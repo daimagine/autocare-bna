@@ -25,6 +25,7 @@
                 <ul class="out-links">
                     <li>{{ HTML::link('role/index', 'Role Management') }}</li>
                     <li>{{ HTML::link('user/index', 'User Management') }}</li>
+                    <li>{{ HTML::link('access/index', 'Access Management') }}</li>
                 </ul>
 
                 <h2>Hello.</h2>

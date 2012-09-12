@@ -37,9 +37,10 @@ Route::any('logout', 'user@logout');
 
 Route::get('user/edit/(:num)', 'user@edit');
 Route::get('role/edit/(:num)', 'role@edit');
+Route::get('access/edit/(:num)', 'access@edit');
 
 Route::controller(array(
-   'home', 'user', 'role'
+   'home', 'user', 'role', 'access'
 ));
 
 Route::get('/', 'home@index');
