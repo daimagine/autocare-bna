@@ -30,6 +30,7 @@ class Secure_Controller extends Controller {
         Asset::add('jquery', 'js/jquery.min.js');
         Asset::add('jquery-ui', 'js/jquery-ui.min.js', array('jquery'));
         Asset::add('jquery-uniform', 'js/plugins/forms/jquery.uniform.js', array('jquery', 'jquery-ui'));
+        Asset::add('application-js', 'js/application.js', array('jquery-uniform'));
     }
 
 }

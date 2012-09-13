@@ -1,19 +1,47 @@
+@section('content')
+
 @include('partial.notification')
 <br>
-    
+
 {{ Form::open('access/add', 'POST') }}
 
-{{ Form::label('name', 'Name') }}
-{{ Form::text('name', @$access['name']) }}
+<fieldset>
 
-{{ Form::label('status', 'Status') }}
-{{ Form::select('status', array(1 => 'Active', 0 => 'Inactive'), isset($access['status']) ? $access['status'] : 1) }}
+    <div class="widget fluid">
+        <div class="whead">
+            <h6>Access Add</h6>
 
-{{ Form::label('description', 'Description') }}
-{{ Form::text('description', @$access['description']) }}
+            <div class="clear"></div>
+        </div>
 
-{{ Form::submit('save') }}
+        {{ Form::nginput('text', 'name', @$access['name'], 'Name') }}
 
-{{ HTML::link('access/index') }}
+        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($access['status']) ? $access['status'] : 1, 'Status') }}
+
+        {{ Form::nginput('text', 'action', @$access['action'], 'Action') }}
+
+        {{ Form::nginput('text', 'description', @$access['description'], 'Description') }}
+
+        {{ Form::nyheckbox('parent', 1, @$access['parent'], 'Parent', 'Action will be a parent for another action') }}
+
+        {{ Form::nyheckbox('visible', 1, @$access['visible'], 'Visible', 'Action will be visible in main or sub navigation') }}
+
+        {{ Form::nyelect('type', array('M' => 'Main Navigation', 'S' => 'Sub Navigation', 'L' => 'Link or Action'), isset($access['type']) ? $access['type'] : 'L', 'Type') }}
+
+        {{ Form::nyelect('parent_id', $parents, @$access['parent_id'], 'Parent') }}
+
+        <div class="formRow noBorderB">
+            <div class="status" id="status3"></div>
+            <div class="formSubmit">
+                {{ HTML::link('access/index', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
+                {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5' )) }}
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+</fieldset>
 
 {{ Form::close() }}
+
+@endsection

@@ -23,7 +23,7 @@ class User extends Eloquent {
             ->where_status(1)
             ->first();
         $role = Role::find($data['role_id']);
-        $user->role = $role;
+        $user->role_id = $role->id;
         $user->login_id = $data['login_id'];
         $user->status = $data['status'];
         $user->name = $data['name'];
@@ -40,7 +40,7 @@ class User extends Eloquent {
     public static function create($data = array()) {
         $user = new User;
         $role = Role::find($data['role_id']);
-        $user->role = $role;
+        $user->role_id = $role->id;
         $user->login_id = $data['login_id'];
         $user->password = Hash::make($data['password']);
         $user->status = $data['status'];

@@ -6,8 +6,6 @@
     <title>Autocare BNA :: {{ (isset($title) ? $title : 'Garage Integrated System') }}</title>
     <!--[if IE]> <link href="css/ie.css" rel="stylesheet" type="text/css"> <![endif]-->
     {{ Asset::styles() }}
-    <!-- javascript library -->
-    {{ Asset::scripts() }}
 </head>
 <body>
     <!-- Top line begins -->
@@ -120,4 +118,7 @@
 
     </div>
     <!-- Content ends -->
+
+    <!-- javascript library -->
+    {{ Asset::scripts() }}
 </body>

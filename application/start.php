@@ -172,3 +172,10 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
 {
 	Session::load();
 }
+
+
+/**
+ * include start.php from other folder to keep all things organize
+ */
+require __DIR__ . DS . 'start' . DS . 'macro.php';
+require __DIR__ . DS . 'start' . DS . 'validator.php';
