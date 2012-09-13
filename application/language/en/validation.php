@@ -67,6 +67,8 @@ return array(
 	"unique"         => "The :attribute has already been taken.",
 	"url"            => "The :attribute format is invalid.",
 
+    "required_select" => "The :attribute is required. Please select properly.",
+
 	/*
 	|--------------------------------------------------------------------------
 	| Custom Validation Language Lines

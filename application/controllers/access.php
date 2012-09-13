@@ -15,9 +15,10 @@ class Access_Controller extends Secure_Controller {
 
     public function get_index() {
         $criteria = array();
-        $accesss = Access::listAll($criteria);
-        return View::make('access.index')
-            ->with('accesss', $accesss);
+        $access = Access::listAll($criteria);
+        return $this->layout->nest('content', 'access.index', array(
+            'access' => $access
+        ));
     }
 
     public function get_edit($id=null) {
@@ -25,9 +26,11 @@ class Access_Controller extends Secure_Controller {
             return Redirect::to('access/index');
         }
         $access = Access::find($id);
-        return View::make('access.edit')
-            ->with('access', $access)
-            ->with('accesses', $accesses);
+        $parents = Access::getParents($id);
+        return $this->layout->nest('content', 'access.edit', array(
+            'access' => $access,
+            'parents' => $parents
+        ));
     }
 
     public function post_edit() {
@@ -51,8 +54,11 @@ class Access_Controller extends Secure_Controller {
 
     public function get_add() {
         $accessdata = Session::get('access');
-        return View::make('access.add')
-            ->with('access', $accessdata);
+        $parents = Access::getParents();
+        return $this->layout->nest('content', 'access.add', array(
+            'access' => $accessdata,
+            'parents' => $parents
+        ));
     }
 
     public function post_add() {

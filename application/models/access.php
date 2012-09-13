@@ -22,6 +22,15 @@ class Access extends Eloquent {
         $access->description = $data['description'];
         $access->status = $data['status'];
         $access->name = $data['name'];
+        $access->action = @$data['action'];
+        $access->description = @$data['description'];
+        $access->parent = isset($data['parent']) ? $data['parent'] : 0;
+        $access->visible = isset($data['visible']) ? $data['visible'] : 0;
+        $access->type = @$data['type'];
+        if(isset($data['parent_id'])) {
+            $access->parent_id = $data['parent_id'];
+        }
+        //save
         $access->save();
         return $access->id;
     }
@@ -31,6 +40,14 @@ class Access extends Eloquent {
         $access->description = $data['description'];
         $access->status = $data['status'];
         $access->name = $data['name'];
+        $access->action = @$data['action'];
+        $access->description = @$data['description'];
+        $access->parent = isset($data['parent']) ? $data['parent'] : 0;
+        $access->visible = isset($data['visible']) ? $data['visible'] : 0;
+        $access->type = @$data['type'];
+        if(isset($data['parent_id'])) {
+            $access->parent_id = $data['parent_id'];
+        }
         $access->save();
         return $access->id;
     }
@@ -40,6 +57,20 @@ class Access extends Eloquent {
         $access->status = 0;
         $access->save();
         return $access->id;
+    }
+
+    public static function getParents($id = -1) {
+        $parent = array(
+            0 => 'Select Below'
+        );
+        $results = Access::where_status(1)
+            ->where_parent(1)
+            ->where('id', '<>', $id)
+            ->get();
+        foreach($results as $r) {
+            $parent[$r->id] = $r->name;
+        }
+        return $parent;
     }
 
 }
