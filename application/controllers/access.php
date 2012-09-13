@@ -26,7 +26,6 @@ class Access_Controller extends Secure_Controller {
             return Redirect::to('access/index');
         }
         $access = Access::find($id);
-        $accesses = Access::allSelect($id);
         return View::make('access.edit')
             ->with('access', $access)
             ->with('accesses', $accesses);
@@ -53,7 +52,6 @@ class Access_Controller extends Secure_Controller {
 
     public function get_add() {
         $accessdata = Session::get('access');
-        $accesses = Access::allSelect();
         return View::make('access.add')
             ->with('access', $accessdata)
             ->with('accesses', $accesses);

@@ -14,15 +14,6 @@
 {{ Form::label('description', 'Description') }}
 {{ Form::text('description', $access->description) }}
 
-{{ Form::label('viewable', 'Viewable') }}
-{{ Form::select('viewable', array(1 => 'Viewable Navigation', 0 => 'Background process'), $access->viewable) }}
-
-{{ Form::label('url', 'Access URL') }}
-{{ Form::text('url', $access->url) }}
-
-{{ Form::label('parent_id', 'Parent Access') }}
-{{ Form::select('parent_id', $accesses, $access->parent_id ) }}
-
 {{ Form::submit('save') }}
 
 {{ HTML::link('access/index') }}
