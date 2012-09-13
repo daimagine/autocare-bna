@@ -1,7 +1,5 @@
-@if(isset($message))
-{{ $message_class . ' : ' . $message }}
-<br>
-@endif
+@section('content')
+@include('partial.notification')
 
 {{ Form::open('role/edit', 'POST') }}
 
@@ -21,3 +19,5 @@
 {{ HTML::link('role/index') }}
 
 {{ Form::close() }}
+
+@endsection

@@ -60,29 +60,22 @@ class User_Controller extends Secure_Controller {
     }
 
     public function get_index() {
-        $message = Session::get('message');
-        $message_class = Session::get('message_class');
         $criteria = array();
         $users = User::listAll($criteria);
-        return View::make('user.index')
-            ->with('message_class', $message_class)
-            ->with('message', $message)
-            ->with('users', $users);
+        return $this->layout->nest('content', 'user.index', array(
+            'users' => $users
+        ));
     }
 
     public function get_edit($id=null) {
         if($id===null) {
             return Redirect::to('user/index');
         }
-        $message = Session::get('message');
-        $message_class = Session::get('message_class');
         $user = User::find($id);
         $roles = Role::allSelect();
-        return View::make('user.edit')
-            ->with('message_class', $message_class)
-            ->with('message', $message)
-            ->with('user', $user)
-            ->with('roles', $roles);
+        return $this->layout->nest('content', 'user.edit', array(
+            'roles' => $roles,
+            'user'=> $user));
     }
 
     public function post_edit() {
@@ -95,27 +88,20 @@ class User_Controller extends Secure_Controller {
         $success = User::update($id, $userdata);
         if($success) {
             //success login
-            return Redirect::to('user/index')
-                ->with('message', 'Success to update user')
-                ->with('message_class', 'success');
+            Session::flash('message', 'Success update user');
+            return Redirect::to('user/index');
         } else {
-            return Redirect::to('user/edit')
-                ->with('message', 'Failed to update user')
-                ->with('message_class', 'error')
-                ->with('id', $id);
+            Session::flash('message_error', 'Failed to update user');
+            return Redirect::to('user/edit')->with('id', $id);
         }
     }
 
     public function get_add() {
-        $message = Session::get('message');
-        $message_class = Session::get('message_class');
         $userdata = Session::get('user');
         $roles = Role::allSelect();
-        return View::make('user.add')
-            ->with('message_class', $message_class)
-            ->with('message', $message)
-            ->with('user', $userdata)
-            ->with('roles', $roles);
+        return $this->layout->nest('content', 'user.add', array(
+            'roles' => $roles,
+            'user', $userdata));
     }
 
     public function post_add() {
@@ -125,13 +111,11 @@ class User_Controller extends Secure_Controller {
             $success = User::create($userdata);
             if($success) {
                 //success login
-                return Redirect::to('user/index')
-                    ->with('message', 'Success to create new user')
-                    ->with('message_class', 'success');
+                Session::flash('message', 'Success to create new user');
+                return Redirect::to('user/index');
             } else {
+                Session::flash('message_error', 'Failed to create new user');
                 return Redirect::to('user/add')
-                    ->with('message', 'Failed to create new user')
-                    ->with('message_class', 'error')
                     ->with('user', $userdata);
             }
         } else {
@@ -149,13 +133,11 @@ class User_Controller extends Secure_Controller {
         $success = User::remove($id);
         if($success) {
             //success login
-            return Redirect::to('user/index')
-                ->with('message', 'Success to remove user')
-                ->with('message_class', 'success');
+            Session::flash('message', 'Success to remove user');
+            return Redirect::to('user/index');
         } else {
-            return Redirect::to('user/index')
-                ->with('message', 'Failed to remove user')
-                ->with('message_class', 'error');
+            Session::flash('message_error', 'Failed to remove user');
+            return Redirect::to('user/index');
         }
     }
 

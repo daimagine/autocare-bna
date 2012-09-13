@@ -15,15 +15,10 @@ class Role_Controller extends Secure_Controller {
     }
 
     public function get_index() {
-        $message = Session::get('message');
-        $message_class = Session::get('message_class');
         $criteria = array();
         $roles = Role::listAll($criteria);
-
         return $this->layout->nest('content', 'role.index', array(
-            'roles' => $roles,
-            'message' => $message,
-            'message_class' => $message_class
+            'roles' => $roles
         ));
     }
 
@@ -31,18 +26,13 @@ class Role_Controller extends Secure_Controller {
         if($id===null) {
             return Redirect::to('role/index');
         }
-        $message = Session::get('message');
-        $message_class = Session::get('message_class');
         $role = Role::find($id);
-        return View::make('role.edit')
-            ->with('message_class', $message_class)
-            ->with('message', $message)
-            ->with('role', $role);
+        return $this->layout->nest('content', 'role.edit', array('role' => $role));
     }
 
     public function post_edit() {
         $id = Input::get('id');
-        if($id===null) {
+        if($id===null   ) {
             return Redirect::to('role/index');
         }
         $role = Role::find($id);
@@ -50,25 +40,18 @@ class Role_Controller extends Secure_Controller {
         $success = Role::update($id, $roledata);
         if($success) {
             //success login
-            return Redirect::to('role/index')
-                ->with('message', 'Success to update role')
-                ->with('message_class', 'success');
+            Session::flash('message', 'Success update role');
+            return Redirect::to('role/index');
         } else {
+            Session::flash('message_error', 'Failed update role');
             return Redirect::to('role/edit')
-                ->with('message', 'Failed to update role')
-                ->with('message_class', 'error')
                 ->with('id', $id);
         }
     }
 
     public function get_add() {
-        $message = Session::get('message');
-        $message_class = Session::get('message_class');
         $roledata = Session::get('role');
-        return View::make('role.add')
-            ->with('message_class', $message_class)
-            ->with('message', $message)
-            ->with('role', $roledata);
+        return $this->layout->nest('content', 'role.add', array('role' => $roledata));
     }
 
     public function post_add() {
@@ -78,14 +61,11 @@ class Role_Controller extends Secure_Controller {
             $success = Role::create($roledata);
             if($success) {
                 //success login
-                return Redirect::to('role/index')
-                    ->with('message', 'Success to create new role')
-                    ->with('message_class', 'success');
+                Session::flash('message', 'Success to create new role');
+                return Redirect::to('role/index');
             } else {
-                return Redirect::to('role/add')
-                    ->with('message', 'Failed to create new role')
-                    ->with('message_class', 'error')
-                    ->with('role', $roledata);
+                Session::flash('message_error', 'Failed to create new role');
+                return Redirect::to('role/add');
             }
         } else {
             Log::info('Validation fails. error : ' + print_r($validation->errors, true));
@@ -102,13 +82,11 @@ class Role_Controller extends Secure_Controller {
         $success = Role::remove($id);
         if($success) {
             //success login
-            return Redirect::to('role/index')
-                ->with('message', 'Success to remove role')
-                ->with('message_class', 'success');
+                    Session::flash('message', 'Success to remove role');
+            return Redirect::to('role/index');
         } else {
-            return Redirect::to('role/index')
-                ->with('message', 'Failed to remove role')
-                ->with('message_class', 'error');
+            Session::flash('message_error', 'Failed to remove role');
+            return Redirect::to('role/index');
         }
     }
 

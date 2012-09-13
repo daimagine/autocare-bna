@@ -1,6 +1,6 @@
 
 @section('content')
-
+@include('partial.notification')
     @if(isset($message))
     {{ $message_class . ' : ' . $message }}
     <br>

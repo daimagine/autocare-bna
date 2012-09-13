@@ -1,12 +1,5 @@
-@if(isset($message))
-{{ $message_class . ' : ' . $message }}
-<br>
-@endif
-
-@if( isset( $this->errors ) )
-{{ implode( '<br />', $this->errors->all( ) ) }}
-@endif
-
+@section('content')
+@include('partial.notification')
 {{ Form::open('role/add', 'POST') }}
 
 {{ Form::label('name', 'Name') }}
@@ -23,3 +16,5 @@
 {{ HTML::link('role/index') }}
 
 {{ Form::close() }}
+
+@endsection

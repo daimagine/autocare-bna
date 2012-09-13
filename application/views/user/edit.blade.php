@@ -1,8 +1,5 @@
-@if(isset($message))
-    {{ $message_class . ' : ' . $message }}
-    <br>
-@endif
-
+@section('content')
+@include('partial.notification')
 {{ Form::open('user/edit', 'POST') }}
 
 {{ Form::text('id', $user->id) }}
@@ -42,3 +39,4 @@
 {{ HTML::link('user/index') }}
 
 {{ Form::close() }}
+@endsection

@@ -1,12 +1,5 @@
-@if(isset($message))
-    {{ $message_class . ' : ' . $message }}
-    <br>
-@endif
-
-@if( isset( $this->errors ) )
-    {{ implode( '<br />', $this->errors->all( ) ) }}
-@endif
-
+@section('content')
+@include('partial.notification')
 {{ Form::open('user/add', 'POST') }}
 
 {{ Form::label('login_id', 'Login ID') }}
@@ -47,3 +40,5 @@
 {{ HTML::link('user/index') }}
 
 {{ Form::close() }}
+
+@endsection
