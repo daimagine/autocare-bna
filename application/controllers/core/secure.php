@@ -8,6 +8,8 @@
  */
 class Secure_Controller extends Controller {
 
+    public $layout = 'layout.base';
+
     /**
      * Catch-all method for requests that can't be matched.
      *
@@ -23,6 +25,8 @@ class Secure_Controller extends Controller {
     public function __construct() {
         parent::__construct();
         $this->filter('before', 'auth');
+
+        Asset::add('style', 'css/styles.css');
         Asset::add('jquery', 'js/jquery.min.js');
         Asset::add('jquery-ui', 'js/jquery-ui.min.js', array('jquery'));
         Asset::add('jquery-uniform', 'js/plugins/forms/jquery.uniform.js', array('jquery', 'jquery-ui'));

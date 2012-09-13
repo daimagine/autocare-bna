@@ -19,10 +19,12 @@ class Role_Controller extends Secure_Controller {
         $message_class = Session::get('message_class');
         $criteria = array();
         $roles = Role::listAll($criteria);
-        return View::make('role.index')
-            ->with('message_class', $message_class)
-            ->with('message', $message)
-            ->with('roles', $roles);
+
+        return $this->layout->nest('content', 'role.index', array(
+            'roles' => $roles,
+            'message' => $message,
+            'message_class' => $message_class
+        ));
     }
 
     public function get_edit($id=null) {

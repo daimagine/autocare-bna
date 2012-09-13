@@ -53,8 +53,7 @@ class Access_Controller extends Secure_Controller {
     public function get_add() {
         $accessdata = Session::get('access');
         return View::make('access.add')
-            ->with('access', $accessdata)
-            ->with('accesses', $accesses);
+            ->with('access', $accessdata);
     }
 
     public function post_add() {
