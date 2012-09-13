@@ -22,7 +22,6 @@ class User extends Eloquent {
         $user = User::where_id($id)
             ->where_status(1)
             ->first();
-
         $role = Role::find($data['role_id']);
         $user->role_id = $role->id;
         $user->login_id = $data['login_id'];
