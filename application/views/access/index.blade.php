@@ -2,12 +2,64 @@
 
 @include('partial.notification')
 
-<br>
-@foreach($access as $access)
-{{ $access->name . ' ' . $access->description . ' ' . HTML::link('access/edit/'.$access->id) . ' ' . HTML::link('access/delete/'.$access->id) }} <br>
-@endforeach
+<!-- Table with opened toolbar -->
+<div class="widget">
+    <div class="whead">
+        <h6>Access List</h6>
+        <div class="clear"></div>
+    </div>
+    <div id="dyn2" class="shownpars">
+        <a class="tOptions act" title="Options">{{ HTML::image('images/icons/options', '') }}</a>
+        <table cellpadding="0" cellspacing="0" border="0" class="dTable">
+            <thead>
+                <tr>
+                    <th>Name<span class="sorting" style="display: block;"></span></th>
+                    <th>Action</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                    <th>Parent</th>
+                    <th>Attribute</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($access as $access)
+                    <tr class="">
+                        <td>{{ $access->name }}</td>
+                        <td>{{ $access->action }}</td>
+                        <td>{{ $access->description }}</td>
+                        <td>{{ HTML::access_type($access->type) }}</td>
+                        <td>{{ $access->parentName() }}</td>
+                        <td class="tableActs" align="center">
+                            @if($access->visible)
+                                <a href="#" class="fs1 iconb tipS" original-title="Visible" data-icon=""></a>
+                            @endif
+                            @if($access->status)
+                                <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
+                            @endif
+                            @if($access->parent)
+                                <a href="#" class="fs1 iconb tipS" original-title="Parent Nav" data-icon=""></a>
+                            @endif
+                        </td>
+                        <td class="tableActs" align="center">
+                            <a href="edit/{{ $access->id }}" class="tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
+                            <a href="delete/{{ $access->id }}" class="tablectrl_small bDefault tipS" original-title="Remove"><span class="iconb" data-icon=""></span></a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    <div class="clear"></div>
+</div>
 
-<br>
-{{ HTML::link('access/add') }}
+<div class="fluid">
+    <div class="grid2">
+        <div class="wButton"><a href="add" title="" class="buttonL bLightBlue first">
+            <span class="icol-add"></span>
+            <span>Add Access</span>
+        </a></div>
+    </div>
+</div>
 
 @endsection

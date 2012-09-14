@@ -8,8 +8,15 @@
  */
 class Access extends Eloquent {
 
-
     public static $table = 'access';
+
+    public function parentAccess() {
+        return $this->belongs_to('Access','parent_id');
+    }
+
+    public function childs(){
+        return $this->has_many('Access','parent_id');
+    }
 
     public static function listAll($criteria) {
         return Access::where('status', '=', 1)->get();
@@ -71,6 +78,11 @@ class Access extends Eloquent {
             $parent[$r->id] = $r->name;
         }
         return $parent;
+    }
+
+    public function parentName() {
+        if($this->parentAccess)
+            return $this->parentAccess->name;
     }
 
 }

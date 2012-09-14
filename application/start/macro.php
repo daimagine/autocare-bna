@@ -98,3 +98,18 @@ Form::macro('nyheckbox', function($name, $value = null, $checked = false, $value
     $html .= '</div>';
     return $html;
 });
+
+
+/**
+ * return name or description of given access_type code
+ * @param string $code
+ * @return string
+ */
+HTML::macro('access_type', function($code) {
+    if($code == 'M')
+        return 'Main Navigation';
+    elseif($code == 'S')
+        return 'Sub Navigation';
+    else
+        return 'Access Link';
+});
