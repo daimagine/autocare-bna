@@ -1,19 +1,36 @@
 @section('content')
+
 @include('partial.notification')
+<br>
+
 {{ Form::open('role/add', 'POST') }}
 
-{{ Form::label('name', 'Name') }}
-{{ Form::text('name', @$role['name']) }}
+<fieldset>
 
-{{ Form::label('status', 'Status') }}
-{{ Form::select('status', array(1 => 'Active', 0 => 'Inactive'), isset($role['status']) ? $role['status'] : 1) }}
+    <div class="widget fluid">
+        <div class="whead">
+            <h6>Role Add</h6>
 
-{{ Form::label('description', 'Description') }}
-{{ Form::text('description', @$role['description']) }}
+            <div class="clear"></div>
+        </div>
 
-{{ Form::submit('save') }}
+        {{ Form::nginput('text', 'name', @$role['name'], 'Name') }}
 
-{{ HTML::link('role/index') }}
+        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($role['status']) ? $role'status'] : 1, 'Status') }}
+
+        {{ Form::nginput('text', 'description', @$role['description'], 'Description') }}
+
+        <div class="formRow noBorderB">
+            <div class="status" id="status3"></div>
+            <div class="formSubmit">
+                {{ HTML::link('role/index', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
+                {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5' )) }}
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+</fieldset>
 
 {{ Form::close() }}
 

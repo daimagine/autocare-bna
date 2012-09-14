@@ -1,42 +1,54 @@
 @section('content')
+
 @include('partial.notification')
+<br>
+
 {{ Form::open('user/edit', 'POST') }}
+<fieldset>
 
-{{ Form::text('id', $user->id) }}
+    <div class="widget fluid">
+        <div class="whead">
+            <h6>User Edit</h6>
 
-{{ Form::label('login_id', 'Login ID') }}
-{{ Form::text('login_id', $user->login_id) }}
+            <div class="clear"></div>
+        </div>
 
-{{ Form::label('role_id', 'User Role') }}
-{{ Form::select('role_id', $roles, $user->role_id) }}
+        {{ Form::hidden('id', $user->id) }}
 
-{{ Form::label('status', 'Status') }}
-{{ Form::select('status', array(1 => 'Active', 0 => 'Inactive'), $user->status) }}
+        {{ Form::nginput('text', 'login_id', $user->login_id, 'Login ID') }}
 
-{{ Form::label('name', 'Name') }}
-{{ Form::text('name', $user->name) }}
+        {{ Form::nyelect('role_id', @$roles, $user->role_id, 'Role') }}
 
-{{ Form::label('staff_id', 'Staff ID') }}
-{{ Form::text('staff_id', $user->staff_id) }}
+        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $user->status, 'Status') }}
 
-{{ Form::label('address1', 'Address 1') }}
-{{ Form::text('address1', $user->address1) }}
+        {{ Form::nginput('text', 'name', $user->name, 'Name') }}
 
-{{ Form::label('address2', 'Address 2') }}
-{{ Form::text('address2', $user->address2) }}
+        {{ Form::nginput('text', 'staff_id', $user->staff_id, 'Staff ID')}}
 
-{{ Form::label('city', 'City') }}
-{{ Form::text('city', $user->city) }}
+        {{ Form::nginput('text', 'address1', $user->address1, 'Address 1')}}
 
-{{ Form::label('phone1', 'Phone 1') }}
-{{ Form::text('phone1', $user->phone1) }}
+        {{ Form::nginput('text', 'address2', $user->address2, 'Address 2')}}
 
-{{ Form::label('phone2', 'Phone 2') }}
-{{ Form::text('phone2', $user->phone2) }}
+        {{ Form::nginput('text', 'city', $user->city, 'City')}}
 
-{{ Form::submit('save') }}
+        {{ Form::nginput('text', 'phone1', $user->phone1, 'Phone 1')}}
 
-{{ HTML::link('user/index') }}
+        {{ Form::nginput('text', 'phone2', $user->phone2, 'Phone 1')}}
+
+
+
+
+        <div class="formRow noBorderB">
+            <div class="status" id="status3"></div>
+            <div class="formSubmit">
+                {{ HTML::link('user/index', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
+                {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5' )) }}
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        </div>
+</fieldset>
 
 {{ Form::close() }}
 @endsection
