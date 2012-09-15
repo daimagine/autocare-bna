@@ -80,9 +80,11 @@
 
                     <!-- Putn Sub nav here-->
                     <div class="divider"><span></span></div>
-                        @yield('subnav')
-                    <div id="general">
 
+                    <div id="general" style="display: block; " class="active">
+                        @section('subnav')
+                            {{ HTML::sub_nav() }}
+                        @yield_section
                     </div>
                 </div>
             </div>

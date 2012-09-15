@@ -115,7 +115,7 @@ HTML::macro('access_type', function($code) {
 });
 
 /**
- *
+ * Main navigation
  */
 HTML::macro('main_nav', function() {
     $mainActive = Session::get('active.main.nav');
@@ -132,34 +132,40 @@ HTML::macro('main_nav', function() {
         $html .= '</span></a></li>';
     }
     echo $html;
+});
 
-//    $navigation = array(
-//        'home' => array(
-//            'action' => 'role@index',
-//            'name' => 'Blog',
-//            'active' => 0
-//        ),
-//        'cat' => array(
-//            'action' => 'home@categoryIndex',
-//            'name' => 'Categorie',
-//            'active' => 0
-//        ),
-//        'bout' => array(
-//            'action' => 'home@about',
-//            'name' => 'About',
-//            'active' => 0
-//        ),
-//    );
-//    $c = URI::current();
-//    var_dump($c);
-//    $a = str_replace('/', '@', $c);
-//    var_dump($a);
-//    foreach($navigation as $n) {
-//        var_dump($n['action'] . ' ~ ' .$a);
-//        if($n['action'] == $a) {
-//            var_dump('granted');
-//            break;
-//        }
-//    }
+/**
+ * Sub navigation
+ */
+HTML::macro('sub_nav', function() {
+    $mainActive = Session::get('active.main.nav');
+    $subActive = Session::get('active.sub.nav');
+    $html = '';
+    $main = Auth::navigation();
+    foreach(Auth::navigation() as $menu) {
+        if($menu['action'] == $mainActive) {
+            $main = $menu;
+        }
+    }
+    if($main['childs'] != null) {
+        foreach($main['childs'] as $menu) {
+            $html .= '<ul class="subNav"><li ';
+            $a = str_replace('/', '@', URI::current());
+            if($menu['action'] == $a) {
+                $html .= 'class="activeli"';
+            }
+            $html .= '><a href="' . URL::to_action($menu['action']) . '" class="';
+            if($menu['action'] == $a) {
+                $html .= 'this ';
+            }
+            $html .= '"';
+            $html .= '><span class="';
+            $html .= $menu['image'];
+            $html .= '"></span>';
+            $html .= $menu['title'];
+            $html .= '</a></li></ul>';
+        }
+    }
+    echo $html;
 
 });

@@ -56,6 +56,7 @@ class Cube extends \Laravel\Auth\Drivers\Eloquent {
             0 => array(
                 'title'  => 'Dashboard',
                 'action' => 'home@index',
+                'image'  => '',
                 'childs' => null
             )
         );
@@ -66,13 +67,15 @@ class Cube extends \Laravel\Auth\Drivers\Eloquent {
                 $navMenu[$nav->id] = array(
                         'title'  => $nav->name,
                         'action' => $nav->action,
+                        'image'  => '',
                         'childs' => null
                     );
             } else {
                 $tempMain = array_get($navMenu, $nav->parent_id);
                 $tempMain['childs'][$nav->id] = array(
                     'title'  => $nav->name,
-                    'action' => $nav->action
+                    'action' => $nav->action,
+                    'image'  => $nav->image
                 );
                 $navMenu[$nav->parent_id] = $tempMain;
             }
