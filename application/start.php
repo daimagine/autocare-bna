@@ -173,6 +173,14 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
 	Session::load();
 }
 
+/**
+ * Use our custom Auth goodness
+ */
+Auth::extend('cube', function()
+{
+    return new Cube;
+});
+
 
 /**
  * include start.php from other folder to keep all things organize

@@ -113,3 +113,53 @@ HTML::macro('access_type', function($code) {
     else
         return 'Access Link';
 });
+
+/**
+ *
+ */
+HTML::macro('main_nav', function() {
+    $mainActive = Session::get('active.main.nav');
+    $html = '';
+    foreach(Auth::navigation() as $menu) {
+        $html .= '<li><a href="';
+        $html .= URL::to_action($menu['action']);
+        $html .= '"';
+        if($menu['action'] == $mainActive) {
+            $html .= 'class="active"';
+        }
+        $html .= '><span>';
+        $html .= $menu['title'];
+        $html .= '</span></a></li>';
+    }
+    echo $html;
+
+//    $navigation = array(
+//        'home' => array(
+//            'action' => 'role@index',
+//            'name' => 'Blog',
+//            'active' => 0
+//        ),
+//        'cat' => array(
+//            'action' => 'home@categoryIndex',
+//            'name' => 'Categorie',
+//            'active' => 0
+//        ),
+//        'bout' => array(
+//            'action' => 'home@about',
+//            'name' => 'About',
+//            'active' => 0
+//        ),
+//    );
+//    $c = URI::current();
+//    var_dump($c);
+//    $a = str_replace('/', '@', $c);
+//    var_dump($a);
+//    foreach($navigation as $n) {
+//        var_dump($n['action'] . ' ~ ' .$a);
+//        if($n['action'] == $a) {
+//            var_dump('granted');
+//            break;
+//        }
+//    }
+
+});

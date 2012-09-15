@@ -40,6 +40,8 @@ class Secure_Controller extends Controller {
 
         Asset::add('bootstrap-js', 'js/bootstrap.js', array('jquery-uniform'));
         Asset::add('application-js', 'js/application.js', array('jquery-uniform'));
+
+        Session::put('active.main.nav', 'home@index');
     }
 
 }

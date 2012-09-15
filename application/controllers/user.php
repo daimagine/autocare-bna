@@ -15,6 +15,7 @@ class User_Controller extends Secure_Controller {
         parent::__construct();
         $this->filters = array();
         $this->filter('before', 'auth')->except(array('login', 'logout'));
+        Session::put('active.main.nav', 'user@index');
     }
 
     public function get_login() {

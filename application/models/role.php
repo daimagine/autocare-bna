@@ -97,4 +97,25 @@ class Role extends Eloquent {
         return true;
     }
 
+    public static function getAccessRole($user) {
+        $role = $user->role;
+        $ids = array();
+        $selected = $role->role_access()
+            ->where_status(1)
+            ->get(array('access.id'));
+        foreach($selected as $s) {
+            array_push($ids, $s->id);
+        }
+        $model = Config::get('auth.navigation');
+        $navigation = DB::table($model)
+            ->where(function($query) {
+            $query->where('type', '=', 'M')
+                ->or_where('type', '=', 'S');
+        })
+            ->where('status', '=', 1)
+            ->where_in('id', $ids)
+            ->get();
+        return $navigation;
+    }
+
 }

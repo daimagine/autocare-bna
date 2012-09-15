@@ -54,7 +54,7 @@
             <!-- Putn Main nav here-->
             <ul class="nav">
                 @section('navigation')
-                <li><a href="./" title="" class="active"><span>Dashboard</span></a></li>
+                    {{ HTML::main_nav() }}
                 @yield_section
             </ul>
 

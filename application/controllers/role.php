@@ -12,9 +12,14 @@ class Role_Controller extends Secure_Controller {
 
     public function __construct() {
         parent::__construct();
+        Session::put('active.main.nav', 'role@index');
     }
 
     public function get_index() {
+        $this->get_list();
+    }
+
+    public function get_list() {
         $criteria = array();
         $roles = Role::listAll($criteria);
         return $this->layout->nest('content', 'role.index', array(
