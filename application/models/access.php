@@ -18,6 +18,11 @@ class Access extends Eloquent {
         return $this->has_many('Access','parent_id');
     }
 
+    public function role_access() {
+        return $this->has_many_and_belongs_to('Role', 'role_access')
+            ->with('sequence');
+    }
+
     public static function listAll($criteria) {
         return Access::where('status', '=', 1)->get();
     }

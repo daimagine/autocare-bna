@@ -14,6 +14,11 @@ class Role extends Eloquent {
         return $this->has_many('User', 'role_id');
     }
 
+    public function role_access() {
+        return $this->has_many_and_belongs_to('Access', 'role_access')
+            ->with('sequence');
+    }
+
     public static function listAll($criteria) {
         return Role::where('status', '=', 1)->get();
     }
@@ -55,4 +60,41 @@ class Role extends Eloquent {
         }
         return $selection;
     }
+
+    public static function getAvailableAccess($role) {
+        $ids = array(-1);
+        $selected = $role->role_access()
+            ->where_status(1)
+            ->get(array('access.id'));
+        foreach($selected as $s) {
+            array_push($ids, $s->id);
+        }
+        $access = Access::where_not_in('id', $ids)
+            ->order_by('parent_id','asc')
+            ->order_by('name','asc')
+            ->get();
+        return $access;
+    }
+
+    public static function getAssignedAccess($role) {
+        $access = $role->role_access()
+            ->order_by('sequence','asc')
+            ->get();
+        return $access;
+    }
+
+    public static function configureAccess($role, $data) {
+        $access_ids = $data['selectedAccess'];
+        $idx = 0;
+        $role->role_access()->delete();
+        foreach($access_ids as $id) {
+            $access = Access::find($id);
+            $role->role_access()
+                ->attach($access, array('sequence' => $idx));
+            $idx++;
+        }
+        $role->save();
+        return true;
+    }
+
 }

@@ -60,6 +60,10 @@ class User_Controller extends Secure_Controller {
     }
 
     public function get_index() {
+        $this->get_list();
+    }
+
+    public function get_list() {
         $criteria = array();
         $users = User::listAll($criteria);
         return $this->layout->nest('content', 'user.index', array(

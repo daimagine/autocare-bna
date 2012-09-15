@@ -179,3 +179,9 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
  */
 require __DIR__ . DS . 'start' . DS . 'macro.php';
 require __DIR__ . DS . 'start' . DS . 'validator.php';
+
+
+/**
+ * turn of pivot timestamps
+ */
+Laravel\Database\Eloquent\Pivot::$timestamps = false;

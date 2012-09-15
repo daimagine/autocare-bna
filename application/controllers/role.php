@@ -105,4 +105,46 @@ class Role_Controller extends Secure_Controller {
         return array_merge($rules, $additional);
     }
 
+    public function get_select() {
+        Asset::add('jquery.chosen', 'js/plugins/forms/jquery.chosen.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('role.application', 'js/role/application.js', array('jquery', 'jquery-ui'));
+        $roles = Role::allSelect();
+        return $this->layout->nest('content', 'role.select', array('roles' => $roles));
+    }
+
+    public function get_access($id=null) {
+        if($id===null) {
+            return Redirect::to('role/index');
+        }
+        Asset::add('jquery.chosen', 'js/plugins/forms/jquery.chosen.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('jquery.dualListBox', 'js/plugins/forms/jquery.dualListBox.js', array('jquery', 'jquery-ui'));
+        Asset::add('role.application', 'js/role/application.js', array('jquery', 'jquery-ui'));
+        $role = Role::find($id);
+        $availableAccess = Role::getAvailableAccess($role);
+        $selectedAccess = Role::getAssignedAccess($role);
+        return $this->layout->nest('content', 'role.access', array(
+            'role' => $role,
+            'availableAccess' => $availableAccess,
+            'selectedAccess' => $selectedAccess
+        ));
+    }
+
+    public function post_access() {
+        $id = Input::get('id');
+        if($id===null   ) {
+            return Redirect::to('role/index');
+        }
+        $data = Input::all();
+        $role = Role::find($id);
+        $success = Role::configureAccess($role, $data);
+        if($success) {
+            //success login
+            Session::flash('message', 'Success to save role access');
+            return Redirect::to('role/access')->with('id', $id);
+        } else {
+            Session::flash('message_error', 'Failed to save role access');
+            return Redirect::to('role/access')->with('id', $id);
+        }
+    }
+
 }
