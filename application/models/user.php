@@ -62,4 +62,17 @@ class User extends Eloquent {
         return $user->id;
     }
 
+    public static function check_permission($user, $uri) {
+        $uri = str_replace('/', '@', $uri);
+        $granted = false;
+        $sql = 'select count(*) as res from access a inner join role_access ra on ra.access_id = a.id
+                inner join role r on ra.role_id = r.id inner join user u on u.role_id = r.id
+                where u.id = ? and a.action = ?';
+        $count = DB::query($sql, array($user->id, $uri));
+
+        if(intval($count[0]->res) > 0)
+            $granted = true;
+        return $granted;
+    }
+
 }

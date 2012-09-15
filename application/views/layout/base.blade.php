@@ -11,7 +11,7 @@
     <!-- Top line begins -->
     <div id="top">
         <div class="wrapper">
-            <a href="index.html" title="" class="logo"><img src="images/logo.png" alt="" /></a>
+            <a href="index.html" title="" class="logo"><img src="" alt="" /></a>
 
             <!-- Right top nav -->
             <div class="topNav">
@@ -34,7 +34,7 @@
     <div id="sidebar">
         <div class="mainNav">
             <div class="user">
-                <a title="" class="leftUserDrop"><img src="images/user.png" alt="" /><span><strong>3</strong></span></a><span>Eugene</span>
+                <a title="" class="leftUserDrop"><img src="" alt="" /><span><strong>3</strong></span></a><span>Eugene</span>
                 <ul class="leftUser">
                 </ul>
             </div>

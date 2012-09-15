@@ -97,4 +97,12 @@ class Cube extends \Laravel\Auth\Drivers\Eloquent {
         return new $model;
     }
 
+    public function has_permissions() {
+        $uri = URI::current();
+        $val = in_array($uri, Config::get('auth.white_list'));
+        if($val)
+            return true;
+        return $this->model()->check_permission(Auth::user(), $uri);
+    }
+
 }

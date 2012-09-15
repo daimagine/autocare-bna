@@ -120,7 +120,7 @@ Route::filter('csrf', function()
  */
 Route::filter('auth', function()
 {
-    if ( ! Auth::check() ) {
+    if ( ! Auth::check() || ! Auth::has_permissions() ) {
         return Redirect::to('login')
             ->with('message', '<strong>Error!</strong> You must be logged in to access that page.')
             ->with('message_class', 'error');
