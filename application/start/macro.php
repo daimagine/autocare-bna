@@ -139,7 +139,6 @@ HTML::macro('main_nav', function() {
  */
 HTML::macro('sub_nav', function() {
     $mainActive = Session::get('active.main.nav');
-    $subActive = Session::get('active.sub.nav');
     $html = '';
     $main = Auth::navigation();
     foreach(Auth::navigation() as $menu) {
