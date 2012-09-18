@@ -61,6 +61,7 @@ class Cube extends \Laravel\Auth\Drivers\Eloquent {
             )
         );
         $navigation = Role::getAccessRole($user);
+        $subnav = array();
         foreach($navigation as $nav) {
             //if main navigation
             if($nav->type === 'M') {
@@ -71,16 +72,19 @@ class Cube extends \Laravel\Auth\Drivers\Eloquent {
                         'childs' => null
                     );
             } else {
-                $tempMain = array_get($navMenu, $nav->parent_id);
-                $tempMain['childs'][$nav->id] = array(
-                    'title'  => $nav->name,
-                    'action' => $nav->action,
-                    'image'  => $nav->image
-                );
-                $navMenu[$nav->parent_id] = $tempMain;
+                $subnav[$nav->id] = $nav;
             }
         }
-
+        foreach($subnav as $nav) {
+            $tempMain = $navMenu[$nav->parent_id];
+            $tempMain['childs'][$nav->id] = array(
+                'title'  => $nav->name,
+                'action' => $nav->action,
+                'image'  => $nav->image
+            );
+            $navMenu[$nav->parent_id] = $tempMain;
+        }
+//        dd($navMenu);
 //        foreach($navMenu as $menu) {
 //            echo $menu['title'].'<br>';
 //            if($menu['childs'] != null) {
@@ -98,8 +102,19 @@ class Cube extends \Laravel\Auth\Drivers\Eloquent {
     }
 
     public function has_permissions() {
-        $uri = URI::current();
-        $val = in_array($uri, Config::get('auth.white_list'));
+        $temp = URI::$segments;
+        $val = false;
+        try {
+            if(empty($temp)) {
+                $uri = '/';
+            }
+            elseif(is_array($temp) && !empty($temp)) {
+                $uri = $temp[0] . '/' . $temp[1];
+            }
+            $val = in_array($uri, Config::get('auth.white_list'));
+        } catch (\Laravel\Database\Exception $err) {
+            Log::write('error', 'failed to check has permissions. ' . $err);
+        }
         if($val)
             return true;
         return $this->model()->check_permission(Auth::user(), $uri);

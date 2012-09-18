@@ -38,9 +38,13 @@ Route::any('logout', 'user@logout');
 Route::get('user/edit/(:num)', 'user@edit');
 Route::get('role/edit/(:num)', 'role@edit');
 Route::get('access/edit/(:num)', 'access@edit');
+Route::get('account/edit/(:num)', 'account@edit');
+Route::get('discount/edit/(:num)', 'discount@edit');
+Route::get('member/edit/(:num)', 'member@edit');
+Route::get('item/edit/(:num)', 'item@edit');
 
 Route::controller(array(
-   'home', 'user', 'role', 'access'
+   'home', 'user', 'role', 'access', 'account', 'discount', 'member', 'item'
 ));
 
 Route::get('/', 'home@index');

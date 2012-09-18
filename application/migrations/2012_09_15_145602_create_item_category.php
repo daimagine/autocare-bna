@@ -10,7 +10,7 @@ class Create_Item_Category {
 	public function up()
 	{
         Schema::create('item_category', function($table){
-            $table->increments('id')->attributes(null);
+            $table->increments('id');
             $table->string('name', 80);
             $table->string('description', 255)->nullable();
             $table->boolean('status')->default(true);
@@ -18,7 +18,7 @@ class Create_Item_Category {
         });
 
         Schema::create('item_type', function($table){
-            $table->increments('id')->attributes(null);
+            $table->increments('id');
             $table->integer('item_category_id');
             $table->string('name', 80);
             $table->string('description', 255)->nullable();
@@ -31,7 +31,7 @@ class Create_Item_Category {
         });
 
         Schema::create('item', function($table){
-            $table->increments('id')->attributes(null);
+            $table->increments('id');
             $table->integer('item_type_id');
             $table->index('item_type_id');
             $table->integer('item_category_id');
@@ -46,7 +46,7 @@ class Create_Item_Category {
             $table->boolean('status')->default(true);
             $table->timestamp('expiry_date')->nullable();
             $table->timestamp('created_at')->nullable();
-            $table->timestamp('update_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
             $table->foreign('item_category_id')
                 ->references('id')
                 ->on('item_category')
@@ -74,7 +74,7 @@ class Create_Item_Category {
 	{
         Schema::drop('item_type');
         Schema::drop('item_category');
-        Schema::drop('category');
+        Schema::drop('item');
     }
 
 }

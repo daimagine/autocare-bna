@@ -2,16 +2,16 @@
 /**
  * Created by JetBrains PhpStorm.
  * User: fauziah
- * Date: 9/13/12
- * Time: 12:35 AM
+ * Date: 9/18/12
+ * Time: 03:35 AM
  */
-class Access_Controller extends Secure_Controller {
+class Member_Controller extends Secure_Controller {
 
     public $restful = true;
 
     public function __construct() {
         parent::__construct();
-        Session::put('active.main.nav', 'access@index');
+        Session::put('active.main.nav', 'member@index');
     }
 
     public function get_index() {
@@ -20,93 +20,87 @@ class Access_Controller extends Secure_Controller {
 
     public function get_list() {
         $criteria = array();
-        $access = Access::listAll($criteria);
-        return $this->layout->nest('content', 'access.index', array(
-            'access' => $access
+        $member = Member::listAll($criteria);
+        return $this->layout->nest('content', 'member.index', array(
+            'member' => $member
         ));
     }
 
     public function get_edit($id=null) {
         if($id===null) {
-            return Redirect::to('access/index');
+            return Redirect::to('member/index');
         }
-        $access = Access::find($id);
-        $parents = Access::getParents($id);
-        return $this->layout->nest('content', 'access.edit', array(
-            'access' => $access,
-            'parents' => $parents
+        $member = Member::find($id);
+        return $this->layout->nest('content', 'member.edit', array(
+            'member' => $member,
         ));
     }
 
     public function post_edit() {
         $id = Input::get('id');
         if($id===null) {
-            return Redirect::to('access/index');
+            return Redirect::to('member/index');
         }
-        $access = Access::find($id);
-        $accessdata = Input::all();
-        $success = Access::update($id, $accessdata);
+        $memberdata = Input::all();
+        $success = Member::update($id, $memberdata);
         if($success) {
             //success edit
             Session::flash('message', 'Success update');
-            return Redirect::to('access/index');
+            return Redirect::to('member/index');
         } else {
             Session::flash('message_error', 'Failed update');
-            return Redirect::to('access/edit')
+            return Redirect::to('member/edit')
                 ->with('id', $id);
         }
     }
 
     public function get_add() {
-        $accessdata = Session::get('access');
-        $parents = Access::getParents();
-        return $this->layout->nest('content', 'access.add', array(
-            'access' => $accessdata,
-            'parents' => $parents
+        $memberdata = Session::get('member');
+        return $this->layout->nest('content', 'member.add', array(
+            'member' => $memberdata,
         ));
     }
 
     public function post_add() {
         $validation = Validator::make(Input::all(), $this->getRules());
-        $accessdata = Input::all();
+        $memberdata = Input::all();
         if(!$validation->fails()) {
-            $success = Access::create($accessdata);
+            $success = Member::create($memberdata);
             if($success) {
                 //success
                 Session::flash('message', 'Success create');
-                return Redirect::to('access/index');
+                return Redirect::to('member/index');
             } else {
                 Session::flash('message_error', 'Failed create');
-                return Redirect::to('access/add')
-                    ->with('access', $accessdata);
+                return Redirect::to('member/add')
+                    ->with('member', $memberdata);
             }
         } else {
-            Log::info('Validation fails. error : ' + print_r($validation->errors, true));
-            return Redirect::to('access/add')
+            return Redirect::to('member/add')
                 ->with_errors($validation)
-                ->with('access', $accessdata);
+                ->with('member', $memberdata);
         }
     }
 
     public function get_delete($id=null) {
         if($id===null) {
-            return Redirect::to('access/index');
+            return Redirect::to('member/index');
         }
-        $success = Access::remove($id);
+        $success = Member::remove($id);
         if($success) {
             //success
             Session::flash('message', 'Remove success');
-            return Redirect::to('access/index');
+            return Redirect::to('member/index');
         } else {
             Session::flash('message_error', 'Remove failed');
-            return Redirect::to('access/index');
+            return Redirect::to('member/index');
         }
     }
 
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
-            'name' => 'required|max:50',
+            'code' => 'required|max:50',
         );
         if($method == 'add') {
             $additional = array(
@@ -119,4 +113,3 @@ class Access_Controller extends Secure_Controller {
     }
 
 }
-

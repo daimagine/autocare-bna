@@ -115,6 +115,18 @@ HTML::macro('access_type', function($code) {
 });
 
 /**
+ * return account type in human readable format
+ */
+HTML::macro('account_type', function($code) {
+    if($code == 'C')
+        return 'Credit Account';
+    elseif($code == 'D')
+        return 'Debit Account';
+    else
+        return 'Undefined';
+});
+
+/**
  * Main navigation
  */
 HTML::macro('main_nav', function() {
@@ -131,6 +143,7 @@ HTML::macro('main_nav', function() {
         $html .= $menu['title'];
         $html .= '</span></a></li>';
     }
+    $html .= '<li><a href="' . URL::to_action('/logout') . '"><span>Logout</span></a></li>';
     echo $html;
 });
 
@@ -146,7 +159,7 @@ HTML::macro('sub_nav', function() {
             $main = $menu;
         }
     }
-    if($main['childs'] != null) {
+    if(isset($main['childs']) && $main['childs'] != null) {
         foreach($main['childs'] as $menu) {
             $html .= '<ul class="subNav"><li ';
             $a = str_replace('/', '@', URI::current());

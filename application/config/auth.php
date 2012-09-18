@@ -89,6 +89,9 @@ return array(
         'login',
         'logout',
         'home/index',
+        'access/add',
+        'role/select',
+        'role/access'
     ),
 
 
