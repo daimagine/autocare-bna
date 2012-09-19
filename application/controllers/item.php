@@ -17,6 +17,10 @@ class Item_Controller extends Secure_Controller {
     }
 
     public function get_index() {
+        $this->get_list();
+    }
+
+    public function get_list() {
         $category_id = Input::get('category'); //this id category
         $all_item_category = ItemCategory::listAll(array());
         if ($all_item_category == null) {
@@ -42,10 +46,10 @@ class Item_Controller extends Secure_Controller {
             'item_category_id' => $item_category->id
         );
 
-        $this->get_list($criteria, $all_item_category ,$item_category);
+        $this->get_items($criteria, $all_item_category ,$item_category);
     }
 
-    public function get_list($criteria, $all_item_category, $item_category) {
+    public function get_items($criteria, $all_item_category, $item_category) {
         $item = Item::listAll($criteria);
         return $this->layout->nest('content', 'item.index', array(
             'item' => $item,

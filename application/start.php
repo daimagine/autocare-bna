@@ -190,6 +190,12 @@ require __DIR__ . DS . 'start' . DS . 'validator.php';
 
 
 /**
+ * constant variable
+ */
+require __DIR__ . DS . 'start' . DS . 'constant.php';
+
+
+/**
  * turn of pivot timestamps
  */
 Laravel\Database\Eloquent\Pivot::$timestamps = false;

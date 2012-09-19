@@ -1,16 +1,58 @@
-
 @section('content')
+
 @include('partial.notification')
-    @if(isset($message))
-    {{ $message_class . ' : ' . $message }}
-    <br>
-    @endif
 
-    @foreach($roles as $role)
-    {{ $role->name . ' ' . $role->description . ' ' . HTML::link('role/edit/'.$role->id) . ' ' . HTML::link('role/delete/'.$role->id) }} <br>
-    @endforeach
+<!-- Table with opened toolbar -->
+<div class="widget">
+    <div class="whead">
+        <h6>Role List</h6>
+        <div class="clear"></div>
+    </div>
+    <div id="dyn2" class="shownpars">
+        <a class="tOptions act" title="Options">{{ HTML::image('images/icons/options', '') }}</a>
+        <table cellpadding="0" cellspacing="0" border="0" class="dTable">
+            <thead>
+            <tr>
+                <th>Name<span class="sorting" style="display: block;"></span></th>
+                <th>Description</th>
+                <th>Attribute</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($roles as $role)
+            <tr class="">
+                <td>{{ $role->name }}</td>
+                <td>{{ $role->description }}</td>
+                <td class="tableActs" align="center">
+                    @if($role->visible)
+                    <a href="#" class="fs1 iconb tipS" original-title="Visible" data-icon=""></a>
+                    @endif
+                    @if($role->status)
+                    <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
+                    @endif
+                </td>
+                <td class="tableActs" align="center">
+                    <a href="edit/{{ $role->id }}" class="tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
+                    <a href="delete/{{ $role->id }}" class="tablectrl_small bDefault tipS" original-title="Remove"><span class="iconb" data-icon=""></span></a>
+                </td>
+            </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
+    <div class="clear"></div>
+</div>
 
-    <br>
-    {{ HTML::link('role/add') }}
+<div class="fluid">
+    <div class="grid2">
+        <div class="wButton"><a href="add" title="" class="buttonL bLightBlue first">
+            <span class="icol-add"></span>
+            <span>Add Role</span>
+        </a></div>
+    </div>
+</div>
 
 @endsection
+
+

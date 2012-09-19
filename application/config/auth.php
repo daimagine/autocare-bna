@@ -91,7 +91,10 @@ return array(
         'home/index',
         'access/add',
         'role/select',
-        'role/access'
+        'role/access',
+
+
+        'account/invoice_in'
     ),
 
 
