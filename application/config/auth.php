@@ -94,7 +94,10 @@ return array(
         'role/access',
 
 
-        'account/invoice_in'
+        'account/invoice_in',
+        'account/invoice_edit',
+        'account/invoice_delete',
+        'account/account_receivable',
     ),
 
 

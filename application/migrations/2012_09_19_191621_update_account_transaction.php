@@ -13,6 +13,8 @@ class Update_Account_Transaction {
             $table->drop_column('to_from');
             $table->string('subject', 255)->nullable();
             $table->date('invoice_date');
+            $table->date('created_at');
+            $table->date('updated_at');
         });
 	}
 
@@ -24,7 +26,7 @@ class Update_Account_Transaction {
 	public function down()
 	{
         Schema::table('account_transactions', function($table) {
-            $table->drop_column(array('subject', 'invoice_date'));
+            $table->drop_column(array('subject', 'invoice_date', 'created_at', 'updated_at'));
             $table->string('to_from', 255)->nullable();
         });
 	}

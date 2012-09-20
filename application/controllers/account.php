@@ -127,4 +127,118 @@ class Account_Controller extends Secure_Controller {
         ));
     }
 
+    public function post_invoice_in() {
+        $validation = Validator::make(Input::all(), $this->getInvoiceRules());
+        $data = Input::all();
+        if(!$validation->fails()) {
+            $success = AccountTransaction::create($data);
+            if($success) {
+                //success
+                Session::flash('message', 'Success create');
+                return Redirect::to('account/account_receivable');
+            } else {
+                Session::flash('message_error', 'Failed create');
+                return Redirect::to('account/invoice_in')
+                    ->with('account', $data);
+            }
+        } else {
+            return Redirect::to('account/invoice_in')
+                ->with_errors($validation)
+                ->with('account', $data);
+        }
+    }
+
+    public function get_account_receivable() {
+        $accounts = AccountTransaction::listAll();
+        return $this->layout->nest('content', 'account.account_transaction.receivable', array(
+            'accounts' => $accounts,
+            'accountTransType' => AUTOCARE_ACCOUNT_TYPE_DEBIT,
+        ));
+    }
+
+    public function get_invoice_delete($type=AUTOCARE_ACCOUNT_TYPE_DEBIT, $id=null) {
+        if($id===null) {
+            return Redirect::to('account/account_receivable');
+        }
+        $success = AccountTransaction::remove($id);
+        if($success) {
+            //success
+            Session::flash('message', 'Remove success');
+        } else {
+            Session::flash('message_error', 'Remove failed');
+        }
+        if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
+            return Redirect::to('account/account_receivable');
+        else
+            return Redirect::to('account/account_payable');
+    }
+
+    public function get_invoice_edit($type=AUTOCARE_ACCOUNT_TYPE_DEBIT, $id) {
+        if($id===null) {
+            return Redirect::to('account/account_receivable');
+        }
+        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
+
+        $account = AccountTransaction::find($id);
+        $inv_date = date(AccountTransaction::$dateformat, strtotime($account->invoice_date));
+        $inv_time = date(AccountTransaction::$timeformat, strtotime($account->invoice_date));
+        $due_date = date(AccountTransaction::$dateformat, strtotime($account->due_date));
+        $due_time = date(AccountTransaction::$timeformat, strtotime($account->due_date));
+
+        return $this->layout->nest('content', 'account.account_transaction.edit', array(
+            'account' => $account,
+            'accountTransType' => $type,
+            'invoice_date' => $inv_date,
+            'invoice_time' => $inv_time,
+            'due_date' => $due_date,
+            'due_time' => $due_time,
+        ));
+    }
+
+    public function post_invoice_edit($type=AUTOCARE_ACCOUNT_TYPE_DEBIT) {
+        $id = Input::get('id');
+        if($id===null) {
+            return Redirect::to('account/account_receivable');
+        }
+        $validation = Validator::make(Input::all(), $this->getInvoiceRules('edit'));
+        if(!$validation->fails()) {
+            $data = Input::all();
+            $success = AccountTransaction::update($id, $data);
+            if($success) {
+                //success edit
+                Session::flash('message', 'Success update');
+                return Redirect::to('account/account_receivable');
+            } else {
+                Session::flash('message_error', 'Failed update');
+                return Redirect::to('account/invoice_edit')
+                    ->with('id', $id);
+            }
+        } else {
+            Session::flash('message_error', 'Failed update');
+            return Redirect::to('account/account_receivable')
+                ->with('id', $id);
+        }
+    }
+
+    private function getInvoiceRules($method='add') {
+        $additional = array();
+        $rules = array(
+            'subject' => 'required',
+            'reference_no' => 'required|max:50',
+            'invoice_date' => 'required',
+            'invoice_time' => 'required',
+            'due_date' => 'required',
+            'due_time' => 'required',
+        );
+        if($method == 'add') {
+            $additional = array(
+            );
+        } elseif($method == 'edit') {
+            $additional = array(
+            );
+        }
+        return array_merge($rules, $additional);
+    }
+
 }

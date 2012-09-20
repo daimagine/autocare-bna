@@ -3,9 +3,11 @@
 @include('partial.notification')
 <br>
 
-{{ Form::open('/account/invoice_in', 'POST') }}
+{{ Form::open('/account/invoice_edit', 'POST') }}
 
-{{ Form::hidden('type', $accountTransType) }}
+{{ Form::hidden('id', $account->id) }}
+
+{{ Form::hidden('type', $account->type) }}
 
 <fieldset>
 
@@ -16,19 +18,19 @@
             <div class="clear"></div>
         </div>
 
-        {{ Form::nginput('text', 'subject', @$account['subject'], 'To') }}
+        {{ Form::nginput('text', 'subject', $account->subject, 'To') }}
 
-        {{ Form::nginput('text', 'invoice_no', $invoiceNumber, 'Invoice', array( 'readonly' => 'readonly' )) }}
+        {{ Form::nginput('text', 'invoice_no', $account->invoice_no, 'Invoice', array( 'readonly' => 'readonly' )) }}
 
-        {{ Form::nginput('text', 'reference_no', @$account['reference_no'], 'Reference') }}
+        {{ Form::nginput('text', 'reference_no', $account->reference_no, 'Reference') }}
 
         <div class="formRow">
             <div class="grid3"><label>Invoice Date</label></div>
             <div class="grid9">
                 <ul class="timeRange">
-                    <li><input name="invoice_date" type="text" class="datepicker" value="{{ @$account['invoice_date'] }}" /></li>
+                    <li><input name="invoice_date" type="text" class="datepicker" value="{{ $invoice_date }}" /></li>
                     <li class="sep">-</li>
-                    <li><input name="invoice_time" type="text" class="timepicker" size="10" value="{{ @$account['invoice_time'] }}" />
+                    <li><input name="invoice_time" type="text" class="timepicker" size="10" value="{{$invoice_time }}" />
                         <span class="ui-datepicker-append">(hh:mm:ss)</span>
                     </li>
                 </ul>
@@ -41,9 +43,9 @@
             <div class="grid3"><label>Due Date</label></div>
             <div class="grid9">
                 <ul class="timeRange">
-                    <li><input name="due_date" type="text" class="datepicker" value="{{ @$account['due_date'] }}" /></li>
+                    <li><input name="due_date" type="text" class="datepicker" value="{{ $due_date }}" /></li>
                     <li class="sep">-</li>
-                    <li><input name="due_time" type="text" class="timepicker" size="10" value="{{ @$account['due_time'] }}" />
+                    <li><input name="due_time" type="text" class="timepicker" size="10" value="{{ $due_time }}" />
                         <span class="ui-datepicker-append">(hh:mm:ss)</span>
                     </li>
                 </ul>
@@ -51,9 +53,9 @@
             <div class="clear"></div>
         </div>
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($account['status']) ? $account['status'] : 1, 'Status') }}
+        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $account->status, 'Status') }}
 
-        {{ Form::nginput('text', 'description', @$account['description'], 'Description') }}
+        {{ Form::nginput('text', 'description', $account->description, 'Description') }}
 
         <div class="formRow noBorderB">
             <div class="status" id="status3"></div>
