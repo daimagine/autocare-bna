@@ -13,8 +13,10 @@
         <table cellpadding="0" cellspacing="0" border="0" class="dTable">
             <thead>
             <tr>
-                <th>Name<span class="sorting" style="display: block;"></span></th>
+                <th>Code<span class="sorting" style="display: block;"></span></th>
                 <th>Value</th>
+				<th>Charge</th>
+				<th>Duration</th>
                 <th>Description</th>
                 <th>Attribute</th>
                 <th>Action</th>
@@ -23,8 +25,10 @@
             <tbody>
             @foreach($discount as $discount)
             <tr class="">
-                <td>{{ $discount->name }}</td>
-                <td>{{ $discount->value }}</td>
+                <td>{{ $discount->code }}</td>
+                <td>{{ $discount->value }}%</td>
+                <td>IDR {{ $discount->registration_fee }}</td>
+				<td>{{ $discount->duration }} {{ $discount->duration_period == 'M' ? 'Month' : ( $discount->duration_period == 'Y' ? 'Year' : '' ) }} </td>
                 <td>{{ $discount->description }}</td>
                 <td class="tableActs" align="center">
                     @if($discount->status)

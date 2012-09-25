@@ -10,7 +10,7 @@ class Discount extends Eloquent {
 
     public static $table = 'discount';
 
-    public static function listAll($criteria) {
+    public static function listAll($criteria=array()) {
         return Discount::where('status', '=', 1)->get();
     }
 
@@ -22,6 +22,9 @@ class Discount extends Eloquent {
         $discount->description = @$data['description'];
         $discount->status = $data['status'];
         $discount->value = $data['value'];
+		$discount->registration_fee = $data['registration_fee'];
+		$discount->duration = $data['duration'];
+		$discount->duration_period = $data['duration_period'];
         //save
         $discount->save();
         return $discount->id;
@@ -33,6 +36,10 @@ class Discount extends Eloquent {
         $discount->description = @$data['description'];
         $discount->status = $data['status'];
         $discount->value = $data['value'];
+		$discount->registration_fee = $data['registration_fee'];
+		$discount->duration = $data['duration'];
+		$discount->duration_period = $data['duration_period'];
+		//save
         $discount->save();
         return $discount->id;
     }

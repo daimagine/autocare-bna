@@ -11,7 +11,7 @@ class AccountTransaction extends Eloquent {
     public static $table = 'account_transactions';
 
     private static $INVOICE_PREFIX = 'INV';
-    private static $length = 14;
+    private static $INVOICE_LENGTH = 14;
 
     public static $sqlformat = 'Y-m-d H:i:s';
     public static $format = 'd-m-Y H:i:s';
@@ -21,8 +21,8 @@ class AccountTransaction extends Eloquent {
     public static function invoice_new() {
         $count = DB::table(static::$table)->count();
         $count++;
-        //pad static::$length leading zeros
-        $suffix = sprintf('%0' . static::$length . 'd', $count);
+        //pad static::$INVOICE_LENGTH leading zeros
+        $suffix = sprintf('%0' . static::$INVOICE_LENGTH . 'd', $count);
         return static::$INVOICE_PREFIX . $suffix;
     }
 
@@ -91,5 +91,14 @@ class AccountTransaction extends Eloquent {
 
         $ate->save();
         return $ate->id;
+    }
+
+    public static function listAllByCriteria($criteria) {
+        $ate=DB::table('account_transactions');
+        if($criteria!=null and $criteria['status']) {
+            if($criteria['status']) {$ate=$ate->where('status', '=', $criteria['status']);}
+            if($criteria['approved_status']){$ate=$ate->where('approved_status', '=', $criteria['approved_status']);}
+        }
+        return $ate->get();
     }
 }

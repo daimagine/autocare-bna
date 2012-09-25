@@ -30,6 +30,9 @@ class Discount_Controller extends Secure_Controller {
         if($id===null) {
             return Redirect::to('discount/index');
         }
+		Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
+		Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
+		Asset::add('discount.application', 'js/discount/application.js', array('jquery.ui.spinner', 'jquery.ui.mousewheel'));
         $discount = Discount::find($id);
         return $this->layout->nest('content', 'discount.edit', array(
             'discount' => $discount,
@@ -42,6 +45,7 @@ class Discount_Controller extends Secure_Controller {
             return Redirect::to('discount/index');
         }
         $discountdata = Input::all();
+		//dd($discountdata);
         $success = Discount::update($id, $discountdata);
         if($success) {
             //success edit
@@ -55,6 +59,9 @@ class Discount_Controller extends Secure_Controller {
     }
 
     public function get_add() {
+		Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
+		Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
+		Asset::add('discount.application', 'js/discount/application.js', array('jquery.ui.spinner', 'jquery.ui.mousewheel'));
         $discountdata = Session::get('discount');
         return $this->layout->nest('content', 'discount.add', array(
             'discount' => $discountdata,

@@ -72,7 +72,7 @@ return array(
 			'host'     => 'localhost',
 			'database' => 'autocare-bna',
 			'username' => 'root',
-			'password' => '',
+			'password' => 'root',
 			'charset'  => 'utf8',
 			'prefix'   => '',
 		),

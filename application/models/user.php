@@ -13,7 +13,7 @@ class User extends Eloquent {
     public function role() {
         return $this->belongs_to('Role');
     }
-
+	
     public static function listAll($criteria) {
         return User::where('status', '=', 1)->get();
     }
@@ -74,5 +74,5 @@ class User extends Eloquent {
             $granted = true;
         return $granted;
     }
-
+	
 }

@@ -13,24 +13,42 @@
         <table cellpadding="0" cellspacing="0" border="0" class="dTable">
             <thead>
             <tr>
-                <th>Number<span class="sorting" style="display: block;"></span></th>
-                <th>Attribute</th>
-                <th>Action</th>
+                <th>Name<span class="sorting" style="display: block;"></span></th>
+				<th>Addres</th>
+				<th>Vehicle No</th>
+				<th>Status</th>
+				<th>Expiry date</th>
+                <th>Membership</th>
             </tr>
             </thead>
             <tbody>
             @foreach($member as $member)
             <tr class="">
-                <td>{{ $member->number }}</td>
+                <td>{{ $member->name }}</td>
+				<td>{{ $member->address1 . ' ' . $member->address2 }}</td>
+				<td></td>
                 <td class="tableActs" align="center">
                     @if($member->status)
                     <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
                     @endif
                 </td>
-                <td class="tableActs" align="center">
-                    <a href="edit/{{ $member->id }}" class="tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
-                    <a href="delete/{{ $member->id }}" class="tablectrl_small bDefault tipS" original-title="Remove"><span class="iconb" data-icon=""></span></a>
-                </td>
+				<td>
+					@if($member->membership != null)
+						{{ $member->membership->expiry_date }}
+					@endif
+				</td>
+				
+				@if($member->membership != null)
+					<td>	
+						{{ HTML::link('/member/delete/'.$member->membership->id, $member->membership->description) }}
+					</td>
+				@else
+					<td class="tableActs" align="center">
+						<a id="formDialog_open" href="#assign" 
+							data-value="{{ $member->id }}" 
+							additional-value="{{$member->name}};{{$member->created_at}}">Assign Membership</a>
+					</td>
+				@endif
             </tr>
             @endforeach
             </tbody>
@@ -39,13 +57,24 @@
     <div class="clear"></div>
 </div>
 
-<div class="fluid">
-    <div class="grid2">
-        <div class="wButton"><a href="add" title="" class="buttonL bLightBlue first">
-            <span class="icol-add"></span>
-            <span>Add Membership</span>
-        </a></div>
-    </div>
+<!-- Dialog content -->
+<div id="formDialog" class="dialog" title="Assign New Membership">
+	<form action="/member/assign" id="memberAssignForm" method="post">
+		<input type="hidden" id="customerId" value="0" name="id"/>
+		<div class="messageTo">
+			<span> Assign membership to <strong><span id="customerName"></span></strong></span>
+			<a href="#" class="uEmail">customer since : <span id="customerSince"></span></a>
+		</div>
+		<div class="divider"><span></span></div>
+		<div class="dialogSelect m10">
+			<label>Select membership</label>
+			<select name="discount_id" >
+				@foreach($discounts as $id => $desc)
+					<option value="{{ $id }}">{{ $desc }}</option>
+				@endforeach
+			</select>
+		</div>
+	</form>
 </div>
-
+			
 @endsection

@@ -20,9 +20,19 @@ class Member_Controller extends Secure_Controller {
 
     public function get_list() {
         $criteria = array();
-        $member = Member::listAll($criteria);
+        $member = Customer::allWithMembership($criteria);
+		$allDisc = Discount::listAll();
+		$discounts = array();
+		foreach($allDisc as $d) {
+			$desc  = $d->duration . ' ';
+			$desc .= $d->duration_period == 'M' ? 'Month' : ( $d->duration_period == 'Y' ? 'Year' : '' ) . ' ';
+			$desc .= '(' . $d->value . '% discount) - IDR' . $d->registration_fee;
+			$discounts[$d->id] = $desc;
+		}
+        Asset::add('member.application', 'js/member/application.js', array('jquery'));
         return $this->layout->nest('content', 'member.index', array(
-            'member' => $member
+            'member' => $member,
+			'discounts' => $discounts
         ));
     }
 
@@ -110,6 +120,24 @@ class Member_Controller extends Secure_Controller {
             );
         }
         return array_merge($rules, $additional);
+    }
+	
+	public function post_assign() {
+        $id = Input::get('id');
+        if($id===null) {
+            return Redirect::to('member/index');
+        }
+        $memberdata = Input::all();
+        $success = Customer::updateMembership($id, $memberdata);
+        if($success) {
+            //success edit
+            Session::flash('message', 'Success update');
+            return Redirect::to('member/index');
+        } else {
+            Session::flash('message_error', 'Failed update');
+            return Redirect::to('member/index')
+                ->with('id', $id);
+        }
     }
 
 }

@@ -43,9 +43,11 @@ Route::get('discount/edit/(:num)', 'discount@edit');
 Route::get('member/edit/(:num)', 'member@edit');
 Route::get('item/edit/(:num)', 'item@edit');
 Route::get('account/invoice_edit/(:any)/(:num)', 'account@invoice_edit');
+Route::get('customer/edit/(:num)', 'customer@edit');
+Route::get('vehicle/edit/(:num)', 'vehicle@edit');
 
 Route::controller(array(
-   'home', 'user', 'role', 'access', 'account', 'discount', 'member', 'item'
+   'home', 'user', 'role', 'access', 'account', 'discount', 'member', 'item', 'customer', 'vehicle'
 ));
 
 Route::get('/', 'home@index');

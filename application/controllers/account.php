@@ -117,7 +117,8 @@ class Account_Controller extends Secure_Controller {
      */
     public function get_invoice_in($type=AUTOCARE_ACCOUNT_TYPE_DEBIT) {
         Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
-        Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
+        Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
+		Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
         $invoiceNumber = AccountTransaction::invoice_new();
         $data = Session::get('accountTrans');
         return $this->layout->nest('content', 'account.account_transaction.add', array(
@@ -178,7 +179,8 @@ class Account_Controller extends Secure_Controller {
             return Redirect::to('account/account_receivable');
         }
         Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
-        Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
+        Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
+		Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
 
         $account = AccountTransaction::find($id);
         $inv_date = date(AccountTransaction::$dateformat, strtotime($account->invoice_date));

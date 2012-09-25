@@ -34,7 +34,7 @@
 
         {{ Form::nginput('text', 'phone1', @$user['phone1'], 'Phone 1')}}
 
-        {{ Form::nginput('text', 'phone2', @$user['phone2'], 'Phone 1')}}
+        {{ Form::nginput('text', 'phone2', @$user['phone2'], 'Phone 2')}}
 
 
         <div class="formRow noBorderB">

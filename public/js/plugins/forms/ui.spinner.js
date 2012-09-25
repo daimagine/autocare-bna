@@ -757,11 +757,11 @@ $.widget('ui.spinner', {
 		if (isNaN(newVal)) {
 			newVal = this.options.start;
 		}
-		this.element.val(
-			this.options.currency ? 
+		var newval = this.options.currency ? 
 				$.ui.spinner.format.currency(newVal, this.options.currency) : 
-				$.ui.spinner.format.number(newVal, this._decimals)
-		);
+				$.ui.spinner.format.number(newVal, this._decimals);
+		newval = this.options.prefix + newval + this.options.suffix;
+		this.element.val( newval );
 	},
 	_animate: function(d) {
 		if (this.element.hasClass('ui-spinner-list') && ((d == 'up' && this._getValue() <= this.options.max) || (d == 'down' && this._getValue() >= this.options.min)) ) {
@@ -867,7 +867,9 @@ $.extend($.ui.spinner, {
 		incremental: true,
 		currency: false,
 		format: '%',
-		items: []
+		items: [],
+		suffix: '',
+		prefix: ''
 	},
 	format: {
 		currency: function(num, sym) {

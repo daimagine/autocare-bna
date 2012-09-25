@@ -19,6 +19,11 @@ class Item extends Eloquent {
         return $this->belongs_to('ItemType');
     }
 
+    public function item_stock_flow() {
+        return $this->has_many_and_belongs_to('AccountTransactions', 'item_stock_flow')
+            ->with('sequence');
+    }
+
     public static function listAll($criteria) {
         $item = Item::where('status', '=', 1);
         if($criteria['item_category_id']){$item = $item->where('item_category_id', '=', $criteria['item_category_id']);}

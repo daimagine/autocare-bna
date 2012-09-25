@@ -16,6 +16,46 @@ class Item_Controller extends Secure_Controller {
         Session::put('active.main.nav', 'item@index');
     }
 
+    public function get_listApproved(){
+//        Asset::add('jquery.form.wizard', 'js/plugins/wizards/jquery.form.wizard.js');
+//        Asset::add('jquery.validate', 'js/plugins/wizards/jquery.validate.js');
+//        Asset::add('jquery.form', 'js/plugins/wizards/jquery.form.js');
+//        Asset::add('function_wizard', 'js/files/application.js');
+        $lstAte=Item_Controller::get_lstAteWareHouse();
+        return $this->layout->nest('content', 'item.account_trx.approved', array(
+            'lstAte' => $lstAte
+        ));
+    }
+
+    public function get_detailApproved($id=null){
+        Asset::add('easytabs', 'js/plugins/ui/jquery.easytabs.min.js' , array('jquery', 'jquery-ui'));
+        Asset::add('function_wizard', 'js/item/application.js');
+
+        if($id===null) {
+            return Redirect::to('access/index');
+        }
+        $accountTrx = AccountTransaction::find($id);
+        $criteria = array(
+            'account_trx_id' => $accountTrx->id,
+        );
+        $items=ItemStockFlow::listAll($criteria);
+
+        return $this->layout->nest('content', 'item.account_trx.detail', array(
+            'items' => $items,
+            'accountTrx' => $accountTrx
+        ));
+    }
+
+    private function get_lstAteWareHouse(){
+        $criteria = array(
+            'status' => accountTransactionStatus::AWAITING_PAYMENT,
+            'approved_status' => approvedStatus::NEW_ACCOUNT_INVOICE
+        );
+        $lstAte=AccountTransaction::listAllByCriteria($criteria);
+        return $lstAte;
+    }
+
+
     public function get_index() {
         $this->get_list();
     }
@@ -91,12 +131,20 @@ class Item_Controller extends Secure_Controller {
         foreach($unitType as $unit) {
             $selectionUnit[$unit->id] = $unit->name;
         }
+
+        $lstAte=Item_Controller::get_lstAteWareHouse();
+        $selectionAte= array();
+        foreach($lstAte as $ate) {
+            $selectionAte[$ate->id] = $ate->invoice_no;
+        }
+
         return $this->layout->nest('content', 'item.add', array(
             'item' => $itemdata,
             'itemType' => $selectionType,
             'itemCategory' => $item_category,
             'allItemCategory' => $all_item_category,
-            'unitType'  => $selectionUnit
+            'unitType'  => $selectionUnit,
+            'accountTransaction' => $selectionAte
         ));
     }
 
@@ -138,6 +186,7 @@ class Item_Controller extends Secure_Controller {
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
+            'account_transaction_id' => 'required|integer',
             'name' => 'required|max:50',
         );
         if($method == 'add') {
@@ -149,4 +198,6 @@ class Item_Controller extends Secure_Controller {
         }
         return array_merge($rules, $additional);
     }
+
+
 }

@@ -135,4 +135,29 @@ $(function() {
     //===== Form elements styling =====//
     $("select, .check, .check :checkbox, input:radio, input:file").uniform();
 
+
+    //===== Collapsible elements management =====//
+
+    $('.exp').collapsible({
+        defaultOpen: 'current',
+        cookieName: 'navAct',
+        cssOpen: 'subOpened',
+        cssClose: 'subClosed',
+        speed: 200
+    });
+
+    $('.opened').collapsible({
+        defaultOpen: 'opened,toggleOpened',
+        cssOpen: 'inactive',
+        cssClose: 'normal',
+        speed: 200
+    });
+
+    $('.closed').collapsible({
+        defaultOpen: '',
+        cssOpen: 'inactive',
+        cssClose: 'normal',
+        speed: 200
+    });
+
 });

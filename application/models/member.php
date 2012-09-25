@@ -9,7 +9,31 @@
 class Member extends Eloquent {
 
     public static $table = 'membership';
+	
+    private static $MEMBERSHIP_PREFIX = 'BNA';
+    private static $MEMBERSHIP_LENGTH = 9;
+	
+    public static $sqlformat = 'Y-m-d H:i:s';
+    public static $format = 'd-m-Y H:i:s';
+    public static $dateformat = 'd-m-Y';
+    public static $timeformat = 'H:i:s';
+	
+	public function customer() {
+		return $this->belongs_to('Customer');
+	}
+	
+	public function discount() {
+		return $this->belongs_to('Discount');
+	}
 
+    public static function member_new() {
+        $count = DB::table(static::$table)->count();
+        $count++;
+        //pad static::$MEMBERSHIP_LENGTH leading zeros
+        $suffix = sprintf('%0' . static::$MEMBERSHIP_LENGTH . 'd', $count);
+        return static::$MEMBERSHIP_PREFIX . $suffix;
+    }
+	
     public static function listAll($criteria) {
         return Member::where('status', '=', 1)->get();
     }
@@ -18,13 +42,26 @@ class Member extends Eloquent {
         $member = Member::where_id($id)
             ->where_status(1)
             ->first();
-        $member->name = $data['number'];
+        $member->number = $data['number'];
         $member->status = $data['status'];
-        $member->registration_date = @$data['registration_date'];
-        $member->expiry_date = @$data['expiry_date'];
+		$member->registration_date = $data['registration_date'];
+		$member->expiry_date = $data['expiry_date'];
+		
         if(isset($data['discount_id']) && $data['discount_id'] != '0') {
             $member->discount_id = $data['discount_id'];
         }
+		
+        if(isset($data['customer_id']) && $data['customer_id'] != '0') {
+            $member->customer_id = $data['customer_id'];
+        }
+		
+		if(isset($data['register_date']) && $data['register_date'] != null && $data['register_date'] != ''
+			&& isset($data['register_time']) && $data['register_time'] != null && $data['register_time'] != '') {
+				
+			$register_date = $data['register_date'] . $data['register_time'];
+			$register_date = DateTime::createFromFormat(static::$format, $register_date);
+			$member->registration_date = $register_date->format(static::$sqlformat);
+		}
         //save
         $member->save();
         return $member->id;
@@ -32,22 +69,43 @@ class Member extends Eloquent {
 
     public static function create($data = array()) {
         $member = new Member;
-        $member->name = $data['number'];
+        $member->number = $data['number'];
         $member->status = $data['status'];
-        $member->registration_date = @$data['registration_date'];
-        $member->expiry_date = @$data['expiry_date'];
+		$member->registration_date = $data['registration_date'];
+		$member->expiry_date = $data['expiry_date'];
+		
         if(isset($data['discount_id']) && $data['discount_id'] != '0') {
             $member->discount_id = $data['discount_id'];
         }
+		
+        if(isset($data['customer_id']) && $data['customer_id'] != '0') {
+            $member->customer_id = $data['customer_id'];
+        }
+		
+		if(isset($data['register_date']) && $data['register_date'] != null && $data['register_date'] != ''
+			&& isset($data['register_time']) && $data['register_time'] != null && $data['register_time'] != '') {
+				
+			$register_date = $data['register_date'] . $data['register_time'];
+			$register_date = DateTime::createFromFormat(static::$format, $register_date);
+			$member->registration_date = $register_date->format(static::$sqlformat);
+		}
+		//save
         $member->save();
         return $member->id;
     }
 
     public static function remove($id) {
         $member = Member::find($id);
-        $member->status = 0;
-        $member->save();
-        return $member->id;
+        return $member->delete();
     }
+	
+	public function get_description() {
+		$d = $this->discount;
+		$desc  = $d->duration . ' ';
+		$desc .= $d->duration_period == 'M' ? 'Month' : ( $d->duration_period == 'Y' ? 'Year' : '' ) . ' ';
+		$desc .= '(' . $d->value . '% discount) - IDR' . $d->registration_fee;
+		$discounts[$d->id] = $desc;
+		return $desc;
+	}
 
 }
