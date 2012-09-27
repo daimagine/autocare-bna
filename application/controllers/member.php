@@ -140,4 +140,14 @@ class Member_Controller extends Secure_Controller {
         }
     }
 
+    public function get_detail($id=null) {
+        if($id===null) {
+            return Redirect::to('member/index');
+        }
+        $member = Member::find($id);
+        return View::make('member.ajax.detail', array(
+            'member' => $member,
+        ));
+    }
+
 }

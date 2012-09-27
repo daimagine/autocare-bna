@@ -139,6 +139,7 @@
                 <label>Vehicle Description</label>
                 <input type="text" id="vehicle-description"/>
             </div>
+            <input type="hidden" id="vehicle-method" value="add"/>
         </form>
     </div>
 

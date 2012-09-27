@@ -63,7 +63,7 @@ class Customer_Controller extends Secure_Controller {
             return Redirect::to('customer/index');
         }
         $memberdata = Input::all();
-
+        //dd($memberdata);
         $success = Customer::update($id, $memberdata);
         if($success) {
             //success edit

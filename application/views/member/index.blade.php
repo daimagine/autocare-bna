@@ -39,8 +39,9 @@
 				</td>
 				
 				@if($member->membership != null)
-					<td>	
-						{{ HTML::link('/member/delete/'.$member->membership->id, $member->membership->description) }}
+					<td>
+                        <a href="#memberDetail" onclick="detailMember('{{ $member->membership->id }}')">{{ $member->membership->description }}</a>
+						<!-- {{ HTML::link('/member/delete/'.$member->membership->id, $member->membership->description) }} -->
 					</td>
 				@else
 					<td class="tableActs" align="center">
@@ -76,5 +77,8 @@
 		</div>
 	</form>
 </div>
-			
+
+<!-- Detail Membership -->
+<div id="detailMember" class="dialog" title="Detail Membership" ></div>
+
 @endsection

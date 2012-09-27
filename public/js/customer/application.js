@@ -25,6 +25,8 @@ $(function() {
 var Customer = {};
 Customer.Vehicle = {
     //selector helper
+    _method : '#vehicle-method',
+    _addkey : '#vehicle-addkey',
     _whead  : '#vehicle-whead',
     _body   : '#vehicle-body',
     _notice : '#vehicle-addnotice',
@@ -53,7 +55,7 @@ Customer.Vehicle = {
             width: 400,
             buttons: {
                 "Save": function () {
-                    var success = Customer.Vehicle.add();
+                    var success = Customer.Vehicle.save();
                     if(success === true)
                         $(this).dialog('close');
                 },
@@ -69,6 +71,8 @@ Customer.Vehicle = {
 
     //function to open up dialog form
     openDialog : function() {
+        $(this._method).val('add');
+        console.log($(this._method));
         var vname = $(this._customername);
         vname.html($(this._customernamefield).val());
         console.log('open up dialog form');
@@ -81,6 +85,7 @@ Customer.Vehicle = {
         $(this._form.model).val('');
         $(this._form.brand).val('');
         $(this._form.desc).val('');
+        $(this._addkey).val('');
     },
 
     //function to close dialog form
@@ -96,6 +101,15 @@ Customer.Vehicle = {
         }
         //clean up
         $(this._customername).html('');
+    },
+
+    save : function() {
+        var flag = $(this._method).val();
+        console.log(flag);
+        if(flag == 'add')
+            return this.add();
+        if(flag == 'edit')
+            return this.update();
     },
 
     //function to add new vehicle
@@ -129,56 +143,76 @@ Customer.Vehicle = {
         console.log(nextidx);
 
         //warning : sequence is really important following thead order
-        var td = $('<td class="v-no">').append($(this._form.no).val());
-        td.after($('<td>').append($(this._form.type).val()));
-        td.after($('<td>').append($(this._form.color).val()));
-        td.after($('<td>').append($(this._form.model).val()));
-        td.after($('<td>').append($(this._form.brand).val()));
-        td.after($('<td>').append($(this._form.desc).val()));
-        td.after($('<td>').append(
+        var td = $('<td class="v-no v-num-' + nextidx + '">').append($(this._form.no).val());
+        td.after($('<td class="v-type-' + nextidx + '">').append($(this._form.type).val()));
+        td.after($('<td class="v-color-' + nextidx + '">').append($(this._form.color).val()));
+        td.after($('<td class="v-model-' + nextidx + '">').append($(this._form.model).val()));
+        td.after($('<td class="v-brand-' + nextidx + '">').append($(this._form.brand).val()));
+        td.after($('<td class="v-desc-' + nextidx + '">').append($(this._form.desc).val()));
+
+        var divv = $('<div>').append(
             $('<a>')
+                .attr('href', this._tbody)
+                .attr('onclick', 'Customer.Vehicle.edit("v-rows-' + nextidx + '", "' + nextidx + '")')
+                .text('edit | ')
+            .after(
+                $('<a>')
                 .attr('href', this._tbody)
                 .attr('onclick', 'Customer.Vehicle.remove("v-rows-' + nextidx + '")')
                 .text('remove')
-        ));
+            )
+        );
+        td.after($('<td>').append(divv));
 
         //hidden input
         var hiddiv = $('<div>').css('display', 'none');
         hiddiv.append(
             $('<input>')
+                .attr('class', 'v-num-hid-' + nextidx)
                 .attr('type', 'hidden')
                 .attr('name','vehicles[' + nextidx + '][number]')
                 .val($(this._form.no).val())
         );
         hiddiv.append(
             $('<input>')
+                .attr('class', 'v-type-hid-' + nextidx)
                 .attr('type', 'hidden')
                 .attr('name','vehicles[' + nextidx + '][type]')
                 .val($(this._form.type).val())
         );
         hiddiv.append(
             $('<input>')
+                .attr('class', 'v-color-hid-' + nextidx)
                 .attr('type', 'hidden')
                 .attr('name','vehicles[' + nextidx + '][color]')
                 .val($(this._form.color).val())
         );
         hiddiv.append(
             $('<input>')
+                .attr('class', 'v-model-hid-' + nextidx)
                 .attr('type', 'hidden')
                 .attr('name','vehicles[' + nextidx + '][model]')
                 .val($(this._form.model).val())
         );
         hiddiv.append(
             $('<input>')
+                .attr('class', 'v-brand-hid-' + nextidx)
                 .attr('type', 'hidden')
                 .attr('name','vehicles[' + nextidx + '][brand]')
                 .val($(this._form.brand).val())
         );
         hiddiv.append(
             $('<input>')
+                .attr('class', 'v-desc-hid-' + nextidx)
                 .attr('type', 'hidden')
                 .attr('name','vehicles[' + nextidx + '][description]')
                 .val($(this._form.desc).val())
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('type', 'hidden')
+                .attr('name','vehicles[' + nextidx + '][status]')
+                .val(1)
         );
         td.after(hiddiv);
 
@@ -192,8 +226,6 @@ Customer.Vehicle = {
         //updating rows
         vrows.val(++nextidx);
         console.log('rows updated to ' + vrows.val());
-
-        //appending hidden fields
 
     },
 
@@ -220,12 +252,14 @@ Customer.Vehicle = {
         return false;
     },
 
-    _validateDuplicate : function() {
+    _validateDuplicate : function(id) {
         var msg = null;
         $(this._tbody).each(function(index) {
             $('tr .v-no').each(function(index) {
-                if($(this).text() === $(Customer.Vehicle._form.no).val().trim())
-                    msg = 'Vehicle Number';
+                if($(this).text() === $(Customer.Vehicle._form.no).val().trim()) {
+                    if($(this).parent().attr('id') !== id)
+                        msg = 'Vehicle Number';
+                }
             });
         });
         var required = 'Following fields are unique : ' + msg;
@@ -234,5 +268,85 @@ Customer.Vehicle = {
         else
             alert(required);
         return false;
+    },
+
+    //function to open up edit dialog form
+    edit : function(id, idx) {
+        $(this._method).val('edit');
+        var vname = $(this._customername);
+        vname.html($(this._customernamefield).val());
+        console.log('open up edit dialog form');
+        $(this._dialog).dialog('open');
+
+        console.log(id + ', ' + idx);
+        var row = $('#'+id);
+        console.log(row);
+
+        $(this._addkey).val(id);
+
+        var num = row.find('.v-num-' + idx);
+        var type = row.find('.v-type-' + idx);
+        var color = row.find('.v-color-' + idx);
+        var model = row.find('.v-model-' + idx);
+        var brand = row.find('.v-brand-' + idx);
+        var desc = row.find('.v-desc-' + idx);
+
+        //clean up
+        $(this._form.no).val(num.text());
+        $(this._form.type).val(type.text());
+        $(this._form.color).val(color.text());
+        $(this._form.model).val(model.text());
+        $(this._form.brand).val(brand.text());
+        $(this._form.desc).val(desc.text());
+    },
+
+    //function to add new vehicle
+    update : function() {
+        var id = $(this._addkey).val();
+        console.log('update rows : ' + id);
+
+        console.log('validate forms first');
+        if(this._validateNull() !== true)
+            return false;
+
+        if(this._validateDuplicate(id) !== true)
+            return false;
+
+        var row = $('#'+id);
+        console.log(row);
+        var idx = id.slice(-1);
+
+        var num = row.find('.v-num-' + idx);
+        var numhid = row.find('.v-num-hid-' + idx);
+        num.html($(this._form.no).val());
+        numhid.val($(this._form.no).val());
+
+        var type = row.find('.v-type-' + idx);
+        var typehid = row.find('.v-type-hid-' + idx);
+        type.html($(this._form.type).val());
+        typehid.val($(this._form.type).val());
+
+        var color = row.find('.v-color-' + idx);
+        var colorhid = row.find('.v-color-hid-' + idx);
+        color.html($(this._form.color).val());
+        colorhid.val($(this._form.color).val());
+
+        var model = row.find('.v-model-' + idx);
+        var modelhid = row.find('.v-model-hid-' + idx);
+        model.html($(this._form.model).val());
+        modelhid.val($(this._form.model).val());
+
+        var brand = row.find('.v-brand-' + idx);
+        var brandhid = row.find('.v-brand-hid-' + idx);
+        brand.html($(this._form.brand).val());
+        brandhid.val($(this._form.brand).val());
+
+        var desc = row.find('.v-desc-' + idx);
+        var deschid = row.find('.v-desc-hid-' + idx);
+        desc.html($(this._form.desc).val());
+        deschid.val($(this._form.desc).val());
+
+        return true;
     }
+
 };
