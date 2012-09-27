@@ -11,6 +11,7 @@ class ItemPrice extends Eloquent {
 
     public static $table = 'item_price';
     public static $timestamps = false;
+   public static $criteria;
 
     public function users() {
         return $this->belongs_to('User', 'configured_by');
@@ -20,20 +21,18 @@ class ItemPrice extends Eloquent {
         return $this->belongs_to('Item', 'item_id');
     }
 
-    public static function listAll($criteria) {
-        $itemPrice = ItemPrice::with(array(
-            'item' => function($query) {
-                if(isset($criteria['item_id'])) {
-                   $query->where('id', '=', $criteria['item_id']);
-                }
-            },
-            'item.item_category' => function($query){
-                if(isset($criteria['item_category_id'])) {
-                    $query->where('id', '=', $criteria['item_category_id']);
-                }
-            },
-            'users'
-        ));
+    public static  function listAll($criteria) {
+
+        $itemPrice = ItemPrice::where_in('item_price.status', $criteria['status']);
+        $itemPrice=$itemPrice->join('item', 'item.id', '=', 'item_price.item_id');
+        $itemPrice=$itemPrice->join('item_category', 'item_category.id', '=', 'item.item_category_id');
+        $itemPrice=$itemPrice->join('user', 'user.id', '=', 'item_price.configured_by');
+        if(isset($criteria['item_id'])) {
+            $itemPrice=$itemPrice->where('item_id', '=', $criteria['item_id']);
+        }
+        if(isset($criteria['item_category_id'])) {
+            $itemPrice = $itemPrice->where('item.item_category_id', '=', $criteria['item_category_id']);
+        }
         $itemPrice=$itemPrice->get();
 //        {{dd($itemPrice);}}
         return $itemPrice;
