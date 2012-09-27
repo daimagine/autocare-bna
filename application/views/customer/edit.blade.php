@@ -72,7 +72,6 @@
                 <tr>
                     <td>No</td>
                     <td>Type</td>
-                    <td>Year</td>
                     <td>Color</td>
                     <td>Model</td>
                     <td>Brand</td>
@@ -82,21 +81,26 @@
                 <tbody id="vehicle-tbody">
 					@for ($i = 0; $i < count($vehicles); $i++)
 						<tr id="v-rows-{{ $i }}">
-						  	<td class="v-no">{{ $vehicles[$i]->number }}</td>
-						  	<td>{{ $vehicles[$i]->type }}</td>
-						  	<td>{{ $vehicles[$i]->year }}</td>
-						  	<td>{{ $vehicles[$i]->color }}</td>
-						  	<td>{{ $vehicles[$i]->model }}</td>
-						  	<td>{{ $vehicles[$i]->brand }}</td>
-						  	<td>{{ $vehicles[$i]->description }}</td>
-						  	<td><a href="#vehicle-tbody" onclick="Customer.Vehicle.remove(&quot;v-rows-{{ $i }}&quot;)">remove</a></td>
+						  	<td class="v-no v-num-{{ $i }}">{{ $vehicles[$i]->number }}</td>
+						  	<td class="v-type-{{ $i }}">{{ $vehicles[$i]->type }}</td>
+						  	<td class="v-color-{{ $i }}">{{ $vehicles[$i]->color }}</td>
+						  	<td class="v-model-{{ $i }}">{{ $vehicles[$i]->model }}</td>
+						  	<td class="v-brand-{{ $i }}">{{ $vehicles[$i]->brand }}</td>
+						  	<td class="v-desc-{{ $i }}">{{ $vehicles[$i]->description }}</td>
+						  	<td>
+                                <div>
+                                    <a href="#vehicle-tbody" onclick="Customer.Vehicle.edit(&quot;v-rows-{{ $i }}&quot;,&quot;{{ $i }}&quot;)">edit</a> |
+                                    <a href="#vehicle-tbody" onclick="Customer.Vehicle.remove(&quot;v-rows-{{ $i }}&quot;)">remove</a>
+                                </div>
+                            </td>
 						  	<td style="display: none; ">
-								<input type="hidden" name="vehicles[{{ $i }}][number]" value="{{ $vehicles[$i]->number }}" />
-								<input type="hidden" name="vehicles[{{ $i }}][type]" value="{{ $vehicles[$i]->type }}" />
-								<input type="hidden" name="vehicles[{{ $i }}][color]" value="{{ $vehicles[$i]->year }}" />
-								<input type="hidden" name="vehicles[{{ $i }}][model]" value="{{ $vehicles[$i]->model }}" />
-								<input type="hidden" name="vehicles[{{ $i }}][brand]" value="{{ $vehicles[$i]->brand }}" />
-								<input type="hidden" name="vehicles[{{ $i }}][description]" value="{{ $vehicles[$i]->description }}" />
+                                <input type="hidden" class="v-num-hid-{{ $i }}" name="vehicles[{{ $i }}][number]" value="{{ $vehicles[$i]->number }}" />
+								<input type="hidden" class="v-type-hid-{{ $i }}" name="vehicles[{{ $i }}][type]" value="{{ $vehicles[$i]->type }}" />
+								<input type="hidden" class="v-color-hid-{{ $i }}" name="vehicles[{{ $i }}][color]" value="{{ $vehicles[$i]->color }}" />
+								<input type="hidden" class="v-model-hid-{{ $i }}" name="vehicles[{{ $i }}][model]" value="{{ $vehicles[$i]->model }}" />
+								<input type="hidden" class="v-brand-hid-{{ $i }}" name="vehicles[{{ $i }}][brand]" value="{{ $vehicles[$i]->brand }}" />
+								<input type="hidden" class="v-desc-hid-{{ $i }}" name="vehicles[{{ $i }}][description]" value="{{ $vehicles[$i]->description }}" />
+                                <input type="hidden" name="vehicles[{{ $i }}][status]" value="{{ $vehicles[$i]->status }}" />
 							</td>
 						</tr>
 					@endfor
@@ -146,10 +150,6 @@
                 <input type="text" id="vehicle-type"/>
             </div>
             <div class="dialogSelect m10">
-                <label>Vehicle Year</label>
-                <input type="text" id="vehicle-year"/>
-            </div>
-            <div class="dialogSelect m10">
                 <label>Vehicle Color</label>
                 <input type="text" id="vehicle-color"/>
             </div>
@@ -165,6 +165,8 @@
                 <label>Vehicle Description</label>
                 <input type="text" id="vehicle-description"/>
             </div>
+            <input type="hidden" id="vehicle-method" value="edit"/>
+            <input type="hidden" id="vehicle-addkey" value="0"/>
         </form>
     </div>
 

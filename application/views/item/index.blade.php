@@ -1,4 +1,4 @@
-@section('content')
+w@section('content')
 
 @include('partial.notification')
 <!-- Rounded buttons -->

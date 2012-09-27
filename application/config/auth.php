@@ -98,7 +98,8 @@ return array(
         'account/invoice_edit',
         'account/invoice_delete',
         'account/account_receivable',
-		
+
+        'member/detail',
     ),
 
 

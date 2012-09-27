@@ -25,4 +25,20 @@ $(function() {
         return false;
     });
 
+    // Dialog
+    $('#detailMember').dialog({
+        autoOpen: false,
+        width: 500,
+        modal: true
+    });
+
 });
+
+
+function detailMember(id){
+    console.log('open detail membership of id ' + id);
+    $('#detailMember').load("/member/detail/" + id);
+    $('#detailMember').dialog('open');
+    $('#detailMember').dialog("option", "position", ['center', 'center'] );
+}
+
