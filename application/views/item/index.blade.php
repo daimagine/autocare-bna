@@ -3,8 +3,8 @@
 @include('partial.notification')
 <!-- Rounded buttons -->
 <ul class="middleNavA">
-    @foreach($item_category as $category)
-    <li><a href="index?category={{$category->id}}" title="{{$category->name}}" style="width: 100px;height: 65px;"><img src="../images/icons/color/config.png" alt="" /><span style="@if($item_category_name == $category->name) color:red @endif">{{$category->name}}</span></a></li>
+    @foreach($item_category as $item_category)
+    <li><a href="index?category={{$item_category->id}}" title="{{$item_category->name}}" style="width: 100px;height: 65px;"><img src="../images/icons/color/config.png" alt="" /><span style="@if($category->name == $item_category->name) color:red @endif">{{$item_category->name}}</span></a></li>
     @endforeach
 </ul>
 <div class="divider"><span></span></div>
@@ -12,7 +12,7 @@
 <!-- Table with opened toolbar -->
 <div class="widget">
     <div class="whead">
-        <h6>List Item {{$item_category_name}}</h6>
+        <h6>List Item {{$category->name}}</h6>
         <div class="clear"></div>
     </div>
     <div id="dyn2" class="shownpars">

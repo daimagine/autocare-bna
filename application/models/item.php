@@ -10,6 +10,8 @@
 class Item extends Eloquent {
 
     public static $table = 'item';
+    public static $timestamps = false;
+
 
     public function item_category() {
         return $this->belongs_to('ItemCategory');
@@ -35,7 +37,7 @@ class Item extends Eloquent {
     public static function update($id, $data=array()) {
         $item = Item::where_id($id)
             ->where_status(1)
-            -first();
+            ->first();
         $item_type= Role::find($data['item_type_id']);
         $item->item_type_id=$item_type->id;
         $item_category= ItemCategory::find($data['item_category_id']);
@@ -43,12 +45,12 @@ class Item extends Eloquent {
         $item->name=$data['name'];
         $item->code=$data['code'];
         $item->description=$data['description'];
-        $item->stock=$data['stock'];
+//        $item->stock=$data['stock'];
         $item->price=$data['price'];
         $item->vendor=$data['vendor'];
         $item->status=$data['status'];
-        $item->date=$data['date'];
-        $item->expiry_date=$data['expiry_date'];
+//        $item->date=$data['date'];
+//        $item->expiry_date=$data['expiry_date'];
         $item->save();
         return $item->id;
     }
@@ -75,6 +77,17 @@ class Item extends Eloquent {
     public static function remove($id) {
         $item = Item::find($id);
         $item->status = 0;
+        $item->save();
+        return $item->id;
+    }
+
+
+
+    public static function updateStock($id, $stock) {
+        $item = Item::where_id($id)
+            ->where_status(1)
+            ->first();
+        $item->stock=$stock;
         $item->save();
         return $item->id;
     }

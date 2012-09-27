@@ -1,54 +1,113 @@
-
 //===== Wizards =====//
 $(function() {
-//    $("#wizard1").formwizard({
-//        formPluginEnabled: true,
-//        validationEnabled: false,
-//        focusFirstInput : false,
-//        disableUIStyles : true,
-//
-//        formOptions :{
-//            success: function(data){$("#status1").fadeTo(500,1,function(){ $(this).html("<span>Form was submitted!</span>").fadeTo(5000, 0); })},
-//            beforeSubmit: function(data){$("#w1").html("<span>Form was submitted with ajax. Data sent to the server: " + $.param(data) + "</span>");},
-//            resetForm: true
-//        }
-//    });
-
     // Dialog
-    $('#formDialog').dialog({
+    $('#formDialogNewItem').dialog({
         autoOpen: false,
-        width: 400,
-        buttons: {
-            "Nice stuff": function () {
-                $(this).dialog("close");
-            },
-            "Cancel": function () {
-                $(this).dialog("close");
-            }
-        }
+        width: 700,
+        modal:true
     });
 
-    // Dialog Link
-    $('#formDialog_open').click(function () {
-        $('#formDialog').dialog('open');
+    $('#dialogNewItem').click(function () {
+        $('#formDialogNewItem').dialog('close');
         return false;
     });
 
     $('#formDialogListItem').dialog({
         autoOpen: false,
-        width: 400,
-        buttons: {
-            "Nice stuff": function () {
-                $(this).dialog("close");
+        width: 700,
+        modal:true
+    });
+
+    $('#buttonReject').click(function () {
+        document.formBody.action.value = 'reject';
+    });
+
+    $('#buttonConfirm').click(function () {
+        document.formBody.action.value = 'confirm';
+    });
+
+    //===== Usual validation engine=====//
+
+    $("#usualValidate").validate({
+        rules: {
+            firstname: "required",
+            minChars: {
+                required: true,
+                minlength: 3
             },
-            "Cancel": function () {
-                $(this).dialog("close");
-            }
+            maxChars: {
+                required: true,
+                maxlength: 6
+            },
+            mini: {
+                required: true,
+                min: 3
+            },
+            maxi: {
+                required: true,
+                max: 6
+            },
+            range: {
+                required: true,
+                range: [6, 16]
+            },
+            emailField: {
+                required: true,
+                email: true
+            },
+            urlField: {
+                required: true,
+                url: true
+            },
+            dateField: {
+                required: true,
+                date: true
+            },
+            digitsOnly: {
+                required: true,
+                digits: true
+            },
+            enterPass: {
+                required: true,
+                minlength: 5
+            },
+            repeatPass: {
+                required: true,
+                minlength: 5,
+                equalTo: "#enterPass"
+            },
+            customMessage: "required",
+            topic: {
+                required: "#newsletter:checked",
+                minlength: 2
+            },
+            agree: "required"
+        },
+        messages: {
+            customMessage: {
+                required: "Bazinga! This message is editable",
+            },
+            agree: "Please accept our policy"
         }
     });
 
-    $('#formDialogWizard_open').click(function () {
-        $('#formDialogListItem').dialog('open');
-        return false;
-    });
+    //===== Validation engine =====//
+
+    $("#validate").validationEngine();
+
 });
+
+function getListItem(categoryId){
+    $('#formDialogListItem').load("../lst_item/"+categoryId);
+    $('#formDialogListItem').dialog('open');
+
+}
+
+function formNewItem(categoryId){
+    $('#formDialogNewItem').load("../putnewitem/"+categoryId);
+    $('#formDialogNewItem').dialog('open');
+}
+
+function confirmApproved(){
+
+}
