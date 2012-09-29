@@ -1,5 +1,7 @@
 //===== Wizards =====//
 $(function() {
+
+
     // Dialog
     $('#formDialogNewItem').dialog({
         autoOpen: false,
@@ -18,82 +20,97 @@ $(function() {
         modal:true
     });
 
-    $('#buttonReject').click(function () {
-        document.formBody.action.value = 'reject';
-    });
-
-    $('#buttonConfirm').click(function () {
-        document.formBody.action.value = 'confirm';
-    });
-
-    //===== Usual validation engine=====//
-
-    $("#usualValidate").validate({
-        rules: {
-            firstname: "required",
-            minChars: {
-                required: true,
-                minlength: 3
+//    $('a.deleteConfirm').click(function () {
+//        document.formBody.action.value = 'confirm';
+//    });
+    //===== closed approved dialog confirmation=====//
+    $('#formDialogApproved').dialog({
+        autoOpen: false,
+        width: 400,
+        modal: true,
+        resizable: false,
+        buttons: {
+            "Yes I'm sure": function() {
+                document.formAutocare.submit();
+                $(this).dialog("close");
             },
-            maxChars: {
-                required: true,
-                maxlength: 6
-            },
-            mini: {
-                required: true,
-                min: 3
-            },
-            maxi: {
-                required: true,
-                max: 6
-            },
-            range: {
-                required: true,
-                range: [6, 16]
-            },
-            emailField: {
-                required: true,
-                email: true
-            },
-            urlField: {
-                required: true,
-                url: true
-            },
-            dateField: {
-                required: true,
-                date: true
-            },
-            digitsOnly: {
-                required: true,
-                digits: true
-            },
-            enterPass: {
-                required: true,
-                minlength: 5
-            },
-            repeatPass: {
-                required: true,
-                minlength: 5,
-                equalTo: "#enterPass"
-            },
-            customMessage: "required",
-            topic: {
-                required: "#newsletter:checked",
-                minlength: 2
-            },
-            agree: "required"
-        },
-        messages: {
-            customMessage: {
-                required: "Bazinga! This message is editable",
-            },
-            agree: "Please accept our policy"
+            "Cancel": function() {
+                $(this).dialog("close");
+            }
         }
     });
 
+    $('#buttonConfirmApproved').click(function () {
+        $("#formDialogApproved").html('<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>' +
+            ' Are you sure the data is correct and you want to closed this approved invoice ?' +
+            '<br/> <em>Please make sure you has write correct information message for accounting team on remarks field</em>' +
+            '</p>');
+        document.formAutocare.action.value = 'confirm';
+        $("#formDialogApproved").dialog('open');
+    });
+
+    $('#buttonCloseApproved').click(function () {
+        var name = $("textarea#remarks").val();
+        if (name!='') {
+            $("#formDialogApproved").html('<p>' +
+                '<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span> Are you sure want to reject this approved invoice ? ' +
+                '<br/> <em>Please make sure you has write correct information message for accounting team on remarks box </em>' +
+                '</p>');
+            document.formAutocare.action.value = 'reject';
+            $("#formDialogApproved").dialog('open');
+        }
+    });
     //===== Validation engine =====//
 
-    $("#validate").validationEngine();
+    $("#formAutocare").validationEngine();
+//==============option==============//
+//    var opts = {
+//        'stockValue': {
+//            decimal: 1,
+//            min: 0,
+//            start: 0
+//        }
+//    };
+//
+//    for (var n in opts)
+//        $("#"+n).spinner(opts[n]);
+
+
+    $('#dialog').dialog({
+        autoOpen: false,
+        width: 400,
+        modal: true,
+        resizable: false,
+        buttons: {
+            "Submit Form": function() {
+                document.formAutocare.submit();
+                $("#formAutocare").validationEngine();
+                $(this).dialog("close");
+            },
+            "Cancel": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    $('form#formAutocare').submit(function(e){
+        e.preventDefault();
+        var name = $("input#name").val();
+        var stock = $("input#stock").val();
+        var code = $("input#code").val();
+        var price = $("input#sellingPrice").val();
+        var purchase_price = $("input#purchasePrice").val();
+        var vendor = $("input#vendor").val();
+        if(name!='' && code!='' && price!='' && purchase_price!='') {
+            $("span#itemName").html(name);
+            $("span#itemCode").html(code);
+            $("span#itemPrice").html(price);
+            $("span#itemPurchasePrice").html(purchase_price);
+            $('#dialog').dialog('open');
+        }
+        return false;
+    });
+
 
 });
 

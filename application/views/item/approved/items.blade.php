@@ -22,6 +22,16 @@
         });
     });
 </script>
+<script type="text/javascript">
+    function confirmSubmit()
+    {
+        var agree=confirm("Are you sure the data is correct ?");
+        if (agree)
+            return true ;
+        else
+            return false ;
+    }
+</script>
 {{ Form::open('item/add_apporved_item', 'POST', array('id' => 'usualValidate'))  }}
    <fieldset class="step" id="w1first">
        <div class="fluid">
@@ -35,7 +45,7 @@
                <div class="status" id="status3"></div>
                <div class="formSubmit">
                    {{ HTML::link('#', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5', 'id' => 'dialogItem' )) }}
-                   {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5' )) }}
+                   {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5', 'onClick' => 'return confirmSubmit()' )) }}
                </div>
                <div class="clear"></div>
            </div>

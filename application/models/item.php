@@ -38,7 +38,7 @@ class Item extends Eloquent {
         $item = Item::where_id($id)
             ->where_status(1)
             ->first();
-        $item_type= Role::find($data['item_type_id']);
+        $item_type= ItemType::find($data['item_type_id']);
         $item->item_type_id=$item_type->id;
         $item_category= ItemCategory::find($data['item_category_id']);
         $item->item_category_id = $item_category->id;
@@ -47,6 +47,7 @@ class Item extends Eloquent {
         $item->description=$data['description'];
 //        $item->stock=$data['stock'];
         $item->price=$data['price'];
+        $item->purchase_price=$data['purchase_price'];
         $item->vendor=$data['vendor'];
         $item->status=$data['status'];
 //        $item->date=$data['date'];
@@ -57,15 +58,18 @@ class Item extends Eloquent {
 
     public static function create($data=array()) {
         $item = new Item();
-        $item_type= Role::find($data['item_type_id']);
+        $item_type= ItemType::find($data['item_type_id']);
         $item->item_type_id=$item_type->id;
         $item_category= ItemCategory::find($data['item_category_id']);
         $item->item_category_id = $item_category->id;
         $item->name=$data['name'];
         $item->code=$data['code'];
         $item->description=$data['description'];
-        $item->stock=$data['stock'];
+        if(isset($data['stock'])) {
+            $item->stock=$data['stock'];
+        }
         $item->price=$data['price'];
+        $item->purchase_price=$data['purchase_price'];
         $item->vendor=$data['vendor'];
         $item->status=$data['status'];
 //        $item->date=$data['date'];

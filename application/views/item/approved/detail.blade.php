@@ -4,8 +4,8 @@
 @include('partial.notification')
 
 <!-- Table with opened toolbar -->
-{{ Form::open('/item/approved_action', 'POST',  array('id' => 'formBody', 'name' => 'formBody')) }}
-{{ Form::hidden('action', '-') }}
+{{ Form::open('/item/approved_action', 'POST',  array('id' => 'formAutocare', 'name' => 'formAutocare')) }}
+{{ Form::hidden('action', '-', array('id' => 'action')) }}
 
 <fieldset>
     <div class="widget fluid">
@@ -67,10 +67,16 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="formRow">
+            <div class="grid3"><label>Remarks message :<span class="req">*</span></label></div>
+            <div class="grid9"><textarea rows="8" cols="" name="remarks" class="validate[required]" id="remarks"></textarea></div><div class="clear"></div>
+        </div>
+
         <div style="padding: 19px 16px">
             <div class="formSubmit">
-                {{ Form::submit('Reject', array( 'class' => 'buttonM bRed mb10 mt5', 'id' => 'buttonReject' )) }}
-                {{ Form::submit('Complete', array( 'class' => 'buttonL bGreen mb10 mt5', 'id' => 'buttonConfirm')) }}
+                {{ Form::submit('Reject', array( 'class' => 'buttonM bRed mb10 mt5', 'id' => 'buttonCloseApproved' )) }}
+                {{ Form::submit('Complete', array( 'class' => 'buttonL bGreen mb10 mt5', 'id' => 'buttonConfirmApproved')) }}
                 <div class="clear"></div>
             </div>
             <div class="btn-group dropup" style="display: inline-block; margin-bottom: 0px;">
@@ -84,11 +90,13 @@
             <div id="formDialogListItem" class="dialog" title="List Item" >
             </div>
 
+            <div id="formDialogApproved" title="Confirmation Closed Approved Invoice">
+            </div>
+
         </div>
     </div>
 </fieldset>
-<script type="text/javascript">
 
-</script>
+
 {{ Form::close() }}
 @endsection

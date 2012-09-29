@@ -34,21 +34,20 @@ class ItemStockFlow extends Eloquent {
         $its=ItemStockFlow::where_in('item_stock_flow.status', $criteria['status']);
         $its=$its->join('item', 'item.id', '=', 'item_stock_flow.item_id');
         $its=$its->join('item_category', 'item_category.id', '=', 'item.item_category_id');
-        $its=$its->join('sub_account_trx', 'sub_account_trx.id', '=', 'item_stock_flow.sub_account_trx_id');
         $its=$its->join('user', 'user.id', '=', 'item_stock_flow.configured_by');
+        $its=$its->join('sub_account_trx', 'sub_account_trx.id', '=', 'item_stock_flow.sub_account_trx_id');
         if(isset($criteria['sub_account_trx_id'])) {
-            $its=$its->where('sub_account_trx_id', '=', $criteria['sub_account_trx_id']);
+            $its=$its->where('item_stock_flow.sub_account_trx_id', '=', $criteria['sub_account_trx_id']);
         }
         if(isset($criteria['item_category_id'])) {
-            $itemPrice = $its->where('item.item_category_id', '=', $criteria['item_category_id']);
+            $its = $its->where('item.item_category_id', '=', $criteria['item_category_id']);
         }
-//        $subAte=ItemStockFlow::where('sub_account_trx_id', '=', $criteria['sub_account_trx_id']);
-//        if($criteria['status']) {$subAte=$subAte->where('status', '=', $criteria['status']);}
         return $its->get('item_stock_flow.*');
     }
 
     public static function create($data=array()) {
         $itemStockFlow = new ItemStockFlow();
+//        {{dd($data);}}
         $item= Item::find($data['item_id']);
         $subAccountTrx = SubAccountTrx::find($data['sub_account_trx_id']);
         $itemStockFlow->item_id = $item->id;
@@ -56,6 +55,7 @@ class ItemStockFlow extends Eloquent {
         $itemStockFlow->quantity = $data['quantity'];
         $itemStockFlow->type = 'O'; //.....??????
         $itemStockFlow->status = itemStockFlowStatus::ADD_TO_LIST;
+        $itemStockFlow->configured_by = Auth::user()->id;
         $itemStockFlow->save();
         return $itemStockFlow->id;
     }
