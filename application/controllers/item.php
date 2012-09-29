@@ -135,13 +135,13 @@ class Item_Controller extends Secure_Controller {
             } else {
                 Session::flash('message_error', 'Failed create');
                 return Redirect::to('item/add'.'?category='.$itemdata['item_category_id'])
-                    ->with('access', $itemdata);
+                    ->with('item', $itemdata);
             }
         } else {
             Log::info('Validation fails. error : ' + print_r($validation->errors, true));
             return Redirect::to('item/add')
                 ->with_errors($validation)
-                ->with('access', $itemdata);
+                ->with('item', $itemdata);
         }
     }
 
