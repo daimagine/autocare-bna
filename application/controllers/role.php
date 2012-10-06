@@ -26,8 +26,23 @@ class Role_Controller extends Secure_Controller {
             'roles' => $roles
         ));
     }
+	
+	public function get_detail($id=null) {
+		if($id===null) {
+			return Redirect::to('role/index');
+		}
+		$role = Role::find($id);
+		$selectedAccess = Role::getAssignedAccess($role);
+        return $this->layout->nest('content', 'role.detail', 
+			array(
+				'role' => $role,
+				'access' => $selectedAccess
+			)
+		);
+    }
 
     public function get_edit($id=null) {
+        $id !== null ? $id : Input::get('id');
         if($id===null) {
             return Redirect::to('role/index');
         }
@@ -41,16 +56,21 @@ class Role_Controller extends Secure_Controller {
             return Redirect::to('role/index');
         }
         $role = Role::find($id);
+        $validation = Validator::make(Input::all(), $this->getRules('edit'));
         $roledata = Input::all();
-        $success = Role::update($id, $roledata);
-        if($success) {
-            //success login
-            Session::flash('message', 'Success update role');
-            return Redirect::to('role/index');
+            if(!$validation->fails()) {
+            $success = Role::update($id, $roledata);
+            if($success) {
+                //success login
+                Session::flash('message', 'Success update role');
+                return Redirect::to('role/index');
+            } else {
+                Session::flash('message_error', 'Failed update role');
+                return Redirect::to_action('role@edit', array($id));
+            }
         } else {
-            Session::flash('message_error', 'Failed update role');
-            return Redirect::to('role/edit')
-                ->with('id', $id);
+            return Redirect::to_action('role@edit', array($id))
+                ->with_errors($validation);
         }
     }
 
@@ -98,7 +118,7 @@ class Role_Controller extends Secure_Controller {
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
-            'name' => 'required|max:50',
+            'name' => 'required|min:3|max:50',
         );
         if($method == 'add') {
             $additional = array(

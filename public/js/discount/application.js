@@ -9,7 +9,8 @@ $(function() {
 		'discountDuration': {
 				decimal: 1,
 				min: 1,
-				start: 1
+				start: 1,
+                suffix: ' Month'
 			}
 	};
 

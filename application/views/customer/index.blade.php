@@ -30,8 +30,18 @@
                     @endif
                 </td>
                 <td class="tableActs" align="center">
-                    <a href="edit/{{ $customer->id }}" class="tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
-                    <a href="delete/{{ $customer->id }}" class="tablectrl_small bDefault tipS" original-title="Remove"><span class="iconb" data-icon=""></span></a>
+                    <a href="/customer/edit/{{ $customer->id }}" 
+						class="appconfirm tablectrl_small bDefault tipS" 
+						original-title="Edit"
+						dialog-confirm-title="Update Confirmation">
+							<span class="iconb" data-icon=""></span>
+					</a>
+                    <a href="/customer/delete/{{ $customer->id }}" 
+						class="appconfirm tablectrl_small bDefault tipS" 
+						original-title="Remove"
+						dialog-confirm-title="Remove Confirmation">
+							<span class="iconb" data-icon=""></span>
+					</a>
                 </td>
             </tr>
             @endforeach

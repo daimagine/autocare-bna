@@ -35,16 +35,17 @@
 Route::any('login', 'user@login');
 Route::any('logout', 'user@logout');
 
-Route::get('user/edit/(:num)', 'user@edit');
-Route::get('role/edit/(:num)', 'role@edit');
-Route::get('access/edit/(:num)', 'access@edit');
-Route::get('account/edit/(:num)', 'account@edit');
-Route::get('discount/edit/(:num)', 'discount@edit');
-Route::get('member/edit/(:num)', 'member@edit');
-Route::get('item/edit/(:num)', 'item@edit');
+//Route::get('user/edit/(:num)', 'user@edit');
+//Route::get('role/edit/(:num)', 'role@edit');
+//Route::get('access/edit/(:num)', 'access@edit');
+//Route::get('account/edit/(:num)', 'account@edit');
+//Route::get('discount/edit/(:num)', 'discount@edit');
+//Route::get('member/edit/(:num)', 'member@edit');
+//Route::get('item/edit/(:num)', 'item@edit');
+//Route::get('customer/edit/(:num)', 'customer@edit');
+//Route::get('vehicle/edit/(:num)', 'vehicle@edit');
+
 Route::get('account/invoice_edit/(:any)/(:num)', 'account@invoice_edit');
-Route::get('customer/edit/(:num)', 'customer@edit');
-Route::get('vehicle/edit/(:num)', 'vehicle@edit');
 
 Route::controller(array(
    'home', 'user', 'role', 'access', 'account', 'discount', 'member', 'item', 'customer', 'vehicle'

@@ -18,6 +18,14 @@ class Role extends Eloquent {
         return $this->has_many_and_belongs_to('Access', 'role_access')
             ->with('sequence');
     }
+	
+	public function parent() {
+		return $this->has_one('Role', 'parent_id');
+	}
+
+	public function childs() {
+		return $this->has_many('Role', 'parent_id');
+	}
 
     public static function listAll($criteria) {
         return Role::where('status', '=', 1)->get();

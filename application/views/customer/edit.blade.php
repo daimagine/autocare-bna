@@ -16,7 +16,7 @@
 
         {{ Form::hidden('id', $customer->id) }}
 
-        {{ Form::nginput('text', 'name', $customer->name, 'Name') }}
+        {{ Form::nginput('text', 'name', $customer->name, 'Name *') }}
 
         {{ Form::nginput('text', 'address1', $customer->address1, 'Address 1')}}
 
@@ -30,7 +30,7 @@
 
         {{ Form::nginput('text', 'phone2', $customer->phone2, 'Phone 2')}}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'),$customer->status, 'Status') }}
+        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'),$customer->status, 'Status *') }}
 		
         {{ Form::nginput('text', 'additional_info', $customer->additional_info, 'Additional Info')}}
 		
@@ -89,8 +89,8 @@
 						  	<td class="v-desc-{{ $i }}">{{ $vehicles[$i]->description }}</td>
 						  	<td>
                                 <div>
-                                    <a href="#vehicle-tbody" onclick="Customer.Vehicle.edit(&quot;v-rows-{{ $i }}&quot;,&quot;{{ $i }}&quot;)">edit</a> |
-                                    <a href="#vehicle-tbody" onclick="Customer.Vehicle.remove(&quot;v-rows-{{ $i }}&quot;)">remove</a>
+                                    <a href="#vehicle-tbody" onclick="Customer.Vehicle.edit('v-rows-{{ $i }}','{{ $i }}')">edit</a> |
+                                    <a href="#vehicle-tbody" onclick="Customer.Vehicle.remove('v-rows-{{ $i }}')">remove</a>
                                 </div>
                             </td>
 						  	<td style="display: none; ">
@@ -141,6 +141,7 @@
                 <span> Register vehicle to <strong><span id="vehicle-customer-name"></span></strong></span>
             </div>
             <div class="divider"><span></span></div>
+            <div class="dialogSelect m10" id="vehicle-dialog-notification"></div>
             <div class="dialogSelect m10">
                 <label>Vehicle Number *</label>
                 <input type="text" id="vehicle-no"/>

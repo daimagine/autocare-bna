@@ -1,4 +1,4 @@
-w@section('content')
+@section('content')
 
 @include('partial.notification')
 <!-- Rounded buttons -->
@@ -43,8 +43,18 @@ w@section('content')
                 <td>{{ $item->date }}</td>
                 <td>{{ $item->expiry_date }}</td>
                 <td class="tableActs" align="center">
-                    <a href="edit/{{ $item->id }}" class="tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
-                    <a href="delete/{{ $item->id }}" class="tablectrl_small bDefault tipS" original-title="Remove"><span class="iconb" data-icon=""></span></a>
+                    <a href="/item/edit/{{ $item->id }}" 
+						class="appconfirm tablectrl_small bDefault tipS" 
+						original-title="Edit"
+						dialog-confirm-title="Update Confirmation">
+							<span class="iconb" data-icon=""></span>
+					</a>
+                    <a href="/item/delete/{{ $item->id }}" 
+						class="appconfirm tablectrl_small bDefault tipS" 
+						original-title="Remove"
+						dialog-confirm-title="Remove Confirmation">
+							<span class="iconb" data-icon=""></span>
+					</a>
                 </td>
             </tr>
             @endforeach

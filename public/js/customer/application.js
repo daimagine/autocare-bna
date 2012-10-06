@@ -44,7 +44,8 @@ Customer.Vehicle = {
         color  : '#vehicle-color',
         model  : '#vehicle-model',
         brand  : '#vehicle-brand',
-        desc   : '#vehicle-description'
+        desc   : '#vehicle-description',
+        notif  : '#vehicle-dialog-notification'
     },
 
     //function to initialize dialog form
@@ -116,6 +117,9 @@ Customer.Vehicle = {
     add : function() {
         console.log('validate forms first');
         if(this._validateNull() !== true)
+            return false;
+
+        if(this._validateLength() !== true)
             return false;
 
         if(this._validateDuplicate() !== true)
@@ -248,7 +252,7 @@ Customer.Vehicle = {
         if(msg === null)
             return true;
         else
-            alert(required);
+            this.notification('error', required);
         return false;
     },
 
@@ -266,7 +270,19 @@ Customer.Vehicle = {
         if(msg === null)
             return true;
         else
-            alert(required);
+            this.notification('error', required);
+        return false;
+    },
+
+    _validateLength : function() {
+        var msg = null;
+        if($(this._form.no).val().trim().length < 5) {
+            msg = 'Vehicle Number length must be more than 3 characters';
+        }
+        if(msg === null)
+            return true;
+        else
+            this.notification('error', msg);
         return false;
     },
 
@@ -309,6 +325,9 @@ Customer.Vehicle = {
         if(this._validateNull() !== true)
             return false;
 
+        if(this._validateLength() !== true)
+            return false;
+
         if(this._validateDuplicate(id) !== true)
             return false;
 
@@ -347,6 +366,15 @@ Customer.Vehicle = {
         deschid.val($(this._form.desc).val());
 
         return true;
+    },
+
+    notification : function(type, message) {
+        var div = $(this._form.notif);
+        var classNotif = 'nInformation';
+        if(type === 'error')
+            classNotif = 'nFailure';
+        var html = '<div class="nNote ' + classNotif + '" style="margin-top: 0; margin-bottom: 15px;"><p>' + message + '</p></div>';
+        div.html(html);
     }
 
 };

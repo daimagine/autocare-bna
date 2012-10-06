@@ -14,9 +14,9 @@
             <div class="clear"></div>
         </div>
 
-        {{ Form::nginput('text', 'name', @$role['name'], 'Name') }}
+        {{ Form::nginput('text', 'name', @$role['name'], 'Name *') }}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($role['status']) ? $role['status'] : 1, 'Status') }}
+        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($role['status']) ? $role['status'] : 1, 'Status *') }}
 
         {{ Form::nginput('text', 'description', @$role['description'], 'Description') }}
 

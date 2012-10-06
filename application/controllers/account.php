@@ -27,6 +27,7 @@ class Account_Controller extends Secure_Controller {
     }
 
     public function get_edit($id=null) {
+        $id !== null ? $id : Input::get('id');
         if($id===null) {
             return Redirect::to('account/index');
         }
@@ -41,16 +42,21 @@ class Account_Controller extends Secure_Controller {
         if($id===null) {
             return Redirect::to('account/index');
         }
+        $validation = Validator::make(Input::all(), $this->getRules());
         $accountdata = Input::all();
-        $success = Account::update($id, $accountdata);
-        if($success) {
-            //success edit
-            Session::flash('message', 'Success update');
-            return Redirect::to('account/index');
+        if(!$validation->fails()) {
+            $success = Account::update($id, $accountdata);
+            if($success) {
+                //success edit
+                Session::flash('message', 'Success update');
+                return Redirect::to('account/index');
+            } else {
+                Session::flash('message_error', 'Failed update');
+                return Redirect::to_action('account@edit', array($id));
+            }
         } else {
-            Session::flash('message_error', 'Failed update');
-            return Redirect::to('account/edit')
-                ->with('id', $id);
+            return Redirect::to_action('account@edit', array($id))
+                ->with_errors($validation);
         }
     }
 
@@ -100,7 +106,7 @@ class Account_Controller extends Secure_Controller {
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
-            'name' => 'required|max:50',
+            'name' => 'required|min:5|max:50',
         );
         if($method == 'add') {
             $additional = array(
@@ -210,16 +216,14 @@ class Account_Controller extends Secure_Controller {
             if($success) {
                 //success edit
                 Session::flash('message', 'Success update');
-                return Redirect::to('account/account_receivable');
+                return Redirect::to_action('account@account_receivable', array($id));
             } else {
                 Session::flash('message_error', 'Failed update');
-                return Redirect::to('account/invoice_edit')
-                    ->with('id', $id);
+                return Redirect::to_action('account@invoice_edit', array($id));
             }
         } else {
             Session::flash('message_error', 'Failed update');
-            return Redirect::to('account/account_receivable')
-                ->with('id', $id);
+            return Redirect::to_action('account@account_receivable', array($id));
         }
     }
 
@@ -227,7 +231,7 @@ class Account_Controller extends Secure_Controller {
         $additional = array();
         $rules = array(
             'subject' => 'required',
-            'reference_no' => 'required|max:50',
+            'reference_no' => 'required|min:5|max:50',
             'invoice_date' => 'required',
             'invoice_time' => 'required',
             'due_date' => 'required',

@@ -9,13 +9,18 @@
 class User extends Eloquent {
 
     public static $table = 'user';
+	
+    private static $USER_PREFIX = 'BNA';
+    private static $USER_LENGTH = 9;
 
     public function role() {
         return $this->belongs_to('Role');
     }
 	
     public static function listAll($criteria) {
-        return User::where('status', '=', 1)->get();
+        return User::with(array( 'role' ))
+				->where('status', '=', 1)
+				->get();
     }
 
     public static function update($id, $data = array()) {
@@ -75,4 +80,22 @@ class User extends Eloquent {
         return $granted;
     }
 	
+    public static function generate_staff_id() {
+        $count = DB::table(static::$table)->count();
+        $count++;
+        //pad static::$USER_LENGTH leading zeros
+        $suffix = sprintf('%0' . static::$USER_LENGTH . 'd', $count);
+        return static::$USER_PREFIX . $suffix;
+    }
+	
+	public static function unique_login_id($login_id, $id = NULL) {
+		$valid = false;
+		$query = DB::table(static::$table)
+					->where('login_id','=',$login_id);
+		if($id != NULL)
+			$query->where('id', '<>', $id);
+		$valid = $query->count() <= 0 ? true : false;
+		//dd($valid);
+		return $valid;
+	}
 }

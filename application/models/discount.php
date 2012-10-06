@@ -10,6 +10,9 @@ class Discount extends Eloquent {
 
     public static $table = 'discount';
 
+    private static $DISC_PREFIX = 'DSC';
+    private static $DISC_LENGTH = 4;
+
     public static function listAll($criteria=array()) {
         return Discount::where('status', '=', 1)->get();
     }
@@ -49,6 +52,14 @@ class Discount extends Eloquent {
         $discount->status = 0;
         $discount->save();
         return $discount->id;
+    }
+
+    public static function create_discount_code() {
+        $count = DB::table(static::$table)->count();
+        $count++;
+        //pad static::$DISC_LENGTH leading zeros
+        $suffix = sprintf('%0' . static::$DISC_LENGTH . 'd', $count);
+        return static::$DISC_PREFIX . $suffix;
     }
 
 }

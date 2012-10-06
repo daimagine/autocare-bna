@@ -10,7 +10,7 @@ class Member extends Eloquent {
 
     public static $table = 'membership';
 	
-    private static $MEMBERSHIP_PREFIX = 'BNA';
+    private static $MEMBERSHIP_PREFIX = 'BNACARE';
     private static $MEMBERSHIP_LENGTH = 9;
 	
     public static $sqlformat = 'Y-m-d H:i:s';

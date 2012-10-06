@@ -14,7 +14,7 @@
             <div class="clear"></div>
         </div>
 
-        {{ Form::nginput('text', 'code', @$discount['code'], 'Code') }}
+        {{ Form::nginput('text', 'code', $discount_code, 'Code', array( 'readonly' => 'readonly' ) ) }}
 
 		<div class="formRow">
 			<div class="grid3"><label>Value</label></div>
@@ -25,7 +25,7 @@
 
         {{ Form::nginput('text', 'description', @$discount['description'], 'Description') }}
 		
-        {{ Form::nginput('text', 'registration_fee', @$discount['registration_fee'], 'Charge') }}
+        {{ Form::nginput('text', 'registration_fee', @$discount['registration_fee'], 'Registration Fee *') }}
 
 		<div class="formRow">
 			<div class="grid3"><label>Duration</label></div>
@@ -34,7 +34,8 @@
 					<input name="duration" type="text" id="discountDuration" value="{{ @$discount['duration'] }}" />
 				</div>
 				<div class="grid7">
-					{{ Form::select('duration_period', array('M' => 'Month', 'Y' => 'Year'), @$discount['duration_period']) }}
+                    {{ Form::hidden('duration_period', 'M') }}
+					{{-- Form::select('duration_period', array('M' => 'Month', 'Y' => 'Year'), @$discount['duration_period']) --}}
 				</div>
 			</div>
 			<div class="clear"></div>

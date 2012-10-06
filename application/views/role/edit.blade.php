@@ -16,9 +16,9 @@
 
         {{ Form::hidden('id', $role->id) }}
 
-        {{ Form::nginput('text', 'name', $role->name, 'Name') }}
+        {{ Form::nginput('text', 'name', $role->name, 'Name *') }}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $role->status, 'Status') }}
+        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $role->status, 'Status *') }}
 
         {{ Form::nginput('text', 'description', $role->description, 'Description') }}
 

@@ -37,6 +37,7 @@ class Member_Controller extends Secure_Controller {
     }
 
     public function get_edit($id=null) {
+        $id !== null ? $id : Input::get('id');
         if($id===null) {
             return Redirect::to('member/index');
         }
@@ -51,16 +52,21 @@ class Member_Controller extends Secure_Controller {
         if($id===null) {
             return Redirect::to('member/index');
         }
+        $validation = Validator::make(Input::all(), $this->getRules('edit'));
         $memberdata = Input::all();
-        $success = Member::update($id, $memberdata);
-        if($success) {
-            //success edit
-            Session::flash('message', 'Success update');
-            return Redirect::to('member/index');
+        if(!$validation->fails()) {
+            $success = Member::update($id, $memberdata);
+            if($success) {
+                //success edit
+                Session::flash('message', 'Success update');
+                return Redirect::to('member/index');
+            } else {
+                Session::flash('message_error', 'Failed update');
+                return Redirect::to_action('member@edit', array($id));
+            }
         } else {
-            Session::flash('message_error', 'Failed update');
-            return Redirect::to('member/edit')
-                ->with('id', $id);
+            return Redirect::to_action('member@edit', array($id))
+                ->with_errors($validation);
         }
     }
 
@@ -110,7 +116,8 @@ class Member_Controller extends Secure_Controller {
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
-            'code' => 'required|max:50',
+            'code' => 'required|min:5|max:50',
+
         );
         if($method == 'add') {
             $additional = array(
@@ -131,10 +138,10 @@ class Member_Controller extends Secure_Controller {
         $success = Customer::updateMembership($id, $memberdata);
         if($success) {
             //success edit
-            Session::flash('message', 'Success update');
+            Session::flash('message', 'Assign membership is success');
             return Redirect::to('member/index');
         } else {
-            Session::flash('message_error', 'Failed update');
+            Session::flash('message_error', 'Failed to assign membership');
             return Redirect::to('member/index')
                 ->with('id', $id);
         }
