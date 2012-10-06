@@ -12,8 +12,8 @@ abstract class approvedStatus {
 }
 
 abstract class accountTrxStatus {
-    const AWAITING_PAYMENT = 'O',
-        DONE_PAYMENT = 'C';
+    const AWAITING_PAYMENT = '1',
+        DONE_PAYMENT = '0';
 }
 
 abstract class itemStockFlowStatus {

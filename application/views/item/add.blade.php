@@ -2,15 +2,14 @@
 
 @include('partial.notification')
 <br>
-
 <ul class="middleNavA">
     @foreach($allItemCategory as $category)
     <li><a href="add?category={{$category->id}}" title="{{$category->name}}" style="width: 100px;height: 65px;"><img src="../images/icons/color/config.png" alt="" /><span style="@if($itemCategory->name == $category->name) color:red @endif">{{$category->name}}</span></a></li>
     @endforeach
 </ul>
 <div class="divider"><span></span></div>
-
-{{ Form::open('item/add', 'POST', array('id' => 'validate')) }}
+<!--, 'onsubmit' => 'return confirmSubmit()'-->
+{{ Form::open('item/add', 'POST', array('id' => 'formAutocare', 'name' => 'formAutocare')) }}
 
 <fieldset>
 
@@ -34,12 +33,22 @@
         @if($accountTransaction!=null)
         {{ Form::nyelect('account_transaction_id', @$accountTransaction, isset($item['account_transaction_id']) ? $item['account_transaction_id'] : null, 'Account Transaction', array('class' => 'validate[required]')) }}
 
-        {{ Form::nginput('text', 'stock', @$item['stock'], 'Stock', array('class' => 'validate[required]')) }}
+        <div class="formRow">
+            <div class="grid3"><label>Stock</label></div>
+            <div class="grid9">
+                <div class="grid5">
+                    <input name="stock" type="text" id="stockValue" value="{{ @$item['stock'] }}" class="validate[required,custom[number]]"/>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
         @endif
 
         {{ Form::nginput('text', 'description', @$access['description'], 'Description', array('class' => 'validate[required]')) }}
 
-        {{ Form::nginput('text', 'price', @$item['price'], 'Price', array('class' => 'validate[required,custom[onlyNumberSp]]')) }}
+        {{ Form::nginput('text', 'price', @$item['price'], 'Selling Price', array('class' => 'validate[required,custom[number]]', 'id' => 'sellingPrice')) }}
+
+        {{ Form::nginput('text', 'purchase_price', @$item['purchase_price'], 'Purchase Price', array('class' => 'validate[required,custom[number]]', 'id' => 'purchasePrice')) }}
 
         {{ Form::nginput('text', 'vendor', @$item['vendor'], 'Vendor', array('class' => 'validate[required]')) }}
 
@@ -49,13 +58,23 @@
             <div class="status" id="status3"></div>
             <div class="formSubmit">
                 {{ HTML::link('item/list?category='.$itemCategory->id, 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
-                {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5' )) }}
+                {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5', 'id' => 'confirmAddButton' )) }}
             </div>
             <div class="clear"></div>
         </div>
     </div>
 
 </fieldset>
+
+<div id="dialog" title="Confirmation Add New Item {{$itemCategory->name}}">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span> Are you sure the data is correct ?</p>
+    <p>Item Name : <strong><span id="itemName"></span></strong></p>
+    <p>Item Code : <strong><span id="itemCode"></span></strong></p>
+    <p>Item Sale Price  : <strong><span id="itemPrice"></span></strong></p>
+    <p>Item Purchase Price : <strong><span id="itemPurchasePrice"></span></strong></p>
+    <p>If this is correct, click Submit Form.</p>
+    <p>To edit, click Cancel.<p>
+</div>
 
 {{ Form::close() }}
 

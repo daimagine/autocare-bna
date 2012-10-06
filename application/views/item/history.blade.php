@@ -58,7 +58,8 @@
             <thead>
             <tr>
                 <th>Item Name<span class="sorting" style="display: block;"></span></th>
-                <th>Price</th>
+                <th>Sale Price</th>
+                <th>Purchase Price</th>
                 <th>Status</th>
                 <th>Created at</th>
                 <th>Expired at</th>
@@ -71,6 +72,7 @@
             <tr class="">
                 <td>{{ $price->item->name }}</td>
                 <td>{{ $price->price }}</td>
+                <td>{{ $price->purchase_price }}</td>
                 <td>{{ ($price->status == '1' ? 'Active' : 'Expired') }}</td>
                 <td>{{ $price->date }}</td>
                 <td>{{ $price->expiry_date }}</td>

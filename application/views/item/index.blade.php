@@ -34,7 +34,7 @@
             <tbody>
             @foreach($item as $item)
             <tr class="">
-                <td>{{ $item->name }}</td>
+                <td class="name">{{ $item->name }}</td>
                 <td>{{ $item->code }}</td>
                 <td>{{ $item->stock }}</td>
                 <td>{{ $item->description }}</td>
@@ -43,18 +43,11 @@
                 <td>{{ $item->date }}</td>
                 <td>{{ $item->expiry_date }}</td>
                 <td class="tableActs" align="center">
-                    <a href="/item/edit/{{ $item->id }}" 
-						class="appconfirm tablectrl_small bDefault tipS" 
-						original-title="Edit"
-						dialog-confirm-title="Update Confirmation">
-							<span class="iconb" data-icon=""></span>
-					</a>
-                    <a href="/item/delete/{{ $item->id }}" 
-						class="appconfirm tablectrl_small bDefault tipS" 
-						original-title="Remove"
-						dialog-confirm-title="Remove Confirmation">
-							<span class="iconb" data-icon=""></span>
-					</a>
+                    <a href="edit/{{ $item->id }}" class="tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
+                    <a href="delete/{{ $item->id }}" class="classConfirmDelete tablectrl_small bDefault tipS" original-title="Remove">
+                        <span class="iconb" data-icon=""></span>
+                        <!-- Dialog modal confirmation delete item-->
+                    </a>
                 </td>
             </tr>
             @endforeach
@@ -71,6 +64,10 @@
             <span>Add New</span>
         </a></div>
     </div>
+</div>
+
+<div id="confirmDelete" class="dialog" title="Confirmation Delete" ></div>
+
 </div>
 
 @endsection

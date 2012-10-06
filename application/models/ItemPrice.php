@@ -48,6 +48,7 @@ class ItemPrice extends Eloquent {
     public static function create($data=array()) {
         $itemPrice = new ItemPrice();
         $item = Item::find($data['item_id']);
+        $itemPrice->purchase_price = $data['purchase_price'];
         $itemPrice->item_id = $item->id;
         $itemPrice->price = $item->price;
         $itemPrice->status = statusType::ACTIVE;

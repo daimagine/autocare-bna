@@ -4,7 +4,7 @@
 <br>
 
 
-{{ Form::open('item/edit', 'POST', array('id' => 'validate')) }}
+{{ Form::open('item/edit', 'POST', array('id' => 'formAutocare', 'name' => 'formAutocare')) }}
 
 <fieldset>
 
@@ -29,7 +29,9 @@
 
         {{ Form::nginput('text', 'description', $item->description, 'Description', array('class' => 'validate[required]')) }}
 
-        {{ Form::nginput('text', 'price', $item->price, 'Price', array('class' => 'validate[required,custom[onlyNumberSp]]')) }}
+        {{ Form::nginput('text', 'price', $item->price, 'Selling Price', array('class' => 'validate[required,custom[number]]', 'id' => 'sellingPrice')) }}
+
+        {{ Form::nginput('text', 'purchase_price', $item->purchase_price, 'Purchase Price', array('class' => 'validate[required,custom[number]]', 'id' => 'purchasePrice')) }}
 
         {{ Form::nginput('text', 'vendor', $item->vendor, 'Vendor', array('class' => 'validate[required]')) }}
 
@@ -44,6 +46,17 @@
             <div class="clear"></div>
         </div>
     </div>
+
+    <div id="dialog" title="Confirmation Update New Item {{$category->name}}">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span> Are you sure the data is correct ?</p>
+        <p>Item Name : <strong><span id="itemName"></span></strong></p>
+        <p>Item Code : <strong><span id="itemCode"></span></strong></p>
+        <p>Item Sale Price  : <strong><span id="itemPrice"></span></strong></p>
+        <p>Item Purchase Price : <strong><span id="itemPurchasePrice"></span></strong></p>
+        <p>If this is correct, click Submit Form.</p>
+        <p>To edit, click Cancel.<p>
+    </div>
+
 
 </fieldset>
 
