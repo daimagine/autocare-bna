@@ -3,7 +3,7 @@
 @include('partial.notification')
 <br>
 
-{{ Form::open('/account/invoice_edit', 'POST') }}
+{{ Form::open('/account/invoice_edit/'.$account->type, 'POST') }}
 
 {{ Form::hidden('id', $account->id) }}
 
@@ -13,19 +13,19 @@
 
     <div class="widget fluid">
         <div class="whead">
-            <h6>Add Invoice</h6>
+            <h6>Edit Invoice {{ $accountTransType === 'D' ? 'Account Receivable' : 'Account Payable' }}</h6>
 
             <div class="clear"></div>
         </div>
 
-        {{ Form::nginput('text', 'subject', $account->subject, 'To') }}
+        {{ Form::nginput('text', 'subject', $account->subject, $accountTransType === 'D' ? 'To *' : ($accountTransType === 'C' ? 'From *' : 'Subject *') ) }}
 
         {{ Form::nginput('text', 'invoice_no', $account->invoice_no, 'Invoice', array( 'readonly' => 'readonly' )) }}
 
-        {{ Form::nginput('text', 'reference_no', $account->reference_no, 'Reference') }}
+        {{ Form::nginput('text', 'reference_no', $account->reference_no, 'Reference *') }}
 
         <div class="formRow">
-            <div class="grid3"><label>Invoice Date</label></div>
+            <div class="grid3"><label>Invoice Date *</label></div>
             <div class="grid9">
                 <ul class="timeRange">
                     <li><input name="invoice_date" type="text" class="datepicker" value="{{ $invoice_date }}" /></li>
@@ -40,7 +40,7 @@
 
 
         <div class="formRow">
-            <div class="grid3"><label>Due Date</label></div>
+            <div class="grid3"><label>Due Date *</label></div>
             <div class="grid9">
                 <ul class="timeRange">
                     <li><input name="due_date" type="text" class="datepicker" value="{{ $due_date }}" /></li>
@@ -60,7 +60,7 @@
         <div class="formRow noBorderB">
             <div class="status" id="status3"></div>
             <div class="formSubmit">
-                {{ HTML::link('account/account_receivable', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
+                {{ HTML::link( $accountTransType === 'D' ? 'account/account_receivable' : 'account/account_payable', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
                 {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5' )) }}
             </div>
             <div class="clear"></div>

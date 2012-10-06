@@ -31,6 +31,8 @@ class AccountTransaction extends Eloquent {
             return false;
 
         $ate = new AccountTransaction;
+        $ate->create_by = Auth::user()->id;
+
         $ate->invoice_no = $data['invoice_no'];
         $ate->reference_no = $data['reference_no'];
         $ate->status = $data['status'];
@@ -55,7 +57,13 @@ class AccountTransaction extends Eloquent {
     }
 
     public static function listAll($criteria=array()) {
-        return AccountTransaction::where('status', '=', 1)->get();
+        $q = AccountTransaction::where('status', '=', 1);
+        foreach($criteria as $key => $val) {
+            if(is_array($val)) {
+                $q->where($key, $val[0], $val[1]);
+            }
+        }
+        return $q->get();
     }
 
     public static function remove($id) {

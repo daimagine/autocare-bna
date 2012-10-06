@@ -5,7 +5,7 @@
 <!-- Table with opened toolbar -->
 <div class="widget">
     <div class="whead">
-        <h6>Account Receivable List</h6>
+        <h6>Account Payable List</h6>
         <div class="clear"></div>
     </div>
     <div id="dyn2" class="shownpars">
@@ -15,7 +15,7 @@
             <tr>
                 <th>Invoice No<span class="sorting" style="display: block;"></span></th>
                 <th>Reference No</th>
-                <th>To</th>
+                <th>From</th>
                 <th>Input Date</th>
                 <th>Invoice Date</th>
                 <th>Due Date</th>
@@ -65,9 +65,9 @@
 
 <div class="fluid">
     <div class="grid2">
-        <div class="wButton"><a href="/account/invoice_in" title="" class="buttonL bLightBlue first">
+        <div class="wButton"><a href="/account/invoice_in/C" title="" class="buttonL bLightBlue first">
             <span class="icol-add"></span>
-            <span>Add Account Receivable</span>
+            <span>Add Account Payable</span>
         </a></div>
     </div>
 </div>
