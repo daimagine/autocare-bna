@@ -99,7 +99,7 @@ class Customer_Controller extends Secure_Controller {
     public function post_add() {
         $validation = Validator::make(Input::all(), $this->getRules());
         $memberdata = Input::all();
-        //dd($memberdata);
+//        dd($memberdata);
         if(!$validation->fails()) {
             $success = Customer::create($memberdata);
             if($success) {

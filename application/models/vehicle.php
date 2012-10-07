@@ -16,6 +16,10 @@ class Vehicle extends Eloquent {
         return $this->belongs_to('Customer');
     }
 
+    public function membership() {
+        return $this->belongs_to('customer.mermbership', 'customer_id'  );
+    }
+
 	public function get_owner() {
 		return $this->customer->name;
 	}
@@ -49,4 +53,13 @@ class Vehicle extends Eloquent {
         $vehicle->save();
 		return $vehicle->id;
 	}
+
+
+    //===jo edit====//
+    public static function getSingleResult($criteria) {
+        $v=Vehicle::where('status', '=', 1);
+        if(isset($criteria['customer_id'])) {$v=$v->where('customer_id', '=', $criteria['customer_id']);}
+        if(isset($criteria['vehicle_number'])) {$v=$v->where('number', '=', $criteria['vehicle_number']);}
+        return $v->first();
+    }
 }

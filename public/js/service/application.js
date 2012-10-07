@@ -10,7 +10,6 @@ $(function() {
     //validation
     $("#formAutocare").validationEngine();
 
-
     $('#dialogAdd').dialog({
         autoOpen: false,
         width: 400,

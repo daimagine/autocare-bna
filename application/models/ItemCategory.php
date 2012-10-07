@@ -13,7 +13,7 @@ class ItemCategory  extends Eloquent
     public static function listAll($criteria) {
         $item_category = ItemCategory::where('status', '=', 1);
         if($criteria != null) {
-            if($criteria['id']) {
+            if(isset($criteria['id'])) {
                 $item_category = $item_category->where('id', '=', $criteria['category_id']);
             }
         }

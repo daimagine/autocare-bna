@@ -15,7 +15,11 @@ class User extends Eloquent {
     }
 	
     public static function listAll($criteria) {
-        return User::where('status', '=', 1)->get();
+        $user = User::where('status', '=', 1);
+        if (isset($criteria['role_id'])) {
+            $user = $user->where('role_id', '=', $criteria['role_id']);
+        }
+        return $user->get();
     }
 
     public static function update($id, $data = array()) {

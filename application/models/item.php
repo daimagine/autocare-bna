@@ -17,6 +17,10 @@ class Item extends Eloquent {
         return $this->belongs_to('ItemCategory');
     }
 
+    public function item_unit() {
+        return $this->belongs_to('UnitType', 'unit_id');
+    }
+
     public function item_type() {
         return $this->belongs_to('ItemType');
     }
@@ -28,7 +32,7 @@ class Item extends Eloquent {
 
     public static function listAll($criteria) {
         $item = Item::where('status', '=', 1);
-        if($criteria['item_category_id']){$item = $item->where('item_category_id', '=', $criteria['item_category_id']);}
+        if(isset($criteria['item_category_id'])){$item = $item->where('item_category_id', '=', $criteria['item_category_id']);}
         $item=$item->get();
         return $item;
 

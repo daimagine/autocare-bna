@@ -26,3 +26,9 @@ abstract class statusType {
     const ACTIVE ='1',
         INACTIVE ='0';
 }
+
+abstract class statusWorkOrder {
+    const OPEN ='O',
+        CLOSE ='D',
+        CANCELED='C';
+}
