@@ -85,6 +85,19 @@
             </table>
             <input type="hidden" id="item-rows" value="0"/>
             <div id="item-input-wrapper" style="display: none;"></div>
+
+            <div class="divider"></div>
+            <div class="fluid">
+                <div class="rtl-inputs">
+                    <div class="grid5">
+                        <ul class="wInvoice">
+                            <li><h4 class="blue" id="item-subtotal">0</h4><span>Subtotal</span></li>
+                            <li><h4 class="red" id="item-subtotal-tax">0</h4><span>Total Tax</span></li>
+                            <li><h4 class="green" id="item-total">0</h4><span>Total Amount</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
