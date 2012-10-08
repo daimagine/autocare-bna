@@ -37,6 +37,11 @@ Account.Item = {
     _accountname : '#item-account-name',
     _accountnamefield : '#account-name',
 
+    //total
+    _subtotal : '#item-subtotal',
+    _subtotaltax : '#item-subtotal-tax',
+    _total : '#item-total',
+
     //form selector helper
     _form   : {
         item   : '#item-info',
@@ -160,8 +165,8 @@ Account.Item = {
         var aidx = $(Account.Item._form.account).find(':selected').attr('id').slice(-1);
         var account_name = $('#select-account-id-' + aidx).text();
         td.after($('<td class="v-account-' + nextidx + '">').append(account_name));
-        td.after($('<td class="v-tax-' + nextidx + '">').append($(this._form.tax).val()));
-        td.after($('<td class="v-amount-' + nextidx + '">').append($(this._form.amount).val()));
+        td.after($('<td class="v-tax-' + nextidx + '">').append(toFixed($(this._form.tax).val(),2)));
+        td.after($('<td class="v-amount-' + nextidx + '">').append(toFixed($(this._form.amount).val(),2)));
 
         var divv = $('<div>').append(
             $('<a>')
@@ -202,7 +207,7 @@ Account.Item = {
         );
         hiddiv.append(
             $('<input>')
-                .attr('class', 'v-price-hid-' + nextidx)
+                .attr('class', 'v-unit-price-hid-' + nextidx)
                 .attr('type', 'hidden')
                 .attr('name','items[' + nextidx + '][unit_price]')
                 .val($(this._form.price).val())
@@ -224,14 +229,14 @@ Account.Item = {
         );
         hiddiv.append(
             $('<input>')
-                .attr('class', 'v-tax-hid-' + nextidx)
+                .attr('class', 'v-tax v-tax-hid-' + nextidx)
                 .attr('type', 'hidden')
                 .attr('name','items[' + nextidx + '][tax]')
                 .val($(this._form.tax).val())
         );
         hiddiv.append(
             $('<input>')
-                .attr('class', 'v-amount-hid-' + nextidx)
+                .attr('class', 'v-amount v-amount-hid-' + nextidx)
                 .attr('type', 'hidden')
                 .attr('name','items[' + nextidx + '][amount]')
                 .val($(this._form.amount).val())
@@ -254,6 +259,8 @@ Account.Item = {
         //updating rows
         vrows.val(++nextidx);
         console.log('rows updated to ' + vrows.val());
+
+        this.calculateTotal();
 
     },
 
@@ -330,24 +337,36 @@ Account.Item = {
 
         $(this._addkey).val(id);
 
-        var item = row.find('.v-item-' + idx);
-        var desc = row.find('.v-desc-' + idx);
-        var qty = row.find('.v-qty-' + idx);
-        var price = row.find('.v-price-' + idx);
-        var disc = row.find('.v-disc-' + idx);
-        var account = row.find('.v-account-' + idx);
-        var tax = row.find('.v-tax-' + idx);
-        var amount = row.find('.v-amount-' + idx);
+        var item = row.find('.v-item-hid-' + idx);
+        var desc = row.find('.v-desc-hid-' + idx);
+        var qty = row.find('.v-qty-hid-' + idx);
+        var price = row.find('.v-unit-price-hid-' + idx);
+        console.log(price);
+        var disc = row.find('.v-disc-hid-' + idx);
+        var account = row.find('.v-account-hid-' + idx);
+        var tax = row.find('.v-tax-hid-' + idx);
+        var amount = row.find('.v-amount-hid-' + idx);
 
         //clean up
-        $(this._form.item).val(item.text());
-        $(this._form.desc).val(desc.text());
-        $(this._form.qty).val(qty.text());
-        $(this._form.price).val(price.text());
-        $(this._form.disc).val(disc.text());
-        $(this._form.account).val(account.text());
-        $(this._form.tax).val(tax.text());
-        $(this._form.amount).val(amount.text());
+        $(this._form.item).val(item.val());
+        $(this._form.desc).val(desc.val());
+        $(this._form.qty).val(qty.val());
+        $(this._form.price).val(price.val());
+        $(this._form.disc).val(disc.val());
+        $(this._form.tax).val(tax.val());
+        $(this._form.amount).val(amount.val());
+
+        console.log($(this._form.account));
+        $(this._form.account).find('option').each(function(idx) {
+            if(this.value == account.val()) {
+                console.log(account);
+                var aidx = account.val().slice(-1);
+                var temp = $('#select-account-id-' + aidx);
+                console.log(temp);
+                $(this).attr('selected' , 'selected');
+                $('#uniform-item-account-type').find('span').html(temp.text());
+            }
+        });
     },
 
     //function to add new item
@@ -401,13 +420,15 @@ Account.Item = {
 
         var tax = row.find('.v-tax-' + idx);
         var taxhid = row.find('.v-tax-hid-' + idx);
-        tax.html($(this._form.tax).val());
+        tax.html(toFixed($(this._form.tax).val(),2));
         taxhid.val($(this._form.tax).val());
 
         var amount = row.find('.v-amount-' + idx);
         var amounthid = row.find('.v-amount-hid-' + idx);
-        amount.html($(this._form.amount).val());
+        amount.html(toFixed($(this._form.amount).val(),2));
         amounthid.val($(this._form.amount).val());
+
+        this.calculateTotal();
 
         return true;
     },
@@ -422,12 +443,46 @@ Account.Item = {
     },
 
     calculateAmount : function() {
-        var qty = parseFloat($(this._form.qty).val());
-        var disc = parseFloat($(this._form.disc).val());
-        var price = parseFloat($(this._form.price).val());
-        var tax = parseFloat($(this._form.tax).val());
-        var amount = ( qty * price ) + tax - disc;
+        var qty = $(this._form.qty).val().trim() == '' ? 0 : $(this._form.qty).val().trim();
+        var disc = $(this._form.disc).val().trim() == '' ? 0 : $(this._form.disc).val().trim();
+        var price = $(this._form.price).val().trim() == '' ? 0 : $(this._form.price).val().trim();
+        var tax = $(this._form.tax).val().trim() == '' ? 0 : $(this._form.tax).val().trim();
+        var amount = ( parseFloat(qty) * parseFloat(price) ) - parseFloat(disc);
+        amount = toFixed(amount, 2);
         $(this._form.amount).val(amount);
+    },
+
+    calculateTotal : function() {
+        var subtotaldiv = $(this._subtotal);
+        var subtotaltaxdiv = $(this._subtotaltax);
+        var totaldiv = $(this._total);
+
+        var tax = 0;
+        $('.v-tax').each(function(idx){
+            var t = this.value.trim() == '' ? 0 : this.value.trim();
+            tax += parseFloat(t);
+        });
+        console.log('tax : ' + tax);
+
+        var amount = 0;
+        $('.v-amount').each(function(idx){
+            var t = this.value.trim() == '' ? 0 : this.value.trim();
+            amount += parseFloat(t);
+        });
+        console.log('amount : ' + amount);
+
+        total = amount + tax;
+        console.log('total : ' + total);
+
+        tax = toFixed(tax, 2);
+        amount = toFixed(amount, 2);
+        total = toFixed(total, 2);
+
+        subtotaldiv.html(amount);
+        subtotaltaxdiv.html(tax);
+        totaldiv.html(total);
+
     }
 
 };
+
