@@ -2,6 +2,14 @@
 
 @include('partial.notification')
 
+<ul class="middleNavA">
+    <li><a href="/account/account_receivable" title="All Receivable Account"><img src="/images/icons/color/refresh.png" alt=""><span>All</span></a></li>
+    <li><a href="/account/invoice_in" title="Add invoice"><img src="/images/icons/color/plus.png" alt=""><span>Add invoice</span></a></li>
+    <li><a href="/account/account_receivable/unpaid" title="Awaiting payment"><img src="/images/icons/color/full-time.png" alt=""><span>Awaiting payment</span></a></li>
+    <li><a href="/account/account_receivable/paid" title="Paid invoice"><img src="/images/icons/color/cost.png" alt=""><span>Paid invoice</span></a></li>
+</ul>
+<div class="divider"><span></span></div>
+
 <!-- Table with opened toolbar -->
 <div class="widget">
     <div class="whead">

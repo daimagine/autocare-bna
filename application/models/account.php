@@ -10,6 +10,11 @@ class Account extends Eloquent {
 
     public static $table = 'account';
 
+
+    public function sub_account_transaction() {
+        return $this->has_many('SubAccountTrans', 'account_type_id');
+    }
+
     public static function listAll($criteria) {
         return Account::where('status', '=', 1)->get();
     }
@@ -44,4 +49,12 @@ class Account extends Eloquent {
         return $account->id;
     }
 
+    public static function allSelect() {
+        $accounts = Account::where('status', '=', 1)->get();
+        $selection = array();
+        foreach($accounts as $a) {
+            $selection[$a->id] = $a->name;
+        }
+        return $selection;
+    }
 }

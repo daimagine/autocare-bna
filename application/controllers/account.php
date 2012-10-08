@@ -127,10 +127,12 @@ class Account_Controller extends Secure_Controller {
 		Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
         $invoiceNumber = AccountTransaction::invoice_new();
         $data = Session::get('accountTrans');
+        $accounts = Account::allSelect();
         return $this->layout->nest('content', 'account.account_transaction.add', array(
             'accountTrans' => $data,
             'accountTransType' => $type,
-            'invoiceNumber' => $invoiceNumber
+            'invoiceNumber' => $invoiceNumber,
+            'accounts'  => $accounts
         ));
     }
 
@@ -159,10 +161,16 @@ class Account_Controller extends Secure_Controller {
         }
     }
 
-    public function get_account_receivable() {
-        $accounts = AccountTransaction::listAll(array(
+    public function get_account_receivable($type=null) {
+        $criteria = array(
             'type' => array('=', AUTOCARE_ACCOUNT_TYPE_DEBIT)
-        ));
+        );
+        if($type === 'paid')
+            $criteria['paid_date'] = array( 'not_null', '' );
+        elseif($type === 'unpaid')
+            $criteria['paid_date'] = array( 'null', '' );
+        $accounts = AccountTransaction::listAll($criteria);
+
         return $this->layout->nest('content', 'account.account_transaction.receivable', array(
             'accounts' => $accounts,
             'accountTransType' => AUTOCARE_ACCOUNT_TYPE_DEBIT,
@@ -170,10 +178,16 @@ class Account_Controller extends Secure_Controller {
     }
 
 
-    public function get_account_payable() {
-        $accounts = AccountTransaction::listAll(array(
+    public function get_account_payable($type=null) {
+        $criteria = array(
             'type' => array('=', AUTOCARE_ACCOUNT_TYPE_CREDIT)
-        ));
+        );
+        if($type === 'paid')
+            $criteria['paid_date'] = array( 'not_null', '' );
+        elseif($type === 'unpaid')
+            $criteria['paid_date'] = array( 'null', '' );
+        $accounts = AccountTransaction::listAll($criteria);
+
         return $this->layout->nest('content', 'account.account_transaction.payable', array(
             'accounts' => $accounts,
             'accountTransType' => AUTOCARE_ACCOUNT_TYPE_CREDIT,
@@ -216,6 +230,8 @@ class Account_Controller extends Secure_Controller {
         $inv_time = date(AccountTransaction::$timeformat, strtotime($account->invoice_date));
         $due_date = date(AccountTransaction::$dateformat, strtotime($account->due_date));
         $due_time = date(AccountTransaction::$timeformat, strtotime($account->due_date));
+        $accounts = Account::allSelect();
+        $items = $account->items;
 
         return $this->layout->nest('content', 'account.account_transaction.edit', array(
             'account' => $account,
@@ -223,7 +239,9 @@ class Account_Controller extends Secure_Controller {
             'invoice_date' => $inv_date,
             'invoice_time' => $inv_time,
             'due_date' => $due_date,
-            'due_time' => $due_time
+            'due_time' => $due_time,
+            'accounts'  => $accounts,
+            'items' => $items
         ));
     }
 

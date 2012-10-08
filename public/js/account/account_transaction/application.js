@@ -17,4 +17,417 @@ $(function() {
         spinnerIncDecOnly: true // Only up and down arrows
     });
 
+    //===== init item dialog =====//
+    Account.Item.initDialog();
+
 });
+
+var Account = {};
+Account.Item = {
+    //selector helper
+    _method : '#item-method',
+    _addkey : '#item-addkey',
+    _whead  : '#item-whead',
+    _body   : '#item-body',
+    _notice : '#item-addnotice',
+    _rows   : '#item-rows',
+    _table  : '#item-table',
+    _tbody  : '#item-tbody',
+    _dialog : '#item-dialog',
+    _accountname : '#item-account-name',
+    _accountnamefield : '#account-name',
+
+    //form selector helper
+    _form   : {
+        item   : '#item-info',
+        desc   : '#item-description',
+        qty    : '#item-quantity',
+        price  : '#item-unit-price',
+        disc   : '#item-discount',
+        account: '#item-account-type',
+        tax    : '#item-tax',
+        amount : '#item-amount',
+        notif  : '#item-dialog-notification'
+    },
+
+    //function to initialize dialog form
+    initDialog : function() {
+        $(this._dialog).dialog({
+            autoOpen: false,
+            modal: true,
+            width: 700,
+            buttons: {
+                "Save": function () {
+                    var success = Account.Item.save();
+                    if(success === true)
+                        $(this).dialog('close');
+                },
+                "Cancel": function () {
+                    $(this).dialog('close');
+                }
+            },
+            close: function () {
+                Account.Item.closeDialog();
+            }
+        });
+    },
+
+    //function to open up dialog form
+    openDialog : function() {
+        $(this._method).val('add');
+        console.log($(this._method));
+        var vname = $(this._accountname);
+        vname.html($(this._accountnamefield).val());
+        console.log('open up dialog form');
+        $(this._dialog).dialog('open');
+
+        //clean up
+        $(this._form.item).val('');
+        $(this._form.desc).val('');
+        $(this._form.disc).val('');
+        $(this._form.account).val('');
+        $(this._form.amount).val('0');
+        $(this._form.price).val('');
+        $(this._form.qty).val('');
+        $(this._form.tax).val('');
+        $(this._addkey).val('');
+    },
+
+    //function to close dialog form
+    closeDialog : function() {
+        console.log('do closed procedures on dialog form');
+        var vnotice = $(this._notice);
+        var vtable = $(this._table);
+        var vrows = $(this._rows);
+        if(vrows.val() == '0') {
+            console.log('no item registered, show notice again');
+            vnotice.show();
+            vtable.hide();
+        }
+        //clean up
+        $(this._accountname).html('');
+    },
+
+    save : function() {
+        var flag = $(this._method).val();
+        console.log(flag);
+        if(flag == 'add')
+            return this.add();
+        if(flag == 'edit')
+            return this.update();
+    },
+
+    //function to add new item
+    add : function() {
+        console.log('validate forms first');
+        if(this._validateNull() !== true)
+            return false;
+
+        if(this._validateLength() !== true)
+            return false;
+
+        if(this._validateDuplicate() !== true)
+            return false;
+
+        console.log('add dynamic rows to item tbody');
+        this._addRow();
+
+        //display table
+        var vnotice = $(this._notice);
+        var vtable = $(this._table);
+        vnotice.hide();
+        vtable.show();
+
+        return true;
+    },
+
+    _addRow : function() {
+        //next idx
+        var vrows = $(this._rows);
+        var vtable = $(this._table);
+        var nextidx = vtable.find('tr').length - 1;
+        if(vrows.val().trim() !== '0')
+            nextidx = parseInt(vrows.val());
+        console.log(nextidx);
+
+        //warning : sequence is really important following thead order
+        var td = $('<td class="v-item v-num-' + nextidx + '">').append($(this._form.item).val());
+        //td.after($('<td class="v-desc-' + nextidx + '">').append($(this._form.desc).val()));
+        td.after($('<td class="v-qty-' + nextidx + '">').append($(this._form.qty).val()));
+        //td.after($('<td class="v-price-' + nextidx + '">').append($(this._form.price).val()));
+        //td.after($('<td class="v-disc-' + nextidx + '">').append($(this._form.disc).val()));
+        //extract account
+        var aidx = $(Account.Item._form.account).find(':selected').attr('id').slice(-1);
+        var account_name = $('#select-account-id-' + aidx).text();
+        td.after($('<td class="v-account-' + nextidx + '">').append(account_name));
+        td.after($('<td class="v-tax-' + nextidx + '">').append($(this._form.tax).val()));
+        td.after($('<td class="v-amount-' + nextidx + '">').append($(this._form.amount).val()));
+
+        var divv = $('<div>').append(
+            $('<a>')
+                .attr('href', this._tbody)
+                .attr('onclick', 'Account.Item.edit("v-rows-' + nextidx + '", "' + nextidx + '")')
+                .text('edit | ')
+                .after(
+                $('<a>')
+                    .attr('href', this._tbody)
+                    .attr('onclick', 'Account.Item.remove("v-rows-' + nextidx + '")')
+                    .text('remove')
+            )
+        );
+        td.after($('<td>').append(divv));
+
+        //hidden input
+        var hiddiv = $('<div>').css('display', 'none');
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'v-item-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','items[' + nextidx + '][item]')
+                .val($(this._form.item).val())
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'v-desc-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','items[' + nextidx + '][description]')
+                .val($(this._form.desc).val())
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'v-qty-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','items[' + nextidx + '][quantity]')
+                .val($(this._form.qty).val())
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'v-price-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','items[' + nextidx + '][unit_price]')
+                .val($(this._form.price).val())
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'v-disc-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','items[' + nextidx + '][discount]')
+                .val($(this._form.disc).val())
+        );
+        var aidx = $(Account.Item._form.account).find(':selected').attr('id').slice(-1);
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'v-account-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','items[' + nextidx + '][account_type_id]')
+                .val($('#select-account-id-' + aidx).val())
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'v-tax-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','items[' + nextidx + '][tax]')
+                .val($(this._form.tax).val())
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'v-amount-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','items[' + nextidx + '][amount]')
+                .val($(this._form.amount).val())
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('type', 'hidden')
+                .attr('name','items[' + nextidx + '][status]')
+                .val(1)
+        );
+        td.after(hiddiv);
+
+        //insert to tr
+        var tr = $('<tr>').attr('id','v-rows-' + nextidx).append(td);
+        console.log(tr);
+        //add dynamic rows to item tbody based on submitted item form
+        var vtbody = $(this._tbody);
+        vtbody.append(tr);
+
+        //updating rows
+        vrows.val(++nextidx);
+        console.log('rows updated to ' + vrows.val());
+
+    },
+
+    remove : function(id) {
+        $('#'+id).remove();
+        var row = $(this._table).find('tr').length - 1;
+        if(row <= 0) {
+            $(this._notice).show();
+            $(this._table).hide();
+            $(this._rows).val(0);
+        }
+    },
+
+    _validateNull : function() {
+        var msg = null;
+        if($(this._form.item).val().trim() === '') {
+            msg = 'Item';
+        }
+        if($(this._form.qty).val().trim() === '') {
+            msg += ', Quantity';
+        }
+        if($(this._form.price).val().trim() === '') {
+            msg += ', Price';
+        }
+        var required = 'Following fields are required : ' + msg;
+        if(msg === null)
+            return true;
+        else
+            this.notification('error', required);
+        return false;
+    },
+
+    _validateDuplicate : function(id) {
+        var msg = null;
+        $(this._tbody).each(function(index) {
+            $('tr .v-item').each(function(index) {
+                if($(this).text() === $(Account.Item._form.item).val().trim()) {
+                    if($(this).parent().attr('id') !== id)
+                        msg = 'Item';
+                }
+            });
+        });
+        var required = 'Following fields must be unique : ' + msg;
+        if(msg === null)
+            return true;
+        else
+            this.notification('error', required);
+        return false;
+    },
+
+    _validateLength : function() {
+        var msg = null;
+        if($(this._form.item).val().trim().length < 5) {
+            msg = 'Item length must be more than 5 characters';
+        }
+        if(msg === null)
+            return true;
+        else
+            this.notification('error', msg);
+        return false;
+    },
+
+    //function to open up edit dialog form
+    edit : function(id, idx) {
+        $(this._method).val('edit');
+        var vname = $(this._accountname);
+        vname.html($(this._accountnamefield).val());
+        console.log('open up edit dialog form');
+        $(this._dialog).dialog('open');
+
+        console.log(id + ', ' + idx);
+        var row = $('#'+id);
+        console.log(row);
+
+        $(this._addkey).val(id);
+
+        var item = row.find('.v-item-' + idx);
+        var desc = row.find('.v-desc-' + idx);
+        var qty = row.find('.v-qty-' + idx);
+        var price = row.find('.v-price-' + idx);
+        var disc = row.find('.v-disc-' + idx);
+        var account = row.find('.v-account-' + idx);
+        var tax = row.find('.v-tax-' + idx);
+        var amount = row.find('.v-amount-' + idx);
+
+        //clean up
+        $(this._form.item).val(item.text());
+        $(this._form.desc).val(desc.text());
+        $(this._form.qty).val(qty.text());
+        $(this._form.price).val(price.text());
+        $(this._form.disc).val(disc.text());
+        $(this._form.account).val(account.text());
+        $(this._form.tax).val(tax.text());
+        $(this._form.amount).val(amount.text());
+    },
+
+    //function to add new item
+    update : function() {
+        var id = $(this._addkey).val();
+        console.log('update rows : ' + id);
+
+        console.log('validate forms first');
+        if(this._validateNull() !== true)
+            return false;
+
+        if(this._validateLength() !== true)
+            return false;
+
+        if(this._validateDuplicate(id) !== true)
+            return false;
+
+        var row = $('#'+id);
+        console.log(row);
+        var idx = id.slice(-1);
+
+        var item = row.find('.v-item-' + idx);
+        var itemhid = row.find('.v-item-hid-' + idx);
+        item.html($(this._form.item).val());
+        itemhid.val($(this._form.item).val());
+
+        var desc = row.find('.v-desc-' + idx);
+        var deschid = row.find('.v-desc-hid-' + idx);
+        desc.html($(this._form.desc).val());
+        deschid.val($(this._form.desc).val());
+
+        var qty = row.find('.v-qty-' + idx);
+        var qtyhid = row.find('.v-qty-hid-' + idx);
+        qty.html($(this._form.qty).val());
+        qtyhid.val($(this._form.qty).val());
+
+        var price = row.find('.v-price-' + idx);
+        var pricehid = row.find('.v-price-hid-' + idx);
+        price.html($(this._form.price).val());
+        pricehid.val($(this._form.price).val());
+
+        var disc = row.find('.v-disc-' + idx);
+        var dischid = row.find('.v-disc-hid-' + idx);
+        disc.html($(this._form.disc).val());
+        dischid.val($(this._form.disc).val());
+
+        var account = row.find('.v-account-' + idx);
+        var accounthid = row.find('.v-account-hid-' + idx);
+        account.html($(this._form.account).val());
+        accounthid.val($(this._form.account).val());
+
+        var tax = row.find('.v-tax-' + idx);
+        var taxhid = row.find('.v-tax-hid-' + idx);
+        tax.html($(this._form.tax).val());
+        taxhid.val($(this._form.tax).val());
+
+        var amount = row.find('.v-amount-' + idx);
+        var amounthid = row.find('.v-amount-hid-' + idx);
+        amount.html($(this._form.amount).val());
+        amounthid.val($(this._form.amount).val());
+
+        return true;
+    },
+
+    notification : function(type, message) {
+        var div = $(this._form.notif);
+        var classNotif = 'nInformation';
+        if(type === 'error')
+            classNotif = 'nFailure';
+        var html = '<div class="nNote ' + classNotif + '" style="margin-top: 0; margin-bottom: 15px;"><p>' + message + '</p></div>';
+        div.html(html);
+    },
+
+    calculateAmount : function() {
+        var qty = parseFloat($(this._form.qty).val());
+        var disc = parseFloat($(this._form.disc).val());
+        var price = parseFloat($(this._form.price).val());
+        var tax = parseFloat($(this._form.tax).val());
+        var amount = ( qty * price ) + tax - disc;
+        $(this._form.amount).val(amount);
+    }
+
+};

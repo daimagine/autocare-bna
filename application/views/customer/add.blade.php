@@ -74,6 +74,7 @@
                     <td>Model</td>
                     <td>Brand</td>
                     <td>Description</td>
+                    <td></td>
                 </tr>
                 </thead>
                 <tbody id="vehicle-tbody">

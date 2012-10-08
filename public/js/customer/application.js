@@ -266,7 +266,7 @@ Customer.Vehicle = {
                 }
             });
         });
-        var required = 'Following fields are unique : ' + msg;
+        var required = 'Following fields must be unique : ' + msg;
         if(msg === null)
             return true;
         else
@@ -277,7 +277,7 @@ Customer.Vehicle = {
     _validateLength : function() {
         var msg = null;
         if($(this._form.no).val().trim().length < 5) {
-            msg = 'Vehicle Number length must be more than 3 characters';
+            msg = 'Vehicle Number length must be more than 5 characters';
         }
         if(msg === null)
             return true;
