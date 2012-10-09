@@ -27,6 +27,7 @@ class Access_Controller extends Secure_Controller {
     }
 
     public function get_edit($id=null) {
+        $id !== null ? $id : Input::get('id');
         if($id===null) {
             return Redirect::to('access/index');
         }
@@ -44,16 +45,22 @@ class Access_Controller extends Secure_Controller {
             return Redirect::to('access/index');
         }
         $access = Access::find($id);
+        $validation = Validator::make(Input::all(), $this->getRules('edit'));
         $accessdata = Input::all();
-        $success = Access::update($id, $accessdata);
-        if($success) {
-            //success edit
-            Session::flash('message', 'Success update');
-            return Redirect::to('access/index');
+        if(!$validation->fails()) {
+            $success = Access::update($id, $accessdata);
+            if($success) {
+                //success edit
+                Session::flash('message', 'Success update');
+                return Redirect::to('access/index');
+            } else {
+                Session::flash('message_error', 'Failed update');
+                return Redirect::to_action('access@edit', array($id));
+            }
         } else {
-            Session::flash('message_error', 'Failed update');
-            return Redirect::to('access/edit')
-                ->with('id', $id);
+            Log::info('Validation fails. error : ' + print_r($validation->errors, true));
+            return Redirect::to_action('access@edit', array($id))
+                ->with_errors($validation);
         }
     }
 
@@ -106,7 +113,7 @@ class Access_Controller extends Secure_Controller {
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
-            'name' => 'required|max:50',
+            'name' => 'required|min:5|max:50',
         );
         if($method == 'add') {
             $additional = array(

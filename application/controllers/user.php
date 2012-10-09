@@ -73,6 +73,7 @@ class User_Controller extends Secure_Controller {
     }
 
     public function get_edit($id=null) {
+        $id !== null ? $id : Input::get('id');
         if($id===null) {
             return Redirect::to('user/index');
         }
@@ -88,46 +89,69 @@ class User_Controller extends Secure_Controller {
         if($id===null) {
             return Redirect::to('user/index');
         }
+		$validation = Validator::make(Input::all(), $this->getRules('edit'));
         $user = User::find($id);
         $userdata = Input::all();
-        $success = User::update($id, $userdata);
-        if($success) {
-            //success login
-            Session::flash('message', 'Success update user');
-            return Redirect::to('user/index');
-        } else {
-            Session::flash('message_error', 'Failed to update user');
-            return Redirect::to('user/edit')->with('id', $id);
-        }
+		if(!$validation->fails()) {
+			if(User::unique_login_id($userdata['login_id'], $id)) {				
+				$success = User::update($id, $userdata);
+				if($success) {
+					//success login
+					Session::flash('message', 'Success update user');
+					return Redirect::to('user/index');
+				} else {
+					Session::flash('message_error', 'Failed to update user');
+					return Redirect::to_action('user@edit', array($id));
+				}
+			} else {
+				Session::flash('message_error', 'Login Id is already in use');
+				return Redirect::to_action('user@edit', array($id));
+			}
+		} else {
+			Log::info('Validation fails. error : ' + print_r($validation->errors, true));
+            return Redirect::to_action('user@edit', array($id))
+                ->with_errors($validation);
+		}
     }
 
     public function get_add() {
         $userdata = Session::get('user');
         $roles = Role::allSelect();
+        $staff_id = User::generate_staff_id();
         return $this->layout->nest('content', 'user.add', array(
             'roles' => $roles,
-            'user', $userdata));
+            'user' => $userdata,
+            'staff_id' => $staff_id
+        ));
     }
 
     public function post_add() {
         $validation = Validator::make(Input::all(), $this->getRules());
         $userdata = Input::all();
+		//dd($userdata);
         if(!$validation->fails()) {
-            $success = User::create($userdata);
-            if($success) {
-                //success login
-                Session::flash('message', 'Success to create new user');
-                return Redirect::to('user/index');
-            } else {
-                Session::flash('message_error', 'Failed to create new user');
+			if(User::unique_login_id($userdata['login_id'])) {
+				$success = User::create($userdata);
+				if($success) {
+					//success login
+					Session::flash('message', 'Success to create new user');
+					return Redirect::to('user/index');
+				} else {
+					Session::flash('message_error', 'Failed to create new user');
+					return Redirect::to('user/add')
+						->with_input();
+				}
+			} else {
+				Session::flash('message_error', 'Login Id is already in use');
                 return Redirect::to('user/add')
-                    ->with('user', $userdata);
-            }
+                    ->with_input();
+			}	
         } else {
+			//dd($userdata);
             Log::info('Validation fails. error : ' + print_r($validation->errors, true));
             return Redirect::to('user/add')
                 ->with_errors($validation)
-                ->with('user', $userdata);
+				->with_input();
         }
     }
 
@@ -149,13 +173,14 @@ class User_Controller extends Secure_Controller {
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
-            'login_id' => 'required|max:50',
-            'staff_id' => 'required|max:50',
-            'status' => 'required'
+            'login_id' 	=> 'required|min:5|max:50|alpha_dash',
+			'name'		=> 'required|min:3|max:50',
+			'phone1' 	=> 'required|min:12|max:18',
+            'status' 	=> 'required'
         );
         if($method == 'add') {
             $additional = array(
-                'password' => 'required|min:5|max:50'
+                'password' => 'required|min:5|max:50|confirmed'
             );
         } elseif($method == 'edit') {
             $additional = array(

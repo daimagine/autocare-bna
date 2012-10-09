@@ -27,6 +27,7 @@ class Vehicle_Controller extends Secure_Controller {
     }
 
     public function get_edit($id=null) {
+        $id !== null ? $id : Input::get('id');
         if($id===null) {
             return Redirect::to('vehicle/index');
         }
@@ -45,17 +46,21 @@ class Vehicle_Controller extends Secure_Controller {
         if($id===null) {
             return Redirect::to('vehicle/index');
         }
+        $validation = Validator::make(Input::all(), $this->getRules());
         $vehicledata = Input::all();
-		//dd($vehicledata);
-        $success = Vehicle::update($id, $vehicledata);
-        if($success) {
-            //success edit
-            Session::flash('message', 'Success update');
-            return Redirect::to('vehicle/index');
+        if(!$validation->fails()) {
+            $success = Vehicle::update($id, $vehicledata);
+            if($success) {
+                //success edit
+                Session::flash('message', 'Success update');
+                return Redirect::to('vehicle/index');
+            } else {
+                Session::flash('message_error', 'Failed update');
+                return Redirect::to_action('vehicle@edit', array($id));
+            }
         } else {
-            Session::flash('message_error', 'Failed update');
-            return Redirect::to('vehicle/edit')
-                ->with('id', $id);
+            return Redirect::to_action('vehicle@edit', array($id))
+                ->with_errors($validation);
         }
     }
 

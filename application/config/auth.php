@@ -101,6 +101,4 @@ return array(
 
         'member/detail',
     ),
-
-
 );

@@ -14,7 +14,7 @@
             <div class="clear"></div>
         </div>
 		
-        {{ Form::nginput('text', 'name', @$customer['name'], 'Name', array( 'id' => 'customer-name' ) ) }}
+        {{ Form::nginput('text', 'name', @$customer['name'], 'Name *', array( 'id' => 'customer-name' ) ) }}
 
         {{ Form::nginput('text', 'address1', @$customer['address1'], 'Address 1')}}
 
@@ -28,7 +28,7 @@
 
         {{ Form::nginput('text', 'phone2', @$customer['phone2'], 'Phone 2')}}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($customer['status']) ? $customer['status'] : 1, 'Status') }}
+        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($customer['status']) ? $customer['status'] : 1, 'Status *') }}
 		
         {{ Form::nginput('text', 'additional_info', @$customer['additional_info'], 'Additional Info')}}
 
@@ -74,6 +74,7 @@
                     <td>Model</td>
                     <td>Brand</td>
                     <td>Description</td>
+                    <td></td>
                 </tr>
                 </thead>
                 <tbody id="vehicle-tbody">
@@ -115,6 +116,7 @@
                 <span> Register vehicle to <strong><span id="vehicle-customer-name"></span></strong></span>
             </div>
             <div class="divider"><span></span></div>
+            <div class="dialogSelect m10" id="vehicle-dialog-notification"></div>
             <div class="dialogSelect m10">
                 <label>Vehicle Number *</label>
                 <input type="text" id="vehicle-no"/>

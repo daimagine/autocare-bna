@@ -27,6 +27,7 @@ class Customer_Controller extends Secure_Controller {
     }
 
     public function get_edit($id=null) {
+        $id !== null ? $id : Input::get('id');
         if($id===null) {
             return Redirect::to('customer/index');
         }
@@ -62,17 +63,27 @@ class Customer_Controller extends Secure_Controller {
         if($id===null) {
             return Redirect::to('customer/index');
         }
+        $validation = Validator::make(Input::all(), $this->getRules('edit'));
         $memberdata = Input::all();
         //dd($memberdata);
-        $success = Customer::update($id, $memberdata);
-        if($success) {
-            //success edit
-            Session::flash('message', 'Success update');
-            return Redirect::to('customer/index');
+        if(!$validation->fails()) {
+            if($this->vehicle_validation($memberdata)) {
+                $success = Customer::update($id, $memberdata);
+                if($success) {
+                    //success edit
+                    Session::flash('message', 'Success update');
+                    return Redirect::to('customer/index');
+                } else {
+                    Session::flash('message_error', 'Failed update');
+                    return Redirect::to_action('customer@edit', array($id));
+                }
+            } else {
+                Session::flash('message_error', 'Minimum one vehicle is required');
+                return Redirect::to_action('customer@edit', array($id));
+            }
         } else {
-            Session::flash('message_error', 'Failed update');
-            return Redirect::to('customer/edit')
-                ->with('id', $id);
+            return Redirect::to_action('customer@edit', array($id))
+                ->with_errors($validation);
         }
     }
 
@@ -101,13 +112,19 @@ class Customer_Controller extends Secure_Controller {
         $memberdata = Input::all();
 //        dd($memberdata);
         if(!$validation->fails()) {
-            $success = Customer::create($memberdata);
-            if($success) {
-                //success
-                Session::flash('message', 'Success create');
-                return Redirect::to('customer/index');
+            if($this->vehicle_validation($memberdata)) {
+                $success = Customer::create($memberdata);
+                if($success) {
+                    //success
+                    Session::flash('message', 'Success create');
+                    return Redirect::to('customer/index');
+                } else {
+                    Session::flash('message_error', 'Failed create');
+                    return Redirect::to('customer/add')
+                        ->with('customer', $memberdata);
+                }
             } else {
-                Session::flash('message_error', 'Failed create');
+                Session::flash('message_error', 'Minimum one vehicle is required');
                 return Redirect::to('customer/add')
                     ->with('customer', $memberdata);
             }
@@ -136,7 +153,7 @@ class Customer_Controller extends Secure_Controller {
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
-            'name' => 'required|max:50',
+            'name' => 'required|min:3|max:50',
             //'register_date' => 'required',
             //'register_time' => 'required',
         );
@@ -148,6 +165,14 @@ class Customer_Controller extends Secure_Controller {
             );
         }
         return array_merge($rules, $additional);
+    }
+
+
+    private function vehicle_validation($data) {
+        //validate minimum one vehicle
+        if(array_key_exists('vehicles', $data) && is_array($data['vehicles']) && sizeof($data['vehicles']) >= 1 )
+            return true;
+        return false;
     }
 
 }

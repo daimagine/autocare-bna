@@ -14,9 +14,9 @@
             <div class="clear"></div>
         </div>
 
-        {{ Form::nginput('text', 'name', @$access['name'], 'Name') }}
+        {{ Form::nginput('text', 'name', @$access['name'], 'Name *') }}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($access['status']) ? $access['status'] : 1, 'Status') }}
+        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($access['status']) ? $access['status'] : 1, 'Status *') }}
 
         {{ Form::nginput('text', 'action', @$access['action'], 'Action') }}
 

@@ -27,6 +27,7 @@ class Account_Controller extends Secure_Controller {
     }
 
     public function get_edit($id=null) {
+        $id !== null ? $id : Input::get('id');
         if($id===null) {
             return Redirect::to('account/index');
         }
@@ -41,16 +42,21 @@ class Account_Controller extends Secure_Controller {
         if($id===null) {
             return Redirect::to('account/index');
         }
+        $validation = Validator::make(Input::all(), $this->getRules());
         $accountdata = Input::all();
-        $success = Account::update($id, $accountdata);
-        if($success) {
-            //success edit
-            Session::flash('message', 'Success update');
-            return Redirect::to('account/index');
+        if(!$validation->fails()) {
+            $success = Account::update($id, $accountdata);
+            if($success) {
+                //success edit
+                Session::flash('message', 'Success update');
+                return Redirect::to('account/index');
+            } else {
+                Session::flash('message_error', 'Failed update');
+                return Redirect::to_action('account@edit', array($id));
+            }
         } else {
-            Session::flash('message_error', 'Failed update');
-            return Redirect::to('account/edit')
-                ->with('id', $id);
+            return Redirect::to_action('account@edit', array($id))
+                ->with_errors($validation);
         }
     }
 
@@ -100,7 +106,7 @@ class Account_Controller extends Secure_Controller {
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
-            'name' => 'required|max:50',
+            'name' => 'required|min:5|max:50',
         );
         if($method == 'add') {
             $additional = array(
@@ -121,45 +127,79 @@ class Account_Controller extends Secure_Controller {
 		Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
         $invoiceNumber = AccountTransaction::invoice_new();
         $data = Session::get('accountTrans');
+        $accounts = Account::allSelect();
         return $this->layout->nest('content', 'account.account_transaction.add', array(
             'accountTrans' => $data,
             'accountTransType' => $type,
-            'invoiceNumber' => $invoiceNumber
+            'invoiceNumber' => $invoiceNumber,
+            'accounts'  => $accounts
         ));
     }
 
     public function post_invoice_in() {
         $validation = Validator::make(Input::all(), $this->getInvoiceRules());
         $data = Input::all();
+        $type = @$data['type'];
         if(!$validation->fails()) {
             $success = AccountTransaction::create($data);
             if($success) {
                 //success
-                Session::flash('message', 'Success create');
-                return Redirect::to('account/account_receivable');
+                Session::flash('message', 'Success create invoice ' + $data['invoice_no']);
+                if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
+                    return Redirect::to('account/account_receivable');
+                else
+                    return Redirect::to('account/account_payable');
             } else {
                 Session::flash('message_error', 'Failed create');
-                return Redirect::to('account/invoice_in')
-                    ->with('account', $data);
+                return Redirect::to_action('account@invoice_in', array( $type ))
+                    ->with_input();
             }
         } else {
-            return Redirect::to('account/invoice_in')
+            return Redirect::to_action('account@invoice_in', array( $type ))
                 ->with_errors($validation)
-                ->with('account', $data);
+                ->with_input();
         }
     }
 
-    public function get_account_receivable() {
-        $accounts = AccountTransaction::listAll();
+    public function get_account_receivable($type=null) {
+        $criteria = array(
+            'type' => array('=', AUTOCARE_ACCOUNT_TYPE_DEBIT)
+        );
+        if($type === 'paid')
+            $criteria['paid_date'] = array( 'not_null', '' );
+        elseif($type === 'unpaid')
+            $criteria['paid_date'] = array( 'null', '' );
+        $accounts = AccountTransaction::listAll($criteria);
+
         return $this->layout->nest('content', 'account.account_transaction.receivable', array(
             'accounts' => $accounts,
             'accountTransType' => AUTOCARE_ACCOUNT_TYPE_DEBIT,
         ));
     }
 
+
+    public function get_account_payable($type=null) {
+        $criteria = array(
+            'type' => array('=', AUTOCARE_ACCOUNT_TYPE_CREDIT)
+        );
+        if($type === 'paid')
+            $criteria['paid_date'] = array( 'not_null', '' );
+        elseif($type === 'unpaid')
+            $criteria['paid_date'] = array( 'null', '' );
+        $accounts = AccountTransaction::listAll($criteria);
+
+        return $this->layout->nest('content', 'account.account_transaction.payable', array(
+            'accounts' => $accounts,
+            'accountTransType' => AUTOCARE_ACCOUNT_TYPE_CREDIT,
+        ));
+    }
+
     public function get_invoice_delete($type=AUTOCARE_ACCOUNT_TYPE_DEBIT, $id=null) {
         if($id===null) {
-            return Redirect::to('account/account_receivable');
+            if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
+                return Redirect::to('account/account_receivable');
+            else
+                return Redirect::to('account/account_payable');
         }
         $success = AccountTransaction::remove($id);
         if($success) {
@@ -176,7 +216,10 @@ class Account_Controller extends Secure_Controller {
 
     public function get_invoice_edit($type=AUTOCARE_ACCOUNT_TYPE_DEBIT, $id) {
         if($id===null) {
-            return Redirect::to('account/account_receivable');
+            if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
+                return Redirect::to('account/account_receivable');
+            else
+                return Redirect::to('account/account_payable');
         }
         Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
         Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
@@ -187,6 +230,8 @@ class Account_Controller extends Secure_Controller {
         $inv_time = date(AccountTransaction::$timeformat, strtotime($account->invoice_date));
         $due_date = date(AccountTransaction::$dateformat, strtotime($account->due_date));
         $due_time = date(AccountTransaction::$timeformat, strtotime($account->due_date));
+        $accounts = Account::allSelect();
+        $items = $account->items;
 
         return $this->layout->nest('content', 'account.account_transaction.edit', array(
             'account' => $account,
@@ -195,13 +240,18 @@ class Account_Controller extends Secure_Controller {
             'invoice_time' => $inv_time,
             'due_date' => $due_date,
             'due_time' => $due_time,
+            'accounts'  => $accounts,
+            'items' => $items
         ));
     }
 
     public function post_invoice_edit($type=AUTOCARE_ACCOUNT_TYPE_DEBIT) {
         $id = Input::get('id');
         if($id===null) {
-            return Redirect::to('account/account_receivable');
+            if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
+                return Redirect::to('account/account_receivable');
+            else
+                return Redirect::to('account/account_payable');
         }
         $validation = Validator::make(Input::all(), $this->getInvoiceRules('edit'));
         if(!$validation->fails()) {
@@ -210,16 +260,20 @@ class Account_Controller extends Secure_Controller {
             if($success) {
                 //success edit
                 Session::flash('message', 'Success update');
-                return Redirect::to('account/account_receivable');
+                if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
+                    return Redirect::to('account/account_receivable');
+                else
+                    return Redirect::to('account/account_payable');
             } else {
                 Session::flash('message_error', 'Failed update');
-                return Redirect::to('account/invoice_edit')
-                    ->with('id', $id);
+                return Redirect::to_action('account@invoice_edit', array($type, $id));
             }
         } else {
             Session::flash('message_error', 'Failed update');
-            return Redirect::to('account/account_receivable')
-                ->with('id', $id);
+            if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
+                return Redirect::to('account/account_receivable');
+            else
+                return Redirect::to('account/account_payable');
         }
     }
 
@@ -227,7 +281,7 @@ class Account_Controller extends Secure_Controller {
         $additional = array();
         $rules = array(
             'subject' => 'required',
-            'reference_no' => 'required|max:50',
+            'reference_no' => 'required|min:5|max:50',
             'invoice_date' => 'required',
             'invoice_time' => 'required',
             'due_date' => 'required',

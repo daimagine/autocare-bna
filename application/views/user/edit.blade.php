@@ -13,17 +13,19 @@
             <div class="clear"></div>
         </div>
 
+        {{ Form::nginput('text', 'staff_id', $user->staff_id, 'Staff ID', array( 'readonly' => 'readonly' ) ) }}
+
         {{ Form::hidden('id', $user->id) }}
+		
+		{{ Form::hidden('staff_id', $user->staff_id) }}
 
-        {{ Form::nginput('text', 'login_id', $user->login_id, 'Login ID') }}
+        {{ Form::nginput('text', 'login_id', $user->login_id, 'Login ID *') }}
 
-        {{ Form::nyelect('role_id', @$roles, $user->role_id, 'Role') }}
+        {{ Form::nyelect('role_id', @$roles, $user->role_id, 'Role *') }}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $user->status, 'Status') }}
+        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $user->status, 'Status *') }}
 
-        {{ Form::nginput('text', 'name', $user->name, 'Name') }}
-
-        {{ Form::nginput('text', 'staff_id', $user->staff_id, 'Staff ID')}}
+        {{ Form::nginput('text', 'name', $user->name, 'Name *') }}
 
         {{ Form::nginput('text', 'address1', $user->address1, 'Address 1')}}
 
@@ -31,12 +33,9 @@
 
         {{ Form::nginput('text', 'city', $user->city, 'City')}}
 
-        {{ Form::nginput('text', 'phone1', $user->phone1, 'Phone 1')}}
+        {{ Form::nginput('text', 'phone1', $user->phone1, 'Phone 1 *')}}
 
         {{ Form::nginput('text', 'phone2', $user->phone2, 'Phone 1')}}
-
-
-
 
         <div class="formRow noBorderB">
             <div class="status" id="status3"></div>

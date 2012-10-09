@@ -27,6 +27,7 @@ class Discount_Controller extends Secure_Controller {
     }
 
     public function get_edit($id=null) {
+        $id !== null ? $id : Input::get('id');
         if($id===null) {
             return Redirect::to('discount/index');
         }
@@ -46,15 +47,21 @@ class Discount_Controller extends Secure_Controller {
         }
         $discountdata = Input::all();
 		//dd($discountdata);
-        $success = Discount::update($id, $discountdata);
-        if($success) {
-            //success edit
-            Session::flash('message', 'Success update');
-            return Redirect::to('discount/index');
+        $validation = Validator::make(Input::all(), $this->getRules('edit'));
+        $discountdata = Input::all();
+        if(!$validation->fails()) {
+            $success = Discount::update($id, $discountdata);
+            if($success) {
+                //success edit
+                Session::flash('message', 'Success update');
+                return Redirect::to('discount/index');
+            } else {
+                Session::flash('message_error', 'Failed update');
+                return Redirect::to_action('discount@edit', array($id));
+            }
         } else {
-            Session::flash('message_error', 'Failed update');
-            return Redirect::to('discount/edit')
-                ->with('id', $id);
+            return Redirect::to_action('discount@edit', array($id))
+                ->with_errors($validation);
         }
     }
 
@@ -63,8 +70,10 @@ class Discount_Controller extends Secure_Controller {
 		Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
 		Asset::add('discount.application', 'js/discount/application.js', array('jquery.ui.spinner', 'jquery.ui.mousewheel'));
         $discountdata = Session::get('discount');
+        $discount_code = Discount::create_discount_code();
         return $this->layout->nest('content', 'discount.add', array(
             'discount' => $discountdata,
+            'discount_code' => $discount_code
         ));
     }
 
@@ -108,6 +117,7 @@ class Discount_Controller extends Secure_Controller {
         $additional = array();
         $rules = array(
             'code' => 'required|max:50',
+            'registration_fee' => 'required|numeric'
         );
         if($method == 'add') {
             $additional = array(

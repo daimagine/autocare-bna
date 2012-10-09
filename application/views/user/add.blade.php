@@ -3,7 +3,6 @@
 @include('partial.notification')
 <br>
 
-
 {{ Form::open('user/add', 'POST') }}
 <fieldset>
     <div class="widget fluid">
@@ -12,29 +11,29 @@
 
             <div class="clear"></div>
         </div>
-        {{ Form::nginput('text', 'login_id', @$user['login_id'], 'Login ID') }}
+        {{ Form::nginput('text', 'staff_id', $staff_id, 'Staff ID', array( 'readonly' => 'readonly' ) ) }}
 
-        {{ Form::nginput('password', 'password',  @$user['password'], 'Password') }}
+        {{ Form::nginput('text', 'login_id', Input::old('login_id'), 'Login ID *') }}
 
-        {{ Form::nginput('password', 'retype_password', null, 'Retype Password') }}
+        {{ Form::nginput('password', 'password',  null, 'Password *') }}
 
-        {{ Form::nyelect('role_id', @$roles, isset($user['role_id']) ? $user['role_id'] : 1, 'Role') }}
+        {{ Form::nginput('password', 'password_confirmation', null, 'Retype Password *') }}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($user['status']) ? $user['status'] : 1, 'Status') }}
+        {{ Form::nyelect('role_id', @$roles, Input::old('role_id'), 'Role *') }}
 
-        {{ Form::nginput('text', 'name', @$user['name'], 'Name') }}
+        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), Input::old('status'), 'Status *') }}
 
-        {{ Form::nginput('text', 'staff_id', @$user['staff_id'], 'Staff ID')}}
+        {{ Form::nginput('text', 'name', Input::old('name'), 'Name *') }}
 
-        {{ Form::nginput('text', 'address1', @$user['address1'], 'Address 1')}}
+        {{ Form::nginput('text', 'address1', Input::old('address1'), 'Address 1')}}
 
-        {{ Form::nginput('text', 'address2', @$user['address2'], 'Address 2')}}
+        {{ Form::nginput('text', 'address2', Input::old('address2'), 'Address 2')}}
 
-        {{ Form::nginput('text', 'city', @$user['city'], 'City')}}
+        {{ Form::nginput('text', 'city', Input::old('city'), 'City')}}
 
-        {{ Form::nginput('text', 'phone1', @$user['phone1'], 'Phone 1')}}
+        {{ Form::nginput('text', 'phone1', Input::old('phone1'), 'Phone 1 *')}}
 
-        {{ Form::nginput('text', 'phone2', @$user['phone2'], 'Phone 2')}}
+        {{ Form::nginput('text', 'phone2', Input::old('phone2'), 'Phone 2')}}
 
 
         <div class="formRow noBorderB">

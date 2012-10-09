@@ -18,6 +18,12 @@ class AccountTransaction extends Eloquent {
     public static $dateformat = 'd-m-Y';
     public static $timeformat = 'H:i:s';
 
+
+    public function items() {
+        return $this->has_many('SubAccountTrans', 'account_trx_id')
+            ->where('status','=',1);
+    }
+
     public static function invoice_new() {
         $count = DB::table(static::$table)->count();
         $count++;
@@ -31,6 +37,8 @@ class AccountTransaction extends Eloquent {
             return false;
 
         $ate = new AccountTransaction;
+        $ate->create_by = Auth::user()->id;
+
         $ate->invoice_no = $data['invoice_no'];
         $ate->reference_no = $data['reference_no'];
         $ate->status = $data['status'];
@@ -51,11 +59,36 @@ class AccountTransaction extends Eloquent {
         $ate->due_date = $due_date->format(static::$sqlformat);
 
         $ate->save();
+
+
+        //register items
+        if(isset($data['items']) && is_array($data['items'])) {
+            //cleanup items
+            $affected = DB::table('sub_account_trx')
+                ->where('account_trx_id', '=', $ate->id)
+                ->delete();
+            foreach($data['items'] as $item) {
+                $ate->items()->insert($item);
+            }
+        }
+
+        //dd($ate);
         return $ate->id;
     }
 
     public static function listAll($criteria=array()) {
-        return AccountTransaction::where('status', '=', 1)->get();
+        $q = AccountTransaction::where('status', '=', 1);
+        foreach($criteria as $key => $val) {
+            if(is_array($val)) {
+                if($val[0] === 'null')
+                    $q->where_null($key);
+                elseif($val[0] === 'not_null')
+                    $q->where_not_null($key);
+                else
+                    $q->where($key, $val[0], $val[1]);
+            }
+        }
+        return $q->get();
     }
 
     public static function remove($id) {
@@ -90,6 +123,20 @@ class AccountTransaction extends Eloquent {
         $ate->due_date = $due_date->format(static::$sqlformat);
 
         $ate->save();
+
+
+        //register items
+        if(isset($data['items']) && is_array($data['items'])) {
+            //cleanup items
+            $affected = DB::table('sub_account_trx')
+                ->where('account_trx_id', '=', $ate->id)
+                ->delete();
+            foreach($data['items'] as $item) {
+                $ate->items()->insert($item);
+            }
+        }
+
+        //dd($ate);
         return $ate->id;
     }
 

@@ -26,16 +26,16 @@ class Create_Item_Stock_Flow_Table {
             $table->string('status', 1);
             $table->integer('configured_by');
             $table->index('configured_by');
-            $table->foreign('item_id')
-                ->references('id')
-                ->on('item')
-                ->on_update('restrict')
-                ->on_delete('restrict');
-            $table->foreign('account_transaction_id')
-                ->references('id')
-                ->on('account_transaction')
-                ->on_update('restrict')
-                ->on_delete('restrict');
+//            $table->foreign('item_id')
+//                ->references('id')
+//                ->on('item')
+//                ->on_update('restrict')
+//                ->on_delete('restrict');
+//            $table->foreign('account_transaction_id')
+//                ->references('id')
+//                ->on('account_transaction')
+//                ->on_update('restrict')
+//                ->on_delete('restrict');
         });
 
         Schema::create('item_price', function($table) {
@@ -48,16 +48,16 @@ class Create_Item_Stock_Flow_Table {
             $table->timestamp('expiry_date');
             $table->integer('configured_by');
             $table->index('configured_by');
-            $table->foreign('item_id')
-                ->references('id')
-                ->on('item')
-                ->on_update('restrict')
-                ->on_delete('restrict');
-            $table->foreign('configured_by')
-                ->references('id')
-                ->on('user')
-                ->on_update('restrict')
-                ->on_delete('restrict');
+//            $table->foreign('item_id')
+//                ->references('id')
+//                ->on('item')
+//                ->on_update('restrict')
+//                ->on_delete('restrict');
+//            $table->foreign('configured_by')
+//                ->references('id')
+//                ->on('user')
+//                ->on_update('restrict')
+//                ->on_delete('restrict');
         });
 
         Schema::table('sub_account_trx', function($table) {
