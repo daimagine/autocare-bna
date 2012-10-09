@@ -160,15 +160,16 @@ class Role_Controller extends Secure_Controller {
             return Redirect::to('role/index');
         }
         $data = Input::all();
+
         $role = Role::find($id);
         $success = Role::configureAccess($role, $data);
         if($success) {
             //success login
             Session::flash('message', 'Success to save role access');
-            return Redirect::to('role/access')->with('id', $id);
+            return Redirect::to_action('role@access', array( $id ));
         } else {
             Session::flash('message_error', 'Failed to save role access');
-            return Redirect::to('role/access')->with('id', $id);
+            return Redirect::to_action('role@access', array( $id ));
         }
     }
 

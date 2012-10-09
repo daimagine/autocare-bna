@@ -11,18 +11,87 @@
 
 <fieldset>
 
-    <div class="widget fluid">
-        <div class="whead">
-            <h6>Edit Invoice {{ $accountTransType === 'D' ? 'Account Receivable' : 'Account Payable' }}</h6>
+<div class="widget">
+    <div class="invoice">
+        <div class="inHead">
+            <span class="inLogo"><h6>{{ $accountTransType === 'D' ? 'Account Receivable' : 'Account Payable' }}</h6></span>
+            <div class="inInfo">
+                <span class="invoiceNum">Invoice # {{ $account->invoice_no }}</span>
+                <i>{{ $account->invoice_date }}</i>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <div class="inContainer">
+            <div class="inFrom">
+                <h5>From/To <strong class="red">{{ $account->subject }}</strong></h5>
+                <span>Ref <strong># {{ $account->reference_no }}</strong></span>
+                <span>Invoice create on <strong>{{ $account->due_date }}</strong></span>
+                <span>Payment due by <strong>{{ $account->due_date }}</strong></span>
+                <span class="black">Invoice Status is <a href="#">{{ $account->paid_date !== null ? 'Paid' : 'Awaiting payment' }}</a></span>
+            </div>
 
             <div class="clear"></div>
         </div>
 
-        {{ Form::nginput('text', 'subject', $account->subject, $accountTransType === 'D' ? 'To *' : ($accountTransType === 'C' ? 'From *' : 'Subject *'), array( 'id' => 'account-name' ) ) }}
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tLight">
+            <thead>
+            <tr>
+                <td width="36%">Item</td>
+                <td width="5%">Quantity</td>
+                <td width="30%">Account</td>
+                <td width="17%">Tax Amount</td>
+                <td width="17%">Amount</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Concept</td>
+                <td>Creating project concept and logic</td>
+                <td>0</td>
+                <td><strong>$1100</strong></td>
+            </tr>
+            </tbody>
+        </table>
 
-        {{ Form::nginput('text', 'invoice_no', $account->invoice_no, 'Invoice', array( 'readonly' => 'readonly' )) }}
+        <div>
+            <div class="inFrom">
+                <h5>Payment method: <i class="red">Wire transfer</i></h5>
+                <span>Bank account #</span>
+                <span>SWIFT code</span>
+                <span>IBAN</span>
+                <span>Billing address</span>
+                <span>Name</span>
+            </div>
 
-        {{ Form::nginput('text', 'reference_no', $account->reference_no, 'Reference *') }}
+            <div class="total">
+                <span>Amount Due</span>
+                <strong class="red">$00.00</strong>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <div class="inFooter">
+            <div class="footnote">Thank you very much for choosing us. It was pleasure to work with you.</div>
+            <ul class="cards">
+                <li class="discover"><a href="#"></a></li>
+                <li class="visa"><a href="#"></a></li>
+                <li class="mc"><a href="#"></a></li>
+                <li class="pp"><a href="#"></a></li>
+                <li class="amex"><a href="#"></a></li>
+            </ul>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="widget fluid">
+        <div class="whead">
+            <h6>Edit Invoice </h6>
+
+            <div class="clear"></div>
+        </div>
 
         <div class="formRow">
             <div class="grid3"><label>Invoice Date *</label></div>
@@ -30,7 +99,7 @@
                 <ul class="timeRange">
                     <li><input name="invoice_date" type="text" class="datepicker" value="{{ $invoice_date }}" /></li>
                     <li class="sep">-</li>
-                    <li><input name="invoice_time" type="text" class="timepicker" size="10" value="{{$invoice_time }}" />
+                    <li><input name="invoice_time" type="text" class="timepicker" size="10" value="{{$invoice_time }}"/>
                         <span class="ui-datepicker-append">(hh:mm:ss)</span>
                     </li>
                 </ul>
@@ -72,44 +141,26 @@
 
             <table id="item-table" cellpadding="0" cellspacing="0" width="100%" class="tDark" style=" {{ ( is_array($items) && empty($items) ) ? 'display:none;' : '' }} ">
                 <thead>
-                    <tr>
-                        <td>Item</td>
-                        <td>Quantity</td>
-                        <td>Account</td>
-                        <td>Tax Amount</td>
-                        <td>Amount</td>
-                        <td></td>
-                    </tr>
+                <tr>
+                    <td>Item</td>
+                    <td>Quantity</td>
+                    <td>Account</td>
+                    <td>Tax Amount</td>
+                    <td>Amount</td>
+                </tr>
                 </thead>
                 <tbody id="item-tbody">
-                    <?php $tax = 0; $amount = 0; ?>
-                    @for ($i = 0; $i < count($items); $i++)
-                        <tr id="v-rows-{{ $i }}">
-                            <td class="v-no v-num-{{ $i }}">{{ $items[$i]->item }}</td>
-                            <td class="v-type-{{ $i }}">{{ $items[$i]->quantity }}</td>
-                            <td class="v-color-{{ $i }}">{{ $items[$i]->account->name }}</td>
-                            <td class="v-model-{{ $i }}">{{ $items[$i]->tax }}</td>
-                            <td class="v-brand-{{ $i }}">{{ $items[$i]->amount }}</td>
-                            <td>
-                                <div>
-                                    <a href="#item-tbody" onclick="Account.Item.edit('v-rows-{{ $i }}','{{ $i }}')">edit</a> |
-                                    <a href="#item-tbody" onclick="Account.Item.remove('v-rows-{{ $i }}')">remove</a>
-                                </div>
-                            </td>
-                            <td style="display: none; ">
-                                <input type="hidden" class="v-item-hid-{{ $i }}" name="items[{{ $i }}][item]" value="{{ $items[$i]->item }}" />
-                                <input type="hidden" class="v-qty-hid-{{ $i }}" name="items[{{ $i }}][quantity]" value="{{ $items[$i]->quantity }}" />
-                                <input type="hidden" class="v-account-hid-{{ $i }}" name="items[{{ $i }}][account_type_id]" value="{{ $items[$i]->account_type_id }}" />
-                                <input type="hidden" class="v-tax-hid-{{ $i }} v-tax" name="items[{{ $i }}][tax]" value="{{ $items[$i]->tax }}" />
-                                <input type="hidden" class="v-amount-hid-{{ $i }} v-amount" name="items[{{ $i }}][amount]" value="{{ $items[$i]->amount }}" />
-                                <input type="hidden" class="v-desc-hid-{{ $i }}" name="items[{{ $i }}][description]" value="{{ $items[$i]->description }}" />
-                                <input type="hidden" class="v-unit-price-hid-{{ $i }}" name="items[{{ $i }}][unit_price]" value="{{ $items[$i]->unit_price }}" />
-                                <input type="hidden" class="v-disc-hid-{{ $i }}" name="items[{{ $i }}][discount]" value="{{ $items[$i]->discount }}" />
-                                <input type="hidden" name="items[{{ $i }}][status]" value="{{ $items[$i]->status }}" />
-                            </td>
-                        </tr>
-                        <?php $tax += $items[$i]->tax; $amount += $items[$i]->amount; ?>
-                    @endfor
+                <?php $tax = 0; $amount = 0; ?>
+                @for ($i = 0; $i < count($items); $i++)
+                <tr id="v-rows-{{ $i }}">
+                    <td class="v-no v-num-{{ $i }}">{{ $items[$i]->item }}</td>
+                    <td class="v-type-{{ $i }}">{{ $items[$i]->quantity }}</td>
+                    <td class="v-color-{{ $i }}">{{ $items[$i]->account->name }}</td>
+                    <td class="v-model-{{ $i }}">{{ $items[$i]->tax }}</td>
+                    <td class="v-brand-{{ $i }}">{{ $items[$i]->amount }}</td>
+                </tr>
+                <?php $tax += $items[$i]->tax; $amount += $items[$i]->amount; ?>
+                @endfor
                 </tbody>
             </table>
             <input type="hidden" id="item-rows" value="{{ empty($items) ? 0 : sizeof($items) }}"/>
@@ -191,7 +242,7 @@
                         <label style="margin-bottom: -13px; display: block;">Account</label><br>
                         <select id="item-account-type">
                             @foreach($accounts as $key => $value)
-                                <option id="select-account-id-{{ $key }}" value="{{ $key }}">{{ $value }}</option>
+                            <option id="select-account-id-{{ $key }}" value="{{ $key }}">{{ $value }}</option>
                             @endforeach
                         </select>
                     </div>

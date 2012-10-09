@@ -46,6 +46,8 @@ class AccountTransaction extends Eloquent {
         $ate->description = @$data['description'];
         $ate->subject = $data['subject'];
 
+        $ate->approved_status = approvedStatus::NEW_ACCOUNT_INVOICE;
+
         //datetime fields
 
         $ate->input_date = date(static::$sqlformat);
@@ -124,8 +126,8 @@ class AccountTransaction extends Eloquent {
 
         $ate->save();
 
-
         //register items
+        $due_amount = 0;
         if(isset($data['items']) && is_array($data['items'])) {
             //cleanup items
             $affected = DB::table('sub_account_trx')
@@ -133,8 +135,14 @@ class AccountTransaction extends Eloquent {
                 ->delete();
             foreach($data['items'] as $item) {
                 $ate->items()->insert($item);
+                $due_amount += $item['amount'];
+                var_dump($item['amount']);
             }
         }
+
+        //dd($data);
+        $ate->due = round($due_amount, 2);
+        $ate->save();
 
         //dd($ate);
         return $ate->id;
