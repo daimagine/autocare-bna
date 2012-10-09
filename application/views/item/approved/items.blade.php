@@ -1,5 +1,7 @@
 <script type="text/javascript">
     $(function() {
+        $("select, .check, .check :checkbox, input:radio, input:file").uniform();
+
         $('#dialogItem').click(function () {
             $('#formDialogListItem').dialog('close');
             return false;

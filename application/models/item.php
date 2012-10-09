@@ -64,8 +64,10 @@ class Item extends Eloquent {
 
     public static function create($data=array()) {
         $item = new Item();
-        $item_type= ItemType::find($data['item_type_id']);
-        $item->item_type_id=$item_type->id;
+        if (isset($data['item_type_id'])) {
+            $item_type= ItemType::find($data['item_type_id']);
+            $item->item_type_id=$item_type->id;
+        }
         $item_category= ItemCategory::find($data['item_category_id']);
         $item->item_category_id = $item_category->id;
         $unit_type = UnitType::find($data['unit_id']);

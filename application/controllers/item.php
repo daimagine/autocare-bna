@@ -378,13 +378,14 @@ class Item_Controller extends Secure_Controller {
         $validation = Validator::make(Input::all(), $this->getRules());
         $subAccountTrxId = Session::get(ACCOUNT_TRX_ID, null);
         $itemdata = Input::all();
-        $itemdata = $itemdata;
+        $stockOpname= $itemdata['stock'];
         if(!$validation->fails()) {
+            $itemdata['stock']=0;
             $success = Item::create($itemdata);
             $insertStokFlow = ItemStockFlow::create(array(
                 'item_id' => $success,
                 'sub_account_trx_id' => $subAccountTrxId,
-                'quantity' => $itemdata['stock']
+                'quantity' => $stockOpname
             ));
             if($success && $insertStokFlow) {
                 Session::flash('message', 'Success Update');
@@ -395,6 +396,16 @@ class Item_Controller extends Secure_Controller {
             Session::flash('message_error', 'Failed create');
             Log::info('Validation fails. error : ' + print_r($validation->errors, true));
         }
+        return Redirect::to('item/detail_approved/'.$subAccountTrxId);
+    }
+
+    public function get_remove_opname_item($id=null){
+        $subAccountTrxId = Session::get(ACCOUNT_TRX_ID, null);
+        if($id===null){
+            return Redirect::to('item/detail_approved/'.$subAccountTrxId);
+        }
+
+        $success = ItemStockFlow::deleteItemStockFlow($id);
         return Redirect::to('item/detail_approved/'.$subAccountTrxId);
     }
 

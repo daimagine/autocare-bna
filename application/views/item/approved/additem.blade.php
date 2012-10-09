@@ -1,5 +1,7 @@
 <script type="text/javascript">
     $(function() {
+        $("select, .check, .check :checkbox, input:radio, input:file").uniform();
+
         $('#dialogNewItem').click(function () {
             $('#formDialogNewItem').dialog('close');
             return false;
@@ -13,6 +15,10 @@
                 digits: true
             },
             price: {
+                required: true,
+                digits: true
+            },
+            purchase_price: {
                 required: true,
                 digits: true
             },
