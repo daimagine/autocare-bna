@@ -29,7 +29,7 @@
                 <th>Due Date</th>
                 <th>Paid</th>
                 <th>Due</th>
-                <th>Attributes</th>
+                <th>Status</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -44,11 +44,7 @@
                 <td>{{ $account->due_date }}</td>
                 <td>{{ $account->paid !== null ? 'IDR' : '' }} {{ $account->paid }}</td>
                 <td>{{ $account->due !== null ? 'IDR' : '' }} {{ $account->due }}</td>
-                <td class="tableActs" align="center">
-                    @if($account->status)
-                    <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
-                    @endif
-                </td>
+                <td>{{ $account->paid_date !== null ? 'paid' : 'awaiting payment' }}</td>
                 <td class="tableActs" align="center">
                     <a href="/account/invoice_edit/{{ $accountTransType }}/{{ $account->id }}"
                        class="appconfirm tablectrl_small bDefault tipS"
@@ -60,6 +56,12 @@
                        class="appconfirm tablectrl_small bDefault tipS"
                        original-title="Remove"
                        dialog-confirm-title="Remove Confirmation">
+                        <span class="iconb" data-icon=""></span>
+                    </a>
+                    <a href="/account/pay_invoice/{{ $accountTransType }}/{{ $account->id }}"
+                       class="appconfirm tablectrl_small bDefault tipS"
+                       original-title="Pay Invoice"
+                       dialog-confirm-title="Payment Confirmation">
                         <span class="iconb" data-icon=""></span>
                     </a>
                 </td>

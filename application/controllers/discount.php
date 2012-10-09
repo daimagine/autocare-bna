@@ -116,8 +116,9 @@ class Discount_Controller extends Secure_Controller {
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
-            'code' => 'required|max:50',
-            'registration_fee' => 'required|numeric'
+            'code' => 'required|min:5|max:50',
+            'registration_fee' => 'required|numeric',
+            'value' => 'required|min:0'
         );
         if($method == 'add') {
             $additional = array(

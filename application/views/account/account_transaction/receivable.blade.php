@@ -29,6 +29,7 @@
                 <th>Due Date</th>
                 <th>Paid</th>
                 <th>Due</th>
+                <th>Status</th>
                 <th>Attributes</th>
                 <th>Action</th>
             </tr>
@@ -44,6 +45,7 @@
                 <td>{{ $account->due_date }}</td>
                 <td>{{ $account->paid !== null ? 'IDR' : '' }} {{ $account->paid }}</td>
                 <td>{{ $account->due !== null ? 'IDR' : '' }} {{ $account->due }}</td>
+                <td>{{ $account->paid_date !== null ? 'paid' : 'awaiting payment' }}</td>
                 <td class="tableActs" align="center">
                     @if($account->status)
                     <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>

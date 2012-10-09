@@ -65,7 +65,7 @@
         <div class="formRow noBorderB">
             <div class="status" id="status3"></div>
             <div class="formSubmit">
-                {{ HTML::link('role/index', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
+                {{ HTML::link('role/select', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
                 {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5', 'onclick' => 'ensureSelectAccess()' )) }}
             </div>
             <div class="clear"></div>

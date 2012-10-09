@@ -70,8 +70,7 @@ return array(
 		'mysql' => array(
 			'driver'   => 'mysql',
 			'host'     => 'localhost',
-//			'database' => 'autocare-bna',
-            'database' => 'DB_Fahmi',
+			'database' => 'autocare-bna_adi',
 			'username' => 'root',
 			'password' => '',
 			'charset'  => 'utf8',

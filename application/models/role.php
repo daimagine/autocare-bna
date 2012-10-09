@@ -92,16 +92,21 @@ class Role extends Eloquent {
     }
 
     public static function configureAccess($role, $data) {
-        $access_ids = $data['selectedAccess'];
         $idx = 0;
         $role->role_access()->delete();
-        foreach($access_ids as $id) {
-            $access = Access::find($id);
-            $role->role_access()
-                ->attach($access, array('sequence' => $idx));
-            $idx++;
+        if(array_key_exists('selectedAccess', $data) && is_array($data)) {
+            $access_ids = $data['selectedAccess'];
+            foreach($access_ids as $id) {
+                $access = Access::find($id);
+                $role->role_access()
+                    ->attach($access, array('sequence' => $idx));
+                $idx++;
+            }
+            $role->save();
+        } else {
+            //Session::flash('message_error', 'Please assign at least one access privilege');
+            //return Redirect::to_action('role@access', array( $id ));
         }
-        $role->save();
         return true;
     }
 

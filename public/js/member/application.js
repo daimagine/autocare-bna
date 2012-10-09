@@ -8,8 +8,25 @@ $(function() {
         width: 400,
         buttons: {
             "Save": function () {
-				$('#memberAssignForm').submit();
-                $(this).dialog("close");
+                var confirm_title = 'Confirmation';
+                var confirm_content = 'Your action cannot be undone. Are you sure?';
+                $("#dialog-confirm").attr('title', confirm_title);
+                $("#dialog-confirm-content").html(confirm_content);
+
+                $("#dialog-confirm").dialog({
+                    modal: true,
+                    buttons : {
+                        "Confirm" : function() {
+                            $('#memberAssignForm').submit();
+                            $(this).dialog("close");
+                        },
+                        "Cancel" : function() {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+
+                $("#dialog-confirm").dialog("open");
             }
         }
     });

@@ -17,7 +17,7 @@
         {{ Form::nginput('text', 'code', $discount_code, 'Code', array( 'readonly' => 'readonly' ) ) }}
 
 		<div class="formRow">
-			<div class="grid3"><label>Value</label></div>
+			<div class="grid3"><label>Value *</label></div>
 			<div class="grid9"><input name="value" type="text" id="discountValue" value="{{ @$discount['value'] }}" /></div><div class="clear"></div>
 		</div>
 

@@ -27,8 +27,11 @@ class Customer extends Eloquent {
 
     public static function update($id, $data = array()) {
         $customer = Customer::where_id($id)
-            ->where_status(1)
+            //->where_status(1)
             ->first();
+
+//        dd($data);
+//        dd($customer);
         $customer->name = $data['name'];
         $customer->status = $data['status'];
 		$customer->address1 = @$data['address1'];

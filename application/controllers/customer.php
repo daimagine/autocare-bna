@@ -135,11 +135,14 @@ class Customer_Controller extends Secure_Controller {
         }
     }
 
-    public function get_delete($id=null) {
+    public function get_delete($id=null, $purge=false) {
         if($id===null) {
             return Redirect::to('customer/index');
         }
-        $success = Customer::remove($id);
+        if($purge === 'purge')
+            $success = Customer::find($id)->delete();
+        else
+            $success = Customer::remove($id);
         if($success) {
             //success
             Session::flash('message', 'Remove success');
