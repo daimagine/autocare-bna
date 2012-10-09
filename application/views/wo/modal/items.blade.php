@@ -1,5 +1,5 @@
 <!-- Tabs -->
-<script src="../js/wo/application.js" type="text/javascript"></script>
+<script src="http://autocare-bna.dev/js/wo/application.js" type="text/javascript"></script>
 <div class="fluid">
     <div class="widget" style="margin-top: 0px;">
         <ul class="tabs">

@@ -224,6 +224,72 @@ class Work_Order_Controller extends Secure_Controller
 
         ));
     }
+
+
+    public function post_edit(){
+        $validation = Validator::make(Input::all(), $this->getRules());
+        $wodata = Input::all();
+        $id = $wodata['id'];
+        if ($id === null) {
+            return Redirect::to('work_order/list');
+        }
+//        $serviceFormulaId=array();
+//        $no=0;
+//        foreach($wodata['services'] as $s){
+//            $serviceFormulaId[$no] = $s['service_formula_id'];
+//            $no++;
+//        }
+//        {{dd($wodata);}}
+        if(!$validation->fails()) {
+            //=== check status customer ===//
+            if($wodata['customerId']==null or $wodata['customerId']==''){
+                //thisis new customer & new vehicle
+                $customer = Customer::create(array(
+                    'name' => $wodata['customerName'],
+                    'status' => 1
+                ));
+                $wodata['customerId'] = $customer;
+            }
+
+            if($wodata['vehiclesid']==null or $wodata['vehiclesid']=='' or $wodata['vehiclesid']==0){
+                $vehicle = Vehicle::create(array(
+                    'customer_id' => $wodata['customerId'],
+                    'status' => statusType::ACTIVE,
+                    'number' => $wodata['vehiclesnumber'],
+                    'type' => $wodata['vehiclestype'],
+                    'color' => $wodata['vehiclescolor'],
+                    'model' => $wodata['vehiclesmodel'],
+                    'brand' => $wodata['vehiclesbrand'],
+                    'description' => $wodata['vehiclesdescription']
+                ));
+
+                if($vehicle) {
+                    //success create new vehicle
+                    $wodata['vehiclesid'] = $vehicle;
+                }
+            } else {
+                $vehicle = Vehicle::getSingleResult(array(
+                    'customer_id' => $wodata['customerId'],
+                    'vehicle_number' => $wodata['vehiclesnumber']
+                ));//TEMPORARY MAKE SURE KE ADI RELASI CUSTOMER DGN VEHICLE (1 to 1 / 1 to m)
+                $wodata['vehiclesid'] = $vehicle->id;
+            }
+
+            $success = Transaction::update($id, $wodata);
+            if($success) {
+                //success
+                Session::flash('message', 'Success update wo');
+                return Redirect::to('work_order/list');
+            } else {
+                Session::flash('message_error', 'Failed update wo');
+                return Redirect::to('work_order/edit/'.$id);
+            }
+        } else {
+            Log::info('Validation fails. error : ' + print_r($validation->errors, true));
+            return Redirect::to('work_order/edit/'.$id)
+                ->with_errors($validation);
+        }
+    }
     //=======================RULES INPUT============================//
     private function getRules($method='add') {
         $additional = array();
