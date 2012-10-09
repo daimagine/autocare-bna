@@ -38,7 +38,7 @@
     </div>
     <div>
         <input type="hidden" id="customerId" name="customerId" value="{{$transaction->vehicle->customer->id}}">
-        <input type="hidden" id="workorderId" name="{{}}">
+        <input type="hidden" id="id" name="{{$transaction->id}}">
     </div>
 </div>
 
