@@ -62,6 +62,9 @@
                     <td>{{$item->item->stock }}</td>
                     <td>{{($item->item->stock) + ($item->quantity) }}</td>
                     <td>{{$item->item->vendor }}</td>
+                    <td>
+                        {{ HTML::link('item/remove_opname_item/'.$item->id, 'remove') }}
+                    </td>
                 </tr>
                 @endforeach
                 </tbody>

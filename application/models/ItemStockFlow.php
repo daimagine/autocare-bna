@@ -67,4 +67,10 @@ class ItemStockFlow extends Eloquent {
         return $itemStockFlow->id;
     }
 
+    public static function deleteItemStockFlow($id) {
+        $affected = DB::table('item_stock_flow')
+            ->where('id', '=', $id)
+            ->delete();
+    }
+
 }

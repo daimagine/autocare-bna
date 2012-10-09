@@ -163,4 +163,10 @@ class Transaction extends Eloquent {
         return $trx->id;
     }
 
+    public static function update_status($id, $status){
+        $trx = Transaction::find($id);
+        $trx->status = $status;
+        $trx->save();
+        return $trx;
+    }
 }

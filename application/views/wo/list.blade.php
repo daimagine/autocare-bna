@@ -32,17 +32,17 @@
                 <td>{{ $trx->date }}</td>
                 <td>{{ ($trx->status == 'O' ? 'Open' : ($trx->status == 'D' ? 'Closed' : 'Canceled')) }}</td>
                 <td class="tableActs" align="center">
-                    <a href="detail/{{ $trx->id }}" class="tablectrl_small bBlue tipS" original-title="Detail"><span class="iconb" data-icon=""></span></a>
+                    <a href="detail/{{ $trx->id }}?type=D" class="tablectrl_small bBlue tipS" original-title="Detail"><span class="iconb" data-icon=""></span></a>
                     @if($trx->status == 'O')
                     <a href="edit/{{ $trx->id }}" class="tablectrl_small bRed tipS" original-title="Update"><span class="iconb" data-icon=""></span></a>
-                    <a href="close/{{ $trx->id }}" class="tablectrl_small bGreen tipS" original-title="Close"><span class="iconb"  data-icon=""></span></a>
-                    <a href="cancel/{{ $trx->id }}" class="tablectrl_small bGreyish tipS" original-title="Cancel"><span class="iconb"  data-icon=""></span></a>
+                    <a href="detail/{{ $trx->id }}?type=C" class="tablectrl_small bGreen tipS" original-title="Close"><span class="iconb"  data-icon=""></span></a>
+                    <a href="do_canceled/{{ $trx->id }}" class="tablectrl_small bGreyish tipS" original-title="Cancel"><span class="iconb"  data-icon=""></span></a>
                     @endif
                     @if($trx->status == 'D' or $trx->status == 'O')
                     <a href="invoice/{{ $trx->id }}" class="tablectrl_small bGold tipS" original-title="Invoice"><span class="iconb"  data-icon=""></span></a>
                     @endif
                     @if($trx->status == 'C' or $trx->status == 'D')
-                    <a href="reopen/{{ $trx->id }}" class="tablectrl_small bSea tipS" original-title="Reopen"><span class="iconb"  data-icon=""></span></a>
+                    <a href="do_reopen/{{ $trx->id }}" class="tablectrl_small bSea tipS" original-title="Reopen"><span class="iconb"  data-icon=""></span></a>
                     @endif
                 </td>
             </tr>

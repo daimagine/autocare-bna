@@ -7,7 +7,14 @@
 <fieldset>
 <div class="widget fluid">
     <div class="whead">
-        <h6>Workorder Detail Information</h6>
+        <h6>
+            @if($action == 'D')
+            Detail Information
+            @elseif($action == 'C')
+            Closed
+            @endif
+            Workorder
+        </h6>
 
         <div class="clear"></div>
     </div>
@@ -147,15 +154,19 @@
                 </div>
                 <div class="grid7">
                     <div class="formSubmit">
-                        @if($transaction->status == 'O')
-                        <a href="#" class="buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>Close WO</span></a>
-                        <a href="#" class="buttonM bGreyish"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>Canceled</span></a>
+                        @if($transaction->status == 'O' and $action == 'D')
+                        <a href="../do_closed/{{ $transaction->id }}" class="buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>Close WO</span></a>
+                        <a href=../do_canceled/{{ $transaction->id }}" class="buttonM bGreyish"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>Canceled</span></a>
                         @endif
-                        @if($transaction->status == 'D' or $transaction->status == 'O')
+                        @if(($transaction->status == 'D' or $transaction->status == 'O') and $action == 'D')
                         <a href="#" class="buttonM bGold"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>To Invoice</span></a>
                         @endif
-                        @if($transaction->status == 'C' or $transaction->status == 'D')
-                        <a href="#" class="buttonM bSea"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>Reopen</span></a>
+                        @if(($transaction->status == 'C' or $transaction->status == 'D') and $action == 'D')
+                        <a href="../do_reopen/{{ $transaction->id }}" class="buttonM bSea"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>Reopen</span></a>
+                        @endif
+
+                        @if($action == 'C')
+                        <a href="../do_closed/{{ $transaction->id }}" class="buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>Close WO</span></a>
                         @endif
                     </div>
                 </div>

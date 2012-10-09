@@ -173,13 +173,61 @@ class Work_Order_Controller extends Secure_Controller
         if ($id===null) {
             return Redirect::to('work_order/list');
         }
-
-
+        //action type : DETAIL => D, CLOSED=> C, CANCELED=> X, REOPEN=> R
+        $action = Input::get('type');
         $transaction = Transaction::get_detail_trx($id);
         return $this->layout->nest('content', 'wo.detail', array(
-            'transaction' => $transaction
+            'transaction' => $transaction,
+            'action' => $action
         ));
     }
+
+    public function get_do_closed($id=null){
+        if ($id===null) {
+            Session::flash('message_error', 'Failed update wo');
+            return Redirect::to('work_order/list');
+        }
+        $update = Transaction::update_status($id, statusWorkOrder::CLOSE);
+        if($update) {
+            //success
+            Session::flash('message', 'Success Canceled wo '.$update->workorder_no);
+            return Redirect::to('work_order/list');
+        } else {
+            Session::flash('message_error', 'Failed update wo');
+            return Redirect::to('work_order/add');
+        }
+    }
+
+    public function get_do_canceled($id=null){
+        if ($id===null) {
+            return Redirect::to('work_order/list');
+        }
+        $update = Transaction::update_status($id, statusWorkOrder::CANCELED);
+        if($update) {
+            //success
+            Session::flash('message', 'Success Canceled wo '.$update->workorder_no);
+            return Redirect::to('work_order/list');
+        } else {
+            Session::flash('message_error', 'Failed add wo');
+            return Redirect::to('work_order/add');
+        }
+    }
+
+    public function get_do_reopen($id=null){
+        if ($id===null) {
+            return Redirect::to('work_order/list');
+        }
+        $update = Transaction::update_status($id, statusWorkOrder::OPEN);
+        if($update) {
+            //success
+            Session::flash('message', 'Success Canceled wo '.$update->workorder_no);
+            return Redirect::to('work_order/list');
+        } else {
+            Session::flash('message_error', 'Failed add wo');
+            return Redirect::to('work_order/add');
+        }
+    }
+
 
     //GET UPDATE or EDIT
     public function get_edit($id=null){
