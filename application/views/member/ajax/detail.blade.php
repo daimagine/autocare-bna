@@ -22,10 +22,58 @@
         </li>
         <li class="on_off noBorderB">
             <div style="float: right">
-                <a href="/member/delete/{{ $member->id }}" class="buttonM bRed"><span class="icol-exit"></span><span style="color: white">Revoke Membership</span></a>
+                <a href="/member/delete/{{ $member->id }}"
+                   class="appconfirm buttonM bRed"
+                   original-title="Remove"
+                   dialog-confirm-title="Remove Confirmation">
+                    <span class="icol-exit"></span>
+                    <span style="color: white">Revoke Membership</span>
+                </a>
             </div>
             <div class="clear"></div>
         </li>
     </ul>
 </div>
 <div class="clear"></div>
+
+<script type="text/javascript">
+
+    $(function() {
+
+        $( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+        $('.appconfirm').click(function(e) {
+            e.preventDefault();
+            var targetUrl = $(this).attr("href");
+            var confirm_title = 'Confirmation';
+            var confirm_content = 'Your action cannot be undone. Are you sure?';
+            var title = $(this).attr("dialog-confirm-title");
+            var content = $(this).attr("dialog-confirm-content");
+            var callback = $(this).attr("dialog-confirm-callback");
+            var t = title || confirm_title;
+            $("#dialog-confirm").attr('title', t);
+            var c = content || confirm_content;
+
+            $("#dialog-confirm").dialog({
+                modal: true,
+                buttons : {
+                    "Confirm" : function() {
+                        console.log(callback);
+                        if(callback) {
+                            var fn = new Function(callback);
+                            fn();
+                        } else {
+                            window.location.href = targetUrl;
+                        }
+                    },
+                    "Cancel" : function() {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $("#dialog-confirm").dialog("open");
+        });
+
+    });
+</script>

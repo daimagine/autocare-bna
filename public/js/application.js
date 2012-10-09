@@ -173,6 +173,7 @@ $(function() {
 		var t = title || confirm_title;
 		$("#dialog-confirm").attr('title', t);
 		var c = content || confirm_content;
+        $("#dialog-confirm-content").html(c);
 
 		$("#dialog-confirm").dialog({
 			modal: true,

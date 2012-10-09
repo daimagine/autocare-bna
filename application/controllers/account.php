@@ -144,7 +144,7 @@ class Account_Controller extends Secure_Controller {
             $success = AccountTransaction::create($data);
             if($success) {
                 //success
-                Session::flash('message', 'Success create invoice ' + $data['invoice_no']);
+                Session::flash('message', 'Success create invoice ' . $data['invoice_no']);
                 if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
                     return Redirect::to('account/account_receivable');
                 else
