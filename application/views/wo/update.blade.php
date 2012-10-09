@@ -3,7 +3,7 @@
 @include('partial.notification')
 <br>
 
-{{ Form::open('/work_order/add', 'POST') }}
+{{ Form::open('/work_order/edit', 'POST') }}
 <fieldset>
 <div class="widget fluid">
     <div class="whead">
@@ -38,7 +38,7 @@
     </div>
     <div>
         <input type="hidden" id="customerId" name="customerId" value="{{$transaction->vehicle->customer->id}}">
-        <input type="hidden" id="workorderId" name="{{}}">
+        <input type="hidden" id="trxId" name="id" value="{{$transaction->id}}">
     </div>
 </div>
 
@@ -73,10 +73,13 @@
                 <td class="v-model">{{$transaction->vehicle->model}}</td>
                 <td class="v-brand">{{$transaction->vehicle->brand}}</td>
                 <td class="v-desc">{{$transaction->vehicle->description}}</td>
-                <td><div><a href="#vehicle-tbody" onclick="WorkOrder.customer.remove()">remove</a></div></td>
-                <div style="display: none; ">
-                    <input class="v-id-hid" type="hidden" name="vehiclesid" value="{{$transaction->vehicle->id}}">
-                </div>
+                <td>
+                    <div><a href="#vehicle-tbody" onclick="WorkOrder.customer.remove()">remove</a></div>
+                    <div style="display: none; ">
+                        <input class="v-id-hid" type="hidden" name="vehiclesid" value="{{$transaction->vehicle->id}}">
+                        <input class="v-id-hid" type="hidden" name="vehiclesnumber" value="{{$transaction->vehicle->number}}">
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>

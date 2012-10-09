@@ -747,11 +747,10 @@ WorkOrder.items = {
     openDialog_lst_items : function(menu) {
         console.log('open up dialog form list items');
         if (menu=='add') {
-            $(this._dialog).load("lst_items");
+            $(this._dialogitems).load("lst_items");
         } else if (menu=='edit') {
-            $(this._dialog).load("../lst_items");
+            $(this._dialogitems).load("../lst_items");
         }
-        $(this._dialogitems).load("lst_items");
         $(this._dialogitems).dialog('open');
         return false;
     },
