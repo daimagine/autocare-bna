@@ -18,7 +18,7 @@
             <div class="searchLine" style="margin-top: 0px">
                 <form action="">
                     <input type="text" id="customerName" name="customerName" class="ac ui-autocomplete-input" placeholder="Enter search name..." autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
-                    <a onclick="WorkOrder.customer.openDialog_lst_customer()"><span class="icos-search" style="position: absolute;top: 0;right: 0;"></span></a>
+                    <a onclick="WorkOrder.customer.openDialog_lst_customer('add')"><span class="icos-search" style="position: absolute;top: 0;right: 0;"></span></a>
                 </form>
             </div>
         </div>
@@ -197,7 +197,6 @@
                 </div>
                 <div class="grid7">
                     <div class="formSubmit">
-<!--                        {{ HTML::link('customer/index', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}-->
                         {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5' )) }}
                     </div>
                 </div>

@@ -11,4 +11,8 @@ class TransactionService extends Eloquent {
 
     public static $table = 'transaction_service';
     public static $timestamps = false;
+
+    public function service_formula() {
+        return $this->belongs_to('ServiceFormula', 'service_formula_id');
+    }
 }

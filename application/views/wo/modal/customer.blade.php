@@ -1,5 +1,5 @@
-<!--<script src="../js/application.js" type="text/javascript"></script>-->
-<script src="../js/wo/application.js" type="text/javascript"></script>
+<!--<script src="../js/wo/application.js" type="text/javascript"></script>-->
+<script src="http://autocare-bna.dev/js/wo/application.js" type="text/javascript"></script>
 <!-- javascript library -->
 <link href="../css/styles.css" media="all" type="text/css" rel="stylesheet">
     <div class="wrapper">

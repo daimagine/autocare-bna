@@ -230,10 +230,14 @@ WorkOrder.customer = {
         });
     },
 
-    //function to open up dialog form
-    openDialog_lst_customer : function() {
-        console.log('open up dialog form');
-        $(this._dialog).load("lst_customer");
+    //function to open up dialog form for
+    openDialog_lst_customer : function(menu) {
+        console.log('open up dialog list customer from menu '+menu);
+        if (menu=='add') {
+            $(this._dialog).load("lst_customer");
+        } else if (menu=='edit') {
+            $(this._dialog).load("../lst_customer");
+        }
         $(this._dialog).dialog('open');
         return false;
     },
@@ -742,6 +746,11 @@ WorkOrder.items = {
     //function to open up dialog items list
     openDialog_lst_items : function() {
         console.log('open up dialog form list items');
+        if (menu=='add') {
+            $(this._dialog).load("lst_items");
+        } else if (menu=='edit') {
+            $(this._dialog).load("../lst_items");
+        }
         $(this._dialogitems).load("lst_items");
         $(this._dialogitems).dialog('open');
         return false;

@@ -27,6 +27,7 @@ class Work_Order_Controller extends Secure_Controller
                 statusWorkOrder::OPEN, statusWorkOrder::CLOSE, statusWorkOrder::CANCELED
             )
         ));
+
 //        {{dd($transactions);}}
         return $this->layout->nest('content', 'wo.list', array(
             'transactions' => $transactions
@@ -104,7 +105,7 @@ class Work_Order_Controller extends Secure_Controller
         Work_Order_Controller::define_asset();
         $lstItemCategory = ItemCategory::listAll(null);
         $lstItems = Item::listAll(array());
-//        {{dd($test);}}
+//        {{dd($date);}}
         return View::make('wo.modal.items', array(
             'lstItemCategory' => $lstItemCategory,
             'lstItems' => $lstItems
@@ -131,7 +132,6 @@ class Work_Order_Controller extends Secure_Controller
                     )
                 ));
 
-//            {{dd($wodata);}}
                 $wodata['vehiclesid'] = 1;//TEMPORARY MAKE SURE KE ADI RELASI CUSTOMER DGN VEHICLE (1 to 1 / 1 to m)
                 $wodata['customerId'] = $customer;
             }
@@ -140,25 +140,83 @@ class Work_Order_Controller extends Secure_Controller
             if($success) {
                 //success
                 Session::flash('message', 'Success add wo');
-                return Redirect::to('wo/list');
+                return Redirect::to('work_order/list');
             } else {
                 Session::flash('message_error', 'Failed add wo');
-                return Redirect::to('wo/add');
+                return Redirect::to('work_order/add');
             }
         } else {
             Log::info('Validation fails. error : ' + print_r($validation->errors, true));
-            return Redirect::to('wo/add')
+            return Redirect::to('work_order/add')
                 ->with_errors($validation);
         }
     }
 
 
+    //GET DETAIL
+    public function get_detail($id=null){
+        if ($id===null) {
+            return Redirect::to('work_order/list');
+        }
 
+
+        $transaction = Transaction::get_detail_trx($id);
+        return $this->layout->nest('content', 'wo.detail', array(
+            'transaction' => $transaction
+        ));
+    }
+
+    //GET UPDATE or EDIT
+    public function get_edit($id=null){
+        if ($id===null) {
+            return Redirect::to('work_order/list');
+        }
+
+        Asset::add('jquery.validationEngine-en', 'js/plugins/forms/jquery.validationEngine-en.js',  array('jquery', 'jquery-ui'));
+        Asset::add('jquery.validate', 'js/plugins/wizards/jquery.validate.js',  array('jquery', 'jquery-ui'));
+        Asset::add('validationEngine.form', 'js/plugins/forms/jquery.validationEngine.js',  array('jquery', 'jquery-ui'));
+        Asset::add('function_item', 'js/wo/application.js',  array('jquery', 'jquery-ui'));
+
+        $transaction = Transaction::get_detail_trx($id);
+//        {{dd($transaction);}}
+        //------------get service list---------------------//
+        $lstService = Service::list_all(array(
+            'status' => array(statusType::ACTIVE)
+        ));
+        $selectionService = array();
+        $selectionService[0] = '-- select service --';
+        foreach($lstService as $srv) {
+            $selectionService[$srv->id] = $srv->name;
+        }
+
+        //------------GET MECHANIC----------------------//
+        $lstMechanic=User::listAll(array(
+            'role_id' => 4
+        ));
+
+        $selectionMechanic = array();
+        $selectionMechanic[0] = '-- select service --';
+        foreach($lstMechanic as $mch) {
+            $selectionMechanic[$mch->id] = $mch->name;
+        }
+
+
+        return $this->layout->nest('content', 'wo.update', array(
+            'selectionService' => $selectionService,
+            'lstService' => $lstService,
+            'selectionMechanic' => $selectionMechanic,
+            'transaction' => $transaction
+
+        ));
+    }
     //=======================RULES INPUT============================//
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
             'customerName' => 'required|max:50',
+            'vehiclesid' => 'required',
+            'services' => 'required',
+            'users' => 'required'
         );
         if($method == 'add') {
             $additional = array(

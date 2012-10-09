@@ -13,11 +13,14 @@ class Craete_Table_Transaction_Item {
             $table->increments('id');
             $table->integer('item_id');
             $table->index('item_id');
+            $table->integer('item_price_id');
+            $table->index('item_price_id');
             $table->integer('transaction_id');
             $table->index('transaction_id');
             $table->integer('quantity');
             $table->string('description', 255)->nullable();
         });
+
 	}
 
 	/**

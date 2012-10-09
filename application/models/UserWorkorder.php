@@ -11,4 +11,8 @@ class UserWorkorder extends Eloquent {
 
     public static $table = 'user_workorder';
     public static $timestamps = false;
+
+    public function user() {
+        return $this->belongs_to('User', 'user_id');
+    }
 }

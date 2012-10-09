@@ -25,18 +25,25 @@
 
             @foreach($transactions as $trx)
             <tr class="">
-                <td class="name">{{ $trx->id }}</td>
+                <td class="name">{{ $trx->workorder_no }}</td>
                 <td>{{ $trx->vehicle->customer->name }}</td>
                 <td>{{ $trx->vehicle->model }}</td>
                 <td>{{ $trx->vehicle->number }}</td>
                 <td>{{ $trx->date }}</td>
                 <td>{{ ($trx->status == 'O' ? 'Open' : ($trx->status == 'D' ? 'Closed' : 'Canceled')) }}</td>
                 <td class="tableActs" align="center">
-                    <a href="edit/{{ $trx->id }}" class="tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
-                    <a href="delete/{{ $trx->id }}" class="classConfirmDelete tablectrl_small bDefault tipS" original-title="Remove">
-                        <span class="iconb" data-icon=""></span>
-                        <!-- Dialog modal confirmation delete item-->
-                    </a>
+                    <a href="detail/{{ $trx->id }}" class="tablectrl_small bBlue tipS" original-title="Detail"><span class="iconb" data-icon=""></span></a>
+                    @if($trx->status == 'O')
+                    <a href="edit/{{ $trx->id }}" class="tablectrl_small bRed tipS" original-title="Update"><span class="iconb" data-icon=""></span></a>
+                    <a href="close/{{ $trx->id }}" class="tablectrl_small bGreen tipS" original-title="Close"><span class="iconb"  data-icon=""></span></a>
+                    <a href="cancel/{{ $trx->id }}" class="tablectrl_small bGreyish tipS" original-title="Cancel"><span class="iconb"  data-icon=""></span></a>
+                    @endif
+                    @if($trx->status == 'D' or $trx->status == 'O')
+                    <a href="invoice/{{ $trx->id }}" class="tablectrl_small bGold tipS" original-title="Invoice"><span class="iconb"  data-icon=""></span></a>
+                    @endif
+                    @if($trx->status == 'C' or $trx->status == 'D')
+                    <a href="reopen/{{ $trx->id }}" class="tablectrl_small bSea tipS" original-title="Reopen"><span class="iconb"  data-icon=""></span></a>
+                    @endif
                 </td>
             </tr>
             @endforeach

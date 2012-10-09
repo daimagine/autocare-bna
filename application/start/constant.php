@@ -32,3 +32,16 @@ abstract class statusWorkOrder {
         CLOSE ='D',
         CANCELED='C';
 }
+
+
+abstract class paymentType {
+    const CASH ='C',
+        EDC ='E',
+        MONTHLY ='M',
+        CORPORATE = 'O';
+}
+
+abstract class paymentState {
+    const INITIATE = 'I',
+        DONE = 'D';
+}

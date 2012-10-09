@@ -13,6 +13,7 @@ class Transaction extends Eloquent {
     public static $timestamps = false;
 
     public static $sqlformat = 'Y-m-d H:i:s';
+    public static $yyyymmdd_format = 'Ymd';
 
     public function transaction_service() {
         return $this->has_many('TransactionService');
@@ -37,25 +38,53 @@ class Transaction extends Eloquent {
         return $trx;
     }
 
+    public static function get_detail_trx($id) {
+        $trx = Transaction::with(array(
+            'vehicle',
+            'vehicle.customer',
+            'vehicle.customer.membership',
+            'transaction_service',
+            'transaction_service.service_formula',
+            'transaction_service.service_formula.service',
+            'transaction_item',
+            'transaction_item.item_price.item',
+            'transaction_item.item_price.item.item_type',
+            'transaction_item.item_price.item.item_category',
+            'transaction_item.item_price.item.item_unit',
+            'user_workorder',
+            'user_workorder.user'));
+        $trx = $trx->where('id', '=', $id);
+        return $trx->first();
+    }
     public static function create($data = array()){
+        //prepare save to db
         $trx = new Transaction();
         $trx->vehicle_id = $data['vehiclesid'];
         $trx->status = statusWorkOrder::OPEN;
+        $trx->payment_state = paymentState::INITIATE;
         $trx->date = date(static::$sqlformat);
-        $trx->amount = 0;//temp
         $trx->save();
 
+
+        //define amount variable
+        $amount=(double)0;
         //add service
         if(isset($data['services']) && is_array($data['services'])) {
             foreach($data['services'] as $service) {
                 $trx->transaction_service()->insert($service);
+                $servicePrice = (double)Service::find((int)$service['service_formula_id'])->service_formula()->price;
+                $amount=$amount+$servicePrice;
             }
         }
 
-        //add items
+        //add items if available
         if(isset($data['items']) && is_array($data['items'])) {
             foreach($data['items'] as $items) {
+                $item_price = ItemPrice::getSingleResult(array('item_id' => $items['item_id']))->id;
+                $items['item_price_id']=$item_price;
                 $trx->transaction_item()->insert($items);
+                $itemPrice = (double)Item::find((int)$items['item_id'])->price;
+                $amount=$amount+$itemPrice;
             }
         }
 
@@ -66,6 +95,12 @@ class Transaction extends Eloquent {
             }
         }
 
+
+        //GENERATE WORK ORDER NO
+        $woNo = 'C'.$data['customerId'].'V'.$data['vehiclesid'].($trx->id);
+        $trx->workorder_no = $woNo;
+        $trx->amount = $amount;
+        $trx->save();
         return $trx->id;
     }
 

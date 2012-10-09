@@ -49,4 +49,9 @@ class Service extends Eloquent {
         $service->save();
         return $service->id;
     }
+
+//    public static function getCurrentPrice($id) {
+//        $service = Service::find($id);
+//        $service->service_formiu
+//    }
 }
