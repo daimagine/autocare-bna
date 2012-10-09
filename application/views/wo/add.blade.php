@@ -120,7 +120,7 @@
     <div class="widget fluid">
         <div id="item-whead" class="whead " >
             <h6>Item</h6>
-            <a href="#vehicle-body" class="buttonH bBlue" title="" onclick="WorkOrder.items.openDialog_lst_items();">Add</a>
+            <a href="#vehicle-body" class="buttonH bBlue" title="" onclick="WorkOrder.items.openDialog_lst_items('add');">Add</a>
             <div class="clear"></div>
         </div>
         <div id="item-body" class="body" style="display: block; ">

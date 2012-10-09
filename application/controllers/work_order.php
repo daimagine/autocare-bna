@@ -54,7 +54,7 @@ class Work_Order_Controller extends Secure_Controller
         }
 
         //------------GET MECHANIC----------------------//
-        $lstMechanic=User::listAll(array(
+        $lstMechanic=User::listByCiteria(array(
            'role_id' => 4
         ));
 
@@ -115,25 +115,40 @@ class Work_Order_Controller extends Secure_Controller
     public function post_add(){
         $validation = Validator::make(Input::all(), $this->getRules());
         $wodata = Input::all();
+
         if(!$validation->fails()) {
             //=== check status customer ===//
             if($wodata['customerId']==null or $wodata['customerId']==''){
                 //thisis new customer & new vehicle
                 $customer = Customer::create(array(
                     'name' => $wodata['customerName'],
-                    'status' => 1,
-                    'vehicles' => array(
-                        'number' => $wodata['vehiclesnumber'],
-                        'type' => $wodata['vehiclestype'],
-                        'color' => $wodata['vehiclescolor'],
-                        'model' => $wodata['vehiclesmodel'],
-                        'brand' => $wodata['vehiclesbrand'],
-                        'description' => $wodata['vehiclesdescription']
-                    )
+                    'status' => 1
+                ));
+                $wodata['customerId'] = $customer;
+            }
+
+            if($wodata['vehiclesid']==null or $wodata['vehiclesid']=='' or $wodata['vehiclesid']==0){
+                    $vehicle = Vehicle::create(array(
+                    'customer_id' => $wodata['customerId'],
+                    'status' => statusType::ACTIVE,
+                    'number' => $wodata['vehiclesnumber'],
+                    'type' => $wodata['vehiclestype'],
+                    'color' => $wodata['vehiclescolor'],
+                    'model' => $wodata['vehiclesmodel'],
+                    'brand' => $wodata['vehiclesbrand'],
+                    'description' => $wodata['vehiclesdescription']
                 ));
 
-                $wodata['vehiclesid'] = 1;//TEMPORARY MAKE SURE KE ADI RELASI CUSTOMER DGN VEHICLE (1 to 1 / 1 to m)
-                $wodata['customerId'] = $customer;
+                if($vehicle) {
+                    //success create new vehicle
+                    $wodata['vehiclesid'] = $vehicle;
+                }
+            } else {
+                $vehicle = Vehicle::getSingleResult(array(
+                    'customer_id' => $wodata['customerId'],
+                    'vehicle_number' => $wodata['vehiclesnumber']
+                ));//TEMPORARY MAKE SURE KE ADI RELASI CUSTOMER DGN VEHICLE (1 to 1 / 1 to m)
+                $wodata['vehiclesid'] = $vehicle->id;
             }
 
             $success = Transaction::create($wodata);

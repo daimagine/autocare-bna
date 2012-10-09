@@ -113,7 +113,6 @@ class Customer extends Eloquent {
 					->where('customer_id', '=', $customer->id)
 					->delete();				
 		}
-		
 		//register vehicles
 		if(isset($data['vehicles']) && is_array($data['vehicles'])) {
 			//cleanup membership

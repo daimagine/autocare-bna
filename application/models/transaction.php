@@ -104,4 +104,57 @@ class Transaction extends Eloquent {
         return $trx->id;
     }
 
+
+    public static function update($id, $data = array()){
+        //prepare save to db
+        $trx = Transaction::find($id);
+        $trx->vehicle_id = $data['vehiclesid'];
+        $trx->status = statusWorkOrder::OPEN;
+        $trx->payment_state = paymentState::INITIATE;
+        $trx->date = date(static::$sqlformat);
+        $trx->save();
+
+
+        //define amount variable
+        $amount=(double)0;
+        //add service
+        if(isset($data['services']) && is_array($data['services'])) {
+            //cleanup membership
+//            $affected = DB::table('transaction_service')
+//                ->where_in('service_formula_id', )
+//                ->delete();
+            foreach($data['services'] as $service) {
+                $trx->transaction_service()->insert($service);
+                $servicePrice = (double)Service::find((int)$service['service_formula_id'])->service_formula()->price;
+                $amount=$amount+$servicePrice;
+            }
+        }
+
+        //add items if available
+        if(isset($data['items']) && is_array($data['items'])) {
+            foreach($data['items'] as $items) {
+                $item_price = ItemPrice::getSingleResult(array('item_id' => $items['item_id']))->id;
+                $items['item_price_id']=$item_price;
+                $trx->transaction_item()->insert($items);
+                $itemPrice = (double)Item::find((int)$items['item_id'])->price;
+                $amount=$amount+$itemPrice;
+            }
+        }
+
+        //add mechanic
+        if(isset($data['users']) && is_array($data['users'])) {
+            foreach($data['users'] as $user) {
+                $trx->user_workorder()->insert($user);
+            }
+        }
+
+
+        //GENERATE WORK ORDER NO
+        $woNo = 'C'.$data['customerId'].'V'.$data['vehiclesid'].($trx->id);
+        $trx->workorder_no = $woNo;
+        $trx->amount = $amount;
+        $trx->save();
+        return $trx->id;
+    }
+
 }

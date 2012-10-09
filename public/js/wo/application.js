@@ -744,7 +744,7 @@ WorkOrder.items = {
     },
 
     //function to open up dialog items list
-    openDialog_lst_items : function() {
+    openDialog_lst_items : function(menu) {
         console.log('open up dialog form list items');
         if (menu=='add') {
             $(this._dialog).load("lst_items");

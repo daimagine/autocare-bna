@@ -23,6 +23,13 @@ class User extends Eloquent {
 				->get();
     }
 
+    //====jojo update====//
+    public static function listByCiteria($criteria) {
+       $user = User::where('status', '=', 1);
+       if (isset($criteria['role_id'])) {{$user=$user->where('role_id', '=', $criteria['role_id']);}}
+        return $user->get();
+    }
+
     public static function update($id, $data = array()) {
         $user = User::where_id($id)
             ->where_status(1)

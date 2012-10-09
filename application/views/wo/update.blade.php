@@ -37,7 +37,8 @@
         <div class="clear"></div>
     </div>
     <div>
-        <input type="hidden" id="customerId" name="customerId">
+        <input type="hidden" id="customerId" name="customerId" value="{{$transaction->vehicle->customer->id}}">
+        <input type="hidden" id="workorderId" name="{{}}">
     </div>
 </div>
 
@@ -142,7 +143,7 @@
 <div class="widget fluid">
     <div id="item-whead" class="whead " >
         <h6>Edit Item</h6>
-        <a href="#vehicle-body" class="buttonH bBlue" title="" onclick="WorkOrder.items.openDialog_lst_items();">Add New Item</a>
+        <a href="#vehicle-body" class="buttonH bBlue" title="" onclick="WorkOrder.items.openDialog_lst_items('edit');">Add New Item</a>
         <div class="clear"></div>
     </div>
     <div id="item-body" class="body" style="display: block; ">

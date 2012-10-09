@@ -46,6 +46,8 @@ class Item extends Eloquent {
         $item->item_type_id=$item_type->id;
         $item_category= ItemCategory::find($data['item_category_id']);
         $item->item_category_id = $item_category->id;
+        $unit_type = UnitType::find($data['unit_id']);
+        $item->unit_id=$unit_type->id;
         $item->name=$data['name'];
         $item->code=$data['code'];
         $item->description=$data['description'];
@@ -66,6 +68,9 @@ class Item extends Eloquent {
         $item->item_type_id=$item_type->id;
         $item_category= ItemCategory::find($data['item_category_id']);
         $item->item_category_id = $item_category->id;
+        $unit_type = UnitType::find($data['unit_id']);
+        $item->unit_id=$unit_type->id;
+        $item->name=$data['name'];
         $item->name=$data['name'];
         $item->code=$data['code'];
         $item->description=$data['description'];
