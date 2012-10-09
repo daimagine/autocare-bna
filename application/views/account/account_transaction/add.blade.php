@@ -177,6 +177,7 @@
                 </div>
             </div>
             <input type="hidden" id="item-method" value="add"/>
+            <input type="hidden" id="item-addkey" value="-1"/>
         </form>
     </div>
 

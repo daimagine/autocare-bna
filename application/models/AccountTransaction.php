@@ -155,4 +155,24 @@ class AccountTransaction extends Eloquent {
         }
         return $ate->get();
     }
+
+
+    public static function pay_invoice($id, $data = array()) {
+        $ate = AccountTransaction::where_id($id)
+            ->where_status(1)
+            ->first();
+
+        $ate->subject_payment = $data['subject_payment'];
+        $ate->paid = round($data['paid'], 2);
+
+        //datetime fields
+        $payment_date = $data['payment_date'] . $data['payment_time'];
+        $payment_date = DateTime::createFromFormat(static::$format, $payment_date);
+        $ate->paid_date = $payment_date->format(static::$sqlformat);
+
+        $ate->save();
+
+        //dd($ate);
+        return $ate->id;
+    }
 }

@@ -30,7 +30,7 @@
                 <th>Paid</th>
                 <th>Due</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th style="min-width: 79px">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -62,7 +62,7 @@
                        class="appconfirm tablectrl_small bDefault tipS"
                        original-title="Pay Invoice"
                        dialog-confirm-title="Payment Confirmation">
-                        <span class="iconb" data-icon=""></span>
+                        <span class="iconb" data-icon=""></span>
                     </a>
                 </td>
             </tr>

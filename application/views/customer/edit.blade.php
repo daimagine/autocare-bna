@@ -168,7 +168,7 @@
                 <input type="text" id="vehicle-description"/>
             </div>
             <input type="hidden" id="vehicle-method" value="edit"/>
-            <input type="hidden" id="vehicle-addkey" value="0"/>
+            <input type="hidden" id="vehicle-addkey" value="-1"/>
         </form>
     </div>
 

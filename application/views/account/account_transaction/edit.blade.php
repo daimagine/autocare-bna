@@ -206,11 +206,30 @@
                 </div>
             </div>
             <input type="hidden" id="item-method" value="add"/>
+            <input type="hidden" id="item-addkey" value="-1"/>
         </form>
     </div>
 
 </fieldset>
 
 {{ Form::close() }}
+
+@endsection
+
+
+
+@section('breadLinks')
+
+<li class="has">
+    <a title="">
+        <i class="icos-money3"></i>
+        <span>{{ $accountTransType === 'D' ? 'Account Receivable' : 'Account Payable' }}</span>
+        <span><img src="/images/elements/control/hasddArrow.png" alt="" /></span>
+    </a>
+    <ul>
+        <li><a href="/account/invoice_in/{{ $accountTransType }}" title=""><span class="icos-add"></span>Add New</a></li>
+        <li><a href="/account/pay_invoice/{{ $accountTransType }}/{{ $account->id }}" title=""><span class="icos-money2"></span>Do Payment</a></li>
+    </ul>
+</li>
 
 @endsection

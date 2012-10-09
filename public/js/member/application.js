@@ -5,7 +5,7 @@ $(function() {
     // Dialog
     $('#formDialog').dialog({
         autoOpen: false,
-        width: 400,
+        width: 500,
         buttons: {
             "Save": function () {
                 var confirm_title = 'Confirmation';

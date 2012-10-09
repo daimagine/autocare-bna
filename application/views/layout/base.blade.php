@@ -110,6 +110,15 @@
                     <li><a href="#">Home</a> </li>
                 </ul>
             </div>
+
+            <div class="breadLinks">
+                <ul>
+                    @section('breadLinks')
+                    @yield_section
+                </ul>
+                <div class="clear"></div>
+            </div>
+
         </div>
 
         <!-- Main content -->

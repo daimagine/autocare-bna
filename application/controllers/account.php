@@ -318,16 +318,23 @@ class Account_Controller extends Secure_Controller {
         $inv_time = date(AccountTransaction::$timeformat, strtotime($account->invoice_date));
         $due_date = date(AccountTransaction::$dateformat, strtotime($account->due_date));
         $due_time = date(AccountTransaction::$timeformat, strtotime($account->due_date));
+        $payment_date = $account->paid_date !== null ? date(AccountTransaction::$dateformat, strtotime($account->paid_date)) :
+            date(AccountTransaction::$dateformat, time());
+        $payment_time = $account->paid_date !== null ? date(AccountTransaction::$timeformat, strtotime($account->paid_date)) :
+            date(AccountTransaction::$timeformat, time());;
         $accounts = Account::allSelect();
         $items = $account->items;
 
-        return $this->layout->nest('content', 'account.account_transaction.edit', array(
+//        dd($account);
+        return $this->layout->nest('content', 'account.account_transaction.pay_invoice', array(
             'account' => $account,
             'accountTransType' => $type,
             'invoice_date' => $inv_date,
             'invoice_time' => $inv_time,
             'due_date' => $due_date,
             'due_time' => $due_time,
+            'payment_date' => $payment_date,
+            'payment_time' => $payment_time,
             'accounts'  => $accounts,
             'items' => $items
         ));
@@ -341,17 +348,19 @@ class Account_Controller extends Secure_Controller {
             else
                 return Redirect::to('account/account_payable');
         }
-        $validation = Validator::make(Input::all(), $this->getInvoiceRules('edit'));
+        ///account/pay_invoice/{{ $accountTransType }}/{{ $account->id }}
+        $validation = Validator::make(Input::all(), $this->getPayInvoiceRules('edit'));
         if(!$validation->fails()) {
             $data = Input::all();
+//            dd($data);
             $success = AccountTransaction::pay_invoice($id, $data);
             if($success) {
                 //success edit
                 Session::flash('message', 'Success update');
                 if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
-                    return Redirect::to('account/account_receivable');
+                    return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_DEBIT.'/'.$id);
                 else
-                    return Redirect::to('account/account_payable');
+                    return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_CREDIT.'/'.$id);
             } else {
                 Session::flash('message_error', 'Failed update');
                 return Redirect::to_action('account@invoice_edit', array($type, $id));
@@ -359,10 +368,28 @@ class Account_Controller extends Secure_Controller {
         } else {
             Session::flash('message_error', 'Failed update');
             if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
-                return Redirect::to('account/account_receivable');
+                return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_DEBIT.'/'.$id)->with_errors($validation);
             else
-                return Redirect::to('account/account_payable');
+                return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_CREDIT.'/'.$id)->with_errors($validation);
         }
+    }
+
+    private function getPayInvoiceRules($method='add') {
+        $additional = array();
+        $rules = array(
+            'subject_payment' => 'required',
+            'paid' => 'required|numeric|min:5',
+            'payment_date' => 'required',
+            'payment_time' => 'required',
+        );
+        if($method == 'add') {
+            $additional = array(
+            );
+        } elseif($method == 'edit') {
+            $additional = array(
+            );
+        }
+        return array_merge($rules, $additional);
     }
 
 }
