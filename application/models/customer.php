@@ -138,18 +138,19 @@ class Customer extends Eloquent {
     }
 
 	public static function allWithMembership($criteria) {
-        return Customer::with('membership')->get();
+        return Customer::with( array('vehicles') )
+            ->get();
 	}
 	
 	public static function updateMembership($id, $data) {
 		$discount = Discount::find($data['discount_id'])->first();
 		//dd($discount);
-		$customer = Customer::find($id);
-		
+        $vehicle = Vehicle::find($id);
+
 		//cleanup membership
-		$affected = DB::table('membership')
-			->where('customer_id', '=', $customer->id)
-			->delete();
+//		$affected = DB::table('membership')
+//			->where('vehicle_id', '=', $vehicle->id)
+//			->delete();
 			//->update(array('status' => 'false'));
 			
 		//save membership
@@ -157,20 +158,20 @@ class Customer extends Eloquent {
 		$period = $discount->duration_period == 'M' ? 'month' : 
 			( $discount->duration_period == 'Y' ? 'year' : 'seconds' );
 		$value = $discount->duration;
-		$expired = date(static::$sqlformat, 
-			strtotime($registration_date . " +$value $period"));
+		$expired = date(static::$sqlformat,  strtotime($registration_date . " +$value $period"));
 		$membership_data = array(
 			'discount_id'		=> $discount->id,
-			'customer_id'		=> $customer->id,
+			'customer_id'		=> $vehicle->customer->id,
+			'vehicle_id'		=> $vehicle->id,
 			'number'			=> Member::member_new(),
 			'status'			=> true,
 			'registration_date'	=> $registration_date,
 			'expiry_date'		=> $expired
 		);
 		//dd($membership_data);
-		$customer->membership()->insert($membership_data);
-		//dd($customer);
-        return $customer->id;
+		$vehicle->membership()->insert($membership_data);
+        //dd($customer);
+        return $vehicle->id;
 	}
 	
 	public static function getForSelect() {

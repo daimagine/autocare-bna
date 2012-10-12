@@ -17,7 +17,7 @@ class Vehicle extends Eloquent {
     }
 
     public function membership() {
-        return $this->belongs_to('customer.mermbership', 'customer_id'  );
+        return $this->has_one('Member', 'vehicle_id');
     }
 
 	public function get_owner() {

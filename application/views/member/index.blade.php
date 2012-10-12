@@ -2,69 +2,77 @@
 
 @include('partial.notification')
 
-<!-- Table with opened toolbar -->
+
+
 <div class="widget">
-    <div class="whead">
-        <h6>Membership List</h6>
-        <div class="clear"></div>
-    </div>
-    <div id="dyn2" class="shownpars">
-        <a class="tOptions act" title="Options">{{ HTML::image('images/icons/options', '') }}</a>
-        <table cellpadding="0" cellspacing="0" border="0" class="dTable">
-            <thead>
-            <tr>
-                <th>Name<span class="sorting" style="display: block;"></span></th>
-				<th>Addres</th>
-				<th>Vehicle No</th>
-				<th>Status</th>
-				<th>Expiry date</th>
-                <th>Membership</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($member as $member)
-            <tr class="">
-                <td>{{ $member->name }}</td>
-				<td>{{ $member->address1 . ' ' . $member->address2 }}</td>
-				<td></td>
-                <td class="tableActs" align="center">
-                    @if($member->status)
-                    <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
-                    @endif
-                </td>
-				<td>
-					@if($member->membership != null)
-						{{ $member->membership->expiry_date }}
-					@endif
-				</td>
-				
-				@if($member->membership != null)
-					<td>
-                        <a href="#memberDetail" onclick="detailMember('{{ $member->membership->id }}')">{{ $member->membership->description }}</a>
-						<!-- {{ HTML::link('/member/delete/'.$member->membership->id, $member->membership->description) }} -->
-					</td>
-				@else
-					<td class="tableActs" align="center">
-						<a id="formDialog_open" href="#assign" 
-							data-value="{{ $member->id }}" 
-							additional-value="{{$member->name}};{{$member->created_at}}">Assign Membership</a>
-					</td>
-				@endif
-            </tr>
-            @endforeach
-            </tbody>
-        </table>
-    </div>
-    <div class="clear"></div>
+    <div class="whead"><h6>Membership List</h6><div class="clear"></div></div>
+    <ul class="updates">
+        @foreach($member as $m)
+        <li>
+            <div class="exp pointer">
+                <div class="wNews">
+                    <a href="#" title="" class="headline"><img src="/images/live/face2.png" alt=""></a>
+                    <div class="announce">
+                        <a href="#" title="">{{ $m->name }}</a>
+                        <span>{{ $m->address1 . ' ' . $m->address2 }}</span>
+                    </div>
+                </div>
+                <span class="uDate" style="width: 65px"><span>{{ sizeof($m->vehicles) }}</span>vehicle</span>
+            </div>
+            <div class="clear">
+                <span class="clear"></span>
+                <ul class="updates">
+                    @foreach($m->vehicles as $vh)
+                        <li>
+                            <span class="{{ $vh->membership != null ? 'uDone' : 'uAlert' }}" style="width: 100%">
+                                Vehicle Number &nbsp; <a href="#" title="">{{ $vh->number }}</a>
+                                @if($vh->membership != null)
+                                    <ul>
+                                        <li class="on_off">
+                                            <label><span class="icos-postcard"></span>Membership Number &nbsp; <a href="#" class="red">{{ $vh->membership->number }}</a> </label>
+                                            <div class="clear"></div>
+                                        </li>
+                                        <li class="on_off">
+                                            <label><span class="icos-cog2"></span>
+                                                <a href="#memberDetail" class="pointer" onclick="detailMember('{{ $vh->membership->id }}')">Show Detail</a>
+                                            </label>
+                                            <div class="clear"></div>
+                                        </li>
+                                    </ul>
+
+                                @else
+                                    <ul>
+                                        <li class="on_off">
+                                            <label><span class="icos-cog2"></span>
+                                                <a id="formDialog_open" href="#assign"
+                                                   data-value-vehicle="{{ $vh->id }}"
+                                                   data-value-customer="{{ $m->id }}"
+                                                   additional-value="{{$vh->number}};{{$vh->customer->name}};{{$vh->created_at}}">Assign Membership</a>
+                                            </label>
+                                            <div class="clear"></div>
+                                        </li>
+                                    </ul>
+                                @endif
+                            </span>
+                            <span class="clear"></span>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+            <span class="clear"></span>
+        </li>
+        @endforeach
+    </ul>
 </div>
 
 <!-- Dialog content -->
 <div id="formDialog" class="dialog" title="Assign New Membership">
 	<form action="/member/assign" id="memberAssignForm" method="post">
-		<input type="hidden" id="customerId" value="0" name="id"/>
+		<input type="hidden" id="customerId" value="0" name="customerId"/>
+		<input type="hidden" id="vehicleId" value="0" name="id"/>
 		<div class="messageTo">
-			<span> Assign membership to <strong><span id="customerName"></span></strong></span>
-			<a href="#" class="uEmail">customer since : <span id="customerSince"></span></a>
+			<span> Assign membership to : &nbsp;<span id="customerName"></span> <strong>&nbsp;<span id="customerVehicle"></span></strong></span>
+			<a href="#" class="uEmail">registered since : <span id="customerSince"></span></a>
 		</div>
 		<div class="divider"><span></span></div>
 		<div class="dialogSelect m10">

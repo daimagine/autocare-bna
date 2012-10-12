@@ -170,7 +170,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', end
 /* # Top part
 ================================================== */
 
-#top { background: url(../images/backgrounds/top.jpg) repeat-x 0 0; height: 48px; display: block; width: 100%; position: absolute; z-index: 10000; border-bottom: 1px solid #1c1c1c; }
+#top { background: url(../images/backgrounds/top.jpg) repeat-x 0 0; height: 48px; display: block; width: 100%; position: absolute; z-index: 1000; border-bottom: 1px solid #1c1c1c; }
 .logo { float: left; margin-top: 10px; }
 .topNav { float: right; position: relative; }
 .topSearch input[type=submit], .userSearch input[type=submit] { background: url(../images/sprites/sprite.png); }
@@ -2302,3 +2302,8 @@ table .dropdown-menu.pull-right { right: auto; left: 0; }
 .loginWrapper { top: 100px; margin-top: 0; }
 .logControl { padding-bottom: 50px; }
 }
+
+
+/** custom app **/
+.pointer { cursor: pointer; }
+.gray-back:hover { background-color: #F2F2F2; }

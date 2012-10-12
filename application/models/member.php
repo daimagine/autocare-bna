@@ -26,8 +26,13 @@ class Member extends Eloquent {
 		return $this->belongs_to('Discount');
 	}
 
+    public function vehicle() {
+        return $this->belongs_to('Vehicle');
+    }
+
     public static function member_new() {
-        $count = DB::table(static::$table)->count();
+        $count = DB::table(static::$table)->order_by('id', 'desc')->take(1)->only('id');
+        //dd($count);
         $count++;
         //pad static::$MEMBERSHIP_LENGTH leading zeros
         $suffix = sprintf('%0' . static::$MEMBERSHIP_LENGTH . 'd', $count);
@@ -80,6 +85,10 @@ class Member extends Eloquent {
 		
         if(isset($data['customer_id']) && $data['customer_id'] != '0') {
             $member->customer_id = $data['customer_id'];
+        }
+
+        if(isset($data['vehicle_id']) && $data['vehicle_id'] != '0') {
+            $member->vehicle_id = $data['vehicle_id'];
         }
 		
 		if(isset($data['register_date']) && $data['register_date'] != null && $data['register_date'] != ''

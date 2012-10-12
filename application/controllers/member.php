@@ -21,6 +21,7 @@ class Member_Controller extends Secure_Controller {
     public function get_list() {
         $criteria = array();
         $member = Customer::allWithMembership($criteria);
+        //dd($member);
 		$allDisc = Discount::listAll();
 		$discounts = array();
 		foreach($allDisc as $d) {
@@ -135,6 +136,7 @@ class Member_Controller extends Secure_Controller {
             return Redirect::to('member/index');
         }
         $memberdata = Input::all();
+        //dd($memberdata);
         $success = Customer::updateMembership($id, $memberdata);
         if($success) {
             //success edit

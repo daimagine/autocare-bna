@@ -35,10 +35,15 @@ $(function() {
     $('#formDialog_open').click(function () {
 		var data = $(this).attr('additional-value').split(';');
 		console.log(data);
-		$('#customerId').val($(this).attr('data-value'));
-		$('#customerName').html(data[0]);
-		$('#customerSince').html(data[1]);
-        $('#formDialog').dialog('open');
+        $('#vehicleId').val($(this).attr('data-value-vehicle'));
+        $('#customerId').val($(this).attr('data-value-customer'));
+        $('#customerName').html(data[1]!='' ? data[1]+'\'s' : 'Customer');
+        $('#customerVehicle').html(data[0]!='' ? data[0] : 'vehicle');
+		$('#customerSince').html(data[2]);
+        $('#formDialog').dialog({
+            modal: true,
+            autoOpen: true
+        });
         return false;
     });
 
