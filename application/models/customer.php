@@ -70,15 +70,17 @@ class Customer extends Eloquent {
             }
 
 			//cleanup vehicle and membership
-			$affected = DB::table('vehicle')
-				->where_not_in('id', $existing_id)
-				->delete();
-            Log::info('affected vehicle cleanup : ' + $affected);
+            if(sizeof($existing_id) > 0) {
+                $affected = DB::table('vehicle')
+                    ->where_not_in('id', $existing_id)
+                    ->delete();
+                Log::info('affected vehicle cleanup : ' + $affected);
 
-            $affected = DB::table('membership')
+                $affected = DB::table('membership')
                 ->where_not_in('vehicle_id', $existing_id)
                 ->delete();
-            Log::info('affected membership cleanup : ' + $affected);
+                Log::info('affected membership cleanup : ' + $affected);
+            }
 
             foreach($new as $vehicle) {
                 $customer->vehicles()->insert($vehicle);

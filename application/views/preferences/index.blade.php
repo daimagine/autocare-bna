@@ -25,8 +25,7 @@
 
         <div class="widget fluid">
             <div class="whead">
-                <h6>News Add</h6>
-
+                <h6>Change Password</h6>
                 <div class="clear"></div>
             </div>
 
