@@ -44,7 +44,7 @@
                                     <ul>
                                         <li class="on_off">
                                             <label><span class="icos-cog2"></span>
-                                                <a id="formDialog_open" href="#assign"
+                                                <a class="formDialog_open" href="#assign"
                                                    data-value-vehicle="{{ $vh->id }}"
                                                    data-value-customer="{{ $m->id }}"
                                                    additional-value="{{$vh->number}};{{$vh->customer->name}};{{$vh->created_at}}">Assign Membership</a>

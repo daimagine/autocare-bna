@@ -1,17 +1,18 @@
 <?php
 /**
  * Created by JetBrains PhpStorm.
- * User: fauziah
- * Date: 9/13/12
- * Time: 12:35 AM
+ * User: adi
+ * Date: 10/12/12
+ * Time: 10:55 PM
+ * To change this template use File | Settings | File Templates.
  */
-class Access_Controller extends Secure_Controller {
+class News_Controller extends Secure_Controller {
 
     public $restful = true;
 
     public function __construct() {
         parent::__construct();
-        Session::put('active.main.nav', 'access@index');
+        Session::put('active.main.nav', 'news@index');
     }
 
     public function get_index() {
@@ -20,100 +21,107 @@ class Access_Controller extends Secure_Controller {
 
     public function get_list() {
         $criteria = array();
-        $access = Access::listAll($criteria);
-        return $this->layout->nest('content', 'access.index', array(
-            'access' => $access
+        $news = News::listAll($criteria);
+        Asset::add('news.application', 'js/news/application.js', array('jquery'));
+        return $this->layout->nest('content', 'news.index', array(
+            'newslist' => $news
+        ));
+    }
+
+    public function get_detail($id=null) {
+        if($id===null) {
+            return Redirect::to('news/index');
+        }
+        $news = News::find($id);
+        return View::make('news.ajax.detail', array(
+            'news' => $news,
         ));
     }
 
     public function get_edit($id=null) {
         $id !== null ? $id : Input::get('id');
         if($id===null) {
-            return Redirect::to('access/index');
+            return Redirect::to('news/index');
         }
-        $access = Access::find($id);
-        $parents = Access::getParents($id);
-        return $this->layout->nest('content', 'access.edit', array(
-            'access' => $access,
-            'parents' => $parents
+        $news = News::find($id);
+        return $this->layout->nest('content', 'news.edit', array(
+            'news' => $news,
         ));
     }
 
     public function post_edit() {
         $id = Input::get('id');
         if($id===null) {
-            return Redirect::to('access/index');
+            return Redirect::to('news/index');
         }
-        $access = Access::find($id);
+        $newsdata = Input::all();
+        //dd($newsdata);
         $validation = Validator::make(Input::all(), $this->getRules('edit'));
-        $accessdata = Input::all();
+        $newsdata = Input::all();
         if(!$validation->fails()) {
-            $success = Access::update($id, $accessdata);
+            $success = News::update($id, $newsdata);
             if($success) {
                 //success edit
                 Session::flash('message', 'Success update');
-                return Redirect::to('access/index');
+                return Redirect::to('news/index');
             } else {
                 Session::flash('message_error', 'Failed update');
-                return Redirect::to_action('access@edit', array($id));
+                return Redirect::to_action('news@edit', array($id));
             }
         } else {
-            Log::info('Validation fails. error : ' + print_r($validation->errors, true));
-            return Redirect::to_action('access@edit', array($id))
+            return Redirect::to_action('news@edit', array($id))
                 ->with_errors($validation);
         }
     }
 
     public function get_add() {
-        $accessdata = Session::get('access');
-        $parents = Access::getParents();
-        return $this->layout->nest('content', 'access.add', array(
-            'access' => $accessdata,
-            'parents' => $parents
+        $newsdata = Session::get('news');
+        return $this->layout->nest('content', 'news.add', array(
+            'news' => $newsdata,
         ));
     }
 
     public function post_add() {
         $validation = Validator::make(Input::all(), $this->getRules());
-        $accessdata = Input::all();
+        $newsdata = Input::all();
+        //dd($newsdata);
         if(!$validation->fails()) {
-            $success = Access::create($accessdata);
+            $success = News::create($newsdata);
             if($success) {
                 //success
                 Session::flash('message', 'Success create');
-                return Redirect::to('access/index');
+                return Redirect::to('news/index');
             } else {
                 Session::flash('message_error', 'Failed create');
-                return Redirect::to('access/add')
-                    ->with('access', $accessdata);
+                return Redirect::to('news/add')
+                    ->with('news', $newsdata);
             }
         } else {
-            Log::info('Validation fails. error : ' + print_r($validation->errors, true));
-            return Redirect::to('access/add')
+            return Redirect::to('news/add')
                 ->with_errors($validation)
-                ->with('access', $accessdata);
+                ->with('news', $newsdata);
         }
     }
 
     public function get_delete($id=null) {
         if($id===null) {
-            return Redirect::to('access/index');
+            return Redirect::to('news/index');
         }
-        $success = Access::remove($id);
+        $success = News::remove($id);
         if($success) {
             //success
             Session::flash('message', 'Remove success');
-            return Redirect::to('access/index');
+            return Redirect::to('news/index');
         } else {
             Session::flash('message_error', 'Remove failed');
-            return Redirect::to('access/index');
+            return Redirect::to('news/index');
         }
     }
 
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
-            'name' => 'required|min:3|max:50',
+            'title' => 'required|min:5|max:150',
         );
         if($method == 'add') {
             $additional = array(
@@ -126,4 +134,3 @@ class Access_Controller extends Secure_Controller {
     }
 
 }
-

@@ -36,7 +36,10 @@ class Home_Controller extends Secure_Controller {
     }
 
     public function action_index() {
-		return View::make('home.index');
+        $discount = array();
+        return $this->layout->nest('content', 'home.index', array(
+            'discount' => $discount
+        ));
 	}
 
 }
