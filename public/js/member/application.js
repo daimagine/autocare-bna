@@ -32,7 +32,7 @@ $(function() {
     });
 
     // Dialog Link
-    $('#formDialog_open').click(function () {
+    $('.formDialog_open').click(function () {
 		var data = $(this).attr('additional-value').split(';');
 		console.log(data);
         $('#vehicleId').val($(this).attr('data-value-vehicle'));

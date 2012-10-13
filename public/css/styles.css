@@ -215,7 +215,7 @@ ul.userNav li a.sidebar { background: url(../images/icons/usernav/sidebar.png) n
 /* # Sidebar stuff
 ================================================== */
 
-#sidebar { display: block; background: url(../images/backgrounds/side.jpg) repeat-y; min-height: 100%; position: absolute; z-index: 999; border-right: 1px solid #c3c3c3; }
+#sidebar { display: block; background: url(../images/backgrounds/side.jpg) repeat-y; min-height: 100%; position: absolute; z-index: 999; border-right: 1px solid #c3c3c3; padding-bottom: 120px; }
 .mainNav { width: 100px; background: url(../images/backgrounds/sidebar.jpg); float: left; padding-top: 15px; position: relative; z-index: 99; padding-top: 49px; }
 .secNav { position: relative; padding-left: 100px; z-index: 98; padding-top: 49px; }
 .secNav h6 { font-size: 12px; padding: 0 15px; }

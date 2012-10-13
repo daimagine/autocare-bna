@@ -40,7 +40,7 @@
 						class="appconfirm tablectrl_small bDefault tipS" 
 						original-title="Remove"
 						dialog-confirm-title="Remove Confirmation"
-                        dialog-confirm-content="{{ $customer->status == 1 ? 'This action will make this customer to be inactive. Are you sure?' : 'This customer is incative. Removing will purge all data and information linnked with this user. Are you sure?' }}">
+                        dialog-confirm-content="{{ $customer->status == 1 ? 'This action will make this customer to be inactive. Are you sure?' : 'This customer is inactive. Removing will purge all data and information linked with this customer. Are you sure?' }}">
 							<span class="iconb" data-icon=""></span>
 					</a>
                 </td>

@@ -50,7 +50,7 @@ Route::get('work_order/edit/(:num)', 'work_order@edit');
 Route::get('news/edit/(:num)', 'news@edit');
 
 Route::controller(array(
-   'home', 'user', 'role', 'access', 'account', 'discount', 'member', 'item', 'customer', 'vehicle', 'service', 'work_order', 'news'
+   'home', 'user', 'role', 'access', 'account', 'discount', 'member', 'item', 'customer', 'vehicle', 'service', 'work_order', 'news', 'preferences'
 ));
 
 Route::get('/', 'home@index');

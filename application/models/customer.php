@@ -46,23 +46,46 @@ class Customer extends Eloquent {
         $customer->save();
 
 		//register membership
-		if(isset($data['discount_id'])) {
-			if($data['discount_id'] != '0')
-				Customer::updateMembership($customer->id, $data);
-			else
-				$affected = DB::table('membership')
-					->where('customer_id', '=', $customer->id)
-					->delete();				
-		}
+//		if(isset($data['discount_id'])) {
+//			if($data['discount_id'] != '0')
+//				Customer::updateMembership($customer->id, $data);
+//			else
+//				$affected = DB::table('membership')
+//					->where('customer_id', '=', $customer->id)
+//					->delete();
+//		}
 
 		//register vehicles
 		if(isset($data['vehicles']) && is_array($data['vehicles'])) {
-			//cleanup membership
+            $existing = array();
+            $existing_id = array();
+            $new = array();
+            foreach($data['vehicles'] as $vehicle) {
+                if(array_key_exists('id', $vehicle)) {
+                    array_push($existing, $vehicle);
+                    array_push($existing_id, $vehicle['id']);
+                } else {
+                    array_push($new, $vehicle);
+                }
+            }
+
+			//cleanup vehicle and membership
 			$affected = DB::table('vehicle')
-				->where('customer_id', '=', $customer->id)
+				->where_not_in('id', $existing_id)
 				->delete();
-			foreach($data['vehicles'] as $vehicle) {
-				$customer->vehicles()->insert($vehicle);
+            Log::info('affected vehicle cleanup : ' + $affected);
+
+            $affected = DB::table('membership')
+                ->where_not_in('vehicle_id', $existing_id)
+                ->delete();
+            Log::info('affected membership cleanup : ' + $affected);
+
+            foreach($new as $vehicle) {
+                $customer->vehicles()->insert($vehicle);
+			}
+
+            foreach($existing as $vehicle) {
+                Vehicle::update($vehicle['id'], $vehicle);
 			}
 		}
 
@@ -108,14 +131,14 @@ class Customer extends Eloquent {
 		          'description' => string 'type' (length=4)
 		*/
 		//register membership
-		if(isset($data['discount_id'])) {
-			if($data['discount_id'] != '0')
-				Customer::updateMembership($customer->id, $data);
-			else
-				$affected = DB::table('membership')
-					->where('customer_id', '=', $customer->id)
-					->delete();				
-		}
+//		if(isset($data['discount_id'])) {
+//			if($data['discount_id'] != '0')
+//				Customer::updateMembership($customer->id, $data);
+//			else
+//				$affected = DB::table('membership')
+//					->where('customer_id', '=', $customer->id)
+//					->delete();
+//		}
 		//register vehicles
 		if(isset($data['vehicles']) && is_array($data['vehicles'])) {
 			//cleanup membership

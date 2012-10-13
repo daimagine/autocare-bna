@@ -17,7 +17,7 @@
         <input type="password" name="password" placeholder="Password" class="loginPassword" />
 
         <div class="logControl">
-            <div class="memory"><input type="checkbox" checked="checked" class="check" id="remember1" /><label for="remember1">Remember me</label></div>
+<!--            <div class="memory"><input type="checkbox" checked="checked" class="check" id="remember1" /><label for="remember1">Remember me</label></div>-->
             <input type="submit" name="submit" value="Login" class="buttonM bBlue" />
             <div class="clear"></div>
         </div>
