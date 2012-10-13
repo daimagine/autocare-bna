@@ -64,6 +64,7 @@ class AccountTransaction extends Eloquent {
 
 
         //register items
+        $due_amount = 0;
         if(isset($data['items']) && is_array($data['items'])) {
             //cleanup items
             $affected = DB::table('sub_account_trx')
@@ -71,8 +72,14 @@ class AccountTransaction extends Eloquent {
                 ->delete();
             foreach($data['items'] as $item) {
                 $ate->items()->insert($item);
+                $due_amount += $item['amount'];
+                //var_dump($item['amount']);
             }
         }
+
+        //dd($data);
+        $ate->due = round($due_amount, 2);
+        $ate->save();
 
         //dd($ate);
         return $ate->id;
@@ -136,7 +143,7 @@ class AccountTransaction extends Eloquent {
             foreach($data['items'] as $item) {
                 $ate->items()->insert($item);
                 $due_amount += $item['amount'];
-                var_dump($item['amount']);
+                //var_dump($item['amount']);
             }
         }
 
