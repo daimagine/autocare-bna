@@ -11,7 +11,16 @@ class News extends Eloquent {
     public static $table = 'news';
 
     public static function listAll($criteria=array()) {
-        return News::where('status', '=', 1)->get();
+        return News::where('status', '=', 1)
+            ->order_by('created_at', 'asc')
+            ->get();
+    }
+
+    public static function recent() {
+        return News::where('status', '=', 1)
+            ->order_by('created_at', 'asc')
+            ->take(10)
+            ->get();
     }
 
     public static function update($id, $data = array()) {

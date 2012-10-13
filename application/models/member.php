@@ -43,6 +43,14 @@ class Member extends Eloquent {
         return Member::where('status', '=', 1)->get();
     }
 
+    public static function recent() {
+        return Member::with(array('vehicle', 'vehicle.customer', 'discount'))
+            ->where('status', '=', 1)
+            ->order_by('created_at', 'asc')
+            ->take(10)
+            ->get();
+    }
+
     public static function update($id, $data = array()) {
         $member = Member::where_id($id)
             ->where_status(1)

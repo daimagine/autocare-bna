@@ -3,7 +3,7 @@
 @include('partial.notification')
 <br>
 
-{{ Form::open('/news/add', 'POST') }}
+{{ Form::open('/news/edit', 'POST') }}
 
 <fieldset>
 

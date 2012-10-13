@@ -3,33 +3,56 @@
 
 @include('partial.notification')
 
+
+<!-- Table with opened toolbar -->
 <div class="widget">
-    <div class="whead"><h6>Some news</h6><div class="clear"></div></div>
-    <ul class="updates">
-        @if(sizeof($newslist) <= 0)
-            <li>
-                <div class="wNews">
-                    <div class="announce">
-                        <span>News list is empty</span>
-                    </div>
-                </div>
-                <span class="clear"></span>
-            </li>
-        @else
+    <div class="whead">
+        <h6>News List</h6>
+        <div class="clear"></div>
+    </div>
+    <div id="dyn2" class="shownpars">
+        <a class="tOptions act" title="Options">{{ HTML::image('images/icons/options', '') }}</a>
+        <table cellpadding="0" cellspacing="0" border="0" class="dTable">
+            <thead>
+            <tr>
+                <th>Title<span class="sorting" style="display: block;"></span></th>
+                <th>Resume</th>
+                <th>Create At</th>
+                <th>Attribute</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
             @foreach($newslist as $news)
-            <li>
-                <div class="wNews">
-                    <div class="announce">
-                        <a href="#newsDetail" title="" class="newsDetail"onclick="detailNews('{{ $news->id }}')">{{ $news->title }}</a>
-                        <span>{{ $news->resume }} ...</span>
-                    </div>
-                </div>
-                <span class="uDate" style="width:80px;"><span>{{ date('d', strtotime($news->created_at)) }}</span>{{ date('F', strtotime($news->created_at)) }}</span>
-                <span class="clear"></span>
-            </li>
+            <tr class="">
+                <td>{{ $news->title }}</td>
+                <td>{{ $news->resume }}</td>
+                <td>{{ date('d F Y', strtotime($news->created_at)) }}</td>
+                <td class="tableActs" align="center">
+                    @if($news->status)
+                    <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
+                    @endif
+                </td>
+                <td class="tableActs" align="center">
+                    <a href="/news/edit/{{ $news->id }}"
+                       class="appconfirm tablectrl_small bDefault tipS"
+                       original-title="Edit"
+                       dialog-confirm-title="Update Confirmation">
+                        <span class="iconb" data-icon=""></span>
+                    </a>
+                    <a href="/news/delete/{{ $news->id }}"
+                       class="appconfirm tablectrl_small bDefault tipS"
+                       original-title="Remove"
+                       dialog-confirm-title="Remove Confirmation">
+                        <span class="iconb" data-icon=""></span>
+                    </a>
+                </td>
+            </tr>
             @endforeach
-        @endif
-    </ul>
+            </tbody>
+        </table>
+    </div>
+    <div class="clear"></div>
 </div>
 
 <div class="fluid">

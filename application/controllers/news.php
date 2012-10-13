@@ -28,6 +28,15 @@ class News_Controller extends Secure_Controller {
         ));
     }
 
+    public function get_all() {
+        $criteria = array();
+        $news = News::listAll($criteria);
+        Asset::add('news.application', 'js/news/application.js', array('jquery'));
+        return $this->layout->nest('content', 'news.all', array(
+            'newslist' => $news
+        ));
+    }
+
     public function get_detail($id=null) {
         if($id===null) {
             return Redirect::to('news/index');
