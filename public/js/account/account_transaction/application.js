@@ -403,14 +403,14 @@ Account.Item = {
         qty.html($(this._form.qty).val());
         qtyhid.val($(this._form.qty).val());
 
-        var price = row.find('.v-price-' + idx);
-        var pricehid = row.find('.v-price-hid-' + idx);
-        price.html($(this._form.price).val());
+//        var price = row.find('.v-unit-price-' + idx);
+        var pricehid = row.find('.v-unit-price-hid-' + idx);
+//        price.html($(this._form.price).val());
         pricehid.val($(this._form.price).val());
 
-        var disc = row.find('.v-disc-' + idx);
+//        var disc = row.find('.v-disc-' + idx);
         var dischid = row.find('.v-disc-hid-' + idx);
-        disc.html($(this._form.disc).val());
+//        disc.html($(this._form.disc).val());
         dischid.val($(this._form.disc).val());
 
         var account = row.find('.v-account-' + idx);
@@ -447,7 +447,7 @@ Account.Item = {
         var disc = $(this._form.disc).val().trim() == '' ? 0 : $(this._form.disc).val().trim();
         var price = $(this._form.price).val().trim() == '' ? 0 : $(this._form.price).val().trim();
         var tax = $(this._form.tax).val().trim() == '' ? 0 : $(this._form.tax).val().trim();
-        var amount = ( parseFloat(qty) * parseFloat(price) ) - parseFloat(disc);
+        var amount = ( parseFloat(qty) * parseFloat(price) ) - parseFloat(disc) + parseFloat(tax);
         amount = toFixed(amount, 2);
         $(this._form.amount).val(amount);
     },
@@ -464,15 +464,15 @@ Account.Item = {
         });
         console.log('tax : ' + tax);
 
-        var amount = 0;
+        var total = 0;
         $('.v-amount').each(function(idx){
             var t = this.value.trim() == '' ? 0 : this.value.trim();
-            amount += parseFloat(t);
+            total += parseFloat(t);
         });
-        console.log('amount : ' + amount);
-
-        total = amount + tax;
         console.log('total : ' + total);
+
+        amount = total - tax;
+        console.log('amount : ' + amount);
 
         tax = toFixed(tax, 2);
         amount = toFixed(amount, 2);

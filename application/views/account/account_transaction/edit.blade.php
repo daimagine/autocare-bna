@@ -85,11 +85,11 @@
                     <?php $tax = 0; $amount = 0; ?>
                     @for ($i = 0; $i < count($items); $i++)
                         <tr id="v-rows-{{ $i }}">
-                            <td class="v-no v-num-{{ $i }}">{{ $items[$i]->item }}</td>
-                            <td class="v-type-{{ $i }}">{{ $items[$i]->quantity }}</td>
-                            <td class="v-color-{{ $i }}">{{ $items[$i]->account->name }}</td>
-                            <td class="v-model-{{ $i }}">{{ $items[$i]->tax }}</td>
-                            <td class="v-brand-{{ $i }}">{{ $items[$i]->amount }}</td>
+                            <td class="v-item v-num-{{ $i }}">{{ $items[$i]->item }}</td>
+                            <td class="v-qty-{{ $i }}">{{ $items[$i]->quantity }}</td>
+                            <td class="v-account-{{ $i }}">{{ $items[$i]->account->name }}</td>
+                            <td class="v-tax-{{ $i }}">{{ $items[$i]->tax }}</td>
+                            <td class="v-amount-{{ $i }}">{{ $items[$i]->amount }}</td>
                             <td>
                                 <div>
                                     <a href="#item-tbody" onclick="Account.Item.edit('v-rows-{{ $i }}','{{ $i }}')">edit</a> |
@@ -120,9 +120,9 @@
                 <div class="rtl-inputs">
                     <div class="grid5">
                         <ul class="wInvoice">
-                            <li><h4 class="blue" id="item-subtotal"><?= number_format($amount, 2) ?></h4><span>Subtotal</span></li>
+                            <li><h4 class="blue" id="item-subtotal"><?= number_format($amount - $tax, 2) ?></h4><span>Subtotal</span></li>
                             <li><h4 class="red" id="item-subtotal-tax"><?= number_format($tax, 2) ?></h4><span>Total Tax</span></li>
-                            <li><h4 class="green" id="item-total"><?= number_format($amount + $tax, 2) ?></h4><span>Total Amount</span></li>
+                            <li><h4 class="green" id="item-total"><?= number_format($amount, 2) ?></h4><span>Total Amount</span></li>
                         </ul>
                     </div>
                 </div>

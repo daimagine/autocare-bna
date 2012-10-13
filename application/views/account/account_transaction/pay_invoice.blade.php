@@ -69,7 +69,7 @@
 
             <div class="total">
                 <span>Amount Due</span>
-                <strong class="greenBack"><?= number_format($amount + $tax, 2) ?></strong>
+                <strong class="greenBack"><?= number_format($amount, 2) ?></strong>
             </div>
 
             <div class="total">
@@ -79,7 +79,7 @@
 
             <div class="total">
                 <span>Nett Amount</span>
-                <strong class="blueBack"><?= number_format($amount, 2) ?></strong>
+                <strong class="blueBack"><?= number_format($amount - $tax, 2) ?></strong>
             </div>
             <div class="clear"></div>
 
@@ -112,6 +112,8 @@
     </div>
 
     <div class="fluid">
+
+        {{ Form::hidden('due', $account->due) }}
 
         {{ Form::nginput('text', 'subject_payment', $account->subject_payment !== null ? $account->subject_payment : Input::old('subject_payment'), $accountTransType === 'D' ? 'From *' : 'To *' ) }}
 
