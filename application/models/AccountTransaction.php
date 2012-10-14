@@ -71,6 +71,7 @@ class AccountTransaction extends Eloquent {
                 ->where('account_trx_id', '=', $ate->id)
                 ->delete();
             foreach($data['items'] as $item) {
+                $item['approved_status'] = approvedStatus::NEW_ACCOUNT_INVOICE;
                 $ate->items()->insert($item);
                 $due_amount += $item['amount'];
                 //var_dump($item['amount']);

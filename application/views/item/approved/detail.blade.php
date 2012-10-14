@@ -18,7 +18,7 @@
 
         {{ Form::nginput('text', '', $subAccountTrx->item, 'Item', array('readonly' => 'readonly')) }}
 
-        {{ Form::nginput('text', '', $subAccountTrx->qty, 'Quantity at invoice', array('readonly' => 'readonly')) }}
+        {{ Form::nginput('text', '', $subAccountTrx->quantity, 'Quantity at invoice', array('readonly' => 'readonly')) }}
 
         {{ Form::nginput('text', '', $subAccountTrx->description, 'Description', array('readonly' => 'readonly')) }}
     </div>
