@@ -14,7 +14,7 @@
 
         {{ Form::nginput('text', '', $subAccountTrx->account_transaction->reference_no, 'Reference No', array('readonly' => 'readonly')) }}
 
-        {{ Form::nginput('text', '', '', 'Create by', array('readonly' => 'readonly')) }}
+        {{ Form::nginput('text', '', '', 'Create By', array('readonly' => 'readonly')) }}
 
         {{ Form::nginput('text', '', $subAccountTrx->item, 'Item', array('readonly' => 'readonly')) }}
 

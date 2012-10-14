@@ -66,7 +66,7 @@ class AccountTransaction extends Eloquent {
         //register items
         $due_amount = 0;
         if(isset($data['items']) && is_array($data['items'])) {
-            //cleanup items-
+            //cleanup items
             $affected = DB::table('sub_account_trx')
                 ->where('account_trx_id', '=', $ate->id)
                 ->delete();
