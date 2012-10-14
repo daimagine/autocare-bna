@@ -23,6 +23,7 @@
             </thead>
             <tbody>
 
+
             @foreach($transactions as $trx)
             <tr class="">
                 <td class="name">{{ $trx->workorder_no }}</td>
@@ -39,7 +40,7 @@
                     <a href="do_canceled/{{ $trx->id }}" class="tablectrl_small bGreyish tipS" original-title="Cancel"><span class="iconb"  data-icon=""></span></a>
                     @endif
                     @if($trx->status == 'D' or $trx->status == 'O')
-                    <a href="invoice/{{ $trx->id }}" class="tablectrl_small bGold tipS" original-title="Invoice"><span class="iconb"  data-icon=""></span></a>
+                    <a href="to_invoice/{{ $trx->id }}" class="tablectrl_small bGold tipS" original-title="Invoice"><span class="iconb"  data-icon=""></span></a>
                     @endif
                     @if($trx->status == 'C' or $trx->status == 'D')
                     <a href="do_reopen/{{ $trx->id }}" class="tablectrl_small bSea tipS" original-title="Reopen"><span class="iconb"  data-icon=""></span></a>

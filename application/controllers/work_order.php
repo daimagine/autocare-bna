@@ -187,13 +187,16 @@ class Work_Order_Controller extends Secure_Controller
             Session::flash('message_error', 'Failed update wo');
             return Redirect::to('work_order/list');
         }
+
+        //process calculate discount for membership
+        $trx = Transaction::find($id);
         $update = Transaction::update_status($id, statusWorkOrder::CLOSE);
         if($update) {
             //success
-            Session::flash('message', 'Success Canceled wo '.$update->workorder_no);
+            Session::flash('message', 'Success closed wo '.$update->workorder_no);
             return Redirect::to('work_order/list');
         } else {
-            Session::flash('message_error', 'Failed update wo');
+            Session::flash('message_error', 'Failed closed wo');
             return Redirect::to('work_order/add');
         }
     }
@@ -208,7 +211,7 @@ class Work_Order_Controller extends Secure_Controller
             Session::flash('message', 'Success Canceled wo '.$update->workorder_no);
             return Redirect::to('work_order/list');
         } else {
-            Session::flash('message_error', 'Failed add wo');
+            Session::flash('message_error', 'Failed canceled wo');
             return Redirect::to('work_order/add');
         }
     }
@@ -220,10 +223,10 @@ class Work_Order_Controller extends Secure_Controller
         $update = Transaction::update_status($id, statusWorkOrder::OPEN);
         if($update) {
             //success
-            Session::flash('message', 'Success Canceled wo '.$update->workorder_no);
+            Session::flash('message', 'Success reopen wo '.$update->workorder_no);
             return Redirect::to('work_order/list');
         } else {
-            Session::flash('message_error', 'Failed add wo');
+            Session::flash('message_error', 'Failed reopen wo');
             return Redirect::to('work_order/add');
         }
     }
@@ -258,7 +261,7 @@ class Work_Order_Controller extends Secure_Controller
         ));
 
         $selectionMechanic = array();
-        $selectionMechanic[0] = '-- select service --';
+        $selectionMechanic[0] = '-- select mechanic --';
         foreach($lstMechanic as $mch) {
             $selectionMechanic[$mch->id] = $mch->name;
         }
@@ -338,6 +341,20 @@ class Work_Order_Controller extends Secure_Controller
                 ->with_errors($validation);
         }
     }
+
+    //GET DETAIL
+    public function get_to_invoice($id=null){
+        if ($id===null) {
+            return Redirect::to('work_order/list');
+        }
+        $action = Input::get('type');
+        $transaction = Transaction::get_detail_trx($id);
+        return $this->layout->nest('content', 'wo.to_invoice', array(
+            'transaction' => $transaction,
+            'action' => $action
+        ));
+    }
+
     //=======================RULES INPUT============================//
     private function getRules($method='add') {
         $additional = array();
@@ -345,7 +362,6 @@ class Work_Order_Controller extends Secure_Controller
             'customerName' => 'required|max:50',
             'vehiclesid' => 'required',
             'services' => 'required',
-            'users' => 'required'
         );
         if($method == 'add') {
             $additional = array(

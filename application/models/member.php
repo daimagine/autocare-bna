@@ -26,6 +26,10 @@ class Member extends Eloquent {
 		return $this->belongs_to('Discount');
 	}
 
+    public function vehicle() {
+        return $this->belongs_to('Vehicle');
+    }
+
     public static function member_new() {
         $count = DB::table(static::$table)->count();
         $count++;
@@ -107,5 +111,13 @@ class Member extends Eloquent {
 		$discounts[$d->id] = $desc;
 		return $desc;
 	}
+
+    public static function getSingleResult($criteria) {
+        $member = Member::where_in('status', $criteria['status']);
+        if (isset($criteria['vehicle_id'])) {$member = $member->where('vehicle_id', '=', $criteria['vehicle_id']);}
+        if (isset($criteria['is_member'])){$member = $member->where('expiry_date', '>=', date(static::$sqlformat, time()));}
+        return $member->first();
+    }
+
 
 }

@@ -56,6 +56,7 @@ class Transaction extends Eloquent {
         $trx = $trx->where('id', '=', $id);
         return $trx->first();
     }
+
     public static function create($data = array()){
         //prepare save to db
         $trx = new Transaction();
@@ -67,24 +68,38 @@ class Transaction extends Eloquent {
 
 
         //define amount variable
-        $amount=(double)0;
+        $amountItem=(double)0;
+        //add items if available
+        if(isset($data['items']) && is_array($data['items'])) {
+            foreach($data['items'] as $items) {
+                $item_price = ItemPrice::getSingleResult(array('item_id' => $items['item_id']));
+                $items['item_price_id']=$item_price->id;
+                $trx->transaction_item()->insert($items);
+                $itemPrice = (double)Item::find((int)$items['item_id'])->price;
+                $amountItem=$amountItem+$itemPrice;
+                $stock=($item_price->item->stock - $items['quantity']);
+                $updatestock = Item::updateStock($item_price->item->id, $stock);
+            }
+        }
+
         //add service
+        $amountService=(double)0;
+        $discAmount=(double)0;
         if(isset($data['services']) && is_array($data['services'])) {
             foreach($data['services'] as $service) {
                 $trx->transaction_service()->insert($service);
                 $servicePrice = (double)Service::find((int)$service['service_formula_id'])->service_formula()->price;
-                $amount=$amount+$servicePrice;
+                $amountService=$amountService+$servicePrice;
             }
-        }
-
-        //add items if available
-        if(isset($data['items']) && is_array($data['items'])) {
-            foreach($data['items'] as $items) {
-                $item_price = ItemPrice::getSingleResult(array('item_id' => $items['item_id']))->id;
-                $items['item_price_id']=$item_price;
-                $trx->transaction_item()->insert($items);
-                $itemPrice = (double)Item::find((int)$items['item_id'])->price;
-                $amount=$amount+$itemPrice;
+            $membership = Member::getSingleResult(array(
+                'status' => array(statusType::ACTIVE),
+                'vehicle_id' => $data['vehiclesid'],
+                'is_member' => true
+            ));
+            if ($membership) {
+                if (isset($membership->discount)){
+                    $discAmount = $amountService * ($membership->discount->value / 100);
+                }
             }
         }
 
@@ -99,28 +114,52 @@ class Transaction extends Eloquent {
         //GENERATE WORK ORDER NO
         $woNo = 'C'.$data['customerId'].'V'.$data['vehiclesid'].($trx->id);
         $trx->workorder_no = $woNo;
-        $trx->amount = $amount;
+        $trx->amount = ($amountItem+$amountService);
+        $trx->discount_amount = $discAmount;
+        $trx->paid_amount = ($amountService - $discAmount);
         $trx->save();
         return $trx->id;
     }
 
 
     public static function update($id, $data = array()){
+
         //prepare save to db
         $trx = Transaction::find($id);
         $trx->vehicle_id = $data['vehiclesid'];
 
-        //define amount variable
-        $amount=(double)0;
+        //add items if available
+
+        $trxItem = TransactionItem::listById(array('id' => $id));
+        if ($trxItem) {
+//            {{dd($data);}}
+            foreach($trxItem as $trx_item) {
+                $item_price = ItemPrice::getSingleResult(array('item_id' => $trx_item->item_id));
+                $stock=($item_price->item->stock + $trx_item->quantity);
+                $updatestock = Item::updateStock($item_price->item->id, $stock);
+            }
+            //cleanup items
+            $affected = DB::table('transaction_item')
+                ->where('transaction_id', '=', $id)
+                ->delete();
+        }
+        $amountItem=(double)0;
+        if(isset($data['items']) && is_array($data['items'])) {
+            foreach($data['items'] as $items) {
+                $item_price = ItemPrice::getSingleResult(array('item_id' => $items['item_id']));
+                $items['item_price_id']=$item_price->id;
+                $trx->transaction_item()->insert($items);
+                $itemPrice = (double)Item::find((int)$items['item_id'])->price;
+                $amountItem=$amountItem+$itemPrice;
+                $stock=($item_price->item->stock - $items['quantity']);
+                $updatestock = Item::updateStock($item_price->item->id, $stock);
+            }
+        }
+
         //add service
+        $amountService=(double)0;
+        $discAmount=(double)0;
         if(isset($data['services']) && is_array($data['services'])) {
-            //cleanup service
-//            $oldServiceFormulaId=array();
-//            $no=0;
-//            foreach($data['services'] as $s){
-//                $oldServiceFormulaId[$no] = $s['service_formula_id'];
-//                $no++;
-//            }
             $affected = DB::table('transaction_service')
                 ->where('transaction_id', '=', $id)
                 ->delete();
@@ -128,22 +167,18 @@ class Transaction extends Eloquent {
             foreach($data['services'] as $service) {
                 $trx->transaction_service()->insert($service);
                 $servicePrice = (double)Service::find((int)$service['service_formula_id'])->service_formula()->price;
-                $amount=$amount+$servicePrice;
-            }
-        }
+                $amountService=$amountService+$servicePrice;
 
-        //add items if available
-        if(isset($data['items']) && is_array($data['items'])) {
-            //cleanup items
-            $affected = DB::table('transaction_item')
-                ->where('transaction_id', '=', $id)
-                ->delete();
-            foreach($data['items'] as $items) {
-                $item_price = ItemPrice::getSingleResult(array('item_id' => $items['item_id']))->id;
-                $items['item_price_id']=$item_price;
-                $trx->transaction_item()->insert($items);
-                $itemPrice = (double)Item::find((int)$items['item_id'])->price;
-                $amount=$amount+$itemPrice;
+                $membership = Member::getSingleResult(array(
+                    'status' => array(statusType::ACTIVE),
+                    'vehicle_id' => $data['vehiclesid'],
+                    'is_member' => true
+                ));
+                if ($membership) {
+                    if (isset($membership->discount)){
+                        $discAmount = $amountService * ($membership->discount->value / 100);
+                    }
+                }
             }
         }
 
@@ -158,7 +193,9 @@ class Transaction extends Eloquent {
             }
         }
 
-        $trx->amount = $amount;
+        $trx->amount = ($amountItem+$amountService);
+        $trx->discount_amount = $discAmount;
+        $trx->paid_amount = ($amountService - $discAmount);
         $trx->save();
         return $trx->id;
     }
