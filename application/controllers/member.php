@@ -27,7 +27,7 @@ class Member_Controller extends Secure_Controller {
 		foreach($allDisc as $d) {
 			$desc  = $d->duration . ' ';
 			$desc .= $d->duration_period == 'M' ? 'Month' : ( $d->duration_period == 'Y' ? 'Year' : '' ) . ' ';
-			$desc .= '(' . $d->value . '% discount) - IDR' . $d->registration_fee;
+			$desc .= '(' . number_format($d->value, 2) . '% discount) - IDR' . $d->registration_fee;
 			$discounts[$d->id] = $desc;
 		}
         Asset::add('member.application', 'js/member/application.js', array('jquery'));

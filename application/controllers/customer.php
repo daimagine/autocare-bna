@@ -140,7 +140,7 @@ class Customer_Controller extends Secure_Controller {
             return Redirect::to('customer/index');
         }
         if($purge === 'purge')
-            $success = Customer::find($id)->delete();
+            $success = Customer::rip($id);
         else
             $success = Customer::remove($id);
         if($success) {
