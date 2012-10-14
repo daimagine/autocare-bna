@@ -3,10 +3,11 @@
 @include('partial.notification')
 <br>
 
-{{ Form::open('/work_order/add', 'POST') }}
+{{ Form::open('/work_order/add', 'POST', array('id' => 'formAutocare', 'name' => 'formAutocare')) }}
 <div>
     <input type="hidden" id="mechanicField" value="{{sizeof($transaction->user_workorder)}}">
     <input type="hidden" id="serviceField" value="{{sizeof($transaction->transaction_service)}}">
+    <input type="hidden" id="transactionId" value="{{$transaction->id}}">
 </div>
 <fieldset>
     <div class="widget fluid">
@@ -26,7 +27,7 @@
         <div class="formRow">
             <div class="grid3"><label>Work Order No</label> </div>
             <div class="grid5">
-                <input type="text"  name="customerName" class="ac ui-autocomplete-input" readonly="true" value="{{$transaction->workorder_no}}">
+                <input type="text" id="workorderno" name="customerName" class="ac ui-autocomplete-input" readonly="true" value="{{$transaction->workorder_no}}">
             </div>
             <div class="clear"></div>
         </div>

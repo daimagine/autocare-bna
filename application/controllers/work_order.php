@@ -256,7 +256,7 @@ class Work_Order_Controller extends Secure_Controller
         }
 
         //------------GET MECHANIC----------------------//
-        $lstMechanic=User::listAll(array(
+        $lstMechanic=User::listByCiteria(array(
             'role_id' => 4
         ));
 
@@ -347,6 +347,9 @@ class Work_Order_Controller extends Secure_Controller
         if ($id===null) {
             return Redirect::to('work_order/list');
         }
+        Asset::add('jquery.validationEngine-en', 'js/plugins/forms/jquery.validationEngine-en.js',  array('jquery', 'jquery-ui'));
+        Asset::add('jquery.validate', 'js/plugins/wizards/jquery.validate.js',  array('jquery', 'jquery-ui'));
+        Asset::add('validationEngine.form', 'js/plugins/forms/jquery.validationEngine.js',  array('jquery', 'jquery-ui'));
         Asset::add('function_item', 'js/wo/application.js',  array('jquery', 'jquery-ui'));
         $action = Input::get('type');
         $transaction = Transaction::get_detail_trx($id);

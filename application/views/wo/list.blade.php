@@ -36,7 +36,7 @@
                     <a href="detail/{{ $trx->id }}?type=D" class="tablectrl_small bBlue tipS" original-title="Detail"><span class="iconb" data-icon=""></span></a>
                     @if($trx->status == 'O')
                     <a href="edit/{{ $trx->id }}" class="tablectrl_small bRed tipS" original-title="Update"><span class="iconb" data-icon=""></span></a>
-                    <a href="detail/{{ $trx->id }}?type=C" class="tablectrl_small bGreen tipS" original-title="Close"><span class="iconb"  data-icon=""></span></a>
+                    <a href="to_invoice/{{ $trx->id }}?type=C" class="tablectrl_small bGreen tipS" original-title="Close"><span class="iconb"  data-icon=""></span></a>
                     <a href="do_canceled/{{ $trx->id }}" class="tablectrl_small bGreyish tipS" original-title="Cancel"><span class="iconb"  data-icon=""></span></a>
                     @endif
                     @if($trx->status == 'D' or $trx->status == 'O')

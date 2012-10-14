@@ -129,7 +129,7 @@ $(function() {
         modal: true,
         resizable: false,
         buttons: {
-            "OK": function() {
+            "Yes": function() {
                 $( this ).dialog( "close" );
                 if('' != jQuery.trim(selectedUrl)) {
                     window.location = selectedUrl;
@@ -142,14 +142,26 @@ $(function() {
     });
 
     $('a.buttonAction').click(function () {
+        //edit/transactionId
         console.log('open confirmation');
-        var mechanicField = $("#mechanicField").val();  // a.delete -> td -> tr -> td.name
-        var serviceField = $("#serviceField").val();  // a.delete -> td -> tr -> td.name
+        var mechanicField = $("#mechanicField").val();
+        var serviceField = $("#serviceField").val();
+        var workorderno = $("#workorderno").val();
+        var transactionId = $("#transactionId").val();
+        selectedUrl = $(this).attr('href');
+        console.log("selectedUrl value "+selectedUrl);
+        console.log("transactionId value "+transactionId);
+        console.log("workorderno value "+workorderno);
+        console.log("mechanicField value "+mechanicField);
+        console.log("serviceField value "+serviceField);
         if (serviceField == 0) {
-            $("#closed_confirmation").html('Sorry you cant closed this work order, since no<strong> mechanic </strong>assigned for this work order ?');
+            $("#closed_confirmation").html('Sorry you cant closed this work order, since no<strong> mechanic </strong>assigned for this work order, press button <strong>Yes</strong> to edit this work order ?');
+            selectedUrl = '../edit/'+transactionId;
         } else if (mechanicField == 0) {
-            $("#closed_confirmation").html('Sorry you cant closed this work order, since no <strong> service </strong>assigned for this work order ?');
+            $("#closed_confirmation").html('Sorry you cant closed this work order, since no <strong> service </strong>assigned for this work order, press button <strong>Yes</strong> to edit this work order ?');
+            selectedUrl = '../edit/'+transactionId;
         } else {
+            $("#closed_confirmation").html('Are you sure want to closed workorder <strong> '+workorderno+' </strong> ?');
             selectedUrl = $(this).attr('href');
         }
         name = jQuery.trim(name);
