@@ -43,6 +43,8 @@ class Transaction extends Eloquent {
             'vehicle',
             'vehicle.customer',
             'vehicle.customer.membership',
+            'vehicle.membership',
+            'vehicle.membership.discount',
             'transaction_service',
             'transaction_service.service_formula',
             'transaction_service.service_formula.service',
@@ -76,7 +78,7 @@ class Transaction extends Eloquent {
                 $items['item_price_id']=$item_price->id;
                 $trx->transaction_item()->insert($items);
                 $itemPrice = (double)Item::find((int)$items['item_id'])->price;
-                $amountItem=$amountItem+$itemPrice;
+                $amountItem=$amountItem+($itemPrice*$items['quantity']);
                 $stock=($item_price->item->stock - $items['quantity']);
                 $updatestock = Item::updateStock($item_price->item->id, $stock);
             }
@@ -111,12 +113,15 @@ class Transaction extends Eloquent {
         }
 
 
-        //GENERATE WORK ORDER NO
+        //GENERATE WORK ORDER & INVOICE NO
         $woNo = 'C'.$data['customerId'].'V'.$data['vehiclesid'].($trx->id);
+        $date = date(static::$yyyymmdd_format, time());
+        $invNo = $date.($trx->id);
+        $trx->invoice_no= $invNo;
         $trx->workorder_no = $woNo;
         $trx->amount = ($amountItem+$amountService);
         $trx->discount_amount = $discAmount;
-        $trx->paid_amount = ($amountService - $discAmount);
+        $trx->paid_amount = ($amountItem + $amountService - $discAmount);
         $trx->save();
         return $trx->id;
     }
@@ -150,7 +155,7 @@ class Transaction extends Eloquent {
                 $items['item_price_id']=$item_price->id;
                 $trx->transaction_item()->insert($items);
                 $itemPrice = (double)Item::find((int)$items['item_id'])->price;
-                $amountItem=$amountItem+$itemPrice;
+                $amountItem=$amountItem+($itemPrice*$items['quantity']);
                 $stock=($item_price->item->stock - $items['quantity']);
                 $updatestock = Item::updateStock($item_price->item->id, $stock);
             }
@@ -195,7 +200,7 @@ class Transaction extends Eloquent {
 
         $trx->amount = ($amountItem+$amountService);
         $trx->discount_amount = $discAmount;
-        $trx->paid_amount = ($amountService - $discAmount);
+        $trx->paid_amount = ($amountItem + $amountService - $discAmount);
         $trx->save();
         return $trx->id;
     }

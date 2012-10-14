@@ -42,7 +42,7 @@ $(function() {
 
     $('#buttonConfirmApproved').click(function () {
         $("#formDialogApproved").html('<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>' +
-            ' Are you sure the data is correct and you want to closed this approved invoice ?' +
+            ' Are you sure the data is correct and you want to closed this approved print ?' +
             '<br/> <em>Please make sure you has write correct information message for accounting team on remarks field</em>' +
             '</p>');
         document.formAutocare.action.value = 'confirm';
@@ -53,7 +53,7 @@ $(function() {
         var name = $("textarea#remarks").val();
         if (name!='') {
             $("#formDialogApproved").html('<p>' +
-                '<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span> Are you sure want to reject this approved invoice ? ' +
+                '<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span> Are you sure want to reject this approved print ? ' +
                 '<br/> <em>Please make sure you has write correct information message for accounting team on remarks box </em>' +
                 '</p>');
             document.formAutocare.action.value = 'reject';

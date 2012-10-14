@@ -141,6 +141,69 @@
     </div>
 
     <div class="divider"><span></span></div>
+    <span class=""><h6>PAYMENT DETAIL</h6></span>
+    <div class="widget" style="margin-top: 10px;width: 100%;">
+        <table cellpadding="0" cellspacing="0" width="100%" class="tDark">
+            <thead>
+            <tr>
+                <td>Detail</td>
+                <td>Unit</td>
+                <td>Qty</td>
+                <td>Sub Total</td>
+                <td>Total</td>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($transaction->transaction_service as  $trx_service)
+            <tr>
+                <td>{{ $trx_service->service_formula->service->name }}</td>
+                <td>-</td>
+                <td align="center">1</td>
+                <td align="right">IDR {{ $trx_service->service_formula->price }}</td>
+                <td align="right">IDR {{ ($trx_service->service_formula->price)}}</td>
+            </tr>
+            @endforeach
+            @foreach($transaction->transaction_item as $trx_item)
+            <?php $total=number_format((float)(($trx_item->item_price->price) * ($trx_item->quantity)), 2, '.', ''); ?>
+            <tr>
+                <td>{{ $trx_item->item_price->item->name}}</td>
+                <td>{{ $trx_item->item_price->item->item_unit->name}}</td>
+                <td align="center">{{ $trx_item->quantity}}</td>
+                <td align="right">IDR {{ $trx_item->item_price->price}}</td>
+                <td align="right">IDR {{$total}}</td>
+            </tr>
+            @endforeach
+            <tr>
+                <td></td><td></td><td></td>
+                <td style="color: #ff0000;"><strong>Sub Total</strong></td>
+                <td align="right" style="color: #ff0000;"><strong>IDR {{$transaction->amount}}</strong></td>
+            </tr>
+            <tr>
+                <td></td><td></td><td></td>
+                <td style="color: #ff0000;"><strong>Pph 0%</strong></td>
+                <td align="right" style="color: #ff0000;"><strong>IDR 0.00</strong></td>
+            </tr>
+            <tr>
+                <td></td><td></td><td></td>
+                <td>
+                    <strong style="color: #ff0000;">Member Discount Service
+                    @if(isset($transaction->vehicle->membership->discount))
+                        {{$transaction->vehicle->membership->discount->value}} %
+                    @endif
+                    </strong>
+                </td>
+                <td align="right" style="color: #ff0000;"><strong>IDR {{$transaction->discount_amount}}</strong></td>
+            </tr>
+            <tr>
+                <td></td><td></td><td></td>
+                <td style="color: #ff0000;"><strong>Total</strong></td>
+                <td align="right" style="color:#ff0000;"><strong>IDR {{$transaction->paid_amount}}</strong></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="divider"><span></span></div>
     <div class="widget fluid">
         <div class="wheadLight2">
             <h6>Action</h6>
@@ -154,8 +217,10 @@
                 </div>
                 <div class="grid7">
                     <div class="formSubmit">
+                        @if($transaction->status == 'O' and $action == 'D')
                         <a href="../do_closed/{{$transaction->id }}" class="buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>Close WO</span></a>
-                        <a href="../do_canceled/{{$transaction->id }}" class="buttonM bGreyish"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>Print Invoice</span></a>
+                        @endif
+                        <a href="../print_invoice/{{$transaction->id}}" target="_blank" class="buttonM bGreyish"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>Print Invoice</span></a>
                     </div>
                 </div>
             </div>

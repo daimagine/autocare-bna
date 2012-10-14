@@ -37,10 +37,10 @@
         <div class="clear"></div>
     </div>
 
-    <div class="formRow">
-        <div class="grid3"><label>Value *</label></div>
-        <div class="grid5"><input name="value" type="text" id="discountValue" value="" /></div><div class="clear"></div>
-    </div>
+<!--    <div class="formRow">-->
+<!--        <div class="grid3"><label>Value *</label></div>-->
+<!--        <div class="grid5"><input name="value" type="text" id="discountValue" value="" /></div><div class="clear"></div>-->
+<!--    </div>-->
     <div>
        <input type="hidden" id="customerId" name="customerId">
     </div>
