@@ -162,6 +162,27 @@ class Customer extends Eloquent {
         return $customer->id;
     }
 
+    public static function rip($id) {
+        //remove all constraint
+        try {
+            //remove membership
+            DB::table('membership')
+                ->where('customer_id', '=', $id)
+                ->delete();
+
+            //remove vehicle
+            DB::table('vehicle')
+                ->where('customer_id', '=', $id)
+                ->delete();
+
+            //remove customer itself
+            Customer::find($id)->delete();
+        } catch (Exception $err) {
+            Log::write('error', $err);
+        }
+        return true;
+    }
+
 	public static function allWithMembership($criteria) {
         return Customer::with( array('vehicles') )
             ->get();

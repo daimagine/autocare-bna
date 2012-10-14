@@ -46,7 +46,7 @@ class Member extends Eloquent {
     public static function recent() {
         return Member::with(array('vehicle', 'vehicle.customer', 'discount'))
             ->where('status', '=', 1)
-            ->order_by('created_at', 'asc')
+            ->order_by('created_at', 'desc')
             ->take(10)
             ->get();
     }

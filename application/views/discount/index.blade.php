@@ -26,7 +26,7 @@
             @foreach($discount as $discount)
             <tr class="">
                 <td>{{ $discount->code }}</td>
-                <td>{{ $discount->value }}%</td>
+                <td>{{ number_format($discount->value,2) }}%</td>
                 <td>IDR {{ $discount->registration_fee }}</td>
 				<td>{{ $discount->duration }} {{ $discount->duration_period == 'M' ? 'Month' : ( $discount->duration_period == 'Y' ? 'Year' : '' ) }} </td>
                 <td>{{ $discount->description }}</td>
@@ -34,7 +34,7 @@
                     @if($discount->status)
                     <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
                     @endif
-                </td>
+                    </td>
                 <td class="tableActs" align="center">
                     <a href="/discount/edit/{{ $discount->id }}" 
 						class="appconfirm tablectrl_small bDefault tipS" 
