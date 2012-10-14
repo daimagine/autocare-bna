@@ -113,7 +113,7 @@ class Access_Controller extends Secure_Controller {
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
-            'name' => 'required|min:5|max:50',
+            'name' => 'required|min:3|max:50',
         );
         if($method == 'add') {
             $additional = array(

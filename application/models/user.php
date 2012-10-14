@@ -19,7 +19,7 @@ class User extends Eloquent {
 	
     public static function listAll($criteria) {
         return User::with(array( 'role' ))
-				->where('status', '=', 1)
+//				->where('status', '=', 1)
 				->get();
     }
 
@@ -105,4 +105,21 @@ class User extends Eloquent {
 		//dd($valid);
 		return $valid;
 	}
+
+    public static function update_password($user, $data) {
+        try {
+            if(Hash::check($data['password'], $user->password)) {
+                $user->password = Hash::make($data['new_password']);
+                $user->save();
+
+                return true;
+            } else {
+                Log::info('Wrong password');
+                return false;
+            }
+        } catch(Exception $ex) {
+        }
+        return false;
+    }
+
 }

@@ -31,7 +31,7 @@
                 <th>Due</th>
                 <th>Status</th>
                 <th>Attributes</th>
-                <th>Action</th>
+                <th style="min-width: 79px">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -64,6 +64,14 @@
                        dialog-confirm-title="Remove Confirmation">
                         <span class="iconb" data-icon=""></span>
                     </a>
+                    @if($account->due == 0 || $account->paid <> $account->due)
+                    <a href="/account/pay_invoice/{{ $accountTransType }}/{{ $account->id }}"
+                       class="appconfirm tablectrl_small bDefault tipS"
+                       original-title="Pay Invoice"
+                       dialog-confirm-title="Payment Confirmation">
+                        <span class="iconb" data-icon=""></span>
+                    </a>
+                    @endif
                 </td>
             </tr>
             @endforeach

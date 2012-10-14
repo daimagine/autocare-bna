@@ -9,7 +9,11 @@
             <div class="clear"></div>
         </li>
         <li class="on_off">
-            <label><span class="icos-car"></span>Membership Number &nbsp; {{ $member->number }}</label>
+            <label><span class="icos-car"></span>Vehicle Number &nbsp; {{ $member->vehicle->number }}</label>
+            <div class="clear"></div>
+        </li>
+        <li class="on_off">
+            <label><span class="icos-postcard"></span>Membership Number &nbsp; {{ $member->number }}</label>
             <div class="clear"></div>
         </li>
         <li class="on_off">

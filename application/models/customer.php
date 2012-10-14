@@ -46,23 +46,48 @@ class Customer extends Eloquent {
         $customer->save();
 
 		//register membership
-		if(isset($data['discount_id'])) {
-			if($data['discount_id'] != '0')
-				Customer::updateMembership($customer->id, $data);
-			else
-				$affected = DB::table('membership')
-					->where('customer_id', '=', $customer->id)
-					->delete();				
-		}
+//		if(isset($data['discount_id'])) {
+//			if($data['discount_id'] != '0')
+//				Customer::updateMembership($customer->id, $data);
+//			else
+//				$affected = DB::table('membership')
+//					->where('customer_id', '=', $customer->id)
+//					->delete();
+//		}
 
 		//register vehicles
 		if(isset($data['vehicles']) && is_array($data['vehicles'])) {
-			//cleanup membership
-			$affected = DB::table('vehicle')
-				->where('customer_id', '=', $customer->id)
-				->delete();
-			foreach($data['vehicles'] as $vehicle) {
-				$customer->vehicles()->insert($vehicle);
+            $existing = array();
+            $existing_id = array();
+            $new = array();
+            foreach($data['vehicles'] as $vehicle) {
+                if(array_key_exists('id', $vehicle)) {
+                    array_push($existing, $vehicle);
+                    array_push($existing_id, $vehicle['id']);
+                } else {
+                    array_push($new, $vehicle);
+                }
+            }
+
+			//cleanup vehicle and membership
+            if(sizeof($existing_id) > 0) {
+                $affected = DB::table('vehicle')
+                    ->where_not_in('id', $existing_id)
+                    ->delete();
+                Log::info('affected vehicle cleanup : ' + $affected);
+
+                $affected = DB::table('membership')
+                ->where_not_in('vehicle_id', $existing_id)
+                ->delete();
+                Log::info('affected membership cleanup : ' + $affected);
+            }
+
+            foreach($new as $vehicle) {
+                $customer->vehicles()->insert($vehicle);
+			}
+
+            foreach($existing as $vehicle) {
+                Vehicle::update($vehicle['id'], $vehicle);
 			}
 		}
 
@@ -108,14 +133,14 @@ class Customer extends Eloquent {
 		          'description' => string 'type' (length=4)
 		*/
 		//register membership
-		if(isset($data['discount_id'])) {
-			if($data['discount_id'] != '0')
-				Customer::updateMembership($customer->id, $data);
-			else
-				$affected = DB::table('membership')
-					->where('customer_id', '=', $customer->id)
-					->delete();				
-		}
+//		if(isset($data['discount_id'])) {
+//			if($data['discount_id'] != '0')
+//				Customer::updateMembership($customer->id, $data);
+//			else
+//				$affected = DB::table('membership')
+//					->where('customer_id', '=', $customer->id)
+//					->delete();
+//		}
 		//register vehicles
 		if(isset($data['vehicles']) && is_array($data['vehicles'])) {
 			//cleanup membership
@@ -138,18 +163,19 @@ class Customer extends Eloquent {
     }
 
 	public static function allWithMembership($criteria) {
-        return Customer::with('membership')->get();
+        return Customer::with( array('vehicles') )
+            ->get();
 	}
 	
 	public static function updateMembership($id, $data) {
 		$discount = Discount::find($data['discount_id'])->first();
 		//dd($discount);
-		$customer = Customer::find($id);
-		
+        $vehicle = Vehicle::find($id);
+
 		//cleanup membership
-		$affected = DB::table('membership')
-			->where('customer_id', '=', $customer->id)
-			->delete();
+//		$affected = DB::table('membership')
+//			->where('vehicle_id', '=', $vehicle->id)
+//			->delete();
 			//->update(array('status' => 'false'));
 			
 		//save membership
@@ -157,20 +183,20 @@ class Customer extends Eloquent {
 		$period = $discount->duration_period == 'M' ? 'month' : 
 			( $discount->duration_period == 'Y' ? 'year' : 'seconds' );
 		$value = $discount->duration;
-		$expired = date(static::$sqlformat, 
-			strtotime($registration_date . " +$value $period"));
+		$expired = date(static::$sqlformat,  strtotime($registration_date . " +$value $period"));
 		$membership_data = array(
 			'discount_id'		=> $discount->id,
-			'customer_id'		=> $customer->id,
+			'customer_id'		=> $vehicle->customer->id,
+			'vehicle_id'		=> $vehicle->id,
 			'number'			=> Member::member_new(),
 			'status'			=> true,
 			'registration_date'	=> $registration_date,
 			'expiry_date'		=> $expired
 		);
 		//dd($membership_data);
-		$customer->membership()->insert($membership_data);
-		//dd($customer);
-        return $customer->id;
+		$vehicle->membership()->insert($membership_data);
+        //dd($customer);
+        return $vehicle->id;
 	}
 	
 	public static function getForSelect() {

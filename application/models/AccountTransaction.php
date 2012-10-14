@@ -64,6 +64,7 @@ class AccountTransaction extends Eloquent {
 
 
         //register items
+        $due_amount = 0;
         if(isset($data['items']) && is_array($data['items'])) {
             //cleanup items
             $affected = DB::table('sub_account_trx')
@@ -71,8 +72,14 @@ class AccountTransaction extends Eloquent {
                 ->delete();
             foreach($data['items'] as $item) {
                 $ate->items()->insert($item);
+                $due_amount += $item['amount'];
+                //var_dump($item['amount']);
             }
         }
+
+        //dd($data);
+        $ate->due = round($due_amount, 2);
+        $ate->save();
 
         //dd($ate);
         return $ate->id;
@@ -136,7 +143,7 @@ class AccountTransaction extends Eloquent {
             foreach($data['items'] as $item) {
                 $ate->items()->insert($item);
                 $due_amount += $item['amount'];
-                var_dump($item['amount']);
+                //var_dump($item['amount']);
             }
         }
 
@@ -154,5 +161,25 @@ class AccountTransaction extends Eloquent {
             if($criteria['approved_status']){$ate=$ate->where('approved_status', '=', $criteria['approved_status']);}
         }
         return $ate->get();
+    }
+
+
+    public static function pay_invoice($id, $data = array()) {
+        $ate = AccountTransaction::where_id($id)
+            ->where_status(1)
+            ->first();
+
+        $ate->subject_payment = $data['subject_payment'];
+        $ate->paid = round($data['paid'], 2);
+
+        //datetime fields
+        $payment_date = $data['payment_date'] . $data['payment_time'];
+        $payment_date = DateTime::createFromFormat(static::$format, $payment_date);
+        $ate->paid_date = $payment_date->format(static::$sqlformat);
+
+        $ate->save();
+
+        //dd($ate);
+        return $ate->id;
     }
 }

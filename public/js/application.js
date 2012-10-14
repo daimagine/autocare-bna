@@ -95,6 +95,17 @@ $(function() {
     $('#breadcrumbs').xBreadcrumbs();
 
 
+    //===== Animated dropdown for the right links group on breadcrumbs line =====//
+
+    $('.breadLinks ul li').click(function () {
+        $(this).children("ul").slideToggle(150);
+    });
+    $(document).bind('click', function(e) {
+        var $clicked = $(e.target);
+        if (! $clicked.parents().hasClass("has"))
+            $('.breadLinks ul li').children("ul").slideUp(150);
+    });
+
     //===== User nav dropdown =====//
 
     $('a.leftUserDrop').click(function () {
@@ -177,6 +188,7 @@ $(function() {
 
 		$("#dialog-confirm").dialog({
 			modal: true,
+            minWidth: 500,
 			buttons : {
 				"Confirm" : function() {
 					console.log(callback);

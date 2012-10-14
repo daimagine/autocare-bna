@@ -155,17 +155,23 @@ class User_Controller extends Secure_Controller {
         }
     }
 
-    public function get_delete($id=null) {
+    public function get_delete($id=null, $purge=false) {
         if($id===null) {
             return Redirect::to('user/index');
         }
-        $success = User::remove($id);
+        $not = 'remove';
+        if($purge === 'purge') {
+            $success = User::find($id)->delete();
+        } else {
+            $not = 'inactivate';
+            $success = User::remove($id);
+        }
         if($success) {
-            //success login
-            Session::flash('message', 'Success to remove user');
+            //success
+            Session::flash('message', 'Success to ' . $not . ' user');
             return Redirect::to('user/index');
         } else {
-            Session::flash('message_error', 'Failed to remove user');
+            Session::flash('message_error', 'Failed to ' . $not . ' user');
             return Redirect::to('user/index');
         }
     }

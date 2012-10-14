@@ -31,7 +31,8 @@ class Member extends Eloquent {
     }
 
     public static function member_new() {
-        $count = DB::table(static::$table)->count();
+        $count = DB::table(static::$table)->order_by('id', 'desc')->take(1)->only('id');
+        //dd($count);
         $count++;
         //pad static::$MEMBERSHIP_LENGTH leading zeros
         $suffix = sprintf('%0' . static::$MEMBERSHIP_LENGTH . 'd', $count);
@@ -40,6 +41,14 @@ class Member extends Eloquent {
 	
     public static function listAll($criteria) {
         return Member::where('status', '=', 1)->get();
+    }
+
+    public static function recent() {
+        return Member::with(array('vehicle', 'vehicle.customer', 'discount'))
+            ->where('status', '=', 1)
+            ->order_by('created_at', 'asc')
+            ->take(10)
+            ->get();
     }
 
     public static function update($id, $data = array()) {
@@ -85,6 +94,10 @@ class Member extends Eloquent {
         if(isset($data['customer_id']) && $data['customer_id'] != '0') {
             $member->customer_id = $data['customer_id'];
         }
+
+        if(isset($data['vehicle_id']) && $data['vehicle_id'] != '0') {
+            $member->vehicle_id = $data['vehicle_id'];
+        }
 		
 		if(isset($data['register_date']) && $data['register_date'] != null && $data['register_date'] != ''
 			&& isset($data['register_time']) && $data['register_time'] != null && $data['register_time'] != '') {
@@ -107,7 +120,7 @@ class Member extends Eloquent {
 		$d = $this->discount;
 		$desc  = $d->duration . ' ';
 		$desc .= $d->duration_period == 'M' ? 'Month' : ( $d->duration_period == 'Y' ? 'Year' : '' ) . ' ';
-		$desc .= '(' . $d->value . '% discount) - IDR' . $d->registration_fee;
+		$desc .= '(' . number_format($d->value, 2) . '% discount) - IDR' . $d->registration_fee;
 		$discounts[$d->id] = $desc;
 		return $desc;
 	}

@@ -36,7 +36,13 @@ class Home_Controller extends Secure_Controller {
     }
 
     public function action_index() {
-		return View::make('home.index');
+        $members = Member::recent();
+        $news = News::recent();
+        Asset::add('home.application', 'js/home/application.js', array('jquery'));
+        return $this->layout->nest('content', 'home.dashboard', array(
+            'news' => $news,
+            'members' => $members
+        ));
 	}
 
 }

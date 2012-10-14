@@ -36,25 +36,25 @@
 		
     </div>
 
-    <div class="widget fluid">
-        <div class="whead">
-            <h6>Membership</h6>
-            <div class="clear"></div>
-        </div>
-
-        <div class="body" style="display: block; ">
-            <div class="formRow">
-                <div class="grid3"><label>Select Available Membership</label> </div>
-                <div class="grid9">
-                    @foreach($discounts as $id => $desc)
-                        <input type="radio" name="discount_id" value="{{ $id }}" {{ isset($discount_id) ? ( $discount_id == $id ? 'checked' : '' ) : ( $id == 0 ? 'checked' : '' ) }} >
-                        <label class="mr20">{{ $desc }}</label><div class="clear"></div>
-                    @endforeach
-                </div>
-                <div class="clear"></div>
-            </div>
-        </div>
-    </div>
+<!--    <div class="widget fluid">-->
+<!--        <div class="whead">-->
+<!--            <h6>Membership</h6>-->
+<!--            <div class="clear"></div>-->
+<!--        </div>-->
+<!---->
+<!--        <div class="body" style="display: block; ">-->
+<!--            <div class="formRow">-->
+<!--                <div class="grid3"><label>Select Available Membership</label> </div>-->
+<!--                <div class="grid9">-->
+<!--                    @foreach($discounts as $id => $desc)-->
+<!--                        <input type="radio" name="discount_id" value="{{ $id }}" {{ isset($discount_id) ? ( $discount_id == $id ? 'checked' : '' ) : ( $id == 0 ? 'checked' : '' ) }} >-->
+<!--                        <label class="mr20">{{ $desc }}</label><div class="clear"></div>-->
+<!--                    @endforeach-->
+<!--                </div>-->
+<!--                <div class="clear"></div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 
     <div class="widget">
         <div id="vehicle-whead" class="whead " >
@@ -95,6 +95,7 @@
                                 </div>
                             </td>
 						  	<td style="display: none; ">
+                                <input type="hidden" class="v-id-hid-{{ $i }}" name="vehicles[{{ $i }}][id]" value="{{ $vehicles[$i]->id }}" />
                                 <input type="hidden" class="v-num-hid-{{ $i }}" name="vehicles[{{ $i }}][number]" value="{{ $vehicles[$i]->number }}" />
 								<input type="hidden" class="v-type-hid-{{ $i }}" name="vehicles[{{ $i }}][type]" value="{{ $vehicles[$i]->type }}" />
 								<input type="hidden" class="v-color-hid-{{ $i }}" name="vehicles[{{ $i }}][color]" value="{{ $vehicles[$i]->color }}" />
@@ -168,7 +169,7 @@
                 <input type="text" id="vehicle-description"/>
             </div>
             <input type="hidden" id="vehicle-method" value="edit"/>
-            <input type="hidden" id="vehicle-addkey" value="0"/>
+            <input type="hidden" id="vehicle-addkey" value="-1"/>
         </form>
     </div>
 
