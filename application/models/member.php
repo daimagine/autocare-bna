@@ -125,4 +125,12 @@ class Member extends Eloquent {
 		return $desc;
 	}
 
+    public static function getSingleResult($criteria) {
+        $member = Member::where_in('status', $criteria['status']);
+        if (isset($criteria['vehicle_id'])) {$member = $member->where('vehicle_id', '=', $criteria['vehicle_id']);}
+        if (isset($criteria['is_member'])){$member = $member->where('expiry_date', '>=', date(static::$sqlformat, time()));}
+        return $member->first();
+    }
+
+
 }

@@ -155,8 +155,8 @@
                 <div class="grid7">
                     <div class="formSubmit">
                         @if($transaction->status == 'O' and $action == 'D')
-                        <a href="../do_closed/{{ $transaction->id }}" class="buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>Close WO</span></a>
-                        <a href=../do_canceled/{{ $transaction->id }}" class="buttonM bGreyish"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>Canceled</span></a>
+                        <a href="../do_closed/{{$transaction->id }}" class="buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>Close WO</span></a>
+                        <a href="../do_canceled/{{$transaction->id }}" class="buttonM bGreyish"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>Canceled</span></a>
                         @endif
                         @if(($transaction->status == 'D' or $transaction->status == 'O') and $action == 'D')
                         <a href="#" class="buttonM bGold"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>To Invoice</span></a>

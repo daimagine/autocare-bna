@@ -131,13 +131,19 @@
                 <td class="s-name-{{$no}}">{{$trx_service->service_formula->service->name}}</td>
                 <td class="s-price-{{$no}}">{{$trx_service->service_formula->price}}</td>
                 <td class="s-desc-{{$no}}">{{$trx_service->service_formula->service->description}}</td>
-                <td><div><a href="#service-tbody" onclick="WorkOrder.service.remove('s-rows-{{$no}}')">remove</a></div></td>
-                <div style="display: none; "><input class="s-no-hid-{{$no}}" type="hidden" name="services[{{$no}}][service_formula_id]" value="{{$trx_service->service_formula->id}}"></div>
+                <td>
+                    <div>
+                        <a href="#service-tbody" onclick="WorkOrder.service.remove('s-rows-{{$no}}')">remove</a>
+                    </div>
+                    <div style="display: none; ">
+                        <input class="s-no-hid-{{$no}}" type="hidden" name="services[{{$no}}][service_formula_id]" value="{{$trx_service->service_formula->id}}">
+                        <input type="hidden" id="service-rows" value="{{$no}}"/>
+                    </div>
+                </td>
             </tr>
             <?php $no++; ?>
             @endforeach
             </tbody>
-            <input type="hidden" id="service-rows" value="{{$no}}"/>
             <div id="service-input-wrapper" style="display: none;"></div>
         </table>
     </div>

@@ -76,7 +76,7 @@ $(function() {
 //        $("#"+n).spinner(opts[n]);
 
 
-    $('#dialog').dialog({
+    $('#confirm-dialog').dialog({
         autoOpen: false,
         width: 400,
         modal: true,
@@ -84,7 +84,6 @@ $(function() {
         buttons: {
             "Submit Form": function() {
                 document.formAutocare.submit();
-                $("#formAutocare").validationEngine();
                 $(this).dialog("close");
             },
             "Cancel": function() {
@@ -93,20 +92,24 @@ $(function() {
         }
     });
 
-    $('form#formAutocare').submit(function(e){
-        e.preventDefault();
+    $('form#formAutocare').submit(function(){
+//        e.preventDefault();
         var name = $("input#name").val();
         var stock = $("input#stock").val();
         var code = $("input#code").val();
         var price = $("input#sellingPrice").val();
         var purchase_price = $("input#purchasePrice").val();
         var vendor = $("input#vendor").val();
+        console.log('name '+name);
+        console.log('price '+price);
+        console.log('purchase_price '+purchase_price);
+        console.log('code '+code);
         if(name!='' && code!='' && price!='' && purchase_price!='') {
             $("span#itemName").html(name);
             $("span#itemCode").html(code);
             $("span#itemPrice").html(price);
             $("span#itemPurchasePrice").html(purchase_price);
-            $('#dialog').dialog('open');
+            $('#confirm-dialog').dialog('open');
         }
         return false;
     });

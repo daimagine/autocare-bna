@@ -47,7 +47,7 @@
         </div>
     </div>
 
-    <div id="dialog" title="Confirmation Update New Item {{$category->name}}">
+    <div id="confirm-dialog" title="Confirmation Update New Item {{$category->name}}">
         <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span> Are you sure the data is correct ?</p>
         <p>Item Name : <strong><span id="itemName"></span></strong></p>
         <p>Item Code : <strong><span id="itemCode"></span></strong></p>

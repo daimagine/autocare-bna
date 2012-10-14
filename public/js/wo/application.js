@@ -792,8 +792,8 @@ WorkOrder.items = {
         td.after($('<td class="i-code-' + nextidx + '">').append(code));
         td.after($('<td class="i-name-' + nextidx + '">').append(name));
         td.after($('<td class="i-vendor-' + nextidx + '">').append(vendor));
-        td.after($('<td class="i-total-' + nextidx + '">').append(1)); //just temporary
         td.after($('<td class="i-price-' + nextidx + '">').append(price));
+        td.after($('<td class="i-total-' + nextidx + '">').append(1)); //just temporary
 
         var divv = $('<div>').append(
             $('<a>')
