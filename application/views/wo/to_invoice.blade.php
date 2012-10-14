@@ -4,6 +4,10 @@
 <br>
 
 {{ Form::open('/work_order/add', 'POST') }}
+<div>
+    <input type="hidden" id="mechanicField" value="{{sizeof($transaction->user_workorder)}}">
+    <input type="hidden" id="serviceField" value="{{sizeof($transaction->transaction_service)}}">
+</div>
 <fieldset>
     <div class="widget fluid">
         <div class="whead">
@@ -203,6 +207,24 @@
         </table>
     </div>
 
+    @if($transaction->status == 'O' and $action == 'D')
+    <div class="divider"><span></span></div>
+    <div class="widget fluid">
+        <div class="wheadLight2">
+            <h6>Action</h6>
+            <div class="clear"></div>
+        </div>
+
+        <div class="formRow">
+            <div class="grid3"><label>Customer</label> </div>
+            <div class="grid5">
+                <input type="text"  name="customerName" class="ac ui-autocomplete-input" readonly="true" value="{{$transaction->vehicle->customer->name}}">
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    @endif
+
     <div class="divider"><span></span></div>
     <div class="widget fluid">
         <div class="wheadLight2">
@@ -217,8 +239,8 @@
                 </div>
                 <div class="grid7">
                     <div class="formSubmit">
-                        @if($transaction->status == 'O' and $action == 'D')
-                        <a href="../do_closed/{{$transaction->id }}" class="buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>Close WO</span></a>
+                        @if($transaction->status == 'O')
+                        <a href="../do_closed/{{$transaction->id }}" class="buttonAction buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>Close WO</span></a>
                         @endif
                         <a href="../print_invoice/{{$transaction->id}}" target="_blank" class="buttonM bGreyish"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>Print Invoice</span></a>
                     </div>
@@ -230,7 +252,7 @@
     </div>
 
     <!-- Dialog add service confirmation -->
-    <div id="service-dialog" class="dialog" title="Add Service Confirmation" style="display: none;">
+    <div id="closed_confirmation" class="dialog" title="Confirmation" style="display: none;">
     </div>
 
     </div>

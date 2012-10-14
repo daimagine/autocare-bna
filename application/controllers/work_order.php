@@ -347,6 +347,7 @@ class Work_Order_Controller extends Secure_Controller
         if ($id===null) {
             return Redirect::to('work_order/list');
         }
+        Asset::add('function_item', 'js/wo/application.js',  array('jquery', 'jquery-ui'));
         $action = Input::get('type');
         $transaction = Transaction::get_detail_trx($id);
         return $this->layout->nest('content', 'wo.to_invoice', array(

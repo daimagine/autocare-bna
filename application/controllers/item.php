@@ -93,7 +93,10 @@ class Item_Controller extends Secure_Controller {
         foreach($itemType as $type) {
             $selectionType[$type->id] = $type->name;
         }
-        $unitType=DB::table('unit_type')->get();
+//        $unitType=DB::table('unit_type')->get();
+        $unitType=UnitType::listAll(array(
+            'item_category_id' => $item_category->id
+        ));
         $selectionUnit = array();
         foreach($unitType as $unit) {
             $selectionUnit[$unit->id] = $unit->name;
@@ -162,7 +165,10 @@ class Item_Controller extends Secure_Controller {
         foreach($itemType as $type) {
             $selectionType[$type->id] = $type->name;
         }
-        $unitType=DB::table('unit_type')->get();
+//        $unitType=DB::table('unit_type')->get();
+        $unitType=UnitType::listAll(array(
+            'item_category_id' => $item->item_category->id
+        ));
         $selectionUnit = array();
         foreach($unitType as $unit) {
             $selectionUnit[$unit->id] = $unit->name;
@@ -359,7 +365,10 @@ class Item_Controller extends Secure_Controller {
         foreach($itemType as $type) {
             $selectionType[$type->id] = $type->name;
         }
-        $unitType=DB::table('unit_type')->get();
+//        $unitType=DB::table('unit_type')->get();
+        $unitType=UnitType::listAll(array(
+            'item_category_id' => $item_category->id
+        ));
         $selectionUnit = array();
         foreach($unitType as $unit) {
             $selectionUnit[$unit->id] = $unit->name;

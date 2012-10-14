@@ -77,7 +77,7 @@ class Item extends Eloquent {
         $item->code=$data['code'];
         $item->description=$data['description'];
         if(isset($data['stock'])) {
-            $item->stock=$data['stock'];
+//            $item->stock=$data['stock'];
         }
         $item->price=$data['price'];
         $item->purchase_price=$data['purchase_price'];

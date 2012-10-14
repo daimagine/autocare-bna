@@ -9,6 +9,7 @@
  */
 $(function() {
 
+    var selectedUrl = '';
     //validation
     $("#formAutocare").validationEngine();
 
@@ -120,6 +121,41 @@ $(function() {
 
     };
     $("div[class^='widget']").contentTabs(); //Run function on any div with class name of "Content Tabs"
+
+    //=========dialog confirmation=========//
+    $('#closed_confirmation').dialog({
+        autoOpen: false,
+        width: 400,
+        modal: true,
+        resizable: false,
+        buttons: {
+            "OK": function() {
+                $( this ).dialog( "close" );
+                if('' != jQuery.trim(selectedUrl)) {
+                    window.location = selectedUrl;
+                }
+            },
+            "Close": function() {
+                $( this ).dialog( "close" );
+            }
+        }
+    });
+
+    $('a.buttonAction').click(function () {
+        console.log('open confirmation');
+        var mechanicField = $("#mechanicField").val();  // a.delete -> td -> tr -> td.name
+        var serviceField = $("#serviceField").val();  // a.delete -> td -> tr -> td.name
+        if (serviceField == 0) {
+            $("#closed_confirmation").html('Sorry you cant closed this work order, since no<strong> mechanic </strong>assigned for this work order ?');
+        } else if (mechanicField == 0) {
+            $("#closed_confirmation").html('Sorry you cant closed this work order, since no <strong> service </strong>assigned for this work order ?');
+        } else {
+            selectedUrl = $(this).attr('href');
+        }
+        name = jQuery.trim(name);
+        $("#closed_confirmation").dialog('open');
+        return false;
+    });
 
     //===== init customer dialog =====//
     WorkOrder.customer.initDialog();
