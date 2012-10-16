@@ -44,6 +44,7 @@ Customer.Vehicle = {
         color  : '#vehicle-color',
         model  : '#vehicle-model',
         brand  : '#vehicle-brand',
+        year   : '#vehicle-year',
         desc   : '#vehicle-description',
         notif  : '#vehicle-dialog-notification'
     },
@@ -85,6 +86,7 @@ Customer.Vehicle = {
         $(this._form.color).val('');
         $(this._form.model).val('');
         $(this._form.brand).val('');
+        $(this._form.year).val('');
         $(this._form.desc).val('');
         $(this._addkey).val('');
     },
@@ -207,6 +209,13 @@ Customer.Vehicle = {
         );
         hiddiv.append(
             $('<input>')
+                .attr('class', 'v-year-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','vehicles[' + nextidx + '][year]')
+                .val($(this._form.year).val())
+        );
+        hiddiv.append(
+            $('<input>')
                 .attr('class', 'v-desc-hid-' + nextidx)
                 .attr('type', 'hidden')
                 .attr('name','vehicles[' + nextidx + '][description]')
@@ -305,6 +314,7 @@ Customer.Vehicle = {
         var color = row.find('.v-color-' + idx);
         var model = row.find('.v-model-' + idx);
         var brand = row.find('.v-brand-' + idx);
+        var year = row.find('.v-year-' + idx);
         var desc = row.find('.v-desc-' + idx);
 
         //clean up
@@ -313,6 +323,7 @@ Customer.Vehicle = {
         $(this._form.color).val(color.text());
         $(this._form.model).val(model.text());
         $(this._form.brand).val(brand.text());
+        $(this._form.year).val(year.text());
         $(this._form.desc).val(desc.text());
     },
 
@@ -359,6 +370,11 @@ Customer.Vehicle = {
         var brandhid = row.find('.v-brand-hid-' + idx);
         brand.html($(this._form.brand).val());
         brandhid.val($(this._form.brand).val());
+
+        var year = row.find('.v-year-' + idx);
+        var yearhid = row.find('.v-year-hid-' + idx);
+        year.html($(this._form.year).val());
+        yearhid.val($(this._form.year).val());
 
         var desc = row.find('.v-desc-' + idx);
         var deschid = row.find('.v-desc-hid-' + idx);

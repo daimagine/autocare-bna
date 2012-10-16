@@ -29,6 +29,7 @@
                 <th>Due Date</th>
                 <th>Paid</th>
                 <th>Due</th>
+                <th>Remaining</th>
                 <th>Status</th>
                 <th style="min-width: 79px">Action</th>
             </tr>
@@ -44,6 +45,7 @@
                 <td>{{ $account->due_date }}</td>
                 <td>{{ $account->paid !== null ? 'IDR' : '' }} {{ $account->paid }}</td>
                 <td>{{ $account->due !== null ? 'IDR' : '' }} {{ $account->due }}</td>
+                <td>IDR {{ number_format($account->due - $account->paid, 2) }}</td>
                 <td>{{ $account->paid_date !== null ? 'paid' : 'awaiting payment' }}</td>
                 <td class="tableActs" align="center">
                     <a href="/account/invoice_edit/{{ $accountTransType }}/{{ $account->id }}"
@@ -63,7 +65,7 @@
                            class="appconfirm tablectrl_small bDefault tipS"
                            original-title="Pay Invoice"
                            dialog-confirm-title="Payment Confirmation">
-                            <span class="iconb" data-icon=""></span>
+                            <span class="iconb" data-icon=""></span>
                         </a>
                     @endif
                 </td>

@@ -20,9 +20,9 @@
 
         {{ Form::nginput('text', 'subject', $account->subject, $accountTransType === 'D' ? 'To *' : ($accountTransType === 'C' ? 'From *' : 'Subject *'), array( 'id' => 'account-name' ) ) }}
 
-        {{ Form::nginput('text', 'invoice_no', $account->invoice_no, 'Invoice', array( 'readonly' => 'readonly' )) }}
+        {{ Form::nginput('text', 'invoice_no', $account->invoice_no, 'Invoice *') }}
 
-        {{ Form::nginput('text', 'reference_no', $account->reference_no, 'Reference *') }}
+        {{ Form::nginput('text', 'reference_no', $account->reference_no, 'Reference', array( 'readonly' => 'readonly' )) }}
 
         <div class="formRow">
             <div class="grid3"><label>Invoice Date *</label></div>

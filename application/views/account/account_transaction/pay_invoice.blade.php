@@ -17,7 +17,7 @@
             <span class="inLogo"><h6>{{ $accountTransType === 'D' ? 'Account Receivable' : 'Account Payable' }}</h6></span>
             <div class="inInfo">
                 <span class="invoiceNum">Invoice # {{ $account->invoice_no }}</span>
-                <i>{{ $account->invoice_date }}</i>
+                <i>{{ date( 'd F Y H:i:s', strtotime($account->invoice_date) ) }}</i>
             </div>
             <div class="clear"></div>
         </div>
@@ -26,9 +26,9 @@
             <div class="inFrom">
                 <h5>{{$accountTransType === 'D' ? 'From' : 'To' }} <strong class="red">{{ $account->subject }}</strong></h5>
                 <span>Ref <strong># {{ $account->reference_no }}</strong></span>
-                <span>Invoice create on <strong>{{ $account->due_date }}</strong></span>
-                <span>Payment due by <strong>{{ $account->due_date }}</strong></span>
-                <span class="black">Invoice Status is <a href="#">{{ $account->paid_date !== null ? 'Paid' : 'Awaiting payment' }}</a></span>
+                <span>Invoice create on <strong>{{ date( 'd F Y H:i:s', strtotime($account->due_date) ) }}</strong></span>
+                <span>Payment due by <strong>{{ date( 'd F Y H:i:s', strtotime($account->due_date) ) }}</strong></span>
+                <span class="black">Invoice Status is <a href="#">{{ $account->paid_date == null ? 'Awaiting payment' : ( $account->paid < $account->due ? 'Partially Paid' : 'Paid' )}}</a></span>
             </div>
 
             <div class="clear"></div>
@@ -54,7 +54,7 @@
                     <td class="v-model-{{ $i }}">{{ $items[$i]->tax }}</td>
                     <td class="v-brand-{{ $i }}">{{ $items[$i]->amount }}</td>
                 </tr>
-                <?php $tax += $items[$i]->tax; $amount += $items[$i]->amount; ?>
+                <?php $tax += ( $items[$i]->tax * $items[$i]->amount / 100); $amount += $items[$i]->amount; ?>
                 @endfor
 
                 @if(count($items) < 1)
@@ -81,6 +81,13 @@
                 <span>Nett Amount</span>
                 <strong class="blueBack"><?= number_format($amount - $tax, 2) ?></strong>
             </div>
+
+            @if($amount > $account->paid)
+                <div class="total">
+                    <span>Remaining Credit</span>
+                    <strong class="greyBack"><?= number_format(($account->due - $account->paid), 2) ?></strong>
+                </div>
+            @endif
             <div class="clear"></div>
 
         </div>

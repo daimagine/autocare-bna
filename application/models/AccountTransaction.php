@@ -11,7 +11,10 @@ class AccountTransaction extends Eloquent {
     public static $table = 'account_transactions';
 
     private static $INVOICE_PREFIX = 'INV';
-    private static $length = 14;
+    private static $INVOICE_LENGTH = 14;
+
+    private static $REF_PREFIX = 'REF';
+    private static $REF_LENGTH = 9;
 
     public static $sqlformat = 'Y-m-d H:i:s';
     public static $format = 'd-m-Y H:i:s';
@@ -28,8 +31,17 @@ class AccountTransaction extends Eloquent {
         $count = DB::table(static::$table)->count();
         $count++;
         //pad static::$length leading zeros
-        $suffix = sprintf('%0' . static::$length . 'd', $count);
+        $suffix = sprintf('%0' . static::$INVOICE_LENGTH . 'd', $count);
         return static::$INVOICE_PREFIX . $suffix;
+    }
+
+    public static function reference_new() {
+        $count = DB::table(static::$table)->order_by('id', 'desc')->take(1)->only('id');
+        //dd($count);
+        $count++;
+        //pad static::$REF_LENGTH leading zeros
+        $suffix = sprintf('%0' . static::$REF_LENGTH . 'd', $count);
+        return static::$REF_PREFIX . $suffix;
     }
 
     public static function create($data=array()) {
