@@ -122,8 +122,9 @@ class Account_Controller extends Secure_Controller {
      * @param string $type
      */
     public function get_invoice_in($type=AUTOCARE_ACCOUNT_TYPE_DEBIT) {
-        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
         Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
+        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
 		Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
         $invoiceNumber = AccountTransaction::invoice_new();
         $data = Session::get('accountTrans');

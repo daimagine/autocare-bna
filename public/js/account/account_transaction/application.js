@@ -20,6 +20,16 @@ $(function() {
     //===== init item dialog =====//
     Account.Item.initDialog();
 
+    var opts = {
+        'item-tax': {
+            stepping: 0.01,
+            min: 0,
+            suffix: '%'
+        }
+    };
+
+    for (var n in opts)
+        $("#"+n).spinner(opts[n]);
 });
 
 var Account = {};
@@ -165,7 +175,7 @@ Account.Item = {
         var aidx = $(Account.Item._form.account).find(':selected').attr('id').slice(-1);
         var account_name = $('#select-account-id-' + aidx).text();
         td.after($('<td class="v-account-' + nextidx + '">').append(account_name));
-        td.after($('<td class="v-tax-' + nextidx + '">').append(toFixed($(this._form.tax).val(),2)));
+        td.after($('<td class="v-tax-' + nextidx + '">').append($(this._form.tax).val()));
         td.after($('<td class="v-amount-' + nextidx + '">').append(toFixed($(this._form.amount).val(),2)));
 
         var divv = $('<div>').append(
@@ -420,7 +430,7 @@ Account.Item = {
 
         var tax = row.find('.v-tax-' + idx);
         var taxhid = row.find('.v-tax-hid-' + idx);
-        tax.html(toFixed($(this._form.tax).val(),2));
+        tax.html($(this._form.tax).val());
         taxhid.val($(this._form.tax).val());
 
         var amount = row.find('.v-amount-' + idx);
@@ -447,7 +457,11 @@ Account.Item = {
         var disc = $(this._form.disc).val().trim() == '' ? 0 : $(this._form.disc).val().trim();
         var price = $(this._form.price).val().trim() == '' ? 0 : $(this._form.price).val().trim();
         var tax = $(this._form.tax).val().trim() == '' ? 0 : $(this._form.tax).val().trim();
-        var amount = ( parseFloat(qty) * parseFloat(price) ) - parseFloat(disc) + parseFloat(tax);
+        var amount = ( parseFloat(qty) * parseFloat(price) ) - parseFloat(disc);
+        console.log('nett amount : ' + amount);
+        var taxamount = (amount * parseFloat(tax) / 100);
+        console.log('tax amount : ' + taxamount);
+        amount = amount + taxamount;
         amount = toFixed(amount, 2);
         $(this._form.amount).val(amount);
     },
@@ -457,30 +471,51 @@ Account.Item = {
         var subtotaltaxdiv = $(this._subtotaltax);
         var totaldiv = $(this._total);
 
-        var tax = 0;
-        $('.v-tax').each(function(idx){
-            var t = this.value.trim() == '' ? 0 : this.value.trim();
-            tax += parseFloat(t);
-        });
-        console.log('tax : ' + tax);
-
-        var total = 0;
+        var idxall = 0;
+        var total = new Array();
         $('.v-amount').each(function(idx){
             var t = this.value.trim() == '' ? 0 : this.value.trim();
-            total += parseFloat(t);
+            total[idx] = parseFloat(t);
+            idxall++;
         });
-        console.log('total : ' + total);
+        console.log(total);
 
-        amount = total - tax;
+        var tax = new Array();
+        var taxamount = new Array();
+        $('.v-tax').each(function(idx){
+            var t = this.value.trim() == '' ? 0 : this.value.trim();
+            tax[idx] = parseFloat(t);
+            taxamount[idx] = total[idx] * tax[idx] / 100;
+        });
+        console.log(tax);
+
+        var subtotal = 0;
+        var taxtotal = 0;
+        var taxtotalamount = 0;
+        var amount = 0;
+        for(i=0; i<idxall; i++) {
+            console.log('tax['+i+'] : ' + tax[i]);
+            console.log('total['+i+'] : ' + total[i]);
+            console.log('tax amount['+i+']: ' + taxamount[i]);
+
+            subtotal += total[i];
+            taxtotal += tax[i];
+            taxtotalamount += taxamount[i];
+        }
+
+        amount = subtotal - taxtotalamount;
+        console.log('tax : ' + taxtotal);
+        console.log('tax amount : ' + taxtotalamount);
+        console.log('total : ' + subtotal);
         console.log('amount : ' + amount);
 
-        tax = toFixed(tax, 2);
+        taxtotal = toFixed(taxtotal, 2);
         amount = toFixed(amount, 2);
-        total = toFixed(total, 2);
+        subtotal = toFixed(subtotal, 2);
 
         subtotaldiv.html(amount);
-        subtotaltaxdiv.html(tax);
-        totaldiv.html(total);
+        subtotaltaxdiv.html(taxtotal);
+        totaldiv.html(subtotal);
 
     }
 

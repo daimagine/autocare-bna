@@ -166,10 +166,13 @@
                             @endforeach
                         </select>
                     </div>
+
                     <div class="dialogSelect m10">
-                        <label>Tax Amount</label><br>
-                        <input type="text" id="item-tax" onchange="Account.Item.calculateAmount()"/>
+                        <label style="margin-bottom: -13px; display: block;">Tax Amount *</label><br>
+                        <input type="text" class="fix-ui-spinner" id="item-tax" onchange="Account.Item.calculateAmount()"/>
+                        <div class="clear"></div>
                     </div>
+
                     <div class="dialogSelect m10">
                         <label>Amount</label><br>
                         <input type="text" id="item-amount" readonly="readonly" value="0"/>
