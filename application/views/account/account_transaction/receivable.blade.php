@@ -44,10 +44,10 @@
                 <td>{{ $account->input_date }}</td>
                 <td>{{ $account->invoice_date }}</td>
                 <td>{{ $account->due_date }}</td>
-                <td>{{ $account->paid !== null ? 'IDR' : '' }} {{ $account->paid }}</td>
-                <td>{{ $account->due !== null ? 'IDR' : '' }} {{ $account->due }}</td>
+                <td>{{ $account->paid !== null ? 'IDR' : '' }} {{  number_format($account->paid, 2) }}</td>
+                <td>{{ $account->due !== null ? 'IDR' : '' }} {{  number_format($account->due, 2) }}</td>
                 <td>IDR {{ number_format($account->due - $account->paid, 2) }}</td>
-                <td>{{ $account->paid_date !== null ? 'paid' : 'awaiting payment' }}</td>
+                <td>{{ $account->paid_date === null ? 'awaiting payment'  : ( ($account->due - $account->paid == 0 ) ? 'paid' : 'partially paid' ) }}</td>
                 <td class="tableActs" align="center">
                     @if($account->status)
                     <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>

@@ -223,6 +223,7 @@ class Account_Controller extends Secure_Controller {
             else
                 return Redirect::to('account/account_payable');
         }
+        Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
         Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
         Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
 		Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));

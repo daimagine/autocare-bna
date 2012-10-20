@@ -39,7 +39,8 @@
                 <tr>
                     <td width="30%">Item</td>
                     <td width="5%">Quantity</td>
-                    <td width="25%">Account</td>
+                    <td width="15%">Account</td>
+                    <td width="10%">Tax Percentage</td>
                     <td width="20%">Tax Amount</td>
                     <td width="20%">Amount</td>
                 </tr>
@@ -51,10 +52,11 @@
                     <td class="v-no v-num-{{ $i }}">{{ $items[$i]->item }}</td>
                     <td class="v-type-{{ $i }}">{{ $items[$i]->quantity }}</td>
                     <td class="v-color-{{ $i }}">{{ $items[$i]->account->name }}</td>
-                    <td class="v-model-{{ $i }}">{{ $items[$i]->tax }}</td>
-                    <td class="v-brand-{{ $i }}">{{ $items[$i]->amount }}</td>
+                    <td class="v-model-{{ $i }}">{{ $items[$i]->tax }}%</td>
+                    <td class="v-tax-amount-{{ $i }}">{{ number_format($items[$i]->tax_amount, 2) }}</td>
+                    <td class="v-brand-{{ $i }}">{{ number_format($items[$i]->amount, 2) }}</td>
                 </tr>
-                <?php $tax += ( $items[$i]->tax * $items[$i]->amount / 100); $amount += $items[$i]->amount; ?>
+                <?php $tax += $items[$i]->tax_amount; $amount += $items[$i]->amount; ?>
                 @endfor
 
                 @if(count($items) < 1)
