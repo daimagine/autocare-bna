@@ -20,9 +20,9 @@
 
         {{ Form::nginput('text', 'subject', $account->subject, $accountTransType === 'D' ? 'To *' : ($accountTransType === 'C' ? 'From *' : 'Subject *'), array( 'id' => 'account-name' ) ) }}
 
-        {{ Form::nginput('text', 'invoice_no', $account->invoice_no, 'Invoice', array( 'readonly' => 'readonly' )) }}
+        {{ Form::nginput('text', 'invoice_no', $account->invoice_no, 'Invoice *') }}
 
-        {{ Form::nginput('text', 'reference_no', $account->reference_no, 'Reference *') }}
+        {{ Form::nginput('text', 'reference_no', $account->reference_no, 'Reference', array( 'readonly' => 'readonly' )) }}
 
         <div class="formRow">
             <div class="grid3"><label>Invoice Date *</label></div>
@@ -76,6 +76,7 @@
                         <td>Item</td>
                         <td>Quantity</td>
                         <td>Account</td>
+                        <td>Tax</td>
                         <td>Tax Amount</td>
                         <td>Amount</td>
                         <td></td>
@@ -89,6 +90,7 @@
                             <td class="v-qty-{{ $i }}">{{ $items[$i]->quantity }}</td>
                             <td class="v-account-{{ $i }}">{{ $items[$i]->account->name }}</td>
                             <td class="v-tax-{{ $i }}">{{ $items[$i]->tax }}</td>
+                            <td class="v-tax-amount-{{ $i }}">{{ $items[$i]->tax_amount }}</td>
                             <td class="v-amount-{{ $i }}">{{ $items[$i]->amount }}</td>
                             <td>
                                 <div>
@@ -101,6 +103,7 @@
                                 <input type="hidden" class="v-qty-hid-{{ $i }}" name="items[{{ $i }}][quantity]" value="{{ $items[$i]->quantity }}" />
                                 <input type="hidden" class="v-account-hid-{{ $i }}" name="items[{{ $i }}][account_type_id]" value="{{ $items[$i]->account_type_id }}" />
                                 <input type="hidden" class="v-tax-hid-{{ $i }} v-tax" name="items[{{ $i }}][tax]" value="{{ $items[$i]->tax }}" />
+                                <input type="hidden" class="v-tax-amount-hid-{{ $i }} v-tax-amount" name="items[{{ $i }}][tax_amount]" value="{{ $items[$i]->tax_amount }}" />
                                 <input type="hidden" class="v-amount-hid-{{ $i }} v-amount" name="items[{{ $i }}][amount]" value="{{ $items[$i]->amount }}" />
                                 <input type="hidden" class="v-desc-hid-{{ $i }}" name="items[{{ $i }}][description]" value="{{ $items[$i]->description }}" />
                                 <input type="hidden" class="v-unit-price-hid-{{ $i }}" name="items[{{ $i }}][unit_price]" value="{{ $items[$i]->unit_price }}" />
@@ -108,7 +111,7 @@
                                 <input type="hidden" name="items[{{ $i }}][status]" value="{{ $items[$i]->status }}" />
                             </td>
                         </tr>
-                        <?php $tax += $items[$i]->tax; $amount += $items[$i]->amount; ?>
+                        <?php $tax += $items[$i]->tax_amount; $amount += $items[$i]->amount; ?>
                     @endfor
                 </tbody>
             </table>
@@ -181,12 +184,12 @@
                         <label>Unit Price *</label><br>
                         <input type="text" id="item-unit-price" onchange="Account.Item.calculateAmount()"/>
                     </div>
-                </div>
-                <div class="grid6">
                     <div class="dialogSelect m10">
                         <label>Discount</label><br>
                         <input type="text" id="item-discount" onchange="Account.Item.calculateAmount()"/>
                     </div>
+                </div>
+                <div class="grid6">
                     <div class="dialogSelect m10">
                         <label style="margin-bottom: -13px; display: block;">Account</label><br>
                         <select id="item-account-type">
@@ -195,9 +198,16 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <div class="dialogSelect m10">
+                        <label style="margin-bottom: -13px; display: block;">Tax Percentage *</label><br>
+                        <input type="text" class="fix-ui-spinner" id="item-tax" onchange="Account.Item.calculateAmount()"/>
+                        <div class="clear"></div>
+                    </div>
+
                     <div class="dialogSelect m10">
                         <label>Tax Amount</label><br>
-                        <input type="text" id="item-tax" onchange="Account.Item.calculateAmount()"/>
+                        <input type="text" id="item-tax-amount" readonly="readonly" value="0"/>
                     </div>
                     <div class="dialogSelect m10">
                         <label>Amount</label><br>

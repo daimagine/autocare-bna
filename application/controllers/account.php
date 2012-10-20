@@ -122,16 +122,18 @@ class Account_Controller extends Secure_Controller {
      * @param string $type
      */
     public function get_invoice_in($type=AUTOCARE_ACCOUNT_TYPE_DEBIT) {
-        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
         Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
+        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
 		Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
-        $invoiceNumber = AccountTransaction::invoice_new();
+        //$invoiceNumber = AccountTransaction::invoice_new();
+        $referenceNo = AccountTransaction::reference_new();
         $data = Session::get('accountTrans');
         $accounts = Account::allSelect();
         return $this->layout->nest('content', 'account.account_transaction.add', array(
             'accountTrans' => $data,
             'accountTransType' => $type,
-            'invoiceNumber' => $invoiceNumber,
+            'referenceNo' => $referenceNo,
             'accounts'  => $accounts
         ));
     }
@@ -221,6 +223,7 @@ class Account_Controller extends Secure_Controller {
             else
                 return Redirect::to('account/account_payable');
         }
+        Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
         Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
         Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
 		Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
@@ -281,7 +284,7 @@ class Account_Controller extends Secure_Controller {
         $additional = array();
         $rules = array(
             'subject' => 'required',
-            'reference_no' => 'required|min:5|max:50',
+            'invoice_no' => 'required|min:5|max:50',
             'invoice_date' => 'required',
             'invoice_time' => 'required',
             'due_date' => 'required',
@@ -363,7 +366,7 @@ class Account_Controller extends Secure_Controller {
 //            dd($data);
             $valid = $this->validatePayInvoice($data);
             if($valid !== true) {
-                Session::flash('message', $valid);
+                Session::flash('message_error', $valid);
                 if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
                     return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_DEBIT.'/'.$id)
                         ->with_input();
@@ -417,7 +420,7 @@ class Account_Controller extends Secure_Controller {
     private function validatePayInvoice($data) {
         //check paid <= due
         if(floor($data['paid']) > $data['due']) {
-            return "Paid must be lower or equal with due amount";
+            return "Payment amount must be less than or equal from due amount";
         }
         return true;
     }

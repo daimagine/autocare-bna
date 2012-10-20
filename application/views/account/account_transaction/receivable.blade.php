@@ -16,7 +16,7 @@
         <h6>Account Receivable List</h6>
         <div class="clear"></div>
     </div>
-    <div id="dyn2" class="shownpars">
+    <div id="dyn2" class="shownpars overflowtable">
         <a class="tOptions act" title="Options">{{ HTML::image('images/icons/options', '') }}</a>
         <table cellpadding="0" cellspacing="0" border="0" class="dTable">
             <thead>
@@ -29,9 +29,10 @@
                 <th>Due Date</th>
                 <th>Paid</th>
                 <th>Due</th>
+                <th>Remaining</th>
                 <th>Status</th>
                 <th>Attributes</th>
-                <th style="min-width: 79px">Action</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -43,9 +44,10 @@
                 <td>{{ $account->input_date }}</td>
                 <td>{{ $account->invoice_date }}</td>
                 <td>{{ $account->due_date }}</td>
-                <td>{{ $account->paid !== null ? 'IDR' : '' }} {{ $account->paid }}</td>
-                <td>{{ $account->due !== null ? 'IDR' : '' }} {{ $account->due }}</td>
-                <td>{{ $account->paid_date !== null ? 'paid' : 'awaiting payment' }}</td>
+                <td>{{ $account->paid !== null ? 'IDR' : '' }} {{  number_format($account->paid, 2) }}</td>
+                <td>{{ $account->due !== null ? 'IDR' : '' }} {{  number_format($account->due, 2) }}</td>
+                <td>IDR {{ number_format($account->due - $account->paid, 2) }}</td>
+                <td>{{ $account->paid_date === null ? 'awaiting payment'  : ( ($account->due - $account->paid == 0 ) ? 'paid' : 'partially paid' ) }}</td>
                 <td class="tableActs" align="center">
                     @if($account->status)
                     <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
@@ -69,7 +71,7 @@
                        class="appconfirm tablectrl_small bDefault tipS"
                        original-title="Pay Invoice"
                        dialog-confirm-title="Payment Confirmation">
-                        <span class="iconb" data-icon=""></span>
+                        <span class="iconb" data-icon=""></span>
                     </a>
                     @endif
                 </td>

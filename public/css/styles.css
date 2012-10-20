@@ -2307,3 +2307,23 @@ table .dropdown-menu.pull-right { right: auto; left: 0; }
 /** custom app **/
 .pointer { cursor: pointer; }
 .gray-back:hover { background-color: #F2F2F2; }
+.overflowtable { min-width: 300px; overflow: auto; }
+
+.ui-dialog input[type="text"].fix-ui-spinner {
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    font-size: 11px;
+    color: #858585;
+    box-shadow: 0 1px 0 white;
+    -webkit-box-shadow: 0 1px 0 white;
+    -moz-box-shadow: 0 1px 0 #fff;
+    padding: 6px 7px;
+    border: 1px solid #D7D7D7;
+    display: inline-block;
+    background: #FDFDFD;
+    height: 26px;
+    margin: 0px;
+}

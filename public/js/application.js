@@ -50,9 +50,11 @@ $(function() {
 
     oTable = $('.dTable').dataTable({
         "bJQueryUI": false,
-        "bAutoWidth": false,
+        "bAutoWidth": true,
         "sPaginationType": "full_numbers",
-        "sDom": '<"H"fl>t<"F"ip>'
+        "sDom": '<"H"fl>t<"F"ip>',
+        "sScrollX": "100%",
+        "sScrollXInner": "200%"
     });
 
 

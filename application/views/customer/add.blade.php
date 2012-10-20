@@ -138,6 +138,10 @@
                 <input type="text" id="vehicle-brand"/>
             </div>
             <div class="dialogSelect m10">
+                <label>Vehicle Year</label>
+                <input type="text" id="vehicle-year"/>
+            </div>
+            <div class="dialogSelect m10">
                 <label>Vehicle Description</label>
                 <input type="text" id="vehicle-description"/>
             </div>

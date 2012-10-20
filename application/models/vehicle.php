@@ -48,7 +48,8 @@ class Vehicle extends Eloquent {
 		$vehicle->model = @$data['model'];
 		$vehicle->brand = @$data['brand'];
 		$vehicle->description = @$data['description'];
-		
+		$vehicle->year = @$data['year'];
+
 		//save
         $vehicle->save();
 		return $vehicle->id;

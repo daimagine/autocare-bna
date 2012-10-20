@@ -18,9 +18,9 @@
 
         {{ Form::nginput('text', 'subject', Input::old('subject'), $accountTransType === 'D' ? 'To *' : ($accountTransType === 'C' ? 'From *' : 'Subject *'), array( 'id' => 'account-name' ) ) }}
 
-        {{ Form::nginput('text', 'invoice_no', $invoiceNumber, 'Invoice', array( 'readonly' => 'readonly' )) }}
+        {{ Form::nginput('text', 'invoice_no', Input::old('reference_no'), 'Invoice *') }}
 
-        {{ Form::nginput('text', 'reference_no', Input::old('reference_no'), 'Reference *') }}
+        {{ Form::nginput('text', 'reference_no', $referenceNo, 'Reference', array( 'readonly' => 'readonly' )) }}
 
         <div class="formRow">
             <div class="grid3"><label>Invoice Date *</label></div>
@@ -152,12 +152,12 @@
                         <label>Unit Price *</label><br>
                         <input type="text" id="item-unit-price" onchange="Account.Item.calculateAmount()"/>
                     </div>
-                </div>
-                <div class="grid6">
                     <div class="dialogSelect m10">
                         <label>Discount</label><br>
                         <input type="text" id="item-discount" onchange="Account.Item.calculateAmount()"/>
                     </div>
+                </div>
+                <div class="grid6">
                     <div class="dialogSelect m10">
                         <label style="margin-bottom: -13px; display: block;">Account</label><br>
                         <select id="item-account-type">
@@ -166,10 +166,18 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <div class="dialogSelect m10">
+                        <label style="margin-bottom: -13px; display: block;">Tax Percentage *</label><br>
+                        <input type="text" class="fix-ui-spinner" id="item-tax" onchange="Account.Item.calculateAmount()"/>
+                        <div class="clear"></div>
+                    </div>
+
                     <div class="dialogSelect m10">
                         <label>Tax Amount</label><br>
-                        <input type="text" id="item-tax" onchange="Account.Item.calculateAmount()"/>
+                        <input type="text" id="item-tax-amount" readonly="readonly" value="0"/>
                     </div>
+
                     <div class="dialogSelect m10">
                         <label>Amount</label><br>
                         <input type="text" id="item-amount" readonly="readonly" value="0"/>

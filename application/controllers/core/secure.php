@@ -28,7 +28,7 @@ class Secure_Controller extends Controller {
 
         Asset::add('style', 'css/styles.css');
         Asset::add('jquery', 'js/jquery.min.js');
-        Asset::add('jquery-ui', 'js/jquery-ui.min.js', array('jquery'));
+        Asset::add('jquery-ui', 'js/jquery-ui.min.js', array('jquery', 'jquery.ui.mousewheel'));
         Asset::add('jquery-uniform', 'js/plugins/forms/jquery.uniform.js', array('jquery', 'jquery-ui'));
 
         Asset::add('jquery.dataTables', 'js/plugins/tables/jquery.dataTables.js', array('jquery', 'jquery-ui'));

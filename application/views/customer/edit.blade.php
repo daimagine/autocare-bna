@@ -101,6 +101,7 @@
 								<input type="hidden" class="v-color-hid-{{ $i }}" name="vehicles[{{ $i }}][color]" value="{{ $vehicles[$i]->color }}" />
 								<input type="hidden" class="v-model-hid-{{ $i }}" name="vehicles[{{ $i }}][model]" value="{{ $vehicles[$i]->model }}" />
 								<input type="hidden" class="v-brand-hid-{{ $i }}" name="vehicles[{{ $i }}][brand]" value="{{ $vehicles[$i]->brand }}" />
+								<input type="hidden" class="v-year-hid-{{ $i }}" name="vehicles[{{ $i }}][year]" value="{{ $vehicles[$i]->year }}" />
 								<input type="hidden" class="v-desc-hid-{{ $i }}" name="vehicles[{{ $i }}][description]" value="{{ $vehicles[$i]->description }}" />
                                 <input type="hidden" name="vehicles[{{ $i }}][status]" value="{{ $vehicles[$i]->status }}" />
 							</td>
@@ -163,6 +164,10 @@
             <div class="dialogSelect m10">
                 <label>Vehicle Brand</label>
                 <input type="text" id="vehicle-brand"/>
+            </div>
+            <div class="dialogSelect m10">
+                <label>Vehicle Year</label>
+                <input type="text" id="vehicle-year"/>
             </div>
             <div class="dialogSelect m10">
                 <label>Vehicle Description</label>

@@ -8,7 +8,7 @@
         <h6>Access List</h6>
         <div class="clear"></div>
     </div>
-    <div id="dyn2" class="shownpars">
+    <div id="dyn2" class="shownpars overflowtable">
         <a class="tOptions act" title="Options">{{ HTML::image('images/icons/options', '') }}</a>
         <table cellpadding="0" cellspacing="0" border="0" class="dTable">
             <thead>
@@ -42,14 +42,14 @@
                     @endif
                 </td>
                 <td class="tableActs" align="center">
-                    <a href="/access/edit/{{ $access->id }}" 
-						class="appconfirm tablectrl_small bDefault tipS" 
+                    <a href="/access/edit/{{ $access->id }}"
+						class="appconfirm tablectrl_small bDefault tipS"
 						original-title="Edit"
 						dialog-confirm-title="Update Confirmation">
 							<span class="iconb" data-icon=""></span>
 					</a>
-                    <a href="/access/delete/{{ $access->id }}" 
-						class="appconfirm tablectrl_small bDefault tipS" 
+                    <a href="/access/delete/{{ $access->id }}"
+						class="appconfirm tablectrl_small bDefault tipS"
 						original-title="Remove"
 						dialog-confirm-title="Remove Confirmation">
 							<span class="iconb" data-icon=""></span>
