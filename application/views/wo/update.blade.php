@@ -3,7 +3,7 @@
 @include('partial.notification')
 <br>
 
-{{ Form::open('/work_order/edit', 'POST') }}
+{{ Form::open('/work_order/edit', 'POST', array('id' => 'formAutocare', 'name' => 'formAutocare')) }}
 <fieldset>
 <div class="widget fluid">
     <div class="whead">
@@ -83,7 +83,7 @@
             </tr>
             </tbody>
         </table>
-        <input type="hidden" id="vehicle-rows" value="0"/>
+        <input type="hidden" id="vehicle-rows" value="1"/>
         <div id="vehicle-input-wrapper" style="display: none;"></div>
     </div>
 </div>
@@ -137,7 +137,6 @@
                     </div>
                     <div style="display: none; ">
                         <input class="s-no-hid-{{$no}}" type="hidden" name="services[{{$no}}][service_formula_id]" value="{{$trx_service->service_formula->id}}">
-                        <input type="hidden" id="service-rows" value="{{$no}}"/>
                     </div>
                 </td>
             </tr>
@@ -145,6 +144,7 @@
             @endforeach
             </tbody>
             <div id="service-input-wrapper" style="display: none;"></div>
+            <input type="hidden" id="service-rows" value="{{$no}}"/>
         </table>
     </div>
 </div>
@@ -181,13 +181,14 @@
                     <td class="i-code-{{$no}}">{{$trx_item->item_price->item->code}}</td>
                     <td class="i-name-{{$no}}">{{$trx_item->item_price->item->name}}</td>
                     <td class="i-vendor-{{$no}}">{{$trx_item->item_price->item->vendor}}</td>
-                    <td class="i-total-{{$no}}">{{$trx_item->item_price->price}}</td>
-                    <td class="i-price-{{$no}}">{{$trx_item->quantity}}</td>
+                    <td class="i-price-{{$no}}">{{$trx_item->item_price->price}}</td>
+                    <td class="i-total-{{$no}}">
+                        <input class="i-qty-hid-{{$no}}" style="width: 30px;" name="items[{{$no}}][quantity]" value="{{$trx_item->quantity}}">
+                    </td>
                     <td>
                         <div><a href="#item-tbody" onclick="WorkOrder.items.remove('i-rows-{{$no}}')">remove</a></div>
                         <div style="display: none; ">
                             <input class="i-no-hid-{{$no}}" type="hidden" name="items[{{$no}}][item_id]" value="{{$trx_item->item_price->item->id}}">
-                            <input class="i-qty-hid-{{$no}}" type="hidden" name="items[{{$no}}][quantity]" value="{{$trx_item->quantity}}">
                         </div>
                     </td>
                 </tr>

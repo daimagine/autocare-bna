@@ -131,13 +131,17 @@
     <!-- Content ends -->
 	
 	<!-- Modal confirmation -->
+
 	<div id="dialog-confirm" title="Confirmation">
 		<p>
 			<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
 			<span id="dialog-confirm-content">Your action cannot be undone. Are you sure?</span>
 		</p>
 	</div>
-	<!-- Modal confirmation ends -->
+
+
+    <div id="submit-confirm" title="Confirmation"></div>
+    <!-- Modal confirmation ends -->
 
     <!-- javascript library -->
     {{ Asset::scripts() }}

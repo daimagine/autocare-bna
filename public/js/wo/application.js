@@ -10,37 +10,62 @@
 $(function() {
 
     var selectedUrl = '';
-    //validation
-    $("#formAutocare").validationEngine();
-
+    var methodType='';
     //-====================== FORM DIALOG LIST CUSTOMER ========================//
-    $('#form-dialog-').dialog({
-        autoOpen: false,
-        width: 930,
-        modal: true,
-        resizable: false,
-        buttons: {
-            "Submit Form": function() {
-                document.formAutocare.submit();
-                $("#formAutocare").validationEngine();
-                $(this).dialog("close");
-            },
-            "Cancel": function() {
-                $(this).dialog("close");
-            }
-        }
-    });
-
     $('form#formAutocare').submit(function(e){
+        console.log(':: SUBMIT FORM ACTION');
         e.preventDefault();
-        var name = $("input#name").val();
-        var price = $("input#price").val();
-        var desc = $("input#description").val();
-        if(name!='' && desc!='' && price!='' ) {
-            $("span#serviceName").html(name);
-            $("span#servicePrice").html(price);
-            $('#dialogAdd').dialog('open');
+        var isvalid =true;
+        var msg = '';
+        var customer = $('#customerName').val();
+        var vehicle = $('#vehicle-rows').val();
+        var service = $('#service-rows').val();
+
+        if (customer.trim() === '')
+            msg += 'Customer, ';
+        if (vehicle.trim() === '0')
+            msg += 'Vehicle, ';
+        if (service.trim() === '0')
+            msg += 'Services, ';
+
+
+        if (msg === '') {
+            console.log(':: Show confirmation add wo');
+            var customerName = $('#customerName').val();
+            var vehicleNumber = $('#vehiclesnumber').val();
+            msg ='<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>Are you sure do this action ?</p>' +
+                    '<p>Customer Name : '+customerName+'</p>' +
+                    '<p>Vehcile No : '+vehicleNumber+'</p>';
+
+//            td.after($('<td class="v-type">').append(type));
+        } else {
+            console.log(':: Show alert data null');
+            msg ='Data ' + msg + ' cant be empty..!!';
+            isvalid=false;
         }
+        console.log(':: isvalid => '+isvalid);
+        console.log(':: MSG => '+msg);
+
+        $('#submit-confirm').dialog({
+            autoOpen: false,
+            width: 400,
+            modal: true,
+            resizable: false,
+            buttons: {
+                "Yes": function() {
+                    if (isvalid){
+                        document.formAutocare.submit();
+                    }
+                    $(this).dialog("close");
+                },
+                "Cancel": function() {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $("#submit-confirm").html(msg);
+        $('#submit-confirm').dialog('open');
         return false;
     });
 
@@ -125,14 +150,28 @@ $(function() {
     //=========dialog confirmation=========//
     $('#closed_confirmation').dialog({
         autoOpen: false,
-        width: 400,
+        width: 550,
         modal: true,
-        resizable: false,
         buttons: {
             "Yes": function() {
-                $( this ).dialog( "close" );
-                if('' != jQuery.trim(selectedUrl)) {
-                    window.location = selectedUrl;
+                if (methodType === 'closed'){
+                    var paymentMethod = $('#option_payment_method').val();
+                    console.log(':: Payment method '+paymentMethod);
+                    if (paymentMethod.trim() === '') {
+                        alert('Please select payment method.!');
+                    } else {
+                        $('#inputhid').append(
+                            $('<input>')
+                                .attr('type', 'hidden')
+                                .attr('id','payment_method')
+                                .attr('name','payment_method')
+                                .val(paymentMethod)
+                        )
+                        document.formAutocare.submit();
+                        $( this ).dialog( "close" );
+                    }
+                } else if (methodType === 'edit') {
+                    window.location.href = selectedUrl;
                 }
             },
             "Close": function() {
@@ -141,7 +180,7 @@ $(function() {
         }
     });
 
-    $('a.buttonAction').click(function () {
+    $('input.buttonAction').click(function () {
         //edit/transactionId
         console.log('open confirmation');
         var mechanicField = $("#mechanicField").val();
@@ -157,12 +196,14 @@ $(function() {
         if (serviceField == 0) {
             $("#closed_confirmation").html('Sorry you cant closed this work order, since no<strong> mechanic </strong>assigned for this work order, press button <strong>Yes</strong> to edit this work order ?');
             selectedUrl = '../edit/'+transactionId;
+            methodType = 'edit';
         } else if (mechanicField == 0) {
             $("#closed_confirmation").html('Sorry you cant closed this work order, since no <strong> service </strong>assigned for this work order, press button <strong>Yes</strong> to edit this work order ?');
             selectedUrl = '../edit/'+transactionId;
+            methodType = 'edit';
         } else {
-            $("#closed_confirmation").html('Are you sure want to closed workorder <strong> '+workorderno+' </strong> ?');
-            selectedUrl = $(this).attr('href');
+            $("#msg-closed").html('Are you sure want to closed workorder <strong> '+workorderno+' </strong> ?, if yes please select Payment method first and then press button yes ');
+            methodType = 'closed';
         }
         name = jQuery.trim(name);
         $("#closed_confirmation").dialog('open');
@@ -191,6 +232,8 @@ WorkOrder.customer = {
     _tbody  : '#vehicle-tbody',
     _dialogvehicle : '#vehicle-dialog',
     _dialog : '#customer-dialog',
+    _dialognewcustomer : '#new-customer-dialog',
+    _divcustomerdatahid : '#customerdatahid',
     _vehiclecustomername : '#vehicle-customer-name',
     _customernamefield : '#customer-name',
     _addvehicle : '#add-new-vehicle',
@@ -206,7 +249,17 @@ WorkOrder.customer = {
         color  : '#vehicle-color',
         model  : '#vehicle-model',
         brand  : '#vehicle-brand',
-        desc   : '#vehicle-description'
+        desc   : '#vehicle-description',
+        //for new customer dialog
+        newcustomername : '#customer-name',
+        newcustomeraddress1 : '#customer-address1',
+        newcustomeraddress2 : '#customer-address2',
+        newcustomercity : '#customer-city',
+        newcustomerpost_code : '#customer-post_code',
+        newcustomerphone1 : '#customer-phone1',
+        newcustomerphone2 : '#customer-phone2',
+        newcustomeradditional_info : '#customer-additional_info',
+        notif  : '#customer-dialog-notification'
     },
     //function to initialize dialog form
     initDialog : function() {
@@ -219,7 +272,7 @@ WorkOrder.customer = {
                     $( this ).dialog( "close" );
                 }
             }
-        })
+        });
 
         $(WorkOrder.customer._select).click(function () {
             var confirmesi= confirm("Do you want select this customer ??");
@@ -274,6 +327,22 @@ WorkOrder.customer = {
             },
             close: function () {
                 WorkOrder.customer.closeDialog();
+            }
+        });
+
+        $(this._dialognewcustomer).dialog({
+            autoOpen: false,
+            modal: true,
+            width: 872,
+            buttons: {
+                "Save": function () {
+                    var success = WorkOrder.customer.save_new_customer();
+                    if(success === true)
+                        $(this).dialog('close');
+                },
+                "Cancel": function () {
+                    $(this).dialog('close');
+                }
             }
         });
     },
@@ -336,7 +405,9 @@ WorkOrder.customer = {
         $('#v-rows').remove();
         var vnotice = $(WorkOrder.customer._notice);
         var vtable = $(WorkOrder.customer._table);
+        var vrows = $(WorkOrder.customer._rows);
         var vaddlink = $(WorkOrder.customer._addvehicle);
+        vrows.val(0);
         vnotice.show();
         vaddlink.show();
         vtable.hide();
@@ -411,6 +482,7 @@ WorkOrder.customer = {
             $('<input>')
                 .attr('class', 'v-num-hid')
                 .attr('type', 'hidden')
+                .attr('id','vehiclesnumber')
                 .attr('name','vehiclesnumber')
                 .val(vehicle_no)
         );
@@ -596,6 +668,111 @@ WorkOrder.customer = {
         $("select, .check, .check :checkbox, input:radio, input:file").uniform();
         console.log('rerun select option');
 
+    },
+    //function to open up dialog form
+    openDialog_newcustomer : function() {
+        $(this._method).val('add');
+        console.log('open up dialog form new customer');
+        $(this._dialognewcustomer).dialog('open');
+
+        //clean up
+        $(this._form.newcustomername).val('');
+        $(this._form.newcustomeraddress1).val('');
+        $(this._form.newcustomeraddress2).val('');
+        $(this._form.newcustomercity).val('');
+        $(this._form.newcustomerpost_code).val('');
+        $(this._form.newcustomerphone1).val('');
+        $(this._form.newcustomerphone2).val('');
+        $(this._form.newcustomeradditional_info).val('');
+    },
+    //will be replace as select action
+    save_new_customer : function() {
+        var msg = '';
+        if($(this._form.newcustomername).val().trim() === '') {
+            msg += 'Name, ';
+        }
+        if($(this._form.newcustomeraddress1).val().trim() === '') {
+            msg += 'Address 1, ';
+        }
+        if($(this._form.newcustomerphone1).val().trim() === '') {
+            msg += 'Phone 1, ';
+        }
+        console.log(msg);
+        var required = 'Following fields are required : ' + msg;
+        if(msg === '') {
+            return this.add_new_customer();
+        } else{
+            this.notification('error', required);
+        }
+    },
+    add_new_customer : function() {
+        this.remove();
+        var name =$(this._form.newcustomername).val();
+        var address1 =$(this._form.newcustomeraddress1).val();
+        var address2 = $(this._form.newcustomeraddress2).val();
+        var city =$(this._form.newcustomercity).val();
+        var post_code = $(this._form.newcustomerpost_code).val();
+        var phone1 =$(this._form.newcustomerphone1).val();
+        var phone2 =$(this._form.newcustomerphone2).val();
+        var additional_info =$(this._form.newcustomeradditional_info).val();
+
+        console.log('add dynamic rows to new customer');
+        $(this._form.customerid).val('');
+        $(this._form.customername).val(name);
+        $(this._form.memberstatus).val('non member');
+        var customerData = $(this._divcustomerdatahid);
+        customerData.append(
+            $('<input>')
+                .attr('type', 'hidden')
+                .attr('name','address1')
+                .val(address1)
+        );
+        customerData.append(
+            $('<input>')
+                .attr('type', 'hidden')
+                .attr('name','address2')
+                .val(address2)
+        );
+        customerData.append(
+            $('<input>')
+                .attr('type', 'hidden')
+                .attr('name','city')
+                .val(city)
+        );
+        customerData.append(
+            $('<input>')
+                .attr('type', 'hidden')
+                .attr('name','post_code')
+                .val(post_code)
+        );
+        customerData.append(
+            $('<input>')
+                .attr('type', 'hidden')
+                .attr('name','phone1')
+                .val(phone1)
+        );
+        customerData.append(
+            $('<input>')
+                .attr('type', 'hidden')
+                .attr('name','phone2')
+                .val(phone2)
+        );
+        customerData.append(
+            $('<input>')
+                .attr('type', 'hidden')
+                .attr('name','additional_info')
+                .val(additional_info)
+        );
+
+        return true;
+    },
+    notification : function(type, message) {
+        var div = $(this._form.notif);
+        var classNotif = 'nInformation';
+        if(type === 'error')
+            classNotif = 'nFailure';
+        var html = '<div class="nNote ' + classNotif + '" style="margin-top: 0; margin-bottom: 15px;"><p>' + message + '</p></div>';
+        div.html(html);
     }
 };
 
@@ -709,6 +886,27 @@ WorkOrder.service = {
                .attr('name','services[' + nextidx + '][service_formula_id]')
                .val(s_id)
        );
+       hiddiv.append(
+           $('<input>')
+               .attr('class', 's-no-hid-' + nextidx)
+               .attr('type', 'hidden')
+               .attr('name','servicesdata[' + nextidx + '][servicename]')
+               .val(servicename)
+       );
+       hiddiv.append(
+           $('<input>')
+               .attr('class', 's-no-hid-' + nextidx)
+               .attr('type', 'hidden')
+               .attr('name','servicesdata[' + nextidx + '][serviceprice]')
+               .val(serviceprice)
+       );
+       hiddiv.append(
+           $('<input>')
+               .attr('class', 's-no-hid-' + nextidx)
+               .attr('type', 'hidden')
+               .attr('name','servicesdata[' + nextidx + '][servicedescription]')
+               .val(servicedesc)
+       );
        td.after(hiddiv);
 
        //insert to tr
@@ -726,6 +924,8 @@ WorkOrder.service = {
     remove : function(id) {
         $('#'+id).remove();
         var row = $(this._table).find('tr').length - 1;
+        var srowsValue = $(this._rows).val();
+        $(this._rows).val(parseInt(srowsValue)-1);
     }
 };
 
@@ -756,38 +956,56 @@ WorkOrder.items = {
         });
 
         $(WorkOrder.items._select).click(function () {
-            var confirmesi= confirm("Do you want select this items ??");
+            var isvalid = true;
+            var confirm_title = 'Confirmation';
+            var confirm_content = 'Your action cannot be undone. Are you sure?';
             var item_id = $(this).parent().parent().children('th.item-id').html();
-
-            //check duplicate id
-            if(WorkOrder.items._validateDuplicate(item_id) !== true)
-                return false
-
-            if (confirmesi== true) {
-                //-------------get value from table-----------------
-                var type = $(this).parent().parent().children('td.type').html();  // a.delete -> td -> tr -> td.name
-                var unit = $(this).parent().parent().children('td.unit').html();
-                var code = $(this).parent().parent().children('td.code').html();
-                var name = $(this).parent().parent().children('td.name').html();
-                var vendor = $(this).parent().parent().children('td.vendor').html();
-                var price = $(this).parent().parent().children('td.price').html();
-                var total = $(this).parent().parent().children('th.total').html();
-                console.log('============');
-                console.log(name);
-                console.log('============');
-                WorkOrder.items._addRow(item_id,type,unit,code,name,vendor,price,total);
-                //display table
-                var vnotice = $(WorkOrder.items._notice);
-                var vtable = $(WorkOrder.items._table);
-                vnotice.hide();
-                vtable.show();
-                alert('success add items '+name);
-//                $(WorkOrder.customer._dialog).dialog( "close" );
-//                console.log('close dialog');
-            }else {
-                console.log('customer not confirm');
+            var stock = $(this).parent().parent().children('td.stock').html();
+            console.log(':: stock => '+stock);
+            if(WorkOrder.items._validateDuplicate(item_id) !== true) {
+                isvalid = false;
+                confirm_content = 'Sorry this item has been select !';
             }
-            return false;
+            if (stock == 0) {
+                isvalid = false;
+                confirm_content = 'Sorry currently stock this item empty !';
+            }
+            $("#dialog-confirm").attr('title', confirm_title);
+            $("#dialog-confirm-content").html(confirm_content);
+
+            $("#dialog-confirm").dialog({
+                modal: true,
+                buttons : {
+                    "Confirm" : function() {
+                        if (isvalid === true) {
+                            //-------------get value from table-----------------
+                            var type = $(WorkOrder.items._select).parent().parent().children('td.type').html();  // a.delete -> td -> tr -> td.name
+                            var unit = $(WorkOrder.items._select).parent().parent().children('td.unit').html();
+                            var code = $(WorkOrder.items._select).parent().parent().children('td.code').html();
+                            var name = $(WorkOrder.items._select).parent().parent().children('td.name').html();
+                            var vendor = $(WorkOrder.items._select).parent().parent().children('td.vendor').html();
+                            var price = $(WorkOrder.items._select).parent().parent().children('td.price').html();
+                            var total = $(WorkOrder.items._select).parent().parent().children('th.total').html();
+                            console.log('============');
+                            console.log(name);
+                            console.log('============');
+                            WorkOrder.items._addRow(item_id,type,unit,code,name,vendor,price,total);
+                            var vnotice = $(WorkOrder.items._notice);
+                            var vtable = $(WorkOrder.items._table);
+                            vnotice.hide();
+                            vtable.show();
+                            $(this).dialog("close");
+                            alert('success add items '+name);
+                        } else {
+                            $(this).dialog("close");
+                        }
+                    },
+                    "Cancel" : function() {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            $("#dialog-confirm").dialog("open");
         });
     },
 
@@ -821,7 +1039,7 @@ WorkOrder.items = {
         if(msg === null)
             return true;
         else
-            alert(required);
+//            alert(required);
         return false;
     },
 
@@ -833,7 +1051,6 @@ WorkOrder.items = {
         if(irows.val().trim() !== '0'){
             nextidx = parseInt(irows.val());}
         console.log(nextidx);
-
         //warning : sequence is really important following thead order
         var td = $('<td class="i-no i-type-' + nextidx + '">').append(type);
         td.after($('<td class="i-unit-' + nextidx + '">').append(unit));
@@ -841,7 +1058,14 @@ WorkOrder.items = {
         td.after($('<td class="i-name-' + nextidx + '">').append(name));
         td.after($('<td class="i-vendor-' + nextidx + '">').append(vendor));
         td.after($('<td class="i-price-' + nextidx + '">').append(price));
-        td.after($('<td class="i-total-' + nextidx + '">').append(1)); //just temporary
+        td.after($('<td class="i-total-' + nextidx + '">').append(
+            $('<input>')
+                .attr('style', 'width: 30px;')
+                .attr('type', 'text')
+                .attr('id','item-quantity-' + nextidx)
+                .attr('name','items[' + nextidx + '][quantity]')
+                .val(1)
+        )); //just temporary
 
         var divv = $('<div>').append(
             $('<a>')
@@ -864,8 +1088,43 @@ WorkOrder.items = {
             $('<input>')
                 .attr('class', 'i-qty-hid-' + nextidx)
                 .attr('type', 'hidden')
-                .attr('name','items[' + nextidx + '][quantity]')
-                .val(item_id)
+                .attr('name','itemsdata[' + nextidx + '][itemtype]')
+                .val(type)
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'i-qty-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','itemsdata[' + nextidx + '][itemunit]')
+                .val(unit)
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'i-qty-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','itemsdata[' + nextidx + '][itemcode]')
+                .val(code)
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'i-qty-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','itemsdata[' + nextidx + '][itemname]')
+                .val(name)
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'i-qty-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','itemsdata[' + nextidx + '][itemvendor]')
+                .val(vendor)
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'i-qty-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','itemsdata[' + nextidx + '][itemprice]')
+                .val(price)
         );
         td.after(hiddiv);
 
@@ -985,6 +1244,13 @@ WorkOrder.mechanic = {
                 .attr('type', 'hidden')
                 .attr('name','users[' + nextidx + '][user_id]')
                 .val(s_id)
+        );
+        hiddiv.append(
+            $('<input>')
+                .attr('class', 'm-no-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','usersdata[' + nextidx + '][mechanicname]')
+                .val(mechanicName)
         );
         td.after(hiddiv);
 

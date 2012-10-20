@@ -3,12 +3,12 @@
 @include('partial.notification')
 <br>
 
-{{ Form::open('/work_order/add', 'POST') }}
+{{ Form::open('/work_order/add', 'POST', array('id' => 'formAutocare', 'name' => 'formAutocare')) }}
 <fieldset>
 <div class="widget fluid">
     <div class="whead">
         <h6>Customer Add</h6>
-
+        <a href="#vehicle-body" id="add-new-customer" class="buttonH bBlue" title="" onclick="WorkOrder.customer.openDialog_newcustomer();">New Customer</a>
         <div class="clear"></div>
     </div>
 
@@ -17,7 +17,7 @@
         <div class="grid5">
             <div class="searchLine" style="margin-top: 0px">
                 <form action="">
-                    <input type="text" id="customerName" name="customerName" class="ac ui-autocomplete-input" placeholder="Enter search name..." autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+                    <input type="text" id="customerName" name="customerName" class="ac ui-autocomplete-input" placeholder="Click search icon or Button new customer..." autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" value="{{$wodata['customerName']}}">
                     <a onclick="WorkOrder.customer.openDialog_lst_customer('add')"><span class="icos-search" style="position: absolute;top: 0;right: 0;"></span></a>
                 </form>
             </div>
@@ -30,19 +30,24 @@
         <div class="grid5">
             <div class="searchLine" style="margin-top: 0px">
                 <form action="">
-                    <input type="text" id="memberStatus" name="search" class="ac ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" disabled="true"></button>
+                    <input type="text" id="memberStatus" name="memberStatus" class="ac ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" disabled="true" value="{{@$wodata['memberStatus']}}"></button>
                 </form>
             </div>
         </div>
         <div class="clear"></div>
     </div>
 
-<!--    <div class="formRow">-->
-<!--        <div class="grid3"><label>Value *</label></div>-->
-<!--        <div class="grid5"><input name="value" type="text" id="discountValue" value="" /></div><div class="clear"></div>-->
-<!--    </div>-->
-    <div>
-       <input type="hidden" id="customerId" name="customerId">
+    <div id="customerdatahid">
+       <input type="hidden" id="customerId" name="customerId" value="{{@$wodata[customerId]}}">
+        @if($wodata)
+        <input type="hidden" name="address1" value="{{@$wodata[address1]}}">
+        <input type="hidden" name="address2" value="{{@$wodata[address2]}}">
+        <input type="hidden" name="city" value="{{@$wodata[city]}}">
+        <input type="hidden" name="post_code" value="{{@$wodata[post_code]}}">
+        <input type="hidden" name="phone1" value="{{@$wodata[phone1]}}">
+        <input type="hidden" name="phone2" value="{{@$wodata[phone2]}}">
+        <input type="hidden" name="additional_info" value="{{@$wodata[additional_info]}}">
+        @endif
     </div>
 </div>
 
@@ -50,15 +55,15 @@
     <div class="widget fluid">
         <div id="vehicle-whead" class="whead " >
             <h6>Vehicle</h6>
-            <a href="#vehicle-body" id="add-new-vehicle" class="buttonH bBlue" title="" onclick="WorkOrder.customer.openDialog_vehicle();">Add</a>
+            <a href="#vehicle-body" id="add-new-vehicle" class="buttonH bBlue" title="" onclick="WorkOrder.customer.openDialog_vehicle();">New Vehicle</a>
             <div class="clear"></div>
         </div>
         <div id="vehicle-body" class="body" style="display: block; ">
-            @if(!isset($customer['vehicles']))
+            @if(!isset($wodata))
             <span id="vehicle-addnotice" class="">Search customer member first <br/> or click add button to add new vehicle for customer non member</span>
             @endif
 
-            <table id="vehicle-table" cellpadding="0" cellspacing="0" width="100%" class="tDark" style=" {{ !isset($customer['vehicles']) ? 'display:none;' : '' }} ">
+            <table id="vehicle-table" cellpadding="0" cellspacing="0" width="100%" class="tDark" style=" {{ !isset($wodata) ? 'display:none;' : '' }} ">
                 <thead>
                 <tr>
                     <td>Vehicle No</td>
@@ -70,10 +75,35 @@
                 </tr>
                 </thead>
                 <tbody id="vehicle-tbody">
-
+                @if(isset($wodata))
+                    <tr id="v-rows">
+                        <td class="v-no v-num">{{@$wodata['vehiclesnumber']}}</td>
+                        <td class="v-type">{{@$wodata['vehiclestype']}}</td>
+                        <td class="v-color">{{@$wodata['vehiclescolor']}}</td>
+                        <td class="v-model">{{@$wodata['vehiclesmodel']}}</td>
+                        <td class="v-brand">{{@$wodata['vehiclesbrand']}}</td>
+                        <td class="v-desc">{{@$wodata['vehiclesdescription']}}</td>
+                        <td>
+                            <div>
+                                <a href="#vehicle-tbody" onclick="WorkOrder.customer.edit('v-rows-0, 0')">edit | </a>
+                                <a href="#vehicle-tbody" onclick="WorkOrder.customer.remove()">remove</a>
+                            </div>
+                            <div style="display: none; ">
+                                <input class="v-id-hid" type="hidden" name="vehiclesid" value="{{@$wodata['vehiclesid']}}">
+                                <input class="v-num-hid" type="hidden" id="vehiclesnumber" name="vehiclesnumber" value="{{@$wodata['vehiclesnumber']}}">
+                                <input class="v-type-hid" type="hidden" name="vehiclestype" value="{{@$wodata['vehiclestype']}}">
+                                <input class="v-color-hid" type="hidden" name="vehiclescolor" value="{{@$wodata['vehiclescolor']}}">
+                                <input class="v-brand-hid-0" type="hidden" name="vehiclesbrand" value="{{@$wodata['vehiclesbrand']}}">
+                                <input class="v-desc-hid" type="hidden" name="vehiclesdescription" value="{{@$wodata['vehiclesdescription']}}">
+                                <input class="v-model-hid" type="hidden" name="vehiclesmodel" value="{{@$wodata['vehiclesmodel']}}">
+                                <input type="hidden" name="vehiclesstatus" value="1">
+                            </div>
+                        </td>
+                    </tr>
+                @endif
                 </tbody>
             </table>
-            <input type="hidden" id="vehicle-rows" value="0"/>
+            <input type="hidden" id="vehicle-rows" value="{{$wodata != null ? 1 : 0}}"/>
             <div id="vehicle-input-wrapper" style="display: none;"></div>
         </div>
     </div>
@@ -114,9 +144,31 @@
             </tr>
             </thead>
             <tbody id="service-tbody">
-
+            <?php $no=0; ?>
+            @if($wodata['servicesdata'])
+                @foreach($wodata['servicesdata'] as $trx_service)
+                <tr id="s-rows-{{$no}}">
+                    <td class="s-no s-num-{{$no}}">{{$no+1}}</td>
+                    <td class="s-name-{{$no}}">{{@$trx_service['servicename']}}</td>
+                    <td class="s-price-{{$no}}">{{@$trx_service['serviceprice']}}</td>
+                    <td class="s-desc-{{$no}}">{{@$trx_service['servicedescription']}}</td>
+                    <td>
+                        <div>
+                            <a href="#service-tbody" onclick="WorkOrder.service.remove('s-rows-{{$no}}')">remove</a>
+                        </div>
+                        <div style="display: none; ">
+                            <input class="s-no-hid-{{$no}}" type="hidden" name="services[{{$no}}][service_formula_id]" value="{{@$wodata['services'][$no]['service_formula_id']}}">
+                            <input class="s-no-hid-{{$no}}" type="hidden" name="servicesdata[{{$no}}][servicename]" value="{{@$trx_service['servicename']}}">
+                            <input class="s-no-hid-{{$no}}" type="hidden" name="servicesdata[{{$no}}][serviceprice]" value="{{@$trx_service['serviceprice']}}">
+                            <input class="s-no-hid-{{$no}}" type="hidden" name="servicesdata[{{$no}}][servicedescription]" value="{{@$trx_service['servicedescription']}}">
+                        </div>
+                    </td>
+                </tr>
+                <?php $no++; ?>
+                @endforeach
+                @endif
             </tbody>
-            <input type="hidden" id="service-rows" value="0"/>
+            <input type="hidden" id="service-rows" value="{{$no}}"/>
             <div id="service-input-wrapper" style="display: none;"></div>
         </table>
             </div>
@@ -129,11 +181,11 @@
             <div class="clear"></div>
         </div>
         <div id="item-body" class="body" style="display: block; ">
-            @if(!isset($customer['items']))
+            @if(!isset($wodata))
             <span id="item-addnotice" class=""><em>click add button to include item for this work order</em></span>
             @endif
 
-            <table id="item-table" cellpadding="0" cellspacing="0" width="100%" class="tDark" style=" {{ !isset($customer['items']) ? 'display:none;' : '' }} ">
+            <table id="item-table" cellpadding="0" cellspacing="0" width="100%" class="tDark" style=" {{ !isset($wodata) ? 'display:none;' : '' }} ">
                 <thead>
                 <tr>
                     <td>Type</td>
@@ -146,10 +198,40 @@
                 </tr>
                 </thead>
                 <tbody id="item-tbody">
-
+                <?php $no=0; ?>
+                @if(isset($wodata))
+                    @foreach($wodata['itemsdata'] as $item)
+                    <tr id="i-rows-0">
+                        <td class="i-no i-type-{{$no}}">{{@$item['itemtype']}}</td>
+                        <td class="i-unit-{{$no}}">{{@$item['itemunit']}}</td>
+                        <td class="i-code-{{$no}}">{{@$item['itemcode']}}</td>
+                        <td class="i-name-{{$no}}">{{@$item['itemname']}}</td>
+                        <td class="i-vendor-{{$no}}">{{@$item['itemvendor']}}</td>
+                        <td class="i-price-{{$no}}">{{@$item['itemprice']}}</td>
+                        <td class="i-total-{{$no}}">
+                            <input style="width: 30px;" type="text" id="item-quantity-{{$no}}" name="items[{{$no}}][quantity]" value="{{@$wodata['items'][$no]['quantity']}}">
+                        </td>
+                        <td>
+                            <div>
+                                <a href="#item-tbody" onclick="WorkOrder.items.remove('i-rows-{{$no}}')">remove</a>
+                            </div>
+                            <div style="display: none; ">
+                                <input class="i-no-hid-{{$no}}" type="hidden" name="items[{{$no}}][item_id]" value="{{@$wodata['items'][$no]['item_id']}}">
+                                <input class="i-no-hid-{{$no}}" type="hidden" name="itemsdata[{{$no}}][itemtype]" value="{{@$item['itemtype']}}">
+                                <input class="i-no-hid-{{$no}}" type="hidden" name="itemsdata[{{$no}}][itemunit]" value="{{@$item['itemunit']}}">
+                                <input class="i-no-hid-{{$no}}" type="hidden" name="itemsdata[{{$no}}][itemcode]" value="{{@$item['itemcode']}}">
+                                <input class="i-no-hid-{{$no}}" type="hidden" name="itemsdata[{{$no}}][itemname]" value="{{@$item['itemname']}}">
+                                <input class="i-no-hid-{{$no}}" type="hidden" name="itemsdata[{{$no}}][itemvendor]" value="{{@$item['itemvendor']}}">
+                                <input class="i-no-hid-{{$no}}" type="hidden" name="itemsdata[{{$no}}][itemprice]" value="{{@$item['itemprice']}}">
+                            </div>
+                        </td>
+                    </tr>
+                    <?php $no++; ?>
+                    @endforeach
+                @endif
                 </tbody>
             </table>
-            <input type="hidden" id="item-rows" value="0"/>
+            <input type="hidden" id="item-rows" value="{{$no}}"/>
             <div id="item-input-wrapper" style="display: none;"></div>
         </div>
     </div>
@@ -180,7 +262,23 @@
                 </tr>
                 </thead>
                 <tbody id="mechanic-tbody">
-
+                <?php $no=0; ?>
+                @if(@$wodata['users'])
+                    @foreach(@$wodata['usersdata'] as $mechanic)
+                    <tr id="m-rows-{{$no}}">
+                        <td class="m-no m-num-{{$no}}">{{$no}}</td>
+                        <td class="m-name-{{$no}}">{{@$mechanic['mechanicname']}}</td>
+                        <td>
+                            <div><a href="#mechanic-tbody" onclick="WorkOrder.mechanic.remove('m-rows-{{$no}}')">remove</a></div>
+                            <div style="display: none; ">
+                                <input class="m-no-hid-{{$no}}" type="hidden" name="users[{{$no}}][user_id]" value="{{$wodata['users'][$no]['user_id']}}">
+                                <input class="m-no-hid-{{$no}}" type="hidden" name="usersdata[{{$no}}][mechanicname]" value="{{$mechanic['mechanicname']}}">
+                            </div>
+                        </td>
+                    </tr>
+                    <?php $no++; ?>
+                    @endforeach
+                @endif
                 </tbody>
             </table>
             <input type="hidden" id="mechanic-rows" value="0"/>
@@ -265,6 +363,51 @@
         </form>
     </div>
 
+    <div id="new-customer-dialog" class="dialog" title="New Customer" style="display: none;">
+        <form id="customer-form" name="vehicle-form">
+            <div class="dialogSelect m10" id="customer-dialog-notification"></div>
+            <div class="divider"><span></span></div>
+            <div class="fluid">
+                <div class="grid6">
+                    <div class="dialogSelect m10">
+                        <label>Name *</label>
+                        <input type="text" id="customer-name"/>
+                    </div>
+                    <div class="dialogSelect m10">
+                        <label>Address 1 *</label>
+                        <input type="text" id="customer-address1"/>
+                    </div>
+                    <div class="dialogSelect m10">
+                        <label>Address 2</label>
+                        <input type="text" id="customer-address2"/>
+                    </div>
+                    <div class="dialogSelect m10">
+                        <label>City</label>
+                        <input type="text" id="customer-city"/>
+                    </div>
+                </div>
+                <div class="grid6">
+                    <div class="dialogSelect m10">
+                        <label>Postal Code</label>
+                        <input type="text" id="customer-post_code"/>
+                    </div>
+                    <div class="dialogSelect m10">
+                        <label>Phone 1 *</label>
+                        <input type="text" id="customer-phone1"/>
+                    </div>
+                    <div class="dialogSelect m10">
+                        <label>Phone 2</label>
+                        <input type="text" id="customer-phone2"/>
+                    </div>
+                    <div class="dialogSelect m10">
+                        <label>Additional Info</label>
+                        <input type="text" id="customer-additional_info"/>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="new-customer-method" value="add"/>
+        </form>
+</div>
 <div>
 
 </div>

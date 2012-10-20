@@ -66,6 +66,8 @@ class Transaction extends Eloquent {
         $trx->status = statusWorkOrder::OPEN;
         $trx->payment_state = paymentState::INITIATE;
         $trx->date = date(static::$sqlformat);
+        $batch = Batch::getSingleResult(array());
+        $trx->batch_id = $batch->id;
         $trx->save();
 
 
@@ -99,6 +101,7 @@ class Transaction extends Eloquent {
                 'is_member' => true
             ));
             if ($membership) {
+                $trx->membership_id=$membership->id;
                 if (isset($membership->discount)){
                     $discAmount = $amountService * ($membership->discount->value / 100);
                 }
@@ -205,8 +208,12 @@ class Transaction extends Eloquent {
         return $trx->id;
     }
 
-    public static function update_status($id, $status){
+    public static function update_status($id, $status, $data){
         $trx = Transaction::find($id);
+        if (isset($data['complete_date'])) {$trx->complete_date = $data['complete_date'];}
+        if (isset($data['payment_date'])) {$trx->payment_date = $data['payment_date'];}
+        if (isset($data['payment_method'])) {$trx->payment_method = $data['payment_method'];}
+        if (isset($data['payment_state'])) {$trx->payment_state = $data['payment_state'];}
         $trx->status = $status;
         $trx->save();
         return $trx;

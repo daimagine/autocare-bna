@@ -30,6 +30,7 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <?php $currentDate=date('Y-m-d H:i:s', time()); ?>
                     @foreach($lstVehicle as $vehicle)
                     <tr>
                         <td class="customerName">{{$vehicle->customer->name}}</td>
@@ -37,7 +38,7 @@
                         <td>{{$vehicle->customer->address1}}</td>
                         <td>{{$vehicle->status ==1 ? 'Active' : 'Inactive'}}</td>
                         <td class="status tableActs" align="center">
-                            @if($vehicle->customer->membership)
+                            @if($vehicle->membership and $vehicle->membership->expiry_date>$currentDate)
                             <a href="#" class="fs1 iconb tipS" original-title="Member" data-icon=""></a>
                             @else
                             <a href="#" class="fs1 iconb tipS" original-title="Non Member" data-icon=""></a>
@@ -45,7 +46,7 @@
                         </td>
                         <th style="display: none" class="customerId">{{$vehicle->customer->id}}</th>
                         <th style="display: none" class="id">{{$vehicle->id}}</th>
-                        <th style="display: none" class="status">{{$vehicle->customer->membership != null ? 'member' : 'non-member'}}</th>
+                        <th style="display: none" class="status">{{($vehicle->membership != null and $vehicle->membership->expiry_date>$currentDate) ? 'member' : 'non-member'}}</th>
                         <th style="display: none" class="type">{{$vehicle->type}}</th>
                         <th style="display: none" class="color">{{$vehicle->color}}</th>
                         <th style="display: none" class="model">{{$vehicle->model}}</th>
