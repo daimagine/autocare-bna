@@ -43,6 +43,7 @@ abstract class paymentType {
 
 abstract class paymentState {
     const INITIATE = 'I',
+        CANCELED = 'C',
         DONE = 'D';
 }
 

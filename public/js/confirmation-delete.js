@@ -39,7 +39,6 @@ $(function () {
         $("#confirmDelete").dialog('open');
         return false;
     });
-
 });
 
 /**

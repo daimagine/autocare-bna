@@ -35,10 +35,8 @@ class Work_Order_Controller extends Secure_Controller
     }
 
     public function get_add() {
-        Asset::add('jquery.validationEngine-en', 'js/plugins/forms/jquery.validationEngine-en.js',  array('jquery', 'jquery-ui'));
-        Asset::add('jquery.validate', 'js/plugins/wizards/jquery.validate.js',  array('jquery', 'jquery-ui'));
-        Asset::add('validationEngine.form', 'js/plugins/forms/jquery.validationEngine.js',  array('jquery', 'jquery-ui'));
-        Asset::add('function_item', 'js/wo/application.js',  array('jquery', 'jquery-ui'));
+        Asset::add('function_wo', 'js/wo/application.js',  array('jquery', 'jquery-ui'));
+        $wodata = Session::get('wodata');
         $customer = Session::get('customer');
         $service = Session::get('service');
         $mechanic = Session::get('mechanic');
@@ -66,6 +64,7 @@ class Work_Order_Controller extends Secure_Controller
 
 
         return $this->layout->nest('content', 'wo.add', array(
+            'wodata' => $wodata,
             'customers' => $customer,
             'selectionService' => $selectionService,
             'lstService' => $lstService,
@@ -117,12 +116,37 @@ class Work_Order_Controller extends Secure_Controller
         $wodata = Input::all();
 
         if(!$validation->fails()) {
+            //==check item stock first====
+            $msgvalitem=null;
+            if(isset($wodata['items'])) {
+                foreach($wodata['items'] as $it) {
+                    $item = Item::find($it['item_id']);
+//                    {{dd($item->stock);}}
+                    if ($item->stock < ((int)$it['quantity'])) {
+                        $msgvalitem .=   'stock item '.($item->name).' not enough, current stock '.($item->stock);
+                    }
+                }
+            }
+//            {{dd($msgvalitem);}}
+            if ($msgvalitem !== null){
+                Session::flash('message_error', $msgvalitem);
+                return Redirect::to('work_order/add')
+                    ->with('wodata',$wodata);
+            }
+
             //=== check status customer ===//
             if($wodata['customerId']==null or $wodata['customerId']==''){
                 //thisis new customer & new vehicle
                 $customer = Customer::create(array(
                     'name' => $wodata['customerName'],
-                    'status' => 1
+                    'address1' => $wodata['address1'],
+                    'address2' => $wodata['address2'],
+                    'city' => $wodata['city'],
+                    'post_code' => $wodata['post_code'],
+                    'phone1' => $wodata['phone1'],
+                    'phone2' => $wodata['phone2'],
+                    'additional_info' => $wodata['additional_info'],
+                    'status' => statusType::ACTIVE
                 ));
                 $wodata['customerId'] = $customer;
             }
@@ -158,7 +182,8 @@ class Work_Order_Controller extends Secure_Controller
                 return Redirect::to('work_order/list');
             } else {
                 Session::flash('message_error', 'Failed add wo');
-                return Redirect::to('work_order/add');
+                return Redirect::to('work_order/add')
+                    ->with('wodata',$wodata);
             }
         } else {
             Log::info('Validation fails. error : ' + print_r($validation->errors, true));
@@ -182,7 +207,9 @@ class Work_Order_Controller extends Secure_Controller
         ));
     }
 
-    public function get_do_closed($id=null){
+    public function post_do_closed(){
+        $data = Input::all();
+        $id = $data['id'];
         if ($id===null) {
             Session::flash('message_error', 'Failed update wo');
             return Redirect::to('work_order/list');
@@ -190,7 +217,12 @@ class Work_Order_Controller extends Secure_Controller
 
         //process calculate discount for membership
         $trx = Transaction::find($id);
-        $update = Transaction::update_status($id, statusWorkOrder::CLOSE);
+        $update = Transaction::update_status($id, statusWorkOrder::CLOSE, array(
+            'complete_date' => date('Y-m-d H:i:s'),
+            'payment_date' => date('Y-m-d H:i:s'),
+            'payment_method' => $data['payment_method'],
+            'payment_state' => paymentState::DONE,
+        ));
         if($update) {
             //success
             Session::flash('message', 'Success closed wo '.$update->workorder_no);
@@ -205,7 +237,21 @@ class Work_Order_Controller extends Secure_Controller
         if ($id===null) {
             return Redirect::to('work_order/list');
         }
-        $update = Transaction::update_status($id, statusWorkOrder::CANCELED);
+        $update = Transaction::update_status($id, statusWorkOrder::CANCELED, array(
+            'payment_state' => paymentState::CANCELED
+        ));
+        $trxItem = TransactionItem::listById(array(
+           'id' => $update->id
+        ));
+        foreach($trxItem as $trx_item) {
+            $item_price = ItemPrice::getSingleResult(array('item_id' => $trx_item->item_id));
+            $stock=($item_price->item->stock + $trx_item->quantity);
+            $updatestock = Item::updateStock($item_price->item->id, $stock);
+        }
+        //cleanup items quantity
+        $affected = DB::table('transaction_item')
+            ->where('transaction_id', '=', $id)
+            ->update(array('quantity' => 0));
         if($update) {
             //success
             Session::flash('message', 'Success Canceled wo '.$update->workorder_no);
@@ -220,7 +266,7 @@ class Work_Order_Controller extends Secure_Controller
         if ($id===null) {
             return Redirect::to('work_order/list');
         }
-        $update = Transaction::update_status($id, statusWorkOrder::OPEN);
+        $update = Transaction::update_status($id, statusWorkOrder::OPEN, array());
         if($update) {
             //success
             Session::flash('message', 'Success reopen wo '.$update->workorder_no);
