@@ -252,7 +252,8 @@ WorkOrder.customer = {
         $(this._dialog).dialog({
             autoOpen: false,
             modal: true,
-            width: 800,
+            width: 900,
+            height: 681,
             buttons: {
                 "Cancel": function () {
                     $('#tablecustomer').dataTable({
@@ -265,39 +266,82 @@ WorkOrder.customer = {
         });
 
         $(WorkOrder.customer._select).click(function () {
-            var confirmesi= confirm("Do you want select this customer ??");
-            if (confirmesi== true) {
-                //-------------get value from table-----------------
-                var vehicle_id = $(this).parent().parent().children('th.id').html();
-                var vehicle_no = $(this).parent().parent().children('td.vehicleNo').html();
-                var type = $(this).parent().parent().children('th.type').html();  // a.delete -> td -> tr -> td.name
-                var color = $(this).parent().parent().children('th.color').html();
-                var model = $(this).parent().parent().children('th.model').html();
-                var brand = $(this).parent().parent().children('th.brand').html();
-                var description = $(this).parent().parent().children('th.description').html();
-                var customerName = $(this).parent().parent().children('td.customerName').html();
-                var customerId = $(this).parent().parent().children('th.customerId').html();
-                var customerStatus = $(this).parent().parent().children('th.status').html();
+//            var confirmesi= confirm("Do you want select this customer ??");
+            //-------------get value from table-----------------
+            var vehicle_id = $(this).parent().parent().children('th.id').html();
+            var vehicle_no = $(this).parent().parent().children('td.vehicleNo').html();
+            var type = $(this).parent().parent().children('th.type').html();  // a.delete -> td -> tr -> td.name
+            var color = $(this).parent().parent().children('th.color').html();
+            var model = $(this).parent().parent().children('th.model').html();
+            var brand = $(this).parent().parent().children('th.brand').html();
+            var description = $(this).parent().parent().children('th.description').html();
+            var customerName = $(this).parent().parent().children('td.customerName').html();
+            var customerId = $(this).parent().parent().children('th.customerId').html();
+            var customerStatus = $(this).parent().parent().children('th.status').html();
 
-                $(WorkOrder.customer._method).val('list');
-                var flag = $(WorkOrder.customer._method).val();
-                console.log('============');
-                console.log(customerName);
-                console.log('============');
-                WorkOrder.customer._putVehicle(vehicle_id,vehicle_no,type,color,model,brand,description);
-                WorkOrder.customer._putCustomer(customerId,customerName,customerStatus);
-                //display table
-                var vnotice = $(WorkOrder.customer._notice);
-                var vtable = $(WorkOrder.customer._table);
-                var vaddlink = $(WorkOrder.customer._addvehicle);
-                vnotice.hide();
-                vaddlink.hide();
-                vtable.show();
-                $(WorkOrder.customer._dialog).dialog( "close" );
-                console.log('close dialog');
-            }else {
-                console.log('customer not confirm');
-            }
+
+            $("#dialog-confirm-content").html("Do you want select customer "+customerName+" ??");
+            $("#dialog-confirm").dialog({
+                modal: true,
+                buttons : {
+                    "Confirm" : function() {
+                       $(WorkOrder.customer._method).val('list');
+                        var flag = $(WorkOrder.customer._method).val();
+                        console.log('============');
+                        console.log(customerName);
+                        console.log('============');
+                        WorkOrder.customer._putVehicle(vehicle_id,vehicle_no,type,color,model,brand,description);
+                        WorkOrder.customer._putCustomer(customerId,customerName,customerStatus);
+                        //display table
+                        var vnotice = $(WorkOrder.customer._notice);
+                        var vtable = $(WorkOrder.customer._table);
+                        var vaddlink = $(WorkOrder.customer._addvehicle);
+                        vnotice.hide();
+                        vaddlink.hide();
+                        vtable.show();
+                        $(this).dialog("close");
+                        $(WorkOrder.customer._dialog).dialog( "close" );
+                        console.log('close dialog');
+                    },
+                    "Cancel" : function() {
+                        console.log('customer not confirm');
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            $("#dialog-confirm").dialog("open");
+//            if (confirmesi== true) {
+//                //-------------get value from table-----------------
+//                var vehicle_id = $(this).parent().parent().children('th.id').html();
+//                var vehicle_no = $(this).parent().parent().children('td.vehicleNo').html();
+//                var type = $(this).parent().parent().children('th.type').html();  // a.delete -> td -> tr -> td.name
+//                var color = $(this).parent().parent().children('th.color').html();
+//                var model = $(this).parent().parent().children('th.model').html();
+//                var brand = $(this).parent().parent().children('th.brand').html();
+//                var description = $(this).parent().parent().children('th.description').html();
+//                var customerName = $(this).parent().parent().children('td.customerName').html();
+//                var customerId = $(this).parent().parent().children('th.customerId').html();
+//                var customerStatus = $(this).parent().parent().children('th.status').html();
+//
+//                $(WorkOrder.customer._method).val('list');
+//                var flag = $(WorkOrder.customer._method).val();
+//                console.log('============');
+//                console.log(customerName);
+//                console.log('============');
+//                WorkOrder.customer._putVehicle(vehicle_id,vehicle_no,type,color,model,brand,description);
+//                WorkOrder.customer._putCustomer(customerId,customerName,customerStatus);
+//                //display table
+//                var vnotice = $(WorkOrder.customer._notice);
+//                var vtable = $(WorkOrder.customer._table);
+//                var vaddlink = $(WorkOrder.customer._addvehicle);
+//                vnotice.hide();
+//                vaddlink.hide();
+//                vtable.show();
+//                $(WorkOrder.customer._dialog).dialog( "close" );
+//                console.log('close dialog');
+//            }else {
+//                console.log('customer not confirm');
+//            }
             return false;
         });
 

@@ -9,10 +9,24 @@
 class Batch extends Eloquent {
 
     public static $table = 'batch';
+    public static $timestamps = false;
+    private static $sqlformat = 'Y-m-d H:i:s';
 
     //===jo edit====//
     public static function getSingleResult($criteria) {
-        $b=Batch::where('batch_status', '=', 1);
+        $b=Batch::where_in('batch_status', $criteria['status']);
         return $b->first();
+    }
+
+    public static function create($data=array()) {
+        $b = new Batch();
+        $b->batch_status = batchStatus::UNSETTLED;
+        $b->open_time = date(static::$sqlformat);
+        $b->sales_count = 0;
+        $b->sales_amount = 0.00;
+        $b->clerk_amount = 0.00;
+        $b->clerk_status = statusType::ACTIVE;
+        $b->save();
+        return $b;
     }
 }

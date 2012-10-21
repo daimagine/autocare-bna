@@ -54,3 +54,8 @@ abstract class SettlementState {
             SETTLED_UNMATCH = 'F'
     ;
 }
+
+abstract class batchStatus {
+    const UNSETTLED ='1',
+        SETTLED ='0';
+}

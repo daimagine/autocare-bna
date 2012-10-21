@@ -325,6 +325,11 @@
 
     </div>
 
+    <!-- Dialog content select items-->
+    <div id="submit-confirm" class="dialog" title="Submit Confirmation" style="display: none;">
+
+    </div>
+
     <!-- Dialog confirmation assign mechanic-->
     <div id="mechanic-dialog" class="dialog" title="Item list" style="display: none;">
 

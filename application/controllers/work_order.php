@@ -263,20 +263,20 @@ class Work_Order_Controller extends Secure_Controller
         }
     }
 
-    public function get_do_reopen($id=null){
-        if ($id===null) {
-            return Redirect::to('work_order/list');
-        }
-        $update = Transaction::update_status($id, statusWorkOrder::OPEN, array());
-        if($update) {
-            //success
-            Session::flash('message', 'Success reopen wo '.$update->workorder_no);
-            return Redirect::to('work_order/list');
-        } else {
-            Session::flash('message_error', 'Failed reopen wo');
-            return Redirect::to('work_order/add');
-        }
-    }
+//    public function get_do_reopen($id=null){
+//        if ($id===null) {
+//            return Redirect::to('work_order/list');
+//        }
+//        $update = Transaction::update_status($id, statusWorkOrder::OPEN, array());
+//        if($update) {
+//            //success
+//            Session::flash('message', 'Success reopen wo '.$update->workorder_no);
+//            return Redirect::to('work_order/list');
+//        } else {
+//            Session::flash('message_error', 'Failed reopen wo');
+//            return Redirect::to('work_order/add');
+//        }
+//    }
 
 
     //GET UPDATE or EDIT

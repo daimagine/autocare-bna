@@ -281,6 +281,11 @@
 </div>
 
 <!-- Dialog content select items-->
+<div id="submit-confirm" class="dialog" title="Submit Confirmation" style="display: none;">
+
+</div>
+
+<!-- Dialog content select items-->
 <div id="item-dialog" class="dialog" title="Item list" style="display: none;">
 
 </div>
