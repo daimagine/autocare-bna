@@ -54,8 +54,20 @@ $(function() {
         "sPaginationType": "full_numbers",
         "sDom": '<"H"fl>t<"F"ip>',
         "sScrollX": "100%",
-        "sScrollXInner": "200%"
+        "sScrollXInner": "110%"
     });
+
+    //console.log(oTable.attr('dtable-sortlist'));
+    try {
+        if(oTable) {
+            //console.log(oTable.attr('dtable-sortlist'));
+            if(oTable.attr('dtable-sortlist')) {
+                oTable.fnSort( eval(oTable.attr('dtable-sortlist')) );
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
 
 
     //===== Dynamic table toolbars =====//

@@ -2327,3 +2327,7 @@ table .dropdown-menu.pull-right { right: auto; left: 0; }
     height: 26px;
     margin: 0px;
 }
+
+.total-left { text-align: left; float: left; margin: 20px 0 20px 30px; }
+.total-left span { font-weight: bold; padding: 0 0 4px 0; display: block; }
+.total-left strong { display: block; font-size: 24px; }
