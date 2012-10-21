@@ -132,7 +132,7 @@
     <!-- Content ends -->
 	
 	<!-- Modal confirmation -->
-	<div id="dialog-confirm" title="Confirmation">
+	<div id="dialog-confirm" title="Confirmation" style="display: none">
 		<p>
 			<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
 			<span id="dialog-confirm-content">Your action cannot be undone. Are you sure?</span>

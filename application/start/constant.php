@@ -45,3 +45,11 @@ abstract class paymentState {
     const INITIATE = 'I',
         DONE = 'D';
 }
+
+abstract class SettlementState {
+    const   UNSETTLED = 'U',
+            SETTLED = 'S',
+            SETTLED_MATCH = 'M',
+            SETTLED_UNMATCH = 'F'
+    ;
+}
