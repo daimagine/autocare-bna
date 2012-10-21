@@ -60,7 +60,7 @@ class Work_Order_Controller extends Secure_Controller
            'role_id' => 4
         ));
         $selectionMechanic = array();
-        $selectionMechanic[0] = '-- select service --';
+        $selectionMechanic[0] = '-- select mechanic --';
         foreach($lstMechanic as $mch) {
             $selectionMechanic[$mch->id] = $mch->name;
         }
