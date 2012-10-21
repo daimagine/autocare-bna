@@ -25,7 +25,7 @@
 
         {{ Form::nginput('text', 'name', $item->name, 'Name', array('class' => 'validate[required]')) }}
 
-        {{ Form::nginput('text', 'code', $item->code, 'Code', array('class' => 'validate[required]')) }}
+        {{ Form::nginput('text', 'code', $item->code, 'Code', array('class' => 'validate[required]', 'disabled' => 'true')) }}
 
         {{ Form::nginput('text', 'description', $item->description, 'Description', array('class' => 'validate[required]')) }}
 

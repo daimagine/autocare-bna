@@ -18,16 +18,12 @@ class SubAccountTrx extends Eloquent {
 
     public static function getByCriteria($criteria) {
         $ate=SubAccountTrx::join('account_transactions', 'sub_account_trx.account_trx_id', '=', 'account_transactions.id');
+        $ate=$ate->join('user', 'user.id', '=', 'account_transactions.create_by');
         $ate=$ate->where('sub_account_trx.approved_status', '=', $criteria['approved_status']);
         if(isset($criteria['id'])) {$ate=$ate->where('sub_account_trx.id', '=', $criteria['id']);}
         if(isset($criteria['account_trx_id']) && $criteria['account_trx_id']!=null  ) {$ate=$ate->where('sub_account_trx.account_trx_id', '=', $criteria['account_trx_id']);}
-//        if(isset($criteria['account_trx_status'])) {$ate=$ate->where('account_transactions.status', '=', $criteria['account_trx_status']);}
+        if(isset($criteria['account_trx_type'])) {$ate=$ate->where('account_transactions.type', '=', $criteria['account_trx_type']);}
         $ate=$ate->where('account_transactions.status', '=', $criteria['account_trx_status']);
-//        $ate=SubAccountTrx::where('approved_status', '=', $criteria['approved_status']);
-//        if($criteria['id']) {$ate=$ate->where('id', '=', $criteria['id']);}
-//        if($criteria['account_trx_id']){$ate=$ate->where('account_trx_id', '=', $criteria['account_trx_id']);}
-//        {{dd($criteria['approved_status']);}}
-//        {{dd($ate);}}
 
         return $ate->get('sub_account_trx.*');
     }

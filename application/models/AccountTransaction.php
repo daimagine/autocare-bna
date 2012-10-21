@@ -21,6 +21,9 @@ class AccountTransaction extends Eloquent {
     public static $dateformat = 'd-m-Y';
     public static $timeformat = 'H:i:s';
 
+    public function user() {
+        return $this->belongs_to('user', 'create_by');
+    }
 
     public function items() {
         return $this->has_many('SubAccountTrans', 'account_trx_id')

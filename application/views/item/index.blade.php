@@ -1,73 +1,60 @@
+
+
+
 @section('content')
 
 @include('partial.notification')
-<!-- Rounded buttons -->
-<ul class="middleNavA">
-    @foreach($item_category as $item_category)
-    <li><a href="index?category={{$item_category->id}}" title="{{$item_category->name}}" style="width: 100px;height: 65px;"><img src="../images/icons/color/config.png" alt="" /><span style="@if($category->name == $item_category->name) color:red @endif">{{$item_category->name}}</span></a></li>
-    @endforeach
-</ul>
-<div class="divider"><span></span></div>
 
-<!-- Table with opened toolbar -->
+
+
 <div class="widget">
-    <div class="whead">
-        <h6>List Item {{$category->name}}</h6>
-        <div class="clear"></div>
-    </div>
-    <div id="dyn2" class="shownpars overflowtable">
-        <a class="tOptions act" title="Options">{{ HTML::image('images/icons/options', '') }}</a>
-        <table cellpadding="0" cellspacing="0" border="0" class="dTable">
-            <thead>
-            <tr>
-                <th>Name<span class="sorting" style="display: block;"></span></th>
-                <th>Code</th>
-                <th>Stock</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Vendor</th>
-                <th>Date</th>
-                <th>Expiry Date</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($item as $item)
-            <tr class="">
-                <td class="name">{{ $item->name }}</td>
-                <td>{{ $item->code }}</td>
-                <td>{{ $item->stock }}</td>
-                <td>{{ $item->description }}</td>
-                <td>{{ $item->price }}</td>
-                <td>{{ $item->vendor }}</td>
-                <td>{{ $item->date }}</td>
-                <td>{{ $item->expiry_date }}</td>
-                <td class="tableActs" align="center">
-                    <a href="edit/{{ $item->id }}" class="classConfirmEdit tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
-                    <a href="delete/{{ $item->id }}" class="classConfirmDelete tablectrl_small bDefault tipS" original-title="Remove">
-                        <span class="iconb" data-icon=""></span>
-                        <!-- Dialog modal confirmation delete item-->
-                    </a>
-                </td>
-            </tr>
-            @endforeach
-            </tbody>
-        </table>
-    </div>
-    <div class="clear"></div>
+    <div class="whead"><h6>Warehouse Management</h6><div class="clear"></div></div>
+    <ul class="updates">
+        @foreach($item_category as $category)
+        <li>
+            <div class="exp pointer">
+                <div class="wNews">
+                    <a href="#" title="" class="headline"><img src="/images/icons/color/{{$category->picture}}" alt=""></a>
+                    <div class="announce">
+                        <a href="#" title="">{{ $category->name }}</a>
+                        <span>{{ $category->description}}</span>
+                    </div>
+                </div>
+                <span class="uDate" style="width: 65px"><span>{{ sizeof($category->item) }}</span>Item</span>
+            </div>
+            <div class="clear">
+                <span class="clear"></span>
+                <ul class="updates">
+                    <li>
+                            <span class="" style="width: 100%">
+                                    <ul>
+                                        <li class="on_off">
+                                            <label><span class="icos-cog2"></span>
+                                                <a class="formDialog_open" href="list?category={{$category->id}}">Show List this items</a>
+                                            </label>
+                                            <div class="clear"></div>
+                                        </li>
+                                        <li class="on_off">
+                                            <label><span class="icos-cog2"></span>
+                                                <a class="formDialog_open" href="add?category={{$category->id}}">Add New items</a>
+                                            </label>
+                                            <div class="clear"></div>
+                                        </li>
+                                        <li class="on_off">
+                                            <label><span class="icos-cog2"></span>
+                                                <a class="formDialog_open" href="list_history?category={{$category->id}}">Show History this items</a>
+                                            </label>
+                                            <div class="clear"></div>
+                                        </li>
+                                    </ul>
+                            </span>
+                        <span class="clear"></span>
+                    </li>
+                </ul>
+            </div>
+            <span class="clear"></span>
+        </li>
+        @endforeach
+    </ul>
 </div>
-
-<div class="fluid">
-    <div class="grid2">
-        <div class="wButton"><a href="add?category={{$category->id}}" title="" class="buttonL bLightBlue first">
-            <span class="icol-add"></span>
-            <span>Add New</span>
-        </a></div>
-    </div>
-</div>
-
-<div id="confirmDelete" class="dialog" title="Confirmation Delete" ></div>
-
-</div>
-
 @endsection

@@ -36,8 +36,6 @@ $(function() {
             msg ='<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>Are you sure do this action ?</p>' +
                     '<p>Customer Name : '+customerName+'</p>' +
                     '<p>Vehcile No : '+vehicleNumber+'</p>';
-
-//            td.after($('<td class="v-type">').append(type));
         } else {
             console.log(':: Show alert data null');
             msg ='Data ' + msg + ' cant be empty..!!';
@@ -81,50 +79,29 @@ $(function() {
 
 
     //===== Image gallery control buttons =====//
-
     $(".gallery ul li").hover(
         function() { $(this).children(".actions").show("fade", 200); },
         function() { $(this).children(".actions").hide("fade", 200); }
     );
 
     //===== Sortable columns =====//
-
     $("table").tablesorter();
 
 
     //===== Resizable columns =====//
-
     $("#resize, #resize2").colResizable({
         liveDrag:true,
         draggingClass:"dragging"
     });
 
-    //===== Dynamic data table =====//
-
-    var table=$('.dTable').val();
-    console.log('id table define '+table);
-//    if (table == 'undefined') {
-        console.log('define new table jquery');
-        oTable = $('.dTable').dataTable({
-            "bJQueryUI": false,
-            "bAutoWidth": false,
-            "sPaginationType": "full_numbers",
-            "sDom": '<"H"fl>t<"F"ip>'
-        });
-//    }
-
 
     //===== Dynamic table toolbars =====//
-
     $('#dyn .tOptions').click(function () {
         $('#dyn .tablePars').slideToggle(200);
     });
-
     $('#dyn2 .tOptions').click(function () {
         $('#dyn2 .tablePars').slideToggle(200);
     });
-
-
     $('.tOptions').click(function () {
         $(this).toggleClass("act");
     });
@@ -210,6 +187,15 @@ $(function() {
         return false;
     });
 
+    //spinner
+    var itemrows = $('#item-rows').val();
+    console.log(':: Item rows is '+itemrows);
+    var i;
+    for (i = 0; i < parseInt(itemrows); ++i) {
+         $('#item-quantity-'+i).spinner({min:0, max:100, showOn:'both'});
+     }
+
+
     //===== init customer dialog =====//
     WorkOrder.customer.initDialog();
     WorkOrder.service.initDialog();
@@ -269,6 +255,10 @@ WorkOrder.customer = {
             width: 800,
             buttons: {
                 "Cancel": function () {
+                    $('#tablecustomer').dataTable({
+                        "bDestroy": true,
+                        "bRetrieve": true
+                    });
                     $( this ).dialog( "close" );
                 }
             }
@@ -947,7 +937,8 @@ WorkOrder.items = {
         $(this._dialogitems).dialog({
             autoOpen: false,
             modal: true,
-            width: 800,
+            width: 1110,
+            height: 681,
             buttons: {
                 "Done": function () {
                     $( this ).dialog( "close" );
@@ -959,6 +950,16 @@ WorkOrder.items = {
             var isvalid = true;
             var confirm_title = 'Confirmation';
             var confirm_content = 'Your action cannot be undone. Are you sure?';
+
+
+            //-------------get value from table-----------------
+            var type = $(this).parent().parent().children('td.type').html();  // a.delete -> td -> tr -> td.name
+            var unit = $(this).parent().parent().children('td.unit').html();
+            var code = $(this).parent().parent().children('td.code').html();
+            var name = $(this).parent().parent().children('td.name').html();
+            var vendor = $(this).parent().parent().children('td.vendor').html();
+            var price = $(this).parent().parent().children('td.price').html();
+            var total = $(this).parent().parent().children('th.total').html();
             var item_id = $(this).parent().parent().children('th.item-id').html();
             var stock = $(this).parent().parent().children('td.stock').html();
             console.log(':: stock => '+stock);
@@ -978,14 +979,6 @@ WorkOrder.items = {
                 buttons : {
                     "Confirm" : function() {
                         if (isvalid === true) {
-                            //-------------get value from table-----------------
-                            var type = $(WorkOrder.items._select).parent().parent().children('td.type').html();  // a.delete -> td -> tr -> td.name
-                            var unit = $(WorkOrder.items._select).parent().parent().children('td.unit').html();
-                            var code = $(WorkOrder.items._select).parent().parent().children('td.code').html();
-                            var name = $(WorkOrder.items._select).parent().parent().children('td.name').html();
-                            var vendor = $(WorkOrder.items._select).parent().parent().children('td.vendor').html();
-                            var price = $(WorkOrder.items._select).parent().parent().children('td.price').html();
-                            var total = $(WorkOrder.items._select).parent().parent().children('th.total').html();
                             console.log('============');
                             console.log(name);
                             console.log('============');
@@ -1135,6 +1128,8 @@ WorkOrder.items = {
         var vtbody = $(this._tbody);
         vtbody.append(tr);
 
+        $('#item-quantity-'+nextidx).spinner({min:0, max:100, showOn:'both'});
+        console.log('Total ID Spinner ' + '#item-quantity-'+nextidx);
         //updating rows
         irows.val(++nextidx);
         console.log('rows updated to ' + irows.val());
@@ -1143,6 +1138,8 @@ WorkOrder.items = {
     remove : function(id) {
         $('#'+id).remove();
         var row = $(this._table).find('tr').length - 1;
+        var irowsValue = $(this._rows).val();
+        $(this._rows).val(parseInt(irowsValue)-1);
     }
 };
 

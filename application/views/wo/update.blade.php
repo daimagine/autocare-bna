@@ -183,7 +183,7 @@
                     <td class="i-vendor-{{$no}}">{{$trx_item->item_price->item->vendor}}</td>
                     <td class="i-price-{{$no}}">{{$trx_item->item_price->price}}</td>
                     <td class="i-total-{{$no}}">
-                        <input class="i-qty-hid-{{$no}}" style="width: 30px;" name="items[{{$no}}][quantity]" value="{{$trx_item->quantity}}">
+                        <input id="item-quantity-{{$no}}" class="i-qty-hid-{{$no}}" style="width: 30px;" name="items[{{$no}}][quantity]" value="{{$trx_item->quantity}}">
                     </td>
                     <td>
                         <div><a href="#item-tbody" onclick="WorkOrder.items.remove('i-rows-{{$no}}')">remove</a></div>

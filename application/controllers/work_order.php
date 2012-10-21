@@ -35,7 +35,11 @@ class Work_Order_Controller extends Secure_Controller
     }
 
     public function get_add() {
-        Asset::add('function_wo', 'js/wo/application.js',  array('jquery', 'jquery-ui'));
+        Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
+        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
+        Asset::add('function_wo', 'js/wo/application.js',  array('jquery', 'jquery.timeentry'));
+
         $wodata = Session::get('wodata');
         $customer = Session::get('customer');
         $service = Session::get('service');
@@ -55,7 +59,6 @@ class Work_Order_Controller extends Secure_Controller
         $lstMechanic=User::listByCiteria(array(
            'role_id' => 4
         ));
-
         $selectionMechanic = array();
         $selectionMechanic[0] = '-- select service --';
         foreach($lstMechanic as $mch) {
@@ -104,7 +107,6 @@ class Work_Order_Controller extends Secure_Controller
         Work_Order_Controller::define_asset();
         $lstItemCategory = ItemCategory::listAll(null);
         $lstItems = Item::listAll(array());
-//        {{dd($date);}}
         return View::make('wo.modal.items', array(
             'lstItemCategory' => $lstItemCategory,
             'lstItems' => $lstItems
@@ -198,7 +200,6 @@ class Work_Order_Controller extends Secure_Controller
         if ($id===null) {
             return Redirect::to('work_order/list');
         }
-        //action type : DETAIL => D, CLOSED=> C, CANCELED=> X, REOPEN=> R
         $action = Input::get('type');
         $transaction = Transaction::get_detail_trx($id);
         return $this->layout->nest('content', 'wo.detail', array(
@@ -283,11 +284,10 @@ class Work_Order_Controller extends Secure_Controller
         if ($id===null) {
             return Redirect::to('work_order/list');
         }
-
-        Asset::add('jquery.validationEngine-en', 'js/plugins/forms/jquery.validationEngine-en.js',  array('jquery', 'jquery-ui'));
-        Asset::add('jquery.validate', 'js/plugins/wizards/jquery.validate.js',  array('jquery', 'jquery-ui'));
-        Asset::add('validationEngine.form', 'js/plugins/forms/jquery.validationEngine.js',  array('jquery', 'jquery-ui'));
-        Asset::add('function_item', 'js/wo/application.js',  array('jquery', 'jquery-ui'));
+        Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
+        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
+        Asset::add('function_wo', 'js/wo/application.js',  array('jquery', 'jquery.timeentry'));
 
         $transaction = Transaction::get_detail_trx($id);
 //        {{dd($transaction);}}

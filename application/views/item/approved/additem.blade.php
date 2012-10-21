@@ -6,82 +6,88 @@
             $('#formDialogNewItem').dialog('close');
             return false;
         });
-    });
-    $("#usualValidate").validate({
-        rules: {
-            firstname: "required",
-            stock: {
-                required: true,
-                digits: true
-            },
-            price: {
-                required: true,
-                digits: true
-            },
-            purchase_price: {
-                required: true,
-                digits: true
-            },
-            agree: "required"
+
+    var opts = {
+        'itemstock': {
+            decimal: 1,
+            min: 0,
+            start: 0
         },
-        messages: {
-            customMessage: {
-                required: "Bazinga! This message is editable",
-            },
-            agree: "Please accept our policy"
+        'itemprice': {
+            decimal: 2,
+            min: 0,
+            start: 0
+        },
+        'itempurchase_price': {
+            decimal: 2,
+            min: 0,
+            start: 0
         }
+    };
+//        for (var n in opts) {
+//            $("#"+n).spinner(opts[n]);
+//        }
+
     });
 </script>
-<script type="text/javascript">
-    function confirmSubmit()
-    {
-        var agree=confirm("Are you sure the data is correct ?");
-        if (agree)
-            return true ;
-        else
-            return false ;
-    }
-</script>
-{{ Form::open('item/putnewitem', 'POST', array('id' => 'usualValidate')) }}
-{{ Form::hidden('item_category_id', $itemCategory->id) }}
-{{ Form::hidden('status', 1) }}
-
-<fieldset class="step" id="w1first">
-    <div class="fluid">
-        <div class="grid6">
-            {{ Form::nyelect('item_type_id', @$itemType, isset($item['item_type_id']) ? $item['item_type_id'] : 1, 'Item Type', array('class' => 'validate[required]')) }}
-
-            {{ Form::nginput('text', 'name', @$item['name'], 'Name', array('class' => 'required'))  }}
-
-            {{ Form::nginput('text', 'price', @$item['price'], 'Selling Price', array('class' => 'required')) }}
-
-            {{ Form::nginput('text', 'stock', @$item['stock'], 'Stock', array('class' => 'required')) }}
-
-            {{ Form::nginput('text', 'description', @$access['description'], 'Description', array('class' => 'required')) }}
-
-        </div>
-        <div class="grid6">
-            {{ Form::nyelect('unit_id', @$unitType, isset($item['unit_id']) ? $item['unit_id'] : 1, 'Unit Type', array('class' => 'required ')) }}
-
-            {{ Form::nginput('text', 'code', @$item['code'], 'Code', array('class' => 'required'))  }}
-
-            {{ Form::nginput('text', 'purchase_price', @$item['purchase_price'], 'Purchase Price', array('class' => 'required')) }}
-
-            {{ Form::nginput('text', 'vendor', @$item['vendor'], 'Vendor', array('class' => 'required'))  }}
-
-            {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($item['status']) ? $item['status'] : 1, 'Status') }}
-        </div>
-        <div class="grid11">
-            <div class="formRow noBorderB">
-                <div class="status" id="status3"></div>
-                <div class="formSubmit">
-                    {{ HTML::link('#', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5', 'id' => 'dialogNewItem' )) }}
-                    {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5' , 'onClick' => 'return confirmSubmit()')) }}
+        {{ Form::hidden('item_category_id', $itemCategory->id, array('id' => 'itemcategoryid')) }}
+        {{ Form::hidden('status', 1) }}
+        <div class="dialogSelect m10" id="newitem-dialog-notification"></div>
+        <div class="divider"><span></span></div>
+        <div class="fluid">
+            <div class="grid6">
+                <div class="dialogSelect m10">
+                    <label style="margin-bottom: -13px; display: block;">Item Type *</label><br>
+                    <select id="item_type_id" name="item_type_id" class="validate[required]">
+                        @foreach($itemType as $key => $value)
+                        <option id="{{ $key }}" value="{{ $key }}">{{ $value }}</option>
+                        @endforeach
+                    </select>
                 </div>
-                <div class="clear"></div>
+                <div class="dialogSelect m10">
+                    <label>Name *</label><br>
+                    <input type="text" id="itemname" name="name" class="required"/>
+                </div>
+                <div class="dialogSelect m10">
+                    <label>Selling Price *</label><br>
+                    <input type="text" id="itemprice" name="price" class="required"/>
+                </div>
+                <div class="dialogSelect m10">
+                    <label>Quantity Opname *</label><br>
+                    <input type="text" id="itemstock" name="stock" class="required"/>
+                </div>
+                <div class="dialogSelect m10">
+                    <label>Description *</label><br>
+                    <input type="text" id="description" name="description" class="required"/>
+                </div>
+            </div>
+            <div class="grid6">
+                <div class="dialogSelect m10">
+                    <label style="margin-bottom: -13px; display: block;">Unit Type *</label><br>
+                    <select id="unit_id" name="unit_id" class="validate[required]">
+                        @foreach($unitType as $key => $value)
+                        <option value="{{ $key }}">{{ $value }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="dialogSelect m10">
+                    <label>Code *</label><br>
+                    <input type="text" id="itemcode" name="code" class="required" disabled="true" value="{{$code}}"/>
+                </div>
+                <div class="dialogSelect m10">
+                    <label>Purchase Price *</label><br>
+                    <input type="text" id="itempurchase_price" name="purchase_price" class="required"/>
+                </div>
+                <div class="dialogSelect m10">
+                    <label>Vendor</label><br>
+                    <input type="text" id="itemvendor" name="vendor" class="required"/>
+                </div>
+                <div class="dialogSelect m10">
+                    <label style="margin-bottom: -13px; display: block;">Status *</label><br>
+                    <select id="itemstatus" class="validate[required]" name="status">
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
             </div>
         </div>
-
-    </div>
-</fieldset>
-{{ Form::close() }}

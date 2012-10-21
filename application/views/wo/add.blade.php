@@ -1,8 +1,9 @@
 @section('content')
-
+<style type="text/css">
+    .ui-spinner { width: 3em;}
+</style>
 @include('partial.notification')
 <br>
-
 {{ Form::open('/work_order/add', 'POST', array('id' => 'formAutocare', 'name' => 'formAutocare')) }}
 <fieldset>
 <div class="widget fluid">
@@ -415,8 +416,9 @@
 </fieldset>
 
 {{ Form::close() }}
-
 @endsection
+
+
 
 
 

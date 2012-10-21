@@ -14,7 +14,7 @@
 
         {{ Form::nginput('text', '', $subAccountTrx->account_transaction->reference_no, 'Reference No', array('readonly' => 'readonly')) }}
 
-        {{ Form::nginput('text', '', '', 'Create By', array('readonly' => 'readonly')) }}
+        {{ Form::nginput('text', '', $subAccountTrx->account_transaction->user->name, 'Create By', array('readonly' => 'readonly')) }}
 
         {{ Form::nginput('text', '', $subAccountTrx->item, 'Item', array('readonly' => 'readonly')) }}
 
@@ -25,50 +25,40 @@
 
     <div class="widget fluid">
         <div class="whead">
-            <h6>Stock Opname List</h6><div class="clear">
+            <h6>Stock Opname Item</h6><div class="clear">
         </div>
         </div>
         <div style="padding: 5px 16px">
-        <div class="btn-group" style="display: inline-block; margin-bottom: -4px;">
+        <div class="btn-group" id="putitem-button" style="display: inline-block; margin-bottom: -4px;">
             <a class="buttonS bBlue" data-toggle="dropdown" href="#"><span>Put Item</span><span class="caret"></span></a>
             <ul class="dropdown-menu">
+                <li><a onclick="items.approved.openDialog_lst_items()" ><span class="icos-folder"></span>Select Item</a></li>
                 @foreach($itemCategory as $c)
-                <li><a onclick="getListItem('{{$c->id}}');" ><span class="icos-folder"></span>Select Item {{$c->name}}</a></li>
-                @endforeach
-                @foreach($itemCategory as $c)
-                <li><a onclick="formNewItem('{{$c->id}}')"><span class="icos-add"></span>New Item {{$c->name}}</a></li>
+                <li><a onclick="items.approved.openDialog_new_items('{{$c->id}}', '{{$c->name}}')"><span class="icos-add"></span>New Item {{$c->name}}</a></li>
                 @endforeach
             </ul>
         </div>
         </div>
-        <div class="formRow noBorderB" style="padding-top: 5px;">
-            <table cellpadding="0" cellspacing="0" width="100%" class="tDark">
+        <div class="formRow noBorderB" style="padding-top: 5px;" id="item-body">
+            <table cellpadding="0" cellspacing="0" width="100%" class="tDark" id="item-table">
                 <thead>
                 <tr>
-                    <td>Item Name</td>
+                    <td>Type</td>
+                    <td>Unit</td>
                     <td>Code</td>
-                    <td>Quantity Opname</td>
-                    <td>Current Stock</td>
-                    <td>Total Stock</td>
+                    <td>Name</td>
                     <td>Vendor</td>
+                    <td>Current Stock</td>
+                    <td>Quantity Opname</td>
+                    <!--                    <td>Total</td>-->
                 </tr>
                 </thead>
-                <tbody>
-                @foreach($items as $item)
-                <tr>
-                    <td>{{$item->item->name }}</td>
-                    <td>{{$item->item->code }}</td>
-                    <td>{{$item->quantity }}</td>
-                    <td>{{$item->item->stock }}</td>
-                    <td>{{($item->item->stock) + ($item->quantity) }}</td>
-                    <td>{{$item->item->vendor }}</td>
-                    <td>
-                        {{ HTML::link('item/remove_opname_item/'.$item->id, 'remove') }}
-                    </td>
-                </tr>
-                @endforeach
+                <tbody id="item-tbody">
+
                 </tbody>
             </table>
+            <input type="hidden" id="item-rows" value="0"/>
+            <div id="item-input-wrapper" style="display: none;"></div>
         </div>
 
         <div class="formRow">
@@ -86,7 +76,7 @@
                 {{ HTML::link('item/list_approved', 'Back', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
             </div>
             <!-- Form Dialog New Item -->
-            <div id="formDialogNewItem" class="dialog" title="Dialog with form elements" >
+            <div id="formDialogNewItem" class="dialog" title="Dialog new items" >
             </div>
 
             <!-- Form Dialog Add Item -->

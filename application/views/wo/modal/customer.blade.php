@@ -1,5 +1,17 @@
-<!--<script src="../js/wo/application.js" type="text/javascript"></script>-->
-<script src="http://autocare-bna.dev/js/wo/application.js" type="text/javascript"></script>
+<script src="../js/wo/application.js" type="text/javascript"></script>
+<script src="../../js/wo/application.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function() {
+        iTable = $('#tablecustomer').dataTable({
+            "bJQueryUI": false,
+            "bAutoWidth": false,
+            "sPaginationType": "full_numbers",
+            "sDom": '<"H"fl>t<"F"ip>'
+        });
+
+
+    });
+</script>
 <!-- javascript library -->
 <link href="../css/styles.css" media="all" type="text/css" rel="stylesheet">
     <div class="wrapper">
@@ -10,7 +22,7 @@
             </div>
             <div id="dyn2" class="shownpars">
                 <a class="tOptions act" title="Options">{{ HTML::image('images/icons/options', '') }}</a>
-                <table cellpadding="0" cellspacing="0" border="0" class="dTable">
+                <table cellpadding="0" cellspacing="0" border="0" class="dTable" id="tablecustomer">
                     <thead>
                     <tr>
                         <th>Name<span class="sorting" style="display: block;"></span></th>

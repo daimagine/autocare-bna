@@ -1,5 +1,19 @@
 <!-- Tabs -->
-<script src="http://autocare-bna.dev/js/wo/application.js" type="text/javascript"></script>
+<script src="../js/wo/application.js" type="text/javascript"></script>
+<script src="../../js/wo/application.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function() {
+        console.log(':: define new table items jquery');
+        oTable = $('.iTable').dataTable({
+            "bJQueryUI": false,
+            "bAutoWidth": false,
+            "sPaginationType": "full_numbers",
+            "sDom": '<"H"fl>t<"F"ip>'
+        });
+
+//        $.uniform.update("select");
+    });
+</script>
 <div class="fluid">
     <div class="widget" style="margin-top: 0px;">
         <ul class="tabs">
@@ -13,14 +27,14 @@
             <div id="{{$category->id}}" class="tab_content">
                 <div id="dyn{{$category->id}}" class="shownpars">
                     <a class="tOptions act" title="Options">{{ HTML::image('images/icons/options', '') }}</a>
-                    <table cellpadding="0" cellspacing="0" border="0" class="dTable">
+                    <table cellpadding="0" cellspacing="0" border="0" class="iTable" id="tableitems">
                         <thead>
                         <tr>
                             <th style="display: none" ></th>
                             <th>Name<span class="sorting" style="display: block;"></span></th>
                             <th>Code</th>
                             <th>Stock</th>
-                            <th>Description</th>
+<!--                            <th>Description</th>-->
                             <th>Price</th>
                             <th>Vendor</th>
                             <th>Type</th>
@@ -37,7 +51,7 @@
                                     <td class="name">{{ $item->name }}</td>
                                     <td class="code">{{ $item->code }}</td>
                                     <td class="stock">{{ $item->stock }}</td>
-                                    <td class="desc">{{ $item->description }}</td>
+<!--                                    <td class="desc">{{ $item->description }}</td>-->
                                     <td class="price">{{ $item->price }}</td>
                                     <td class="vendor">{{ $item->vendor }}</td>
                                     <td class="type">{{ $item->item_type->name}}</td>

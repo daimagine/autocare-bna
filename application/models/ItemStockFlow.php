@@ -47,14 +47,13 @@ class ItemStockFlow extends Eloquent {
 
     public static function create($data=array()) {
         $itemStockFlow = new ItemStockFlow();
-//        {{dd($data);}}
         $item= Item::find($data['item_id']);
         $subAccountTrx = SubAccountTrx::find($data['sub_account_trx_id']);
         $itemStockFlow->item_id = $item->id;
         $itemStockFlow->sub_account_trx_id = $subAccountTrx->id;
         $itemStockFlow->quantity = $data['quantity'];
-        $itemStockFlow->type = 'O'; //.....??????
-        $itemStockFlow->status = itemStockFlowStatus::ADD_TO_LIST;
+        $itemStockFlow->type = 'O';
+        $itemStockFlow->status = statusType::ACTIVE;
         $itemStockFlow->configured_by = Auth::user()->id;
         $itemStockFlow->save();
         return $itemStockFlow->id;

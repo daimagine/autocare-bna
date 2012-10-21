@@ -28,21 +28,21 @@
 
         {{ Form::nginput('text', 'name', @$item['name'], 'Name', array('class' => 'validate[required]')) }}
 
-        {{ Form::nginput('text', 'code', @$item['code'], 'Code', array('class' => 'validate[required]')) }}
+        {{ Form::nginput('text', 'code', @$code, 'Code', array('class' => 'validate[required]', 'disabled' => 'true')) }}
 
-        @if($accountTransaction!=null)
-        {{ Form::nyelect('account_transaction_id', @$accountTransaction, isset($item['account_transaction_id']) ? $item['account_transaction_id'] : null, 'Account Transaction', array('class' => 'validate[required]')) }}
-
-        <div class="formRow">
-            <div class="grid3"><label>Stock</label></div>
-            <div class="grid9">
-                <div class="grid5">
-                    <input name="stock" type="text" id="stockValue" value="{{ @$item['stock'] }}" class="validate[required,custom[number]]"/>
-                </div>
-            </div>
-            <div class="clear"></div>
-        </div>
-        @endif
+<!--        @if($accountTransaction!=null)-->
+<!--        {{ Form::nyelect('account_transaction_id', @$accountTransaction, isset($item['account_transaction_id']) ? $item['account_transaction_id'] : null, 'Account Transaction', array('class' => 'validate[required]')) }}-->
+<!---->
+<!--        <div class="formRow">-->
+<!--            <div class="grid3"><label>Stock</label></div>-->
+<!--            <div class="grid9">-->
+<!--                <div class="grid5">-->
+<!--                    <input name="stock" type="text" id="stockValue" value="{{ @$item['stock'] }}" class="validate[required,custom[number]]"/>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="clear"></div>-->
+<!--        </div>-->
+<!--        @endif-->
 
         {{ Form::nginput('text', 'description', @$access['description'], 'Description', array('class' => 'validate[required]')) }}
 

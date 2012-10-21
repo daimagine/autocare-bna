@@ -16,8 +16,31 @@ class Item_Controller extends Secure_Controller {
         Session::put('active.main.nav', 'item@index');
     }
 
+    private function define_asset(){
+        Asset::add('style', 'css/styles.css');
+        Asset::add('jquery', 'js/jquery.min.js');
+        Asset::add('jquery-ui', 'js/jquery-ui.min.js', array('jquery'));
+        Asset::add('jquery-uniform', 'js/plugins/forms/jquery.uniform.js', array('jquery', 'jquery-ui'));
+        Asset::add('jquery.dataTables', 'js/plugins/tables/jquery.dataTables.js', array('jquery', 'jquery-ui'));
+        Asset::add('jquery.sortable', 'js/plugins/tables/jquery.sortable.js', array('jquery', 'jquery-ui'));
+        Asset::add('jquery.resizable', 'js/plugins/tables/jquery.resizable.js', array('jquery', 'jquery-ui'));
+        Asset::add('jquery.collapsible', 'js/plugins/ui/jquery.collapsible.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('jquery.breadcrumbs', 'js/plugins/ui/jquery.breadcrumbs.js', array('jquery', 'jquery-ui'));
+        Asset::add('jquery.tipsy', 'js/plugins/ui/jquery.tipsy.js', array('jquery', 'jquery-ui'));
+        Asset::add('bootstrap-js', 'js/bootstrap.js', array('jquery-uniform'));
+        Asset::add('application-js', 'js/application.js', array('jquery-uniform'));
+    }
+
     public function get_index() {
-        $this->get_list();
+        $all_item_category = ItemCategory::listAll(array());
+        if ($all_item_category == null) {
+            Session::flash('message_error', 'System Failed (List Item Category Null)');
+            return Redirect::to('/');
+        }
+        return $this->layout->nest('content', 'item.index', array(
+            'item_category' => $all_item_category,
+        ));
+//        $this->get_list();
     }
 
     public function get_list() {
@@ -51,7 +74,7 @@ class Item_Controller extends Secure_Controller {
 
     public function get_items($criteria, $all_item_category, $item_category) {
         $item = Item::listAll($criteria);
-        return $this->layout->nest('content', 'item.index', array(
+        return $this->layout->nest('content', 'item.list', array(
             'item' => $item,
             'item_category' => $all_item_category,
             'category' => $item_category
@@ -59,13 +82,10 @@ class Item_Controller extends Secure_Controller {
     }
 
     public function get_add() {
-//        Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
-//        Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
         Asset::add('jquery.validationEngine-en', 'js/plugins/forms/jquery.validationEngine-en.js',  array('jquery', 'jquery-ui'));
         Asset::add('jquery.validate', 'js/plugins/wizards/jquery.validate.js',  array('jquery', 'jquery-ui'));
         Asset::add('validationEngine.form', 'js/plugins/forms/jquery.validationEngine.js',  array('jquery', 'jquery-ui'));
         Asset::add('function_item', 'js/item/application.js',  array('jquery', 'jquery-ui'));
-//        Asset::add('function_item', 'js/item/confirmation.js',  array('jquery'));
         $itemdata = Session::get('item');
         $category_id = Input::get('category'); //this id category
 
@@ -93,7 +113,6 @@ class Item_Controller extends Secure_Controller {
         foreach($itemType as $type) {
             $selectionType[$type->id] = $type->name;
         }
-//        $unitType=DB::table('unit_type')->get();
         $unitType=UnitType::listAll(array(
             'item_category_id' => $item_category->id
         ));
@@ -105,15 +124,16 @@ class Item_Controller extends Secure_Controller {
         $lstSubAte=Item_Controller::get_lstSubAccountTrx(null);
 
         $selectionAte= array();
-//        {{dd($lstSubAte);}}
         if($lstSubAte!=null){
             foreach($lstSubAte as $ate) {
                 $selectionAte[$ate->id] = ($ate->account_transaction->invoice_no).('-').($ate->id);
             }
         }
 
+        $code = Item::code_new_item();
         return $this->layout->nest('content', 'item.add', array(
             'item' => $itemdata,
+            'code' => $code,
             'itemType' => $selectionType,
             'itemCategory' => $item_category,
             'allItemCategory' => $all_item_category,
@@ -149,8 +169,6 @@ class Item_Controller extends Secure_Controller {
     }
 
     public function get_edit($id=null) {
-//        Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
-//        Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
         Asset::add('jquery.validationEngine-en', 'js/plugins/forms/jquery.validationEngine-en.js',  array('jquery', 'jquery-ui'));
         Asset::add('jquery.validate', 'js/plugins/wizards/jquery.validate.js',  array('jquery', 'jquery-ui'));
         Asset::add('validationEngine.form', 'js/plugins/forms/jquery.validationEngine.js',  array('jquery', 'jquery-ui'));
@@ -165,7 +183,6 @@ class Item_Controller extends Secure_Controller {
         foreach($itemType as $type) {
             $selectionType[$type->id] = $type->name;
         }
-//        $unitType=DB::table('unit_type')->get();
         $unitType=UnitType::listAll(array(
             'item_category_id' => $item->item_category->id
         ));
@@ -182,7 +199,6 @@ class Item_Controller extends Secure_Controller {
             }
         }
 
-//        {{dd($item);}}
         return $this->layout->nest('content', 'item.edit', array(
             'item' => $item,
             'itemType' => $selectionType,
@@ -264,7 +280,8 @@ class Item_Controller extends Secure_Controller {
             'id' => $id,
             'approved_status' => approvedStatus::NEW_ACCOUNT_INVOICE,
             'account_trx_id' => null,
-            'account_trx_status' => accountTrxStatus::AWAITING_PAYMENT
+            'account_trx_status' => accountTrxStatus::AWAITING_PAYMENT,
+            'account_trx_type' => AUTOCARE_ACCOUNT_TYPE_CREDIT
         ));
         return $lstAte;
     }
@@ -278,51 +295,34 @@ class Item_Controller extends Secure_Controller {
     }
 
     public function get_detail_approved($id=null) {
+        Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
         Asset::add('jquery.validationEngine-en', 'js/plugins/forms/jquery.validationEngine-en.js',  array('jquery', 'jquery-ui'));
-        Asset::add('jquery.validate', 'js/plugins/wizards/jquery.validate.js',  array('jquery', 'jquery-ui'));
-        Asset::add('validationEngine.form', 'js/plugins/forms/jquery.validationEngine.js',  array('jquery', 'jquery-ui'));
-        Asset::add('function_item', 'js/item/application.js',  array('jquery', 'jquery-ui'));
+        Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
+        Asset::add('jquery.validate', 'js/plugins/wizards/jquery.validate.js',  array('jquery.validationEngine-en'));
+        Asset::add('validationEngine.form', 'js/plugins/forms/jquery.validationEngine.js',  array('jquery.validationEngine-en'));
+        Asset::add('function_item', 'js/item/application.js',  array('jquery.validationEngine-en'));
         Session::forget(ACCOUNT_TRX_ID);
         Session::put(ACCOUNT_TRX_ID, $id);
         if($id===null) {
             return Redirect::to('access/index');
         }
         $subAccountTrx = SubAccountTrx::find($id);
-        $criteria = array(
-            'sub_account_trx_id' => $subAccountTrx->id,
-            'status' => array(itemStockFlowStatus::ADD_TO_LIST)
-        );
-        $items=ItemStockFlow::listAll($criteria);
-
         $all_item_category = ItemCategory::listAll(array());
 
         return $this->layout->nest('content', 'item.approved.detail', array(
-            'items' => $items,
             'subAccountTrx' => $subAccountTrx,
             'itemCategory' => $all_item_category
         ));
     }
 
-    public function get_lst_item($id) {
-        $itemdata = Session::get('item');
-        $subAccountTrxId = Session::get(ACCOUNT_TRX_ID, null);
-        if($subAccountTrxId==null){
-            Session::flash('message', 'System Failed');
-            return Redirect::to('/');
-        }
-        $item_category=ItemCategory::find($id);
-        $items=Item::listAll(array(
-            'item_category_id' => $item_category->id
-        ));
-        $selectionItem = array();
-        foreach($items as $item) {
-            $selectionItem[$item->id] = $item->name;
-        }
+    public function get_lst_item() {
+        //get list items
+        Item_Controller::define_asset();
+        $lstItemCategory = ItemCategory::listAll(null);
+        $lstItems = Item::listAll(array());
         return View::make('item.approved.items', array(
-            'selectionItem' => $selectionItem,
-            'item' => $itemdata,
-            'categoryName' => $item_category->name,
-            'sub_account_trx_id' => $subAccountTrxId
+            'lstItemCategory' => $lstItemCategory,
+            'lstItems' => $lstItems
         ));
     }
 
@@ -344,10 +344,8 @@ class Item_Controller extends Secure_Controller {
     }
 
     public function get_putnewitem($id){
-        Asset::add('jquery.validationEngine-en', 'js/plugins/forms/jquery.validationEngine-en.js',  array('jquery', 'jquery-ui'));
-        Asset::add('jquery.validate', 'js/plugins/wizards/jquery.validate.js',  array('jquery', 'jquery-ui'));
-        Asset::add('validationEngine.form', 'js/plugins/forms/jquery.validationEngine.js',  array('jquery', 'jquery-ui'));
-        Asset::add('function_item', 'js/item/application.js',  array('jquery', 'jquery-ui'));
+        Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
+        Asset::add('function_item', 'js/item/application.js',  array('jquery.ui.spinner', 'jquery-ui'));
         $itemdata = Session::get('item');
         $subAccountTrxId = Session::get(ACCOUNT_TRX_ID, null);
         if($subAccountTrxId==null){
@@ -365,7 +363,6 @@ class Item_Controller extends Secure_Controller {
         foreach($itemType as $type) {
             $selectionType[$type->id] = $type->name;
         }
-//        $unitType=DB::table('unit_type')->get();
         $unitType=UnitType::listAll(array(
             'item_category_id' => $item_category->id
         ));
@@ -374,8 +371,10 @@ class Item_Controller extends Secure_Controller {
             $selectionUnit[$unit->id] = $unit->name;
         }
 
+        $code = Item::code_new_item();
         return View::make('item.approved.additem', array(
             'item' => $itemdata,
+            'code' => $code,
             'itemType' => $selectionType,
             'unitType'  => $selectionUnit,
             'itemCategory' => $item_category,
@@ -419,43 +418,45 @@ class Item_Controller extends Secure_Controller {
     }
 
     public function post_approved_action() {
+        $data = Input::all();
         $action = Input::get('action'); //this action type
         $remarks = Input::get('remarks');
         $subAccountTrxId = Session::get(ACCOUNT_TRX_ID, null);
-        $criteria = array(
-            'sub_account_trx_id' => $subAccountTrxId,
-            'status' => array(itemStockFlowStatus::ADD_TO_LIST)
-        );
         $item =null;
-        $listItemStockFlow = ItemStockFlow::listAll($criteria);
         $subAccountTrx = SubAccountTrx::find($subAccountTrxId);
-
             if ($action == 'confirm') {
-                if ($listItemStockFlow!=null) {
-                    foreach($listItemStockFlow as $itemStockFlow){
-                        //update item
-                        $item = Item::find($itemStockFlow->item->id);
-                        $countStock = ($item->stock) + ($itemStockFlow->quantity);
-                        if(Item::updateStock($item->id, $countStock)) {
-                        //success update item stock
+                if (isset($data['item_id'])) {
+                    if($data['item_id']==null || $data['item_id']=='') {
+//                        {{dd($data);}}
+                        $item = Item::create($data);
+                        $success = ItemStockFlow::create(array(
+                            'item_id' => $item,
+                            'sub_account_trx_id' => $subAccountTrxId,
+                            'quantity' => $data['stock_opname']
+                        ));
+                        if($success && $item) {
+                            Session::flash('message', 'Success Closed');
+                        } else {
+                            Session::flash('message_error', 'Failed Closed approved invoice');
                         }
-                        //update item stock flow
-                        if(ItemStockFlow::updateStatus($itemStockFlow->id, itemStockFlowStatus::CONFIRM_ADDITIONAL)) {
-                        //success update item stock flow status
+                    } else {
+                        $item = Item::find($data['item_id']);
+                        $success = ItemStockFlow::create(array(
+                            'item_id' => $item->id,
+                            'sub_account_trx_id' => $subAccountTrxId,
+                            'quantity' => $data['stock_opname']
+                        ));
+                        $countStock = ($item->stock) + ((int)$data['stock_opname']);
+                        $item = Item::update($item->id, array('stock' => $countStock));
+                        if($success && $item) {
+                            Session::flash('message', 'Success Closed');
+                        } else {
+                            Session::flash('message_error', 'Failed Closed approved invoice');
                         }
                     }
                 }
                 $subAccountTrx->approved_status = approvedStatus::CONFIRM_BY_WAREHOUSE;
             } else if ($action = 'reject') {
-                if ($listItemStockFlow!=null) {
-                    foreach($listItemStockFlow as $itemStockFlow){
-                        //update item stock flow
-                        if(ItemStockFlow::updateStatus($itemStockFlow->id, itemStockFlowStatus::CANCEL)) {
-                        //success update item stock flow status
-                        }
-                    }
-                }
-
                 $subAccountTrx->approved_status = approvedStatus::REVIEW_BY_WAREHOUSE;
             }
             if(SubAccountTrx::updateStatus($subAccountTrx->id, $subAccountTrx->approved_status, $remarks)) {
@@ -464,7 +465,6 @@ class Item_Controller extends Secure_Controller {
 
         return Redirect::to('item/list_approved');
     }
-
 
 
     //============================= START CONTROLLER FOR MENU HISTORY ====================
@@ -503,7 +503,7 @@ class Item_Controller extends Secure_Controller {
         //----call query get item stock flow-----//
         $listItemStockFlow=ItemStockFlow::listAll(array(
             'item_category_id' => $item_category->id,
-            'status' => array(itemStockFlowStatus::ADD_TO_LIST, itemStockFlowStatus::CONFIRM_ADDITIONAL)
+            'status' => array(statusType::ACTIVE, statusType::INACTIVE)
         ));
         return $this->layout->nest('content', 'item.history', array(
             'listItemPrice' => $listItemPrice,

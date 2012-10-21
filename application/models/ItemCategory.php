@@ -10,8 +10,14 @@ class ItemCategory  extends Eloquent
 {
     public static $table = 'item_category';
 
+    public function item() {
+        return $this->has_many('Item', 'item_category_id')
+            ->where('status', '=', statusType::ACTIVE);
+    }
+
     public static function listAll($criteria) {
-        $item_category = ItemCategory::where('status', '=', 1);
+        $item_category = ItemCategory::with('item');
+        $item_category = $item_category->where('status', '=', 1);
         if($criteria != null) {
             if(isset($criteria['id'])) {
                 $item_category = $item_category->where('id', '=', $criteria['category_id']);

@@ -12,6 +12,10 @@ class Item extends Eloquent {
     public static $table = 'item';
     public static $timestamps = false;
 
+    private static $REF_PREFIX = 'ITM';
+    private static $REF_LENGTH = 10;
+
+
 
     public function item_category() {
         return $this->belongs_to('ItemCategory');
@@ -42,22 +46,26 @@ class Item extends Eloquent {
         $item = Item::where_id($id)
             ->where_status(1)
             ->first();
-        $item_type= ItemType::find($data['item_type_id']);
-        $item->item_type_id=$item_type->id;
-        $item_category= ItemCategory::find($data['item_category_id']);
-        $item->item_category_id = $item_category->id;
-        $unit_type = UnitType::find($data['unit_id']);
-        $item->unit_id=$unit_type->id;
-        $item->name=$data['name'];
-        $item->code=$data['code'];
-        $item->description=$data['description'];
-//        $item->stock=$data['stock'];
-        $item->price=$data['price'];
-        $item->purchase_price=$data['purchase_price'];
-        $item->vendor=$data['vendor'];
-        $item->status=$data['status'];
-//        $item->date=$data['date'];
-//        $item->expiry_date=$data['expiry_date'];
+        if(isset($data['item_type_id'])){
+            $item_type= ItemType::find($data['item_type_id']);
+            $item->item_type_id=$item_type->id;
+        }
+        if(isset($data['item_category_id'])){
+            $item_category= ItemCategory::find($data['item_category_id']);
+            $item->item_category_id = $item_category->id;
+        }
+        if(isset($data['unit_id'])){
+            $unit_type = UnitType::find($data['unit_id']);
+            $item->unit_id=$unit_type->id;
+        }
+        if(isset($data['stock'])){$item->stock=$data['stock'];}
+        if(isset($data['name'])){$item->name=$data['name'];}
+        if(isset($data['code'])){$item->code=$data['code'];}
+        if(isset($data['description'])){$item->description=$data['description'];}
+        if(isset($data['price'])){$item->price=$data['price'];}
+        if(isset($data['purchase_price'])){$item->purchase_price=$data['purchase_price'];}
+        if(isset($data['vendor'])){$item->vendor=$data['vendor'];}
+        if(isset($data['status'])){$item->status=$data['status'];}
         $item->save();
         return $item->id;
     }
@@ -79,6 +87,9 @@ class Item extends Eloquent {
         if(isset($data['stock'])) {
 //            $item->stock=$data['stock'];
         }
+        if(isset($data['stock_opname'])) {
+            $item->stock=$data['stock_opname'];
+        }
         $item->price=$data['price'];
         $item->purchase_price=$data['purchase_price'];
         $item->vendor=$data['vendor'];
@@ -96,8 +107,6 @@ class Item extends Eloquent {
         return $item->id;
     }
 
-
-
     public static function updateStock($id, $stock) {
         $item = Item::where_id($id)
             ->where_status(1)
@@ -105,5 +114,12 @@ class Item extends Eloquent {
         $item->stock=$stock;
         $item->save();
         return $item->id;
+    }
+
+    public static function code_new_item() {
+        $count = DB::table(static::$table)->order_by('id', 'desc')->take(1)->only('id');
+        $count++;
+        $suffix = sprintf('%0' . static::$REF_LENGTH . 'd', $count);
+        return static::$REF_PREFIX . $suffix;
     }
 }
