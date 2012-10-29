@@ -16,6 +16,14 @@ class User extends Eloquent {
     public function role() {
         return $this->belongs_to('Role');
     }
+
+    public function conversations() {
+        return $this->has_many_and_belongs_to('Conversation');
+    }
+
+    public function messages() {
+        return $this->has_many('Message');
+    }
 	
     public static function listAll($criteria) {
         return User::with(array( 'role' ))
@@ -28,6 +36,21 @@ class User extends Eloquent {
        $user = User::where('status', '=', 1);
        if (isset($criteria['role_id'])) {{$user=$user->where('role_id', '=', $criteria['role_id']);}}
         return $user->get();
+    }
+
+    public static function find_name_ajax($logged_user, $name) {
+        $name = '%'.$name.'%';
+        $users = DB::table('user')
+            ->where('id', '<>', $logged_user->id)
+            ->where('name', 'LIKE', $name)
+            ->get(array('id','name'));
+        //dd($users);
+        $result = array();
+        foreach($users as $u) {
+            $result[] = array('id' => $u->id, 'text' => $u->name);
+        }
+//        dd($result);
+        return $result;
     }
 
     public static function update($id, $data = array()) {
