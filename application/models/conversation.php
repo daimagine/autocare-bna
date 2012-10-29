@@ -18,11 +18,21 @@ class Conversation extends Eloquent {
         return $this->has_many('Message', 'topic_id');
     }
 
-    public function markRead() {
-        foreach($this->messages() as $m) {
-            $m->read = true;
-            $m->save();
-        }
+    public function markRead($user_id=null) {
+        //mark read conversation user
+        DB::table('conversation_user')
+            ->where('conversation_id', '=', $this->id)
+            ->where('user_id', '=', $user_id)
+            ->update(array(
+                'read' => true
+            ));
+        //mark read message
+        DB::table('message')
+            ->where('topic_id', '=', $this->id)
+            ->where('user_id', '=', $user_id)
+            ->update(array(
+            'read' => true
+        ));
     }
 
     public static function listAll() {
@@ -32,63 +42,64 @@ class Conversation extends Eloquent {
     public static function send($data) {
         try {
 
-            //make new conversation if data['conversation_id'] is not exist
-            if(array_key_exists('conversation_id', $data)) {
-                $conversation = Conversation::find($data['conversation_id']);
+            array_push($data['user'], $data['sender']);
+            sort($data['user']);
+            //dd($data);
+            $convid = DB::table(static::$table)
+                ->join('conversation_user', 'conversation_user.conversation_id', '=', static::$table.".id")
+                ->where('conversation_user.key', '=', static::generateKey($data['user']))
+                ->take(1)
+                ->only(static::$table.".id")
+                ;
+//            dd(DB::last_query());
+//            dd($convid);
+
+            //if already have conversation with list of user
+            if($convid === false) {
+                $log = 'not found';
+                $conversation = Conversation::create(array(
+                    'subject' => Utilities\Stringutils::snippet($data['message'])
+                ));
+
+                foreach($data['user'] as $u) {
+                    $add = array();
+                    if($u == $data['sender']) {
+                        $add['read'] = true;
+                    }
+                    $add['key']  = static::generateKey($data['user']);
+                    $conversation->users()->attach($u, $add);
+                }
+                $conversation->users()->sync($data['user']);
+
             } else {
+                $conversation = Conversation::find($convid);
+                $conversation->subject = Utilities\Stringutils::snippet($data['message']);
+                $conversation->save();
 
-                array_push($data['user'], $data['sender']);
-                $convid = DB::table(static::$table)
-                    ->join('conversation_user', 'conversation_user.conversation_id', '=', static::$table.".id")
-                    ->where(function($query) use($data) {
-                        foreach($data['user'] as $u) {
-                            $query->where('conversation_user.user_id', '=', $u);
-                        }
-                    })
-                    ->take(1)
-                    ->only(static::$table.".id")
-                    ;
-                //dd($convid);
-
-                //if already have conversation with list of user
-                if($convid === false) {
-                    $log = 'not found';
-                    $conversation = Conversation::create(array(
-                        'subject' => Utilities\Stringutils::snippet($data['message'])
+                DB::table('conversation_user')
+                    ->where('conversation_id', '=', $conversation->id)
+                    ->where('user_id', '=', $data['sender'])
+                    ->update(array(
+                        'read' => true,
+                        'key'  => static::generateKey($data['user'])
                     ));
 
-                    foreach($data['user'] as $u) {
-                        $add = array();
-                        if($u == $data['sender']) {
-                            $add['read'] = true;
-                        }
-                        $conversation->users()->attach($u, $add);
-                    }
-                    $conversation->users()->sync($data['user']);
-
-                } else {
-                    $conversation = Conversation::find($convid);
-                    $conversation->subject = Utilities\Stringutils::snippet($data['message']);
-                    $conversation->save();
-
-                    DB::table('conversation_user')
-                        ->where('conversation_id', '=', $conversation->id)
-                        ->where('user_id', '=', $data['sender'])
-                        ->update(array(
-                            'read' => true
-                        ));
-                    $log = $conversation;
-                }
-
-                //dd($log);
-
+                //flag others pivot to unread
+                DB::table('conversation_user')
+                    ->where('conversation_id', '=', $conversation->id)
+                    ->where('user_id', '<>', $data['sender'])
+                    ->update(array(
+                        'read' => false,
+                    ));
+                $log = $conversation;
             }
 
             //create message
             foreach($data['user'] as $user) {
                 $m = array(
                     'user_id' => $user,
-                    'message' => $data['message']
+                    'message' => $data['message'],
+                    'sender_id' => $data['sender']
                 );
                 if($user == $data['sender']) {
                     $m['read'] = true;
@@ -132,4 +143,12 @@ class Conversation extends Eloquent {
         }
         return $res;
     }
+
+    public static function generateKey($users_id=array()) {
+        $res = "";
+        foreach($users_id as $id)
+            $res .= $id . "z";
+        return $res;
+    }
+
 }

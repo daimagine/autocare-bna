@@ -15,6 +15,7 @@ class Create_Messaging_System {
             $table->integer('conversation_id');
             $table->boolean('deleted')->default(false);
             $table->boolean('read')->default(false);
+            $table->string('key');
             $table->timestamps();
         });
 
@@ -28,6 +29,7 @@ class Create_Messaging_System {
             $table->increments('id');
             $table->integer('topic_id');
             $table->integer('user_id');
+            $table->integer('sender_id');
             $table->boolean('deleted')->default(false);
             $table->boolean('read')->default(false);
             $table->text('message');

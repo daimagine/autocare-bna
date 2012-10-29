@@ -24,10 +24,13 @@
             <ul class="messagesTwo">
 
                 @foreach($conversations as $conv)
-
                     <?php $pivot = $conv->self(); ?>
-                    <li class="{{ $pivot['read'] == true ? 'by_me' : 'by_user' }}">
-                        <a href="#" title=""><img src="images/live/face1.png" alt=""></a>
+                    <li class="{{ $pivot['read'] == true ? 'by_me' : 'by_user' }} pointer tipE"
+                        data-id="{{ $conv->id }}"
+                        onclick="viewConversation(this);"
+                        original-title="view conversation">
+
+                        <a href="#" title=""><img src="/images/live/face{{ $conv->id > 5 ? ( $conv->id - 5 ) : $conv->id }}.png" alt=""></a>
                         <div class="messageArea">
                             <div class="infoRow">
                             <span class="name"><strong>{{ $conv->list_user }}</strong></span>
@@ -38,7 +41,6 @@
                         </div>
                         <div class="clear"></div>
                     </li>
-
                 @endforeach
 
             </ul>

@@ -83,3 +83,13 @@ $(function() {
 //    });
 
 });
+
+
+function viewConversation(obj) {
+    console.log(obj);
+    var id = $(obj).attr('data-id');
+    console.log(id);
+    var url = '/conversation/view/' + id;
+    console.log(url);
+    document.location.href = url;
+}

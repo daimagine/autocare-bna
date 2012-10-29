@@ -18,6 +18,9 @@ class Conversation_Controller extends Secure_Controller {
 
     public function get_list() {
         $conversations = Conversation::listAll();
+        Asset::add('jquery.chosen', 'js/plugins/forms/jquery.chosen.min.js', array('jquery'));
+        Asset::add('jquery.chosen.ajaxaddition', 'js/plugins/forms/jquery.chosen.ajaxaddition.js', array('jquery.chosen'));
+        Asset::add('conversation.application', 'js/conversation/application.js', array('jquery'));
         return $this->layout->nest('content', 'conversation.list', array(
             'conversations' => $conversations,
         ));
@@ -35,7 +38,10 @@ class Conversation_Controller extends Secure_Controller {
             return Redirect::to_action('conversation@list');
 
         $conversation = Conversation::find($id);
-        $conversation->markRead();
+        $conversation->markRead(Auth::user()->id);
+        Asset::add('jquery.chosen', 'js/plugins/forms/jquery.chosen.min.js', array('jquery'));
+        Asset::add('jquery.chosen.ajaxaddition', 'js/plugins/forms/jquery.chosen.ajaxaddition.js', array('jquery.chosen'));
+        Asset::add('conversation.application', 'js/conversation/application.js', array('jquery'));
         return $this->layout->nest('content', 'conversation.detail', array(
             'conversation' => $conversation
         ));
@@ -71,13 +77,22 @@ class Conversation_Controller extends Secure_Controller {
                 } else {
                     Session::flash('message', 'Your message has been sent');
                     $returnurl = 'conversation@list';
+                    Input::clear();
                 }
 
             } else {
-                Session::flash('message_error', 'Please select at least one message receiver');
+                    Session::flash('message_error', 'Please select at least one message receiver');
             }
         }
-        return Redirect::to_action($returnurl)
+
+        $param = array();
+        if(array_key_exists('return_url', $inputs)) {
+            if($inputs['return_url'] == 'reply') {
+                array_push($param, @$conv->id);
+                $returnurl = 'conversation@view';
+            }
+        }
+        return Redirect::to_action($returnurl, $param)
             ->with_errors($validation)
             ->with_input();
     }

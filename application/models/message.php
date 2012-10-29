@@ -14,6 +14,10 @@ class Message extends Eloquent {
         return $this->belongs_to('User');
     }
 
+    public function sender() {
+        return $this->belongs_to('User', 'sender_id');
+    }
+
     public function conversation() {
         return $this->belongs_to('Conversation', 'topic_id');
     }
