@@ -13,7 +13,7 @@ $(function() {
         autoSize: true,
         appendText: '(dd-mm-yyyy)',
         dateFormat: 'dd-mm-yy',
-        minDate: '0'
+        minDate: '-5Y'
     });
 
     //===== Time picker =====//

@@ -32,6 +32,14 @@ class Report_Account_Controller extends Secure_Controller {
             'paid_date' => array( 'not_null', '' ),
             'input_date' => array( 'within', $start, $end )
         );
+        if(Input::get('type')!==null) {
+            $type = Input::get('type');
+            if($type === AUTOCARE_ACCOUNT_TYPE_DEBIT) {
+                $criteria['type'] = array( '=', AUTOCARE_ACCOUNT_TYPE_DEBIT );
+            } elseif($type === AUTOCARE_ACCOUNT_TYPE_CREDIT) {
+                $criteria['type'] = array( '=', AUTOCARE_ACCOUNT_TYPE_CREDIT );
+            }
+        }
 
         $accounts = AccountTransaction::listAll($criteria);
 
@@ -40,7 +48,25 @@ class Report_Account_Controller extends Secure_Controller {
         return $this->layout->nest('content', 'report.account.daily', array(
             'accounts' => $accounts,
             'date' => $invdate,
+            'type' => $type
         ));
+    }
+
+    public function action_week() {
+
+    }
+
+    public function action_week_selection($month=null, $year=null) {
+        if($month === null) $month = date('m');
+        if($year === null) $year = date('Y');
+
+        // Current timestamp is assumed, so these find first and last day of THIS month
+        $first = date("01-$month-$year"); // hard-coded '01' for first day
+        $last = date("t-$month-$year");
+
+        //dd($first. ' - ' .$last);
+        $result = array($first, $last);
+        return json_encode($result);
     }
 
 }

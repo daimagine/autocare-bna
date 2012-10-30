@@ -27,6 +27,23 @@
                         <ul class="timeRange">
                             <li>Date&nbsp;&nbsp;&nbsp;</li>
                             <li><input name="date" type="text" class="datepicker" value="{{ $date }}" /></li>
+                        </ul>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid">
+                        <ul class="timeRange">
+                            <li>Type&nbsp;&nbsp;&nbsp;</li>
+                            <li>
+                                <select name="type">
+                                    <option value="">All</option>
+                                    <option value="{{ AUTOCARE_ACCOUNT_TYPE_DEBIT }}"
+                                        {{ $type == AUTOCARE_ACCOUNT_TYPE_DEBIT ? 'selected="selected"' : '' }}>Income</option>
+                                    <option value="{{ AUTOCARE_ACCOUNT_TYPE_CREDIT }}"
+                                        {{ $type == AUTOCARE_ACCOUNT_TYPE_CREDIT ? 'selected="selected"' : '' }}>Expenditur</option>
+                                </select>
+                            </li>
                             <li style="margin-left: 50px;"><input type="submit" class="buttonS bLightBlue" value="Search"></li>
                         </ul>
                     </div>

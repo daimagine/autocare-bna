@@ -103,7 +103,7 @@ class User extends Eloquent {
         $granted = false;
         $sql = "select count(*) as res from access a inner join role_access ra on ra.access_id = a.id
                 inner join role r on ra.role_id = r.id inner join user u on u.role_id = r.id
-                where u.id = ? and a.action like CONCAT(?,'%')";
+                where u.id = ? and ? like CONCAT(a.action,'%')";
         $count = DB::query($sql, array($user->id, $uri));
 
 //        dd($count);
