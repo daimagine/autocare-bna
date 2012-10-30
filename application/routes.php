@@ -52,7 +52,8 @@ Route::get('settlement/edit/(:num)', 'settlement@edit');
 
 Route::controller(array(
     'home', 'user', 'role', 'access', 'account', 'discount', 'member', 'item', 'customer', 'vehicle',
-    'service', 'work_order', 'news', 'preferences', 'settlement', 'conversation'
+    'service', 'work_order', 'news', 'preferences', 'settlement', 'conversation',
+    'report.dashboard', 'report.account'
 ));
 
 Route::get('/', 'home@index');

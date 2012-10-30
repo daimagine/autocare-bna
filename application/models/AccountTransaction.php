@@ -105,15 +105,21 @@ class AccountTransaction extends Eloquent {
         $q = AccountTransaction::where('status', '=', 1);
         foreach($criteria as $key => $val) {
             if(is_array($val)) {
-                if($val[0] === 'null')
+                if($val[0] === 'null') {
                     $q->where_null($key);
-                elseif($val[0] === 'not_null')
+                } elseif($val[0] === 'not_null') {
                     $q->where_not_null($key);
-                else
+                } elseif($val[0] === 'within') {
+                    $q->where($key, '>=', $val[1]);
+                    $q->where($key, '<=', $val[2]);
+                } else {
                     $q->where($key, $val[0], $val[1]);
+                }
             }
         }
-        return $q->get();
+        $data =  $q->get();
+        //dd(DB::last_query());
+        return $data;
     }
 
     public static function remove($id) {

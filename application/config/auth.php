@@ -100,5 +100,10 @@ return array(
         'account/account_receivable',
 
         'member/detail',
+
+        'report/account/index',
+        'report/account/day',
+        'report/account/week',
+        'report/account/month',
     ),
 );

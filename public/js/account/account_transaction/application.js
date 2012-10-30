@@ -1,4 +1,4 @@
-    $(function() {
+$(function() {
 
     $( ".datepicker" ).datepicker({
         showOtherMonths:true,
