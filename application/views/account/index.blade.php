@@ -13,6 +13,7 @@
         <table cellpadding="0" cellspacing="0" border="0" class="dTable">
             <thead>
             <tr>
+                <th>Category</th>
                 <th>Name<span class="sorting" style="display: block;"></span></th>
                 <th>Description</th>
                 <th>Type</th>
@@ -23,6 +24,7 @@
             <tbody>
             @foreach($account as $account)
             <tr class="">
+                <td>{{ $account->category == AccountCategory::ITEM ? 'Item' : 'Accounting' }}</td>
                 <td>{{ $account->name }}</td>
                 <td>{{ $account->description }}</td>
                 <td>{{ HTML::account_type($account->type) }}</td>

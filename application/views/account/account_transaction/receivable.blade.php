@@ -18,9 +18,10 @@
     </div>
     <div id="dyn2" class="shownpars overflowtable">
         <a class="tOptions act" title="Options">{{ HTML::image('images/icons/options', '') }}</a>
-        <table cellpadding="0" cellspacing="0" border="0" class="dTable">
+        <table cellpadding="0" cellspacing="0" border="0" class="dTableAccount">
             <thead>
             <tr>
+                <th>Type</th>
                 <th>Invoice No<span class="sorting" style="display: block;"></span></th>
                 <th>Reference No</th>
                 <th>To</th>
@@ -38,6 +39,7 @@
             <tbody>
             @foreach($accounts as $account)
             <tr class="">
+                <td>{{ $account->account->name }}</td>
                 <td>{{ $account->invoice_no }}</td>
                 <td>{{ $account->reference_no }}</td>
                 <td>{{ $account->subject }}</td>

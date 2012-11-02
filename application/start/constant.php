@@ -59,3 +59,9 @@ abstract class batchStatus {
     const UNSETTLED ='1',
         SETTLED ='0';
 }
+
+abstract class AccountCategory {
+    const   ITEM = 'I',
+            ACCOUNTING = 'A'
+    ;
+}

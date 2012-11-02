@@ -2308,7 +2308,10 @@ table .dropdown-menu.pull-right { right: auto; left: 0; }
 /** custom app **/
 .pointer { cursor: pointer; }
 .gray-back:hover { background-color: #F2F2F2; }
-.overflowtable { min-width: 300px; overflow: auto; }
+.overflowtable {
+    min-width: 300px;
+    /**overflow: auto;**/
+}
 
 .ui-dialog input[type="text"].fix-ui-spinner {
     width: 100%;

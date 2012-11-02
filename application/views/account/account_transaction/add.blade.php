@@ -23,6 +23,18 @@
         {{ Form::nginput('text', 'reference_no', $referenceNo, 'Reference', array( 'readonly' => 'readonly' )) }}
 
         <div class="formRow">
+            <div class="grid3"><label>Account Type</label></div>
+            <div class="grid9">
+                <select name="account_id">
+                    @foreach($accountAccountings as $key => $value)
+                        <option value="{{ $key }}">{{ $value }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <div class="formRow">
             <div class="grid3"><label>Invoice Date *</label></div>
             <div class="grid9">
                 <ul class="timeRange">

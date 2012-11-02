@@ -30,6 +30,31 @@ $(function() {
 
     for (var n in opts)
         $("#"+n).spinner(opts[n]);
+
+
+    //===== Dynamic data table =====//
+
+    oTable = $('.dTableAccount').dataTable({
+        "bJQueryUI": false,
+        "bAutoWidth": true,
+        "sPaginationType": "full_numbers",
+        "sDom": '<"H"fl>t<"F"ip>',
+        "sScrollX": "100%",
+        "sScrollXInner": "220%"
+    });
+
+    console.log(oTable.attr('dtable-sortlist'));
+    try {
+        if(oTable) {
+            //console.log(oTable.attr('dtable-sortlist'));
+            if(oTable.attr('dtable-sortlist')) {
+                oTable.fnSort( eval(oTable.attr('dtable-sortlist')) );
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
+
 });
 
 var Account = {};
