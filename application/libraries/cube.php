@@ -109,9 +109,11 @@ class Cube extends \Laravel\Auth\Drivers\Eloquent {
                 $uri = '/';
             }
             elseif(is_array($temp) && !empty($temp)) {
-                $uri = $temp[0] . '/' . $temp[1];
+//                $uri = $temp[0] . '/' . $temp[1];
+                $uri = implode("/", $temp);
             }
             $val = in_array($uri, Config::get('auth.white_list'));
+
         } catch (\Laravel\Database\Exception $err) {
             Log::write('error', 'failed to check has permissions. ' . $err);
         }

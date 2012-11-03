@@ -81,6 +81,25 @@
 
         <div class="widget">
             <div class="whead">
+                <h6>Settlement Notices</h6>
+                <div class="clear"></div>
+            </div>
+            <div class="body">
+                <ul class="wInvoice">
+                    <li style="width:50%"><h4 class="red">{{ number_format($settlements[SettlementState::UNSETTLED]) }}</h4><span class="red">Unsettled</span></li>
+                    <li style="width:50%"><h4 class="blue">{{ number_format($settlements[SettlementState::SETTLED_UNMATCH]) }}</h4><span class="blue">Unmatch</span></li>
+                </ul>
+                <div class="clear"></div>
+
+                <div class="invList fluid">
+                    <a href="settlement/list" title="" class="floatR buttonS bLightBlue">Process Settlement</a>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+
+        <div class="widget">
+            <div class="whead">
                 <h6>Invoices statistics</h6>
                 <div class="titleOpt">
                     <a href="#" data-toggle="dropdown"><span class="iconb" data-icon=""></span><span class="clear"></span></a>

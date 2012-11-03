@@ -129,18 +129,25 @@ class Account_Controller extends Secure_Controller {
         //$invoiceNumber = AccountTransaction::invoice_new();
         $referenceNo = AccountTransaction::reference_new();
         $data = Session::get('accountTrans');
-        $accounts = Account::allSelect();
+        $accounts = Account::allSelect(array(
+            'category' => array('=', AccountCategory::ITEM)
+        ));
+        $accountAccountings = Account::allSelect(array(
+            'category' => array('=', AccountCategory::ACCOUNTING)
+        ));
         return $this->layout->nest('content', 'account.account_transaction.add', array(
             'accountTrans' => $data,
             'accountTransType' => $type,
             'referenceNo' => $referenceNo,
-            'accounts'  => $accounts
+            'accounts'  => $accounts,
+            'accountAccountings'  => $accountAccountings,
         ));
     }
 
     public function post_invoice_in() {
         $validation = Validator::make(Input::all(), $this->getInvoiceRules());
         $data = Input::all();
+        //dd($data);
         $type = @$data['type'];
         if(!$validation->fails()) {
             $success = AccountTransaction::create($data);
@@ -173,6 +180,10 @@ class Account_Controller extends Secure_Controller {
             $criteria['paid_date'] = array( 'null', '' );
         $accounts = AccountTransaction::listAll($criteria);
 
+        Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
+        Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
+        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
         return $this->layout->nest('content', 'account.account_transaction.receivable', array(
             'accounts' => $accounts,
             'accountTransType' => AUTOCARE_ACCOUNT_TYPE_DEBIT,
@@ -190,6 +201,10 @@ class Account_Controller extends Secure_Controller {
             $criteria['paid_date'] = array( 'null', '' );
         $accounts = AccountTransaction::listAll($criteria);
 
+        Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
+        Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
+        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
         return $this->layout->nest('content', 'account.account_transaction.payable', array(
             'accounts' => $accounts,
             'accountTransType' => AUTOCARE_ACCOUNT_TYPE_CREDIT,
@@ -233,8 +248,13 @@ class Account_Controller extends Secure_Controller {
         $inv_time = date(AccountTransaction::$timeformat, strtotime($account->invoice_date));
         $due_date = date(AccountTransaction::$dateformat, strtotime($account->due_date));
         $due_time = date(AccountTransaction::$timeformat, strtotime($account->due_date));
-        $accounts = Account::allSelect();
         $items = $account->items;
+        $accounts = Account::allSelect(array(
+            'category' => array('=', AccountCategory::ITEM)
+        ));
+        $accountAccountings = Account::allSelect(array(
+            'category' => array('=', AccountCategory::ACCOUNTING)
+        ));
 
         return $this->layout->nest('content', 'account.account_transaction.edit', array(
             'account' => $account,
@@ -244,7 +264,8 @@ class Account_Controller extends Secure_Controller {
             'due_date' => $due_date,
             'due_time' => $due_time,
             'accounts'  => $accounts,
-            'items' => $items
+            'items' => $items,
+            'accountAccountings'  => $accountAccountings,
         ));
     }
 
@@ -256,6 +277,7 @@ class Account_Controller extends Secure_Controller {
             else
                 return Redirect::to('account/account_payable');
         }
+        //dd(Input::all());
         $validation = Validator::make(Input::all(), $this->getInvoiceRules('edit'));
         if(!$validation->fails()) {
             $data = Input::all();

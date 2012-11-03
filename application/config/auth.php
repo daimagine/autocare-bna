@@ -93,12 +93,9 @@ return array(
         'role/select',
         'role/access',
 
-
-        'account/invoice_in',
-        'account/invoice_edit',
-        'account/invoice_delete',
-        'account/account_receivable',
-
-        'member/detail',
+        'report/account/index',
+        'report/account/day',
+        'report/account/week',
+        'report/account/month',
     ),
 );

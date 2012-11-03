@@ -25,6 +25,8 @@
 
         {{ Form::nyelect('type', array('D' => 'Debit', 'C' => 'Credit'), $account->type, 'Type') }}
 
+        {{ Form::nyelect('category', array(AccountCategory::ITEM => 'Item', AccountCategory::ACCOUNTING => 'Accounting'), $account->category, 'Category') }}
+
         <div class="formRow noBorderB">
             <div class="status" id="status3"></div>
             <div class="formSubmit">

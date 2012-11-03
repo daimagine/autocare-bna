@@ -2006,6 +2006,7 @@ transition:0.8s;
 .messagesTwo li > a { margin: 14px; display: block; position: absolute; left: 0; top: 0; }
 .messagesTwo li .messageArea { box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; padding: 10px 16px; position: relative; border-left: 1px solid #cdcdcd; margin-left: 65px; min-height: 64px; }
 .messagesTwo .by_user { background: #FEFEFE; }
+.messagesTwo .by_me { background: #F7F7F7; }
 
 
 /* Enter message field  */
@@ -2307,7 +2308,10 @@ table .dropdown-menu.pull-right { right: auto; left: 0; }
 /** custom app **/
 .pointer { cursor: pointer; }
 .gray-back:hover { background-color: #F2F2F2; }
-.overflowtable { min-width: 300px; overflow: auto; }
+.overflowtable {
+    min-width: 300px;
+    /**overflow: auto;**/
+}
 
 .ui-dialog input[type="text"].fix-ui-spinner {
     width: 100%;
@@ -2331,3 +2335,8 @@ table .dropdown-menu.pull-right { right: auto; left: 0; }
 .total-left { text-align: left; float: left; margin: 20px 0 20px 30px; }
 .total-left span { font-weight: bold; padding: 0 0 4px 0; display: block; }
 .total-left strong { display: block; font-size: 24px; }
+
+
+.chzn-container-multi .chzn-choices .search-field input.chosen-loading {
+    background: transparent url('/images/elements/loaders/5s.gif') no-repeat right 10px !important;
+}

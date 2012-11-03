@@ -195,4 +195,12 @@ class User_Controller extends Secure_Controller {
         return array_merge($rules, $additional);
     }
 
+    public function get_find() {
+        $name = trim($_GET['data']['q']);
+        //dd($name);
+        $users = User::find_name_ajax(Auth::user(), $name);
+        $result =  json_encode(array('q' => $name, 'results' => $users));
+        return $result;
+    }
+
 }

@@ -9,7 +9,6 @@
 class Batch extends Eloquent {
 
     public static $table = 'batch';
-    public static $timestamps = false;
     private static $sqlformat = 'Y-m-d H:i:s';
 
     //===jo edit====//

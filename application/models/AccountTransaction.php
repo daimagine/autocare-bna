@@ -25,6 +25,10 @@ class AccountTransaction extends Eloquent {
         return $this->belongs_to('user', 'create_by');
     }
 
+    public function account() {
+        return $this->belongs_to('account', 'account_id');
+    }
+
     public function items() {
         return $this->has_many('SubAccountTrans', 'account_trx_id')
             ->where('status','=',1);
@@ -60,6 +64,7 @@ class AccountTransaction extends Eloquent {
         $ate->type = $data['type'];
         $ate->description = @$data['description'];
         $ate->subject = $data['subject'];
+        $ate->account_id = $data['account_id'];
 
         $ate->approved_status = approvedStatus::NEW_ACCOUNT_INVOICE;
 
@@ -102,18 +107,70 @@ class AccountTransaction extends Eloquent {
     }
 
     public static function listAll($criteria=array()) {
-        $q = AccountTransaction::where('status', '=', 1);
+        $q = AccountTransaction::with(array('account'))
+            ->where('status', '=', 1);
         foreach($criteria as $key => $val) {
             if(is_array($val)) {
-                if($val[0] === 'null')
+                if($val[0] === 'null') {
                     $q->where_null($key);
-                elseif($val[0] === 'not_null')
+                } elseif($val[0] === 'not_null') {
                     $q->where_not_null($key);
-                else
+                } elseif($val[0] === 'within') {
+                    $q->where($key, '>=', $val[1]);
+                    $q->where($key, '<=', $val[2]);
+                } else {
                     $q->where($key, $val[0], $val[1]);
+                }
             }
         }
-        return $q->get();
+        $data =  $q->get();
+        //dd(DB::last_query());
+        return $data;
+    }
+
+    public static function weekly($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::weekly_lookup($key);
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+
+        $q = "SELECT a.name, "
+            . "Count(*) AS count, "
+            . "Sum(at.due) AS amount, "
+            . "Date_add(at.invoice_date, INTERVAL(1-Dayofweek(at.invoice_date)) day) AS week_start, "
+            . "Date_add(at.invoice_date, INTERVAL(7-Dayofweek(at.invoice_date)) day) AS week_end ";
+
+        $q .= "FROM   account_transactions AS at "
+            . "INNER JOIN account AS a ON a.id = at.account_id ";
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        $q.= $where;
+
+        $q .= "GROUP  BY Week(at.input_date), "
+            . "a.name ";
+
+        $data = DB::query($q, $param);
+
+//        dd($data);
+//        dd(DB::last_query());
+        return $data;
     }
 
     public static function remove($id) {
@@ -134,6 +191,7 @@ class AccountTransaction extends Eloquent {
         $ate->type = $data['type'];
         $ate->description = @$data['description'];
         $ate->subject = $data['subject'];
+        $ate->account_id = $data['account_id'];
 
         //datetime fields
 
@@ -197,5 +255,15 @@ class AccountTransaction extends Eloquent {
 
         //dd($ate);
         return $ate->id;
+    }
+
+    public static function weekly_lookup($key) {
+        $keystore = array(
+            'paid_date' => 'at.paid_date',
+            'start_date' => 'at.invoice_date',
+            'end_date' => 'at.invoice_date',
+            'invoice_date' => 'at.invoice_date',
+        );
+        return($keystore[$key]);
     }
 }

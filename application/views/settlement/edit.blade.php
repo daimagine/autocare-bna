@@ -6,6 +6,7 @@
 {{ Form::open('settlement/edit', 'POST', array( 'name' => 'formSettlement' ) ) }}
 
 {{ Form::hidden('id', $settlement->id) }}
+{{ Form::hidden('clerk_user_id', Auth::user()->id) }}
 
 <fieldset>
     <div class="widget fluid">
@@ -19,19 +20,18 @@
             <div class="fluid">
                 <div class="grid6">
                     <div class="inFrom" style="width: 90%; margin-bottom: 0px;">
-                        <h5>Settlement Date : <strong class="red">{{ date('d F Y', strtotime($settlement->settlement_date)) }}</strong></h5>
-<!--                        <span class="black">Total from Transaction <a href="#">IDR {{ number_format($total_transaction, 2) }}</a></span>-->
+                        <h5>Settlement Date : <strong class="red">{{ $settlement->state == SettlementState::UNSETTLED ? '-' : date('d F Y', strtotime($settlement->close_time)) }}</strong></h5>
                         <span>Settlement is <strong id="settlement-state">Unmatch</strong></span>
                     </div>
 
                     <div class="total-left">
                         <span>Trans Amount</span>
-                        <strong class="greyBack textR" id="total-transaction-amount">{{ number_format($total_transaction, 2) }}</strong>
+                        <strong class="greyBack textR" id="total-transaction-amount">{{ number_format($settlement->sales_amount, 2) }}</strong>
                     </div>
 
                     <div class="total-left">
                         <span>Total Amount</span>
-                        <strong class="greenBack textR" id="total-amount">{{ number_format($settlement->amount_cash, 2) }}</strong>
+                        <strong class="greenBack textR" id="total-amount">{{ number_format($settlement->clerk_amount_cash, 2) }}</strong>
                         <em><a href="#recalculate" onclick="Settlement.recalculateAmount();">recalculate</a></em>
                     </div>
                 </div>
@@ -40,11 +40,11 @@
 
                         {{ Form::hidden('state', SettlementState::SETTLED) }}
 
-                        {{ Form::hidden('settlement_date', date('Y-m-d', strtotime($settlement->settlement_date))) }}
+                        {{ Form::hidden('close_time', date('Y-m-d')) }}
 
-                        {{ Form::nginput('text', 'amount_cash',  $settlement->amount_cash, 'Amount in Cash', array( 'class' => 'calculate-total', 'id' => 'amount-cash' )) }}
+                        {{ Form::nginput('text', 'clerk_amount_cash',  $settlement->clerk_amount_cash, 'Amount in Cash', array( 'class' => 'calculate-total', 'id' => 'amount-cash' )) }}
 
-                        {{ Form::nginput('text', 'amount_non_cash',  $settlement->amount_non_cash, 'Amount non Cash', array( 'class' => 'calculate-total', 'id' => 'amount-non-cash' )) }}
+                        {{ Form::nginput('text', 'clerk_amount_non_cash',  $settlement->clerk_amount_non_cash, 'Amount non Cash', array( 'class' => 'calculate-total', 'id' => 'amount-non-cash' )) }}
 
                         <em>Amount information above will be summarized into total transaction on the left side. Click <strong>recalculate</strong> if total transaction is not updated automatically</em>
                     </div>
@@ -144,6 +144,12 @@
                 </div>
 
             </div>
+        </div>
+
+        <div class="formRow">
+            <div class="grid3"><label>Notes</label></div>
+            <div class="grid9"><textarea rows="3" cols="" name="notes">{{ $settlement->notes }}</textarea> </div>
+            <div class="clear"></div>
         </div>
 
         <div class="formRow noBorderB">
