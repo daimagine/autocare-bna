@@ -195,7 +195,6 @@ $(function() {
          $('#item-quantity-'+i).spinner({min:0, max:100, showOn:'both'});
      }
 
-
     //===== init customer dialog =====//
     WorkOrder.customer.initDialog();
     WorkOrder.service.initDialog();

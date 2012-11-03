@@ -17,7 +17,7 @@
                 <th>Vehicle Name</th>
                 <th>Vehicle No</th>
                 <th>Service Time</th>
-                <th>Status</th>
+                <th>WO Status</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -78,6 +78,7 @@
                 <span class="icol-add"></span>
                 <span>Add WO</span>
             </a>
+            &nbsp;<button id="btnSave">Save current view</button>
         </div>
     </div>
 </div>

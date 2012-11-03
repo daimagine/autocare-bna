@@ -48,7 +48,7 @@ class ServiceFormula extends Eloquent {
         $service = Service::find($data['service_id']);
         $serFor->service_id = $service->id;
         $serFor->price = $data['price'];
-        $serFor->status =  $data['price']; //when create status always active
+        $serFor->status =  $data['price'];
         $serFor->configured_by = Auth::user()->id;
         $serFor->save();
         return $serFor->id;

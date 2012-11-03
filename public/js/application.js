@@ -14,7 +14,6 @@ $(function() {
 
 
     //===== Login pic hover animation =====//
-
     $(".loginPic").hover(
         function() {
 
@@ -28,14 +27,12 @@ $(function() {
 
 
     //===== Image gallery control buttons =====//
-
     $(".gallery ul li").hover(
         function() { $(this).children(".actions").show("fade", 200); },
         function() { $(this).children(".actions").hide("fade", 200); }
     );
 
     //===== Sortable columns =====//
-
     $("table").tablesorter();
 
 
@@ -52,10 +49,50 @@ $(function() {
         "bJQueryUI": false,
         "bAutoWidth": true,
         "sPaginationType": "full_numbers",
-        "sDom": '<"H"fl>t<"F"ip>',
+//        "sDom": '<"H"fl>t<"F"ip>',
+//        "sDom": 'T<"clear">lfrtip',
+        "sDom": "<'row-fluid'<'span6'T><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+        "oTableTools": {
+            "sSwfPath": "../media/swf/copy_csv_xls_pdf.swf",
+            "mColumns": "visible",
+            "aButtons":    [
+                {
+                    "sExtends":    "copy",
+                    "bSelectedOnly": "true",
+                    "sButtonText": "Copy To Cliboard"
+                },
+                {
+                    "sExtends": "xls",
+                    "sPdfOrientation": "landscape",
+                    "sButtonText": "Save to Excel"
+                },
+                {
+                    "sExtends": "pdf",
+                    "sPdfOrientation": "landscape",
+                    "sButtonText": "Save to PDF"
+                }
+            ]
+        },
         "sScrollX": "100%",
         "sScrollXInner": "110%"
     });
+
+    //Try get data datatable for print pdf
+    $('#btnSave').button({icons: {primary:'ui-icon-disk'},
+        disabled: false
+    }).click(function() {
+            console.log('Print action');
+            var cells = [];
+            var rows = oTable.fnGetColumnData();
+
+            for(var i=0;i<rows.length;i++)
+            {
+                // Get HTML of 3rd column (for example)
+                cells.push($(rows[i]).find("td:eq(3)").html());
+            }
+            console.log(cells);
+        });
+
 
     //console.log(oTable.attr('dtable-sortlist'));
     try {

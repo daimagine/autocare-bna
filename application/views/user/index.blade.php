@@ -18,8 +18,9 @@
 				<th>Login ID</th>
 				<th>Phone Number</th>
 				<th>Role</th>
-				<th>Status</th>
-				<th>Actions</th>
+                <th style="display: none;">User Status</th>
+                <th>Status</th>
+				<th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -30,10 +31,11 @@
 				<td>{{ $user->login_id }}</td>
 				<td>{{ $user->phone1 }}</td>
 				<td>{{ $user->role->name }}</td>
+                <td style="display: none;">{{$user->status == 1 ? 'Active' : 'Inactive'}}</td>
                 <td class="tableActs" align="center">
-                    @if($user->status)
-						<a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
-                    @endif
+                @if($user->status)
+                <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
+                @endif
                 </td>
                 <td class="tableActs" align="center">
                     <a href="/user/edit/{{ $user->id }}" 
