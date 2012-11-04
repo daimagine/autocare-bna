@@ -2340,3 +2340,6 @@ table .dropdown-menu.pull-right { right: auto; left: 0; }
 .chzn-container-multi .chzn-choices .search-field input.chosen-loading {
     background: transparent url('/images/elements/loaders/5s.gif') no-repeat right 10px !important;
 }
+
+.fixoptTime:first-child { margin-top: 0px; }
+.fixoptTime { margin-top: 20px; }
