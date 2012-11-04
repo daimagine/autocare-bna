@@ -438,4 +438,11 @@ class Work_Order_Controller extends Secure_Controller
         }
         return array_merge($rules, $additional);
     }
+
+
+    public function post_item_print(){
+        $wodata = Input::all();
+        {{dd($wodata);}}
+    }
+
 }

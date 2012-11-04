@@ -15,7 +15,7 @@
                 <th>No<span class="sorting" style="display: block;"></span></th>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Status</th>
+                <th>Service Status</th>
                 <th>Price</th>
                 <th>Last update</th>
                 <th>Action</th>
