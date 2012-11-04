@@ -46,6 +46,8 @@ class Report_Account_Controller extends Secure_Controller {
 
         $accounts = AccountTransaction::listAll($criteria);
 
+        $graphData = $this->create_daily_graph($accounts);
+
         $this->inject_js();
         Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
         Asset::add('report.account.application', 'js/report/account/application.js', array('jquery.timeentry'));
@@ -53,7 +55,8 @@ class Report_Account_Controller extends Secure_Controller {
             'accounts' => $accounts,
             'startdate' => $startdate,
             'enddate' => $enddate,
-            'type' => @$type
+            'type' => @$type,
+            'graphData' => @$graphData
         ));
     }
 
@@ -130,4 +133,54 @@ class Report_Account_Controller extends Secure_Controller {
         Asset::add('report.account.sparkline', 'js/plugins/charts/jquery.sparkline.min.js', array('jquery'));
     }
 
+    private function create_daily_graph($accounts) {
+        $ct = array();
+        $data = array();
+        foreach($accounts as $account) {
+            if(!in_array($account->account->name, $ct))
+                array_push($ct, $account->account->name);
+        }
+        //echo print_r($ct, true) . "\n";
+        foreach($ct as $c) {
+//            echo "//satu ". $c. "\n";
+            foreach($accounts as $account) {
+                $idx = date('Y-m-d', strtotime($account->invoice_date));
+//                echo "//idx ". $idx. "\n";
+//                echo "//pre-sub ". @$data[$c][$idx] . "\n";
+                if($c === $account->account->name) {
+//                    echo "//dua ". $c . " sama \n";
+                    if(array_key_exists($c, $data)) {
+                        if(array_key_exists($idx, $data[$c])) {
+//                            echo "//dua satu ". $idx . " ada \n";
+                            $data[$c][$idx] = $account->paid + $data[$c][$idx];
+                        } else {
+//                            echo "//dua dua ". $idx . " ga ada \n";
+                            $data[$c][$idx] = $account->paid;
+                        }
+                    } else {
+//                        echo "//dua tiga ". $c . " ga ada \n";
+                        $data[$c][$idx] = $account->paid;
+                    }
+                } else {
+//                    echo "//tiga ". $c . " ga sama \n";
+                    if(array_key_exists($c, $data)) {
+                        if(array_key_exists($idx, $data[$c])) {
+//                            echo "//tiga satu ". $idx . " ada \n";
+                        } else {
+//                            echo "//tiga dua ". $idx . " ga ada \n";
+                            $data[$c][$idx] = 0;
+                        }
+                    } else {
+//                        echo "//tiga tiga ". $c . " ga ada \n";
+                        $data[$c][$idx] = 0;
+                    }
+                }
+//                echo "//val ". $account->paid . "\n";
+//                echo "//sub ". $data[$c][$idx] . "\n";
+//                echo "\n";
+            }
+//            echo "\n//-----\n";
+        }
+        return $data;
+    }
 }

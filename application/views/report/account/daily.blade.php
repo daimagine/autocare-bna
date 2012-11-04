@@ -125,162 +125,67 @@
         $(function () {
             var previousPoint;
 
-            var content = new Array();
-            var idx = 0;
+            /**
+             * <?php //echo htmlentities(print_r($graphData, true)); ?>
+             */
 
-            @foreach($accounts as $account)
-            var d = [];
-            d.push([
-                "{{ date('Y-m-d', strtotime($account->invoice_date)) }}",
-                toFixed("{{  number_format($account->paid, 2) }}", 2)
-            ]);
-            content[idx] = d;
-            idx++;
-
-            @endforeach
-
-            //console.log(content);
-
-            <?php
-                $ct = array();
-                $data = array();
-                foreach($accounts as $account) {
-                    if(!in_array($account->account->name, $ct))
-                        array_push($ct, $account->account->name);
-                }
-                //echo print_r($ct, true) . "\n";
-                foreach($ct as $c) {
-                    echo "//satu ". $c. "\n";
-                    foreach($accounts as $account) {
-                        $idx = date('Y-m-d', strtotime($account->invoice_date));
-                        echo "//idx ". $idx. "\n";
-                        echo "//pre-sub ". @$data[$c][$idx] . "\n";
-                        if($c === $account->account->name) {
-                            echo "//dua ". $c . " sama \n";
-                            if(array_key_exists($c, $data)) {
-                                if(array_key_exists($idx, $data[$c])) {
-                                    echo "//dua satu ". $idx . " ada \n";
-                                    $data[$c][$idx] = $account->paid + $data[$c][$idx];
-                                } else {
-                                    echo "//dua dua ". $idx . " ga ada \n";
-                                    $data[$c][$idx] = $account->paid;
-                                }
-                            } else {
-                                echo "//dua tiga ". $c . " ga ada \n";
-                                $data[$c][$idx] = $account->paid;
-                            }
-                        } else {
-                            echo "//tiga ". $c . " ga sama \n";
-                            if(array_key_exists($c, $data)) {
-                                if(array_key_exists($idx, $data[$c])) {
-                                    echo "//tiga satu ". $idx . " ada \n";
-                                } else {
-                                    echo "//tiga dua ". $idx . " ga ada \n";
-                                    $data[$c][$idx] = 0;
-                                }
-                            } else {
-                                echo "//tiga tiga ". $c . " ga ada \n";
-                                $data[$c][$idx] = 0;
-                            }
-                        }
-                        echo "//val ". $account->paid . "\n";
-                        echo "//sub ". $data[$c][$idx] . "\n";
-                        echo "\n";
-                    }
-                    echo "\n//-----\n";
-                }
-
-            ?>
-
-            <?php
-                /**
-                 * format :
-                 *      2012-01-01
-                 *          cash in  : 9000
-                 *          cash out : 4900
-                 *      2012-01-02
-                 *          cash in  : 5000
-                 *          cash out : 3000
-                 */
-            ?>
-
-            var datas = <?php echo json_encode($data) ?>;
-            console.log(datas);
-
-
-            var d1 = [];
-            for (var i = 0; i <= 10; i += 1)
-                d1.push([i, parseInt(Math.random() * 30)]);
-
-            var d2 = [];
-            for (var i = 0; i <= 10; i += 1)
-                d2.push([i, parseInt(Math.random() * 30)]);
-
-            var d3 = [];
-            for (var i = 0; i <= 10; i += 1)
-                d3.push([i, parseInt(Math.random() * 30)]);
-
-//            d1 = [['5',2], ['6',20], ['7',21]];
-//            d2 = [['5',3], ['6',21], ['7',22]];
-//            d3 = [['5',2], ['6',24], ['7',12]];
-
-            console.log(d1);
-            console.log(d2);
-            console.log(d3);
+<!--            var datas = --><?php //echo json_encode($graphData) ?><!--;-->
+<!--            console.log('data');-->
+<!--            console.log(datas);-->
 
             var ds = new Array();
-
-            ds.push({
-                data:d1,
-                bars: {
-                    show: true,
-                    barWidth: 0.2,
-                    order: 1
-                },
-                label: "tes1"
-            });
-            ds.push({
-                data:d2,
-                bars: {
-                    show: true,
-                    barWidth: 0.2,
-                    order: 2
-                },
-                label: "tes2"
-            });
-            ds.push({
-                data:d3,
-                bars: {
-                    show: true,
-                    barWidth: 0.2,
-                    order: 3
-                },
-                label: "tes3"
-            });
-
-//            ds = new Array();
-            var idx = 1;
-            $.each(datas, function(i, obj) {
-                console.log(i);
-                console.log(obj);
-                var d6 = [];
-//                $.each(obj, function(j, d) {
-//
-//                }
-//                ds.push({
-//                    data:obj,
-//                    bars: {
-//                        show: true,
-//                        barWidth: 0.2,
-//                        order: idx
-//                    }
-//                });
-                console.log(d6);
-                console.log(idx);
-                idx++;
-            });
-
+            var d = new Array();
+            var dmin = new Date('2012-09-30').getTime();
+            var dmax = new Date('2012-10-5').getTime();
+            <?php foreach($graphData as $key => $d) : ?>
+                d[0] = '<?php echo $key ?>';
+                d[1] = new Array();
+                <?php foreach($d as $date => $val) : ?>
+                    if(dmin > new Date('<?php echo $date ?>').getTime()) {
+                        dmin = new Date('<?php echo $date ?>').getTime();
+                    }
+                    if(dmax < new Date('<?php echo $date ?>').getTime()) {
+                        dmax = new Date('<?php echo $date ?>').getTime();
+                    }
+                    d[1].push([ new Date('<?php echo $date ?>').getTime(), parseFloat(<?php echo $val ?>) ]);
+                <?php endforeach; ?>
+                console.log(d);
+                ds.push(d);
+                d = new Array();
+            <?php endforeach; ?>
+            console.log('data store');
             console.log(ds);
+
+            var dsa = new Array();
+            $.each(ds, function(i, obj) {
+                console.log("ds ke " + i);
+                console.log(obj[0]);
+                console.log(obj[1]);
+                dsa.push(
+                    {
+                        data: obj[1],
+                        bars: {
+                            show: true,
+                            barWidth: 1 * 60 * 60 * 1000,
+                            order: i
+                        },
+                        label: obj[0]
+                    }
+                );
+            });
+            //Display graph
+            $.plot($("#placeholder1"), dsa, {
+                grid:{
+                    hoverable:true
+                },
+                legend: true,
+                xaxis: {
+                    mode: "time",
+                    minTickSize: [1, "day"],
+                    min: dmin,
+                    max: dmax
+                }
+            });
 
             //tooltip function
             function showTooltip(x, y, contents, areAbsoluteXY) {
@@ -297,15 +202,6 @@
                     opacity: 0.8
                 }).prependTo(rootElt).show();
             }
-
-            //Display graph
-            $.plot($("#placeholder1"), ds, {
-                grid:{
-                    hoverable:true
-                },
-                legend: true
-            });
-
 
             //add tooltip event
             $("#placeholder1").bind("plothover", function (event, pos, item) {
@@ -325,10 +221,11 @@
                                     x = item.series.data[i][0];
                             }
                         }
+                        var d = new Date(x);
+                        x = $.datepicker.formatDate('dd MM yy', d);;
+                        var y = "IDR " + item.datapoint[1];
 
-                        var y = item.datapoint[1];
-
-                        showTooltip(item.pageX+5, item.pageY+5,x + " = " + y);
+                        showTooltip(item.pageX+5, item.pageY+5, x + " = " + y);
 
                     }
                 }
