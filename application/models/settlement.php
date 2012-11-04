@@ -72,6 +72,8 @@ class Settlement extends Eloquent {
         if(array_key_exists('state', $data))
             $settlement->state = $data['state'];
 
+        //set as closed batch when saved this record
+        $settlement->batch_status = batchStatus::SETTLED;
         //always set after settlement date
         $settlement->is_match($settlement);
 
