@@ -92,10 +92,5 @@ return array(
         'access/add',
         'role/select',
         'role/access',
-
-        'report/account/index',
-        'report/account/day',
-        'report/account/week',
-        'report/account/month',
     ),
 );
