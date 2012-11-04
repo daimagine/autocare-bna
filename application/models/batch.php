@@ -25,6 +25,7 @@ class Batch extends Eloquent {
         $b->sales_amount = 0.00;
         $b->clerk_amount = 0.00;
         $b->clerk_status = statusType::ACTIVE;
+        $b->state = SettlementState::UNSETTLED;
         $b->save();
         return $b;
     }
