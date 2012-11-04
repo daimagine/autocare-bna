@@ -78,7 +78,6 @@
                 <span class="icol-add"></span>
                 <span>Add WO</span>
             </a>
-            &nbsp;<button id="btnSave">Save current view</button>
         </div>
     </div>
 </div>

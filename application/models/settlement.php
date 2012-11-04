@@ -76,6 +76,8 @@ class Settlement extends Eloquent {
         $settlement->batch_status = batchStatus::SETTLED;
         //always set after settlement date
         $settlement->is_match($settlement);
+        //closed all wo if still open
+        Settlement::canceled_wo($settlement->id);
 
         if(array_key_exists('clerk_user_id', $data)) {
             $settlement->clerk_user_id = $data['clerk_user_id'];
@@ -213,4 +215,24 @@ class Settlement extends Eloquent {
         return $result;
     }
 
+
+    private static function canceled_wo($batchId) {
+        try {
+            $woOpen = Transaction::list_all(array(
+                'status' => array(statusWorkOrder::OPEN),
+                'batch_id' => $batchId
+            ));
+//            {{dd($woOpen);}}
+            if($woOpen != null) {
+                foreach ($woOpen as $wo) {
+                    $update = Transaction::update_status($wo->id, statusWorkOrder::CANCELED, array(
+                        'payment_state' => paymentState::CANCELED
+                    ));
+                }
+            }
+        } catch (Exception $err) {
+            Log::exception($err);
+        }
+        return false;
+    }
 }

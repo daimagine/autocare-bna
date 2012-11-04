@@ -34,6 +34,7 @@ class Transaction extends Eloquent {
     public static function list_all($criteria) {
         $trx = Transaction::with(array('vehicle', 'vehicle.customer'));
         $trx = $trx->where_in('status', $criteria['status']);
+        if(isset($criteria['batch_id'])) {$trx = $trx->where('batch_id', '=', $criteria['batch_id']);}
         $trx = $trx->get();
         return $trx;
     }
@@ -227,7 +228,7 @@ class Transaction extends Eloquent {
             $batch->sales_count = ($batch->sales_count) + 1;
             $batch->sales_amount = ($batch->sales_amount) + ($trx->paid_amount);
             $batch->save();
-//            {{dd($batch->id);}}
+
             $batchid = $batch->id;
             if(isset($trx->transaction_service)) {
                 foreach($trx->transaction_service as $trx_service) {
