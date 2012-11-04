@@ -267,4 +267,88 @@ class Transaction extends Eloquent {
         }
         return $trx;
     }
+
+    public static function list_report($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'daily');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+
+            } elseif($val[0] === 'like') {
+                $criterion[] = "LOWER($key) like ?";
+                $value = '%'. strtolower($val[1]) . '%';
+                array_push($param, $value);
+
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+        $q = "select " .
+                    "distinct t.invoice_no as invoice_no, " .
+                    "t.workorder_no as workorder_no, " .
+                    "c.name as customer_name, " .
+                    "v.number as vehicle_no, " .
+                    "t.status as workorder_status, " .
+                    "t.date as transaction_date, " .
+                    "count(distinct p.id) as total_parts, " .
+                    "count(distinct st.id) as total_services, " .
+                    "t.amount as total_transactions, " .
+                    "t.discount_amount as discount, " .
+                    "t.payment_method as payment_type ";
+
+        $q .= "from " .
+                    "transaction t " .
+                    "inner join vehicle v on t.vehicle_id = v.id " .
+                    "inner join customer c on v.customer_id = c.id " .
+                    "left join transaction_service st on st.transaction_id = t.id " .
+                    "left join (transaction_item it, item as p) " .
+                        "on (it.transaction_id = t.id and it.item_id = p.id and p.item_category_id = 1)";
+
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .= "ORDER BY transaction_date desc "
+        ;
+
+        $data = DB::query($q, $param);
+        $clean = array();
+        foreach($data as $d) {
+            if($d->invoice_no !== null && strtoupper($d->invoice_no) !== 'NULL') {
+                array_push($clean, $d);
+            }
+        }
+
+//        dd($clean);
+//        dd(DB::last_query());
+        return $clean;
+    }
+
+
+    public static function criteria_lookup($key, $category = null) {
+        $keystore = array(
+            'date' => 't.date',
+            'invoice_no' => 't.date',
+            'wo_id' => 't.workorder_no',
+            'customer_name' => 'c.name',
+            'vehicle_no' => 'v.number',
+            'wo_status' => 't.status',
+        );
+        return($keystore[$key]);
+    }
 }

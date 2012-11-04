@@ -16,7 +16,7 @@
 <!-- Table with opened toolbar -->
 <div class="widget">
     <div class="whead">
-        <h6>Account Report :: Weekly</h6>
+        <h6>Account Report :: Monthly</h6>
         <div class="clear"></div>
     </div>
 
@@ -62,7 +62,8 @@
         <table cellpadding="0" cellspacing="0" border="0" class="dTableAccountMin" dtable-sortlist="[[0,'desc']]">
             <thead>
             <tr>
-                <th>Date Range<span class="sorting" style="display: block;"></span></th>
+                <th>Year<span class="sorting" style="display: block;"></span></th>
+                <th>Month<span class="sorting" style="display: block;"></span></th>
                 <th>Account Name</th>
                 <th>Count</th>
                 <th>Amount</th>
@@ -71,7 +72,8 @@
             <tbody>
             @foreach($accounts as $account)
             <tr class="">
-                <td>{{ date('Y-m-d', strtotime($account->week_start)) }} - {{ date('Y-m-d', strtotime($account->week_end)) }}</td>
+                <td>{{ $account->year }}</td>
+                <td>{{ $account->monthname }}</td>
                 <td>{{ $account->name }}</td>
                 <td>{{ $account->count }}</td>
                 <td>IDR {{  number_format($account->amount, 2) }}</td>

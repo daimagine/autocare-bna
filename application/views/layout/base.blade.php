@@ -142,4 +142,8 @@
 
     <!-- javascript library -->
     {{ Asset::scripts() }}
+
+    <!-- additional javascript -->
+    @section('additional_js')
+    @yield_section
 </body>

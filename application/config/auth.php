@@ -93,9 +93,8 @@ return array(
         'role/select',
         'role/access',
 
-        'report/account/index',
-        'report/account/day',
-        'report/account/week',
-        'report/account/month',
+        'report/transaction/index',
+        'report/transaction/list',
+        'report/transaction/detail',
     ),
 );

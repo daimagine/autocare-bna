@@ -128,6 +128,56 @@ class AccountTransaction extends Eloquent {
         return $data;
     }
 
+    public static function monthly($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::weekly_lookup($key);
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+
+        $q = "SELECT a.name, "
+            . "Count(*) AS count, "
+            . "Sum(at.due) AS amount, "
+            . "year(at.invoice_date) AS year, "
+            . "month(at.invoice_date) AS month, "
+            . "monthname(at.invoice_date) AS monthname "
+        ;
+
+        $q .= "FROM   account_transactions AS at "
+            . "INNER JOIN account AS a ON a.id = at.account_id ";
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        $q.= $where;
+
+        $q .= "GROUP  BY year, "
+            . "month, "
+            . "a.name "
+            . "ORDER BY  year desc, month desc "
+        ;
+
+        $data = DB::query($q, $param);
+
+//        dd($data);
+//        dd(DB::last_query());
+        return $data;
+    }
+
     public static function weekly($criteria=array()) {
         $param = array();
         $criterion = array();
@@ -163,7 +213,7 @@ class AccountTransaction extends Eloquent {
 
         $q.= $where;
 
-        $q .= "GROUP  BY Week(at.input_date), "
+        $q .= "GROUP  BY Week(at.invoice_date), "
             . "a.name ";
 
         $data = DB::query($q, $param);
