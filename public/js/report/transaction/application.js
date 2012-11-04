@@ -80,3 +80,17 @@ $(function() {
     }
 
 });
+
+
+function showdetail(a) {
+    var id = $(a).attr('data-id');
+    var hidin = $('#transactionId');
+    var form = $('#formList');
+
+    hidin.val(id);
+    console.log(hidin);
+    form.attr('action', '/report/transaction/detail');
+    console.log(form);
+    form.submit();
+}
+
