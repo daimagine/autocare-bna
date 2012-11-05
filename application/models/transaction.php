@@ -273,7 +273,7 @@ class Transaction extends Eloquent {
         $param = array();
         $criterion = array();
         foreach($criteria as $key => $val) {
-            $key = static::criteria_lookup($key, 'daily');
+            $key = static::criteria_lookup($key, 'list');
             if($val[0] === 'not_null') {
                 $criterion[] = "$key is not null";
 
@@ -293,14 +293,16 @@ class Transaction extends Eloquent {
             }
         }
         $q = "select " .
-                    "distinct t.invoice_no as invoice_no, " .
+                    "distinct t.id as transaction_id, " .
+                    "t.invoice_no as invoice_no, " .
                     "t.workorder_no as workorder_no, " .
                     "c.name as customer_name, " .
                     "v.number as vehicle_no, " .
                     "t.status as workorder_status, " .
                     "t.date as transaction_date, " .
-                    "count(distinct p.id) as total_parts, " .
-                    "count(distinct st.id) as total_services, " .
+                    "(select count(distinct st.id) from transaction_service st where st.transaction_id = t.id) as total_services, ".
+                    "(select count(distinct it.id) from transaction_item it ".
+                        "inner join item i on i.id = it.item_id where it.transaction_id = t.id and i.item_category_id = 1) as total_parts, " .
                     "t.amount as total_transactions, " .
                     "t.discount_amount as discount, " .
                     "t.payment_method as payment_type ";
@@ -309,9 +311,8 @@ class Transaction extends Eloquent {
                     "transaction t " .
                     "inner join vehicle v on t.vehicle_id = v.id " .
                     "inner join customer c on v.customer_id = c.id " .
-                    "left join transaction_service st on st.transaction_id = t.id " .
-                    "left join (transaction_item it, item as p) " .
-                        "on (it.transaction_id = t.id and it.item_id = p.id and p.item_category_id = 1)";
+                    "left join transaction_service st on st.transaction_id = t.id "
+        ;
 
 
         $where = " ";
@@ -340,16 +341,64 @@ class Transaction extends Eloquent {
         return $clean;
     }
 
+    public static function detail_report($criteria=array()) {
+        $trx = Transaction::with(array(
+            'vehicle',
+            'vehicle.customer',
+            'vehicle.customer.membership',
+            'vehicle.membership',
+            'vehicle.membership.discount',
+            'transaction_service',
+            'transaction_service.service_formula',
+            'transaction_service.service_formula.service',
+            'transaction_item',
+            'transaction_item.item_price.item',
+            'transaction_item.item_price.item.item_type',
+            'transaction_item.item_price.item.item_category',
+            'transaction_item.item_price.item.item_unit',
+            'user_workorder',
+            'user_workorder.user'));
+
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'detail');
+            if($val[0] === 'not_null') {
+                $trx->where_not_null($key);
+
+            } elseif($val[0] === 'like') {
+                $value = '%'. strtolower($val[1]) . '%';
+                $trx->where("LOWER($key)", "like", $value);
+
+            } elseif($val[0] === 'between') {
+                $trx->where_between($key, $val[1], $val[2]);
+
+            } else {
+                $trx->where($key, $val[0], $val[1]);
+            }
+        }
+        $result =  $trx->first();
+
+//        dd($result);
+        return $result;
+    }
 
     public static function criteria_lookup($key, $category = null) {
-        $keystore = array(
-            'date' => 't.date',
-            'invoice_no' => 't.date',
-            'wo_id' => 't.workorder_no',
-            'customer_name' => 'c.name',
-            'vehicle_no' => 'v.number',
-            'wo_status' => 't.status',
-        );
+        $keystore = array();
+        if($category == 'list') {
+            $keystore = array(
+                'date' => 't.date',
+                'invoice_no' => 't.date',
+                'wo_id' => 't.workorder_no',
+                'customer_name' => 'c.name',
+                'vehicle_no' => 'v.number',
+                'wo_status' => 't.status',
+            );
+        } elseif($category == 'detail') {
+            $keystore = array(
+                'transaction_id' => 't.id',
+                'item_type' => 'i.item_category_id',
+                'item_name' => 'i.name',
+            );
+        }
         return($keystore[$key]);
     }
 }

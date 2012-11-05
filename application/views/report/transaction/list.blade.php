@@ -20,7 +20,7 @@
         <div class="clear"></div>
     </div>
 
-    <form method="get">
+    <form method="get" id="formList">
         <div class="fluid grid">
             <div class="formRow">
                 <div class="grid6">
@@ -82,6 +82,7 @@
                     <div class="clear"></div>
                 </div>
 
+                <input type="hidden" name="transaction_id" value="{{ $vehicle_no }}" id="transactionId"/>
                 <div class="clear"></div>
             </div>
         </div>
@@ -105,6 +106,7 @@
         <table cellpadding="0" cellspacing="0" border="0" class="dTableTransaction" dtable-sortlist="[[0,'desc']]">
             <thead>
             <tr>
+                <th>Action</th>
                 <th>Invoice<span class="sorting" style="display: block;"></span></th>
                 <th>Workorder Number</th>
                 <th>Customer</th>
@@ -122,6 +124,12 @@
             <tbody>
             @foreach($transactions as $transaction)
                 <tr class="">
+                    <td class="tableActs" align="center">
+                        <a href="/report/transaction/detail/{{ $transaction->transaction_id }}" class="tablectrl_small bDefault tipS" original-title="Detail"
+                           data-id="{{ $transaction->transaction_id }}">
+                            <span class="iconb" data-icon=""></span>
+                        </a>
+                    </td>
                     <td>{{ $transaction->invoice_no }}</td>
                     <td>{{ $transaction->workorder_no }}</td>
                     <td>{{ $transaction->customer_name }}</td>

@@ -93,8 +93,5 @@ return array(
         'role/select',
         'role/access',
 
-        'report/transaction/index',
-        'report/transaction/list',
-        'report/transaction/detail',
     ),
 );

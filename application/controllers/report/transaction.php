@@ -69,6 +69,39 @@ class Report_Transaction_Controller extends Secure_Controller {
             'wo_id' => @$wo_id,
             'invoice_no' => @$invoice_no,
         ));
+
+    }
+
+
+    public function action_detail($transaction_id=null) {
+//        dd(Input::all());
+
+//        dd($transaction_id);
+        if($transaction_id===null) {
+            return Redirect::to('report/transaction/list');
+        }
+        $criteria = array(
+            'transaction_id' => array( '=', $transaction_id )
+        );
+        if(Input::get('item_type')!==null && Input::get('item_type')!='') {
+            $item_type = Input::get('item_type');
+            $criteria['item_type'] = array( '=', $item_type );
+        }
+        if(Input::get('item_name')!==null && Input::get('item_name')!='') {
+            $item_name = Input::get('item_name');
+            $criteria['item_name'] = array( 'like', $item_name );
+        }
+
+        $transaction = Transaction::detail_report($criteria);
+
+        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('report.transaction.application', 'js/report/transaction/application.js', array('jquery.timeentry'));
+        return $this->layout->nest('content', 'report.transaction.detail', array(
+            'transaction' => $transaction,
+            'transaction_id' => $transaction_id,
+            'item_type' => @$item_type,
+            'item_name' => @$item_name,
+        ));
     }
 
 }
