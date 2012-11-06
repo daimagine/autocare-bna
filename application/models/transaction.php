@@ -362,19 +362,21 @@ class Transaction extends Eloquent {
         foreach($criteria as $key => $val) {
             $key = static::criteria_lookup($key, 'detail');
             if($val[0] === 'not_null') {
-                $trx->where_not_null($key);
+                $trx = $trx->where_not_null($key);
 
             } elseif($val[0] === 'like') {
                 $value = '%'. strtolower($val[1]) . '%';
-                $trx->where("LOWER($key)", "like", $value);
+                $trx = $trx->where("LOWER($key)", "like", $value);
 
             } elseif($val[0] === 'between') {
-                $trx->where_between($key, $val[1], $val[2]);
+                $trx = $trx->where_between($key, $val[1], $val[2]);
 
             } else {
-                $trx->where($key, $val[0], $val[1]);
+                $trx = $trx->where($key, $val[0], $val[1]);
             }
         }
+//        dd($criteria);
+//        dd($trx);
         $result =  $trx->first();
 
 //        dd($result);
@@ -386,7 +388,7 @@ class Transaction extends Eloquent {
         if($category == 'list') {
             $keystore = array(
                 'date' => 't.date',
-                'invoice_no' => 't.date',
+                'invoice_no' => 't.invoice_no',
                 'wo_id' => 't.workorder_no',
                 'customer_name' => 'c.name',
                 'vehicle_no' => 'v.number',
@@ -394,9 +396,9 @@ class Transaction extends Eloquent {
             );
         } elseif($category == 'detail') {
             $keystore = array(
-                'transaction_id' => 't.id',
-                'item_type' => 'i.item_category_id',
-                'item_name' => 'i.name',
+                'transaction_id' => 'transaction.id',
+                'item_type' => 'transaction_item.item_price.item.item_category_id',
+                'item_name' => 'transaction_item.item_price.item.name',
             );
         }
         return($keystore[$key]);

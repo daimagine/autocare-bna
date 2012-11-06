@@ -25,26 +25,26 @@
             <div class="formRow">
                 <div class="grid6">
                     <ul class="timeRange">
-                        <li style="margin-top:2px;">Start Date</li>
-                        <li style="margin-left:44px;"><input name="startdate" type="text" class="datepicker" value="{{ $startdate }}" /></li>
+                        <li style="width:120px; margin-top:2px;">Start Date</li>
+                        <li><input name="startdate" type="text" class="datepicker" value="{{ $startdate }}" /></li>
                     </ul>
                     <div class="clear"></div>
                     <ul class="timeRange fixoptTime">
-                        <li>Workorder ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                        <li style="width:120px;">Workorder ID</li>
                         <li>
                             <input type="text" name="wo_id" value="{{ $wo_id }}"/>
                         </li>
                     </ul>
                     <div class="clear"></div>
                     <ul class="timeRange fixoptTime">
-                        <li>Customer Name&nbsp;&nbsp;&nbsp;</li>
+                        <li style="width:120px;">Customer Name</li>
                         <li>
                             <input type="text" name="customer_name" value="{{ $customer_name }}"/>
                         </li>
                     </ul>
                     <div class="clear"></div>
                     <ul class="timeRange fixoptTime">
-                        <li>Invoice Number&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                        <li style="width:120px;">Invoice Number</li>
                         <li>
                             <input type="text" name="invoice_no" value="{{ $invoice_no }}"/>
                         </li>
@@ -54,12 +54,12 @@
 
                 <div class="grid6">
                     <ul class="timeRange">
-                        <li style="margin-top:2px;">End Date&nbsp;&nbsp;&nbsp;</li>
-                        <li style="margin-left:44px;"><input name="enddate" type="text" class="datepicker" value="{{ $enddate }}" /></li>
+                        <li style="width:120px; margin-top:2px;">End Date</li>
+                        <li><input name="enddate" type="text" class="datepicker" value="{{ $enddate }}" /></li>
                     </ul>
                     <div class="clear"></div>
                     <ul class="timeRange fixoptTime">
-                        <li>Workorder Status&nbsp;&nbsp;&nbsp;</li>
+                        <li style="width:120px;">Workorder Status</li>
                         <li>
                             <select name="wo_status">
                                 <option value="">All</option>
@@ -74,7 +74,7 @@
                     </ul>
                     <div class="clear"></div>
                     <ul class="timeRange fixoptTime">
-                        <li>Vehicle Number&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                        <li style="width:120px;">Vehicle Number</li>
                         <li>
                             <input type="text" name="vehicle_no" value="{{ $vehicle_no }}"/>
                         </li>
@@ -82,7 +82,6 @@
                     <div class="clear"></div>
                 </div>
 
-                <input type="hidden" name="transaction_id" value="{{ $vehicle_no }}" id="transactionId"/>
                 <div class="clear"></div>
             </div>
         </div>
