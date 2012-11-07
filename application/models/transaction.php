@@ -461,7 +461,7 @@ class Transaction extends Eloquent {
         if(is_array($criterion) && !empty($criterion))
             $q.= $where;
 
-        $q .= " GROUP BY date ORDER BY date desc ";
+        $q .= " GROUP BY date(t.date) ORDER BY date(t.date) desc ";
 
         $data = DB::query($q, $param);
 
