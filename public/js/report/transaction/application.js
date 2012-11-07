@@ -5,13 +5,6 @@
  * Time: 2:57 PM
  * To change this template use File | Settings | File Templates.
  */
-/**
- * Created with JetBrains PhpStorm.
- * User: adi
- * Date: 10/30/12
- * Time: 2:52 PM
- * To change this template use File | Settings | File Templates.
- */
 
 $(function() {
 

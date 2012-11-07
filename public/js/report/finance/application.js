@@ -1,8 +1,8 @@
 /**
  * Created with JetBrains PhpStorm.
  * User: adi
- * Date: 10/30/12
- * Time: 2:52 PM
+ * Date: 11/4/12
+ * Time: 2:57 PM
  * To change this template use File | Settings | File Templates.
  */
 
@@ -34,20 +34,9 @@ $(function() {
         }
     });
 
-    //===== Time picker =====//
-
-    $('.timepicker').timeEntry({
-        show24Hours: true, // 24 hours format
-        showSeconds: true, // Show seconds?
-        spinnerImage: '/images/elements/ui/spinner.png', // Arrows image
-        spinnerSize: [19, 26, 0], // Image size
-        spinnerIncDecOnly: true // Only up and down arrows
-    });
-
-
     //===== Dynamic data table =====//
 
-    oTable = $('.dTableAccount').dataTable({
+    oTable = $('.dTableTransaction').dataTable({
         "bJQueryUI": false,
         "bAutoWidth": true,
         "sPaginationType": "full_numbers",
@@ -56,10 +45,9 @@ $(function() {
         "sScrollXInner": "160%"
     });
 
-    console.log(oTable.attr('dtable-sortlist'));
     try {
         if(oTable) {
-            //console.log(oTable.attr('dtable-sortlist'));
+//            console.log(oTable.attr('dtable-sortlist'));
             if(oTable.attr('dtable-sortlist')) {
                 oTable.fnSort( eval(oTable.attr('dtable-sortlist')) );
             }
@@ -69,7 +57,7 @@ $(function() {
     }
 
 
-    oTableMin = $('.dTableAccountMin').dataTable({
+    oTableMin = $('.dTableTransactionMin').dataTable({
         "bJQueryUI": false,
         "bAutoWidth": true,
         "sPaginationType": "full_numbers",
@@ -78,10 +66,9 @@ $(function() {
         "sScrollXInner": "100%"
     });
 
-    console.log(oTableMin.attr('dtable-sortlist'));
     try {
         if(oTableMin) {
-            //console.log(oTableMin.attr('dtable-sortlist'));
+            console.log(oTableMin.attr('dtable-sortlist'));
             if(oTableMin.attr('dtable-sortlist')) {
                 oTableMin.fnSort( eval(oTableMin.attr('dtable-sortlist')) );
             }
@@ -91,3 +78,5 @@ $(function() {
     }
 
 });
+
+

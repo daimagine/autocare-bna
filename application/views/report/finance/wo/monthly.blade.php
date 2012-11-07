@@ -7,15 +7,22 @@
 <div class="clear"></div>
 <div class="divider"><span></span></div>
 
-@include('partial.report.account_middlenav')
+@include('partial.report.finance_middlenav')
 
 <div class="clear"></div>
 <div class="divider"><span></span></div>
 
+
+@include('partial.report.finance_wo_middlenav')
+
+<div class="clear"></div>
+<div class="divider"><span></span></div>
+
+
 <!-- Table with opened toolbar -->
 <div class="widget">
     <div class="whead">
-        <h6>Account Report :: Monthly</h6>
+        <h6>Finance Report :: Weekly Work Order</h6>
         <div class="clear"></div>
     </div>
 
@@ -32,14 +39,16 @@
                     </ul>
                     <div class="clear"></div>
                     <ul class="timeRange fixoptTime">
-                        <li style="width:120px;">Type</li>
+                        <li style="width:120px;">Workorder Status</li>
                         <li>
-                            <select name="type">
+                            <select name="wo_status">
                                 <option value="">All</option>
-                                <option value="{{ AUTOCARE_ACCOUNT_TYPE_DEBIT }}"
-                                {{ $type == AUTOCARE_ACCOUNT_TYPE_DEBIT ? 'selected="selected"' : '' }}>Income</option>
-                                <option value="{{ AUTOCARE_ACCOUNT_TYPE_CREDIT }}"
-                                {{ $type == AUTOCARE_ACCOUNT_TYPE_CREDIT ? 'selected="selected"' : '' }}>Expenditur</option>
+                                <option value="{{ statusWorkOrder::OPEN }}"
+                                {{ $wo_status == statusWorkOrder::OPEN ? 'selected="selected"' : '' }}>Open</option>
+                                <option value="{{ statusWorkOrder::CLOSE }}"
+                                {{ $wo_status == statusWorkOrder::CLOSE ? 'selected="selected"' : '' }}>Close</option>
+                                <option value="{{ statusWorkOrder::CANCELED }}"
+                                {{ $wo_status == statusWorkOrder::CANCELED ? 'selected="selected"' : '' }}>Canceled</option>
                             </select>
                         </li>
                     </ul>
@@ -76,24 +85,36 @@
 
     <div id="dyn2" class="shownpars overflowtable">
         <a class="tOptions act" title="Options">{{ HTML::image('images/icons/options', '') }}</a>
-        <table cellpadding="0" cellspacing="0" border="0" class="dTableAccountMin" dtable-sortlist="[[0,'desc']]">
+        <table cellpadding="0" cellspacing="0" border="0" class="dTableTransactionMin" dtable-sortlist="[[0,'desc']]">
             <thead>
             <tr>
                 <th>Year<span class="sorting" style="display: block;"></span></th>
                 <th>Month<span class="sorting" style="display: block;"></span></th>
-                <th>Account Name</th>
-                <th>Count</th>
+                <th>Total Work Order</th>
+                <th>Total Open</th>
+                <th>Total Closed</th>
+                <th>Total Canceled</th>
                 <th>Amount</th>
+                <th>Action</th>
             </tr>
             </thead>
+
             <tbody>
-            @foreach($accounts as $account)
+            @foreach($transactions as $transaction)
             <tr class="">
-                <td>{{ $account->year }}</td>
-                <td>{{ $account->monthname }}</td>
-                <td>{{ $account->name }}</td>
-                <td>{{ $account->count }}</td>
-                <td>IDR {{  number_format($account->amount, 2) }}</td>
+                <td>{{ $transaction->year }}</td>
+                <td>{{ $transaction->monthname }}</td>
+                <td>{{ $transaction->total_wo }}</td>
+                <td>{{ $transaction->total_open }}</td>
+                <td>{{ $transaction->total_closed }}</td>
+                <td>{{ $transaction->total_canceled }}</td>
+                <td>IDR {{  number_format($transaction->total_amount, 2) }}</td>
+
+                <td class="tableActs" align="center">
+                    <a href="#detail" class="tablectrl_small bDefault tipS" original-title="Detail">
+                        <span class="iconb" data-icon=""></span>
+                    </a>
+                </td>
             </tr>
             @endforeach
             </tbody>
@@ -109,3 +130,4 @@
 </style>
 
 @endsection
+

@@ -362,19 +362,21 @@ class Transaction extends Eloquent {
         foreach($criteria as $key => $val) {
             $key = static::criteria_lookup($key, 'detail');
             if($val[0] === 'not_null') {
-                $trx->where_not_null($key);
+                $trx = $trx->where_not_null($key);
 
             } elseif($val[0] === 'like') {
                 $value = '%'. strtolower($val[1]) . '%';
-                $trx->where("LOWER($key)", "like", $value);
+                $trx = $trx->where("LOWER($key)", "like", $value);
 
             } elseif($val[0] === 'between') {
-                $trx->where_between($key, $val[1], $val[2]);
+                $trx = $trx->where_between($key, $val[1], $val[2]);
 
             } else {
-                $trx->where($key, $val[0], $val[1]);
+                $trx = $trx->where($key, $val[0], $val[1]);
             }
         }
+//        dd($criteria);
+//        dd($trx);
         $result =  $trx->first();
 
 //        dd($result);
@@ -386,7 +388,7 @@ class Transaction extends Eloquent {
         if($category == 'list') {
             $keystore = array(
                 'date' => 't.date',
-                'invoice_no' => 't.date',
+                'invoice_no' => 't.invoice_no',
                 'wo_id' => 't.workorder_no',
                 'customer_name' => 'c.name',
                 'vehicle_no' => 'v.number',
@@ -394,11 +396,182 @@ class Transaction extends Eloquent {
             );
         } elseif($category == 'detail') {
             $keystore = array(
-                'transaction_id' => 't.id',
-                'item_type' => 'i.item_category_id',
-                'item_name' => 'i.name',
+                'transaction_id' => 'transaction.id',
+                'item_type' => 'transaction_item.item_price.item.item_category_id',
+                'item_name' => 'transaction_item.item_price.item.name',
+            );
+        } elseif($category == 'finance_daily') {
+            $keystore = array(
+                'wo_status' => 't.status',
+                'date' => 't.date',
+            );
+        } elseif($category == 'finance_weekly') {
+            $keystore = array(
+                'wo_status' => 't.status',
+                'date' => 't.date',
+            );
+        } elseif($category == 'finance_monthly') {
+            $keystore = array(
+                'wo_status' => 't.status',
+                'date' => 't.date',
             );
         }
         return($keystore[$key]);
     }
+
+    public static function finance_daily($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'finance_daily');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+
+            } elseif($val[0] === 'like') {
+                $criterion[] = "LOWER($key) like ?";
+                $value = '%'. strtolower($val[1]) . '%';
+                array_push($param, $value);
+
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+        $q = "SELECT date(t.date) as date, ".
+                    "count(distinct t.workorder_no) as total_wo, ".
+                    "sum(case when t.status = 'O' then 1 else 0 end) as total_open, ".
+                    "sum(case when t.status = 'D' then 1 else 0 end) as total_closed, ".
+                    "sum(case when t.status = 'C' then 1 else 0 end) as total_canceled, ".
+                    "sum(t.amount) as total_amount ";
+
+        $q .= "FROM transaction t ";
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .= " GROUP BY date(t.date) ORDER BY date(t.date) desc ";
+
+        $data = DB::query($q, $param);
+
+        $clean = array();
+        foreach($data as $d) {
+            if($d->date !== null && strtoupper($d->date) !== 'NULL') {
+                array_push($clean, $d);
+            }
+        }
+
+//        dd($clean);
+//        dd(DB::last_query());
+        return $clean;
+    }
+
+    public static function finance_weekly($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'finance_weekly');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+
+        $q = "SELECT ".
+            "Date_add(t.date, INTERVAL(1-Dayofweek(t.date)) day) AS week_start, ".
+            "Date_add(t.date, INTERVAL(7-Dayofweek(t.date)) day) AS week_end, ".
+            "count(distinct t.workorder_no) as total_wo, ".
+            "sum(case when t.status = 'O' then 1 else 0 end) as total_open, ".
+            "sum(case when t.status = 'D' then 1 else 0 end) as total_closed, ".
+            "sum(case when t.status = 'C' then 1 else 0 end) as total_canceled, ".
+            "sum(t.amount) as total_amount ";
+
+        $q .= "FROM transaction t ";
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .= " GROUP BY Week(t.date) ORDER BY Week(t.date) desc ";
+
+        $data = DB::query($q, $param);
+
+//        dd($data);
+//        dd(DB::last_query());
+        return $data;
+    }
+
+
+    public static function finance_monthly($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'finance_monthly');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+
+        $q = "SELECT ".
+            "year(t.date) AS year, ".
+            "month(t.date) AS month, ".
+            "monthname(t.date) AS monthname, ".
+            "count(distinct t.workorder_no) as total_wo, ".
+            "sum(case when t.status = 'O' then 1 else 0 end) as total_open, ".
+            "sum(case when t.status = 'D' then 1 else 0 end) as total_closed, ".
+            "sum(case when t.status = 'C' then 1 else 0 end) as total_canceled, ".
+            "sum(t.amount) as total_amount ";
+
+        $q .= "FROM transaction t ";
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .= " GROUP BY year, month ORDER BY year desc, month desc ";
+
+        $data = DB::query($q, $param);
+
+//        dd($data);
+//        dd(DB::last_query());
+        return $data;
+    }
+
+
 }

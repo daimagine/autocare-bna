@@ -73,15 +73,15 @@ class Report_Account_Controller extends Secure_Controller {
 
         $startdate = Input::get('startdate');
         $enddate = Input::get('enddate');
-        if($startdate == null)
+        if($startdate == null && $startdate == '')
             $startdate = date('d-m-Y', strtotime('09/01/2012'));
-        if($enddate == null)
+        if($enddate == null && $enddate == '')
             $enddate = date('d-m-Y');
 
         $tempdate = DateTime::createFromFormat('d-m-Y H:i:s', $startdate.' 00:00:00');
-        $start = $tempdate->format('Y-m-d H:i:s');
+        $start = $tempdate->format('Y-m-1 H:i:s');
         $tempdate = DateTime::createFromFormat('d-m-Y H:i:s', $enddate.' 23:59:59');
-        $end = $tempdate->format('Y-m-d H:i:s');
+        $end = $tempdate->format('Y-m-t H:i:s');
 
         $criteria = array(
             'paid_date' => array('not_null'),
