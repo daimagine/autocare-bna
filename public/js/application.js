@@ -50,8 +50,8 @@ $(function() {
         "bAutoWidth": true,
         "sPaginationType": "full_numbers",
 //        "sDom": '<"H"fl>t<"F"ip>',
-//        "sDom": 'T<"clear">lfrtip',
-        "sDom": "<'row-fluid'<'span6'T><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+        "sDom": 'T<"clear">lfrtip',
+//        "sDom": "<'row-fluid'<'span6'T><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
         "oTableTools": {
             "sSwfPath": "../media/swf/copy_csv_xls_pdf.swf",
             "mColumns": "visible",

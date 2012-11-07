@@ -26,8 +26,8 @@
                 <th>Description</th>
                 <th>Price</th>
                 <th>Vendor</th>
-                <th>Date</th>
-                <th>Expiry Date</th>
+                <th>Create Date</th>
+<!--                <th>Expiry Date</th>-->
                 <th>Action</th>
             </tr>
             </thead>
@@ -40,8 +40,8 @@
                 <td>{{ $item->description }}</td>
                 <td>{{ $item->price }}</td>
                 <td>{{ $item->vendor }}</td>
-                <td>{{ $item->date }}</td>
-                <td>{{ $item->expiry_date }}</td>
+                <td>{{ $item->created_at }}</td>
+<!--                <td>{{ $item->expiry_date }}</td>-->
                 <td class="tableActs" align="center">
                     <a href="edit/{{ $item->id }}" class="classConfirmEdit tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
                     <a href="delete/{{ $item->id }}" class="classConfirmDelete tablectrl_small bDefault tipS" original-title="Remove">

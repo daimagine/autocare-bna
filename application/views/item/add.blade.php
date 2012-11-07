@@ -28,7 +28,7 @@
 
         {{ Form::nginput('text', 'name', @$item['name'], 'Name', array('class' => 'validate[required]')) }}
 
-        {{ Form::nginput('text', 'code', @$code, 'Code', array('class' => 'validate[required]', 'disabled' => 'true')) }}
+        {{ Form::nginput('text', 'code', @$code, 'Code', array('class' => 'validate[required]', 'readonly' => 'true')) }}
 
 <!--        @if($accountTransaction!=null)-->
 <!--        {{ Form::nyelect('account_transaction_id', @$accountTransaction, isset($item['account_transaction_id']) ? $item['account_transaction_id'] : null, 'Account Transaction', array('class' => 'validate[required]')) }}-->
