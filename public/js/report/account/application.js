@@ -16,6 +16,24 @@ $(function() {
         minDate: '-5Y'
     });
 
+    $('.monthpicker').datepicker( {
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        minDate: '-5Y',
+        dateFormat: 'MM yy',
+        onClose: function(dateText, inst) {
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(year, month, 1));
+            console.log($(this).attr('data-mask'));
+            var id = $(this).attr('data-mask');
+            month = parseInt(month) + 1;
+            $('#'+id).val( 1 + "-" + month + "-" + year );
+            console.log($('#'+id));
+        }
+    });
+
     //===== Time picker =====//
 
     $('.timepicker').timeEntry({

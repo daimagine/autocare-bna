@@ -403,6 +403,17 @@ class Transaction extends Eloquent {
         } elseif($category == 'finance_daily') {
             $keystore = array(
                 'wo_status' => 't.status',
+                'date' => 't.date',
+            );
+        } elseif($category == 'finance_weekly') {
+            $keystore = array(
+                'wo_status' => 't.status',
+                'date' => 't.date',
+            );
+        } elseif($category == 'finance_monthly') {
+            $keystore = array(
+                'wo_status' => 't.status',
+                'date' => 't.date',
             );
         }
         return($keystore[$key]);
@@ -464,6 +475,103 @@ class Transaction extends Eloquent {
 //        dd($clean);
 //        dd(DB::last_query());
         return $clean;
-
     }
+
+    public static function finance_weekly($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'finance_weekly');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+
+        $q = "SELECT ".
+            "Date_add(t.date, INTERVAL(1-Dayofweek(t.date)) day) AS week_start, ".
+            "Date_add(t.date, INTERVAL(7-Dayofweek(t.date)) day) AS week_end, ".
+            "count(distinct t.workorder_no) as total_wo, ".
+            "sum(case when t.status = 'O' then 1 else 0 end) as total_open, ".
+            "sum(case when t.status = 'D' then 1 else 0 end) as total_closed, ".
+            "sum(case when t.status = 'C' then 1 else 0 end) as total_canceled, ".
+            "sum(t.amount) as total_amount ";
+
+        $q .= "FROM transaction t ";
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .= " GROUP BY Week(t.date) ORDER BY Week(t.date) desc ";
+
+        $data = DB::query($q, $param);
+
+//        dd($data);
+//        dd(DB::last_query());
+        return $data;
+    }
+
+
+    public static function finance_monthly($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'finance_monthly');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+
+        $q = "SELECT ".
+            "year(t.date) AS year, ".
+            "month(t.date) AS month, ".
+            "monthname(t.date) AS monthname, ".
+            "count(distinct t.workorder_no) as total_wo, ".
+            "sum(case when t.status = 'O' then 1 else 0 end) as total_open, ".
+            "sum(case when t.status = 'D' then 1 else 0 end) as total_closed, ".
+            "sum(case when t.status = 'C' then 1 else 0 end) as total_canceled, ".
+            "sum(t.amount) as total_amount ";
+
+        $q .= "FROM transaction t ";
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .= " GROUP BY year, month ORDER BY year desc, month desc ";
+
+        $data = DB::query($q, $param);
+
+//        dd($data);
+//        dd(DB::last_query());
+        return $data;
+    }
+
+
 }

@@ -22,7 +22,7 @@
 <!-- Table with opened toolbar -->
 <div class="widget">
     <div class="whead">
-        <h6>Finance Report :: Daily Work Order</h6>
+        <h6>Finance Report :: Weekly Work Order</h6>
         <div class="clear"></div>
     </div>
 
@@ -82,7 +82,7 @@
         <table cellpadding="0" cellspacing="0" border="0" class="dTableTransactionMin" dtable-sortlist="[[0,'desc']]">
             <thead>
             <tr>
-                <th>Date<span class="sorting" style="display: block;"></span></th>
+                <th>Date Range<span class="sorting" style="display: block;"></span></th>
                 <th>Total Work Order</th>
                 <th>Total Open</th>
                 <th>Total Closed</th>
@@ -95,7 +95,7 @@
             <tbody>
             @foreach($transactions as $transaction)
             <tr class="">
-                <td>{{ date('Y-m-d', strtotime($transaction->date)) }}</td>
+                <td>{{ date('Y-m-d', strtotime($transaction->week_start)) }} - {{ date('Y-m-d', strtotime($transaction->week_end)) }}</td>
                 <td>{{ $transaction->total_wo }}</td>
                 <td>{{ $transaction->total_open }}</td>
                 <td>{{ $transaction->total_closed }}</td>
