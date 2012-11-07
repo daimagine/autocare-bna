@@ -93,5 +93,10 @@ return array(
         'role/select',
         'role/access',
 
+        'report/finance/index',
+        'report/finance/wo',
+        'report/finance/wo_daily',
+        'report/finance/wo_weekly',
+        'report/finance/wo_monthly',
     ),
 );

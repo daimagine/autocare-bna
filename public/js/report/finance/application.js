@@ -16,17 +16,6 @@ $(function() {
         minDate: '-5Y'
     });
 
-    //===== Time picker =====//
-
-    $('.timepicker').timeEntry({
-        show24Hours: true, // 24 hours format
-        showSeconds: true, // Show seconds?
-        spinnerImage: '/images/elements/ui/spinner.png', // Arrows image
-        spinnerSize: [19, 26, 0], // Image size
-        spinnerIncDecOnly: true // Only up and down arrows
-    });
-
-
     //===== Dynamic data table =====//
 
     oTable = $('.dTableTransaction').dataTable({
@@ -74,16 +63,4 @@ $(function() {
 
 });
 
-
-function showdetail(a) {
-    var id = $(a).attr('data-id');
-    var hidin = $('#transactionId');
-    var form = $('#formList');
-
-    hidin.val(id);
-    console.log(hidin);
-    form.attr('action', '/report/transaction/detail');
-    console.log(form);
-    form.submit();
-}
 

@@ -400,7 +400,70 @@ class Transaction extends Eloquent {
                 'item_type' => 'transaction_item.item_price.item.item_category_id',
                 'item_name' => 'transaction_item.item_price.item.name',
             );
+        } elseif($category == 'finance_daily') {
+            $keystore = array(
+                'wo_status' => 't.status',
+            );
         }
         return($keystore[$key]);
+    }
+
+    public static function finance_daily($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'finance_daily');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+
+            } elseif($val[0] === 'like') {
+                $criterion[] = "LOWER($key) like ?";
+                $value = '%'. strtolower($val[1]) . '%';
+                array_push($param, $value);
+
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+        $q = "SELECT date(t.date) as date, ".
+                    "count(distinct t.workorder_no) as total_wo, ".
+                    "sum(case when t.status = 'O' then 1 else 0 end) as total_open, ".
+                    "sum(case when t.status = 'D' then 1 else 0 end) as total_closed, ".
+                    "sum(case when t.status = 'C' then 1 else 0 end) as total_canceled, ".
+                    "sum(t.amount) as total_amount ";
+
+        $q .= "FROM transaction t ";
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .= " GROUP BY date ORDER BY date desc ";
+
+        $data = DB::query($q, $param);
+
+        $clean = array();
+        foreach($data as $d) {
+            if($d->date !== null && strtoupper($d->date) !== 'NULL') {
+                array_push($clean, $d);
+            }
+        }
+
+//        dd($clean);
+//        dd(DB::last_query());
+        return $clean;
+
     }
 }
