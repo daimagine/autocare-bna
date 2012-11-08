@@ -10,7 +10,7 @@
 class Item extends Eloquent {
 
     public static $table = 'item';
-    public static $timestamps = false;
+//    public static $timestamps = false;
 
     private static $REF_PREFIX = 'ITM';
     private static $REF_LENGTH = 10;
@@ -121,5 +121,95 @@ class Item extends Eloquent {
         $count++;
         $suffix = sprintf('%0' . static::$REF_LENGTH . 'd', $count);
         return static::$REF_PREFIX . $suffix;
+    }
+
+    public static function list_report($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'list');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+
+            } elseif($val[0] === 'like') {
+                $criterion[] = "LOWER($key) like ?";
+                $value = '%'. strtolower($val[1]) . '%';
+                array_push($param, $value);
+
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+        $q = "select ".
+            "i.name as name, ".
+            "ic.name as category, ".
+            "it.name as type, ".
+            "ut.name as unit, ".
+            "i.code as code, ".
+            "i.stock as current_stock, ".
+            "(select count(distinct isf.id) from item_stock_flow isf where isf.item_id = i.id) as total_update_stock, ".
+            "i.price as sell_price, ".
+            "(select count(distinct ip.id) from item_price ip where ip.item_id = i.id) as total_update_sell_price, ".
+            "i.price as purchase_price, ".
+            "i.vendor as vendor, ".
+            "i.status as status, ".
+            "i.created_at as create_date, ".
+            "i.updated_at as last_update ";
+
+        $q .= "from " .
+            "item i " .
+            "inner join item_category ic on i.item_category_id=ic.id " .
+            "inner join item_type it on i.item_type_id=it.id " .
+            "inner join unit_type ut on i.unit_id=ut.id " .
+            "left join item_stock_flow isf on isf.item_id= i.id ".
+            "left join item_price ip on ip.item_id= i.id "
+        ;
+
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .= "ORDER BY name desc "
+        ;
+
+        $data = DB::query($q, $param);
+        $clean = array();
+        foreach($data as $d) {
+            if($d->code !== null && strtoupper($d->code) !== 'NULL') {
+                array_push($clean, $d);
+            }
+        }
+        return $clean;
+    }
+    public static function criteria_lookup($key, $category = null) {
+        $keystore = array();
+        if($category == 'list') {
+            $keystore = array(
+                'name' => 'i.name',
+                'code' => 'i.code',
+                'vendor' => 'i.vendor',
+                'stock' => 'i.stock'
+            );
+        } elseif($category == 'detail') {
+            $keystore = array(
+                'transaction_id' => 't.id',
+                'item_type' => 'i.item_category_id',
+                'item_name' => 'i.name',
+            );
+        }
+        return($keystore[$key]);
     }
 }
