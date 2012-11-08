@@ -13,7 +13,7 @@
 <div class="divider"><span></span></div>
 
 
-@include('partial.report.finance_wo_middlenav')
+@include('partial.report.finance_service_middlenav')
 
 <div class="clear"></div>
 <div class="divider"><span></span></div>
@@ -22,7 +22,7 @@
 <!-- Table with opened toolbar -->
 <div class="widget">
     <div class="whead">
-        <h6>Finance Report :: Monthly Work Order</h6>
+        <h6>Finance Report :: Monthly Service</h6>
         <div class="clear"></div>
     </div>
 
@@ -39,16 +39,13 @@
                     </ul>
                     <div class="clear"></div>
                     <ul class="timeRange fixoptTime">
-                        <li style="width:120px;">Workorder Status</li>
+                        <li style="width:120px;">Service Type</li>
                         <li>
-                            <select name="wo_status">
+                            <select name="service_type">
                                 <option value="">All</option>
-                                <option value="{{ statusWorkOrder::OPEN }}"
-                                {{ $wo_status == statusWorkOrder::OPEN ? 'selected="selected"' : '' }}>Open</option>
-                                <option value="{{ statusWorkOrder::CLOSE }}"
-                                {{ $wo_status == statusWorkOrder::CLOSE ? 'selected="selected"' : '' }}>Close</option>
-                                <option value="{{ statusWorkOrder::CANCELED }}"
-                                {{ $wo_status == statusWorkOrder::CANCELED ? 'selected="selected"' : '' }}>Canceled</option>
+                                @foreach($service_type_opt as $key => $val)
+                                <option value="{{ $key }}" {{ $key == $service_type ? 'selected="selected"' : '' }}>{{ $val }}</option>
+                                @endforeach
                             </select>
                         </li>
                     </ul>
@@ -90,31 +87,20 @@
             <tr>
                 <th>Year<span class="sorting" style="display: block;"></span></th>
                 <th>Month<span class="sorting" style="display: block;"></span></th>
-                <th>Total Work Order</th>
-                <th>Total Open</th>
-                <th>Total Closed</th>
-                <th>Total Canceled</th>
+                <th>Service</th>
+                <th>Count</th>
                 <th>Amount</th>
-                <th>Action</th>
             </tr>
             </thead>
 
             <tbody>
-            @foreach($transactions as $transaction)
+            @foreach($services as $service)
             <tr class="">
-                <td>{{ $transaction->year }}</td>
-                <td>{{ $transaction->monthname }}</td>
-                <td>{{ $transaction->total_wo }}</td>
-                <td>{{ $transaction->total_open }}</td>
-                <td>{{ $transaction->total_closed }}</td>
-                <td>{{ $transaction->total_canceled }}</td>
-                <td>IDR {{  number_format($transaction->total_amount, 2) }}</td>
-
-                <td class="tableActs" align="center">
-                    <a href="#detail" class="tablectrl_small bDefault tipS" original-title="Detail">
-                        <span class="iconb" data-icon=""></span>
-                    </a>
-                </td>
+                <td>{{ $service->year }}</td>
+                <td>{{ $service->monthname }}</td>
+                <td>{{ $service->service_desc }}</td>
+                <td>{{ $service->service_count }}</td>
+                <td>IDR {{  number_format($service->amount, 2) }}</td>
             </tr>
             @endforeach
             </tbody>
@@ -122,12 +108,6 @@
     </div>
     <div class="clear"></div>
 </div>
-
-<style type="text/css">
-    .ui-datepicker-calendar {
-        display: none;
-    }
-</style>
 
 @endsection
 
