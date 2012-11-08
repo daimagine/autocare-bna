@@ -204,4 +204,129 @@ class Report_Finance_Controller extends Secure_Controller {
     }
 
 
+
+
+    // PARTS REPORT
+
+    public function action_part() {
+        return $this->layout->nest('content', 'report.finance.part.index', array());
+    }
+
+
+    public function action_part_daily() {
+
+        $startdate = Input::get('startdate');
+        $enddate = Input::get('enddate');
+        if($startdate == null)
+            $startdate = date('d-m-Y', strtotime('09/01/2012'));
+        if($enddate == null)
+            $enddate = date('d-m-Y');
+        $tempdate = DateTime::createFromFormat('d-m-Y H:i:s', $startdate.' 00:00:00');
+        $start = $tempdate->format('Y-m-d H:i:s');
+        $tempdate = DateTime::createFromFormat('d-m-Y H:i:s', $enddate.' 23:59:59');
+        $end = $tempdate->format('Y-m-d H:i:s');
+
+        $criteria = array(
+            'date' => array( 'between', $start, $end )
+        );
+        if(Input::get('part_type')!==null && Input::get('part_type')!='') {
+            $part_type = Input::get('part_type');
+            $criteria['part_type'] = array( '=', $part_type );
+        }
+        if(Input::get('part_category')!==null && Input::get('part_category')!='') {
+            $part_category = Input::get('part_category');
+            $criteria['part_category'] = array( '=', $part_category );
+        }
+        if(Input::get('part_unit')!==null && Input::get('part_unit')!='') {
+            $part_unit = Input::get('part_unit');
+            $criteria['part_unit'] = array( '=', $part_unit );
+        }
+        $parts = Item::finance_daily($criteria);
+        $part_type_opt = ItemType::allSelect();
+        $part_category_opt = ItemCategory::allSelect();
+        $part_unit_opt = UnitType::allSelect();
+
+        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('report.finance.application', 'js/report/finance/application.js', array('jquery.timeentry'));
+        return $this->layout->nest('content', 'report.finance.part.daily', array(
+            'parts' => $parts,
+            'part_type' => @$part_type,
+            'part_type_opt' => @$part_type_opt,
+            'part_category' => @$part_category,
+            'part_category_opt' => @$part_category_opt,
+            'part_unit' => @$part_unit,
+            'part_unit_opt' => @$part_unit_opt,
+            'startdate' => $startdate,
+            'enddate' => $enddate,
+        ));
+    }
+
+
+    public function action_part_weekly() {
+        $this->part_report_periodic();
+    }
+
+    public function action_part_monthly() {
+        $this->part_report_periodic('MONTH');
+    }
+
+    public function part_report_periodic($period='WEEK') {
+//        dd(Input::all());
+
+        $startdate = Input::get('startdate');
+        $enddate = Input::get('enddate');
+        if($startdate == null && $startdate == '')
+            $startdate = date('d-m-Y', strtotime('09/01/2012'));
+        if($enddate == null && $enddate == '')
+            $enddate = date('d-m-Y');
+
+        $tempdate = DateTime::createFromFormat('d-m-Y H:i:s', $startdate.' 00:00:00');
+        $start = $tempdate->format('Y-m-1 H:i:s');
+        $tempdate = DateTime::createFromFormat('d-m-Y H:i:s', $enddate.' 23:59:59');
+        $end = $tempdate->format('Y-m-t H:i:s');
+
+        $criteria = array(
+            'date' => array( 'between', $start, $end )
+        );
+
+        if(Input::get('part_type')!==null && Input::get('part_type')!='') {
+            $part_type = Input::get('part_type');
+            $criteria['part_type'] = array( '=', $part_type );
+        }
+        if(Input::get('part_category')!==null && Input::get('part_category')!='') {
+            $part_category = Input::get('part_category');
+            $criteria['part_category'] = array( '=', $part_category );
+        }
+        if(Input::get('part_unit')!==null && Input::get('part_unit')!='') {
+            $part_unit = Input::get('part_unit');
+            $criteria['part_unit'] = array( '=', $part_unit );
+        }
+
+        if($period === 'MONTH') {
+            $view = 'report.finance.part.monthly';
+            $parts = Item::finance_monthly($criteria);
+
+        } else {
+            $view = 'report.finance.part.weekly';
+            $parts = Item::finance_weekly($criteria);
+        }
+
+        $part_type_opt = ItemType::allSelect();
+        $part_category_opt = ItemCategory::allSelect();
+        $part_unit_opt = UnitType::allSelect();
+
+        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('report.finance.application', 'js/report/finance/application.js', array('jquery.timeentry'));
+        return $this->layout->nest('content', $view, array(
+            'parts' => $parts,
+            'part_type' => @$part_type,
+            'part_type_opt' => @$part_type_opt,
+            'part_category' => @$part_category,
+            'part_category_opt' => @$part_category_opt,
+            'part_unit' => @$part_unit,
+            'part_unit_opt' => @$part_unit_opt,
+            'startdate' => $startdate,
+            'enddate' => $enddate,
+        ));
+    }
 }

@@ -209,7 +209,219 @@ class Item extends Eloquent {
                 'item_type' => 'i.item_category_id',
                 'item_name' => 'i.name',
             );
+        } elseif($category == 'finance_daily') {
+            $keystore = array(
+                'part_type' => 'i.item_type_id',
+                'part_category' => 'i.item_category_id',
+                'part_unit' => 'i.unit_id',
+                'date' => 't.date',
+            );
+        } elseif($category == 'finance_weekly') {
+            $keystore = array(
+                'part_type' => 'i.item_type_id',
+                'part_category' => 'i.item_category_id',
+                'part_unit' => 'i.unit_id',
+                'date' => 't.date',
+            );
+        } elseif($category == 'finance_monthly') {
+            $keystore = array(
+                'part_type' => 'i.item_type_id',
+                'part_category' => 'i.item_category_id',
+                'part_unit' => 'i.unit_id',
+                'date' => 't.date',
+            );
         }
         return($keystore[$key]);
     }
+
+    public static function finance_daily($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'finance_daily');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+
+            } elseif($val[0] === 'like') {
+                $criterion[] = "LOWER($key) like ?";
+                $value = '%'. strtolower($val[1]) . '%';
+                array_push($param, $value);
+
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+        $q =    "SELECT ".
+                    "s.code as part_code, ".
+                    "s.name as part_desc, ".
+                    "s.vendor as part_vendor, ".
+                    "sc.name as part_category, ".
+                    "ut.name as unit_type, ".
+                    "count(distinct ts.id) as part_count, ".
+                    "sum(t.amount) as amount, ".
+                    "date(t.date) as part_date ".
+                    "FROM transaction t ".
+                    "INNER JOIN transaction_item AS ts ON ts.transaction_id = t.id ".
+                    "INNER JOIN item_price as sf ON sf.id = ts.item_price_id ".
+                    "INNER JOIN item AS s ON sf.item_id = s.id ".
+                    "INNER JOIN item_category AS sc ON sc.id = s.item_category_id ".
+                    "INNER JOIN unit_type AS ut ON s.unit_id = ut.id ";
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .=   " GROUP BY ".
+                    "part_date , ".
+                    "part_desc ".
+                    "ORDER BY ".
+                    "part_date desc, part_desc asc";
+
+        $data = DB::query($q, $param);
+
+        $clean = array();
+        foreach($data as $d) {
+            if($d->part_date !== null && strtoupper($d->part_date) !== 'NULL') {
+                array_push($clean, $d);
+            }
+        }
+
+//        dd($clean);
+//        dd(DB::last_query());
+        return $clean;
+    }
+
+
+    public static function finance_weekly($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'finance_weekly');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+
+        $q =    "SELECT ".
+                    "Date_add(t.date, INTERVAL(1-Dayofweek(t.date)) day) AS week_start, ".
+                    "Date_add(t.date, INTERVAL(7-Dayofweek(t.date)) day) AS week_end, ".
+                    "s.code as part_code, ".
+                    "s.name as part_desc, ".
+                    "s.vendor as part_vendor, ".
+                    "sc.name as part_category, ".
+                    "ut.name as unit_type, ".
+                    "count(distinct ts.id) as part_count, ".
+                    "sum(t.amount) as amount ";
+
+        $q .=   "FROM transaction t ".
+                    "INNER JOIN transaction_item AS ts ON ts.transaction_id = t.id ".
+                    "INNER JOIN item_price as sf ON sf.id = ts.item_price_id ".
+                    "INNER JOIN item AS s ON sf.item_id = s.id ".
+                    "INNER JOIN item_category AS sc ON sc.id = s.item_category_id ".
+                    "INNER JOIN unit_type AS ut ON s.unit_id = ut.id ";
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .=   " GROUP BY ".
+                    "Week(t.date) , ".
+                    "part_desc ".
+                "ORDER BY ".
+                    "Week(t.date) desc, part_desc asc";
+
+        $data = DB::query($q, $param);
+
+//        dd($data);
+//        dd(DB::last_query());
+        return $data;
+    }
+
+
+    public static function finance_monthly($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'finance_monthly');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+
+        $q =    "SELECT ".
+                    "year(t.date) AS year, ".
+                    "month(t.date) AS month, ".
+                    "monthname(t.date) AS monthname, ".
+                    "s.code as part_code, ".
+                    "s.name as part_desc, ".
+                    "s.vendor as part_vendor, ".
+                    "sc.name as part_category, ".
+                    "ut.name as unit_type, ".
+                    "count(distinct ts.id) as part_count, ".
+                    "sum(t.amount) as amount ";
+
+        $q .=   "FROM transaction t ".
+                    "INNER JOIN transaction_item AS ts ON ts.transaction_id = t.id ".
+                    "INNER JOIN item_price as sf ON sf.id = ts.item_price_id ".
+                    "INNER JOIN item AS s ON sf.item_id = s.id ".
+                    "INNER JOIN item_category AS sc ON sc.id = s.item_category_id ".
+                    "INNER JOIN unit_type AS ut ON s.unit_id = ut.id ";
+
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .=   " GROUP BY ".
+                    "year, month, ".
+                    "part_desc ".
+                "ORDER BY ".
+                    "year desc, month desc, part_desc asc";
+
+        $data = DB::query($q, $param);
+
+//        dd($data);
+//        dd(DB::last_query());
+        return $data;
+    }
+
+
 }

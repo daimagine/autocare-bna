@@ -102,5 +102,9 @@ return array(
         'report/finance/service_daily',
         'report/finance/service_weekly',
         'report/finance/service_monthly',
+        'report/finance/part',
+        'report/finance/part_daily',
+        'report/finance/part_weekly',
+        'report/finance/part_monthly',
     ),
 );

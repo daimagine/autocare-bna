@@ -131,7 +131,7 @@ class Service extends Eloquent {
                     "date(t.date) as service_date ".
                 "FROM transaction t ".
                     "INNER JOIN transaction_service AS ts ON ts.transaction_id = t.id ".
-                    "INNER JOIN service_formula as sf ON sf.service_id = ts.id ".
+                    "INNER JOIN service_formula as sf ON sf.id = ts.service_formula_id ".
                     "INNER JOIN service AS s ON sf.service_id = s.id ";
 
         $where = " ";
@@ -183,16 +183,16 @@ class Service extends Eloquent {
         }
 
         $q =    "SELECT ".
-                "Date_add(t.date, INTERVAL(1-Dayofweek(t.date)) day) AS week_start, ".
-                "Date_add(t.date, INTERVAL(7-Dayofweek(t.date)) day) AS week_end, ".
-                "s.name as service_desc, ".
-                "count(distinct ts.id) as service_count, ".
-                "sum(t.amount) as amount ";
+                    "Date_add(t.date, INTERVAL(1-Dayofweek(t.date)) day) AS week_start, ".
+                    "Date_add(t.date, INTERVAL(7-Dayofweek(t.date)) day) AS week_end, ".
+                    "s.name as service_desc, ".
+                    "count(distinct ts.id) as service_count, ".
+                    "sum(t.amount) as amount ";
 
         $q .=   "FROM transaction t ".
-                "INNER JOIN transaction_service AS ts ON ts.transaction_id = t.id ".
-                "INNER JOIN service_formula as sf ON sf.service_id = ts.id ".
-                "INNER JOIN service AS s ON sf.service_id = s.id ";
+                    "INNER JOIN transaction_service AS ts ON ts.transaction_id = t.id ".
+                    "INNER JOIN service_formula as sf ON sf.id = ts.service_formula_id ".
+                    "INNER JOIN service AS s ON sf.service_id = s.id ";
 
         $where = " ";
         if(strlen(trim($where)) > 0)
@@ -243,7 +243,7 @@ class Service extends Eloquent {
 
         $q .=   "FROM transaction t ".
                     "INNER JOIN transaction_service AS ts ON ts.transaction_id = t.id ".
-                    "INNER JOIN service_formula as sf ON sf.service_id = ts.id ".
+                    "INNER JOIN service_formula as sf ON sf.id = ts.service_formula_id ".
                     "INNER JOIN service AS s ON sf.service_id = s.id ";
 
 
