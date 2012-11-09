@@ -23,7 +23,10 @@ class Report_Warehouse_Controller extends Secure_Controller {
         $vendor = Input::get('vendor');
         $opQryStock = Input::get('opQryStock');
         $stock = Input::get('stock');
+        $type = Input::get('type');
+        $category = Input::get('category');
 
+        $lstCategory = ItemCategory::listAll(array());
         $criteria = array();
         if ($name != null && $name != '') {
             $criteria['name'] =  array( 'like', $name );
@@ -40,9 +43,23 @@ class Report_Warehouse_Controller extends Secure_Controller {
 
             }
         }
+        if ($type != null && $type != '') {
+            $criteria['type'] =  array( 'like', $type );
+        }
+        if ($category != null && $category != '' &&  $category!=0) {
+            $criteria['category'] =  array( '=', $category );
+        }
 
         $items = Item::list_report($criteria);
-//        {dd($items);}
+        $selectionCategory = array();
+        $selectionCategory[0] = '--ALL--';
+        foreach($lstCategory as $ctg) {
+            $selectionCategory[$ctg->id] = $ctg->name;
+        }
+
+        $selectionType = array();
+        $selectionType[0] = '--select category first--';
+
         Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
         Asset::add('report.warehouse.application', 'js/report/warehouse/application.js', array('jquery.timeentry'));
         return $this->layout->nest('content', 'report.warehouse.item', array(
@@ -52,7 +69,30 @@ class Report_Warehouse_Controller extends Secure_Controller {
             'vendor' => $vendor,
             'stock' => $stock,
             'opQryStock' => $opQryStock,
+            'type' => $type,
+            'category' => $category,
+            'lstCategory' => $selectionCategory,
+            'lstType' => $selectionType,
+        ));
+    }
 
+    public function action_lst_unit_type($id=null){
+        if ($id===null) {
+            return Redirect::to('report/warehouse/list_item');
+        }
+        $lstUnitType = UnitType::listAll(array(
+            'item_category_id' => $id,
+        ));
+
+        $type=0;
+        $selection = array();
+        $selection[0] = '--ALL--';
+        foreach($lstUnitType as $ctg) {
+            $selection[$ctg->id] = $ctg->name;
+        }
+        return View::make('report.warehouse.selectboxtype', array(
+            'lstType' => $selection,
+            'type' => $type
         ));
     }
 
