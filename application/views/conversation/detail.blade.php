@@ -39,7 +39,7 @@
                         @endif
 
                         <li class="{{ $message->sender_id }} {{ $message->sender->id }} {{ $message->sender_id == Auth::user()->id ? 'by_user' : 'by_me' }}">
-                            <a href="#" title=""><img src="/images/live/face2.png" alt=""></a>
+                            <a href="#" title=""><img src="/images/userLogin.png" alt="" width="37" height="36" alt=""></a>
                             <div class="messageArea">
                                 <span class="aro"></span>
                                 <div class="infoRow">

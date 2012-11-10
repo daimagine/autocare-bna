@@ -17,7 +17,7 @@
             <!-- Right top nav -->
             <div class="topNav">
                 <ul class="userNav">
-                    <li>{{ HTML::link('logout', '', array('class' => 'logout')) }}</li>
+                    <li class="tipN" title="Logout">{{ HTML::link('logout', '', array('class' => 'logout')) }}</li>
                     <li class="showTabletP"><a href="#" title="" class="sidebar"></a></li>
                 </ul>
             </div>
@@ -35,7 +35,10 @@
     <div id="sidebar">
         <div class="mainNav">
             <div class="user">
-                <a title="" class="leftUserDrop"><img src="" alt="" /><span><strong>3</strong></span></a><span>Eugene</span>
+                <a title="" class="leftUserDrop">
+                    <img src="/images/userLogin.png" alt="" width="72" height="70"/><span></span>
+                </a>
+                <span>{{ Auth::user()->name }}</span>
                 <ul class="leftUser">
                 </ul>
             </div>
@@ -66,7 +69,7 @@
             <div class="secWrapper">
                 <div class="secTop">
                     <div class="balance">
-                        <div class="balInfo">Date:<span>Apr 21 2012</span></div>
+                        <div class="balInfo">Date:<span>{{ date('d F Y H:i:s') }}</span></div>
                     </div>
                     <a href="#" class="triangle-red"></a>
                 </div>
@@ -74,9 +77,9 @@
                 <!-- Tabs container -->
                 <div id="tab-container" class="tab-container">
                     <ul class="iconsLine ic3 etabs">
-                        <li><a href="#general" title=""><span class="icos-fullscreen"></span></a></li>
-                        <li><a href="#alt1" title=""><span class="icos-user"></span></a></li>
-                        <li><a href="#alt2" title=""><span class="icos-archive"></span></a></li>
+                        <li><a href="/" title="Dashboard" class="tipS"><span class="icos-fullscreen"></span></a></li>
+                        <li><a href="/preferences/list" title="Change Password" class="tipS"><span class="icos-user"></span></a></li>
+                        <li><a href="/conversation/list" title="Messages" class="tipS"><span class="icos-archive"></span></a></li>
                     </ul>
 
                     <!-- Putn Sub nav here-->
@@ -98,7 +101,7 @@
     <!-- Content begins -->
     <div id="content">
         <div class="contentTop">
-            <span class="pageTitle"><span class="icon-screen"></span>Dashboard</span>
+            <span class="pageTitle"><span class="icon-screen"></span>Autocare BNA eBengkel</span>
 
             <div class="clear"></div>
         </div>
@@ -106,10 +109,10 @@
         <!-- Breadcrumbs line -->
         <div class="breadLine">
             <div class="bc">
-                <ul id="breadcrumbs" class="breadcrumbs">
-                    <li><a href="#">Dashboard</a></li>
-                    <li><a href="#">Home</a> </li>
-                </ul>
+<!--                <ul id="breadcrumbs" class="breadcrumbs">-->
+<!--                    <li><a href="#">Dashboard</a></li>-->
+<!--                    <li><a href="#">Home</a> </li>-->
+<!--                </ul>-->
             </div>
 
             <div class="breadLinks">

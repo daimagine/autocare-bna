@@ -94,14 +94,17 @@ return array(
         'role/access',
 
         'report/finance/index',
+
         'report/finance/wo',
         'report/finance/wo_daily',
         'report/finance/wo_weekly',
         'report/finance/wo_monthly',
+
         'report/finance/service',
         'report/finance/service_daily',
         'report/finance/service_weekly',
         'report/finance/service_monthly',
+
         'report/finance/part',
         'report/finance/part_daily',
         'report/finance/part_weekly',

@@ -30,7 +30,7 @@
                         onclick="viewConversation(this);"
                         original-title="view conversation">
 
-                        <a href="#" title=""><img src="/images/live/face{{ $conv->id > 5 ? ( $conv->id - 5 ) : $conv->id }}.png" alt=""></a>
+                        <a href="#" title=""><img src="/images/userLogin.png" alt="" width="37" height="36"></a>
                         <div class="messageArea">
                             <div class="infoRow">
                             <span class="name"><strong>{{ $conv->list_user }}</strong></span>
