@@ -201,7 +201,9 @@ class Item extends Eloquent {
                 'name' => 'i.name',
                 'code' => 'i.code',
                 'vendor' => 'i.vendor',
-                'stock' => 'i.stock'
+                'stock' => 'i.stock',
+                'type' => 'it.name',
+                'category' => 'ic.id'
             );
         } elseif($category == 'detail') {
             $keystore = array(

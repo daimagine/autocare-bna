@@ -39,6 +39,13 @@
                             </div>
                         </div>
                     <div class="clear" style="padding-bottom: 15px;"></div>
+                        <div class="grid3"><label>Category</label> </div>
+                        <div class="grid7">
+                            <div class="searchLine" style="margin-top: 0px">
+                                {{Form::select('category', $lstCategory, $category, array('id' => 'itemCategory'))}}
+                            </div>
+                        </div>
+                    <div class="clear" style="padding-bottom: 15px;"></div>
                 </div>
 
                 <div class="grid6">
@@ -58,7 +65,15 @@
                         <div class="grid5 searchLine" style="margin-top: 0px">
                                 <input type="text" id="itemStock" name="stock" class="ac ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" value="{{$stock}}"></button>
                             </div>
+                    </div>
+                    <div class="clear" style="padding-bottom: 15px;"></div>
+                    <div class="grid3"><label>Type</label> </div>
+                    <div class="grid7">
+                        <div class="grid5 searchLine" style="margin-top: 0px" id="divType">
+                            <input type="text" id="itemType" name="type" class="ac ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" value="{{$type}}"></button>
+<!--                            {{Form::select('type', $lstType, $type, array('id'=>'itemType'))}}-->
                         </div>
+                    </div>
                     <div class="clear" style="padding-bottom: 15px;"></div>
                 </div>
                 <div class="clear"></div>
@@ -89,10 +104,10 @@
                 <th>Type</th>
                 <th>Unit</th>
                 <th>Code</th>
-                <th>Vehicle</th>
                 <th>Current Stock</th>
                 <th>Total updated stock</th>
                 <th>Sell Price</th>
+                <th>Total updated sell price</th>
                 <th>Purchase Price</th>
                 <th>Vendor</th>
                 <th>Status Item</th>
@@ -116,9 +131,9 @@
                 <td>IDR {{  number_format($item->purchase_price, 2) }}</td>
                 <td>{{ $item->vendor }}</td>
 
-                @if($item->status === statusType::ACTIVE)
+                @if($item->status == statusType::ACTIVE)
                 <td>Active</td>
-                @elseif($item->status === statusType::INACTIVE)
+                @elseif($item->status == statusType::INACTIVE)
                 <td>Inactive</td>
                 @else
                 <td></td>

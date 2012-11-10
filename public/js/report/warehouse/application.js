@@ -75,4 +75,12 @@ $(function() {
         console.log(err);
     }
 
+//    $("#itemCategory").change(function(event){
+//        $("option:selected", $(this)).each(function(){
+//            var obj = document.getElementById('itemCategory').value;
+//            console.log('Object value is '+obj);
+//            $("#divType").load("lst_unit_type/"+obj);
+//        });
+//    });
+
 });
