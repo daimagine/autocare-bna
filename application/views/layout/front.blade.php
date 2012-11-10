@@ -18,7 +18,9 @@
 <!-- Top line begins -->
 <div id="top">
     <div class="wrapper">
-        <a href="#" title="" class="logo"><img src="images/logo.png" alt="" /></a>
+        <a href="#" title="" class="logo">
+<!--            <img src="images/logo.png" alt="" />-->
+        </a>
 
         <!-- Right top nav -->
         <div class="topNav"></div>

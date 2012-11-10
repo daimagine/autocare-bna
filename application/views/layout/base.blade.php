@@ -12,7 +12,9 @@
     <!-- Top line begins -->
     <div id="top">
         <div class="wrapper">
-            <a href="index.html" title="" class="logo"><img src="" alt="" /></a>
+            <a href="index.html" title="" class="logo">
+<!--                <img src="" alt="" />-->
+            </a>
 
             <!-- Right top nav -->
             <div class="topNav">
