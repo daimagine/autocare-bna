@@ -60,7 +60,7 @@
                     <div class="grid3"><label>Stock</label> </div>
                     <div class="grid7">
                         <div style="float: left;">
-                            {{Form::select('opQryStock', array('=' => 'eq', '<' => 'lt', '>' => 'gt'), $opQryStock)}}
+                            {{Form::select('opQryStock', array('=' => 'eq (equal)', '<' => 'lt (less than)', '>' => 'gt (greater than)'), $opQryStock)}}
                         </div>
                         <div class="grid5 searchLine" style="margin-top: 0px">
                                 <input type="text" id="itemStock" name="stock" class="ac ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" value="{{$stock}}"></button>

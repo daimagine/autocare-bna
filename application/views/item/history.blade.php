@@ -17,7 +17,7 @@
     </div>
     <div id="dyn2" class="shownpars">
         <a class="tOptions act" title="Options">{{ HTML::image('images/icons/options', '') }}</a>
-        <table cellpadding="0" cellspacing="0" border="0" class="dTable">
+        <table cellpadding="0" cellspacing="0" border="0" class="dTableStockHistory">
             <thead>
             <tr>
                 <th>Item Name<span class="sorting" style="display: block;"></span></th>
@@ -54,7 +54,7 @@
     </div>
     <div id="dyn1" class="shownpars">
         <a class="tOptions act" title="Options">{{ HTML::image('images/icons/options', '') }}</a>
-        <table cellpadding="0" cellspacing="0" border="0" class="dTable">
+        <table cellpadding="0" cellspacing="0" border="0" class="dTablePriceHistory">
             <thead>
             <tr>
                 <th>Item Name<span class="sorting" style="display: block;"></span></th>

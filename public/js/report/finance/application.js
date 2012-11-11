@@ -40,7 +40,29 @@ $(function() {
         "bJQueryUI": false,
         "bAutoWidth": true,
         "sPaginationType": "full_numbers",
-        "sDom": '<"H"fl>t<"F"ip>',
+//        "sDom": '<"H"fl>t<"F"ip>',
+        "sDom": 'T<"clear">lfrtip',
+        "oTableTools": {
+            "sSwfPath": "../../media/swf/copy_csv_xls_pdf.swf",
+            "mColumns": "visible",
+            "aButtons":    [
+                {
+                    "sExtends":    "copy",
+                    "bSelectedOnly": "true",
+                    "sButtonText": "Copy To Cliboard"
+                },
+                {
+                    "sExtends": "xls",
+                    "sPdfOrientation": "landscape",
+                    "sButtonText": "Save to Excel"
+                },
+                {
+                    "sExtends": "pdf",
+                    "sPdfOrientation": "landscape",
+                    "sButtonText": "Save to PDF"
+                }
+            ]
+        },
         "sScrollX": "100%",
         "sScrollXInner": "160%"
     });
@@ -61,7 +83,29 @@ $(function() {
         "bJQueryUI": false,
         "bAutoWidth": true,
         "sPaginationType": "full_numbers",
-        "sDom": '<"H"fl>t<"F"ip>',
+//        "sDom": '<"H"fl>t<"F"ip>',
+        "sDom": 'T<"clear">lfrtip',
+        "oTableTools": {
+            "sSwfPath": "../../media/swf/copy_csv_xls_pdf.swf",
+            "mColumns": "visible",
+            "aButtons":    [
+                {
+                    "sExtends":    "copy",
+                    "bSelectedOnly": "true",
+                    "sButtonText": "Copy To Cliboard"
+                },
+                {
+                    "sExtends": "xls",
+                    "sPdfOrientation": "landscape",
+                    "sButtonText": "Save to Excel"
+                },
+                {
+                    "sExtends": "pdf",
+                    "sPdfOrientation": "landscape",
+                    "sButtonText": "Save to PDF"
+                }
+            ]
+        },
         "sScrollX": "100%",
         "sScrollXInner": "100%"
     });

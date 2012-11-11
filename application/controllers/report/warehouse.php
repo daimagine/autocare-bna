@@ -26,7 +26,7 @@ class Report_Warehouse_Controller extends Secure_Controller {
         $type = Input::get('type');
         $category = Input::get('category');
 
-        $lstCategory = ItemCategory::listAll(array());
+
         $criteria = array();
         if ($name != null && $name != '') {
             $criteria['name'] =  array( 'like', $name );
@@ -38,9 +38,8 @@ class Report_Warehouse_Controller extends Secure_Controller {
             $criteria['vendor'] =  array( 'like', $vendor );
         }
         if ($stock != null && $stock != '') {
-            $criteria['stock'] =  array( ($opQryStock != null && $opQryStock != '') ? $opQryStock : '=', $stock );
             if ($opQryStock != null && $opQryStock != '') {
-
+                $criteria['stock'] =  array( ($opQryStock != null && $opQryStock != '') ? $opQryStock : '=', $stock );
             }
         }
         if ($type != null && $type != '') {
@@ -51,6 +50,7 @@ class Report_Warehouse_Controller extends Secure_Controller {
         }
 
         $items = Item::list_report($criteria);
+        $lstCategory = ItemCategory::listAll(array());
         $selectionCategory = array();
         $selectionCategory[0] = '--ALL--';
         foreach($lstCategory as $ctg) {
@@ -97,10 +97,135 @@ class Report_Warehouse_Controller extends Secure_Controller {
     }
 
     public function action_history_stock_item() {
-        return $this->layout->nest('content', 'report.warehouse.stock', array());
+        $name = Input::get('name');
+        $code = Input::get('code');
+        $startDate = Input::get('startDate');
+        $endDate = Input::get('endDate');
+        $stock = Input::get('stock');
+        $type = Input::get('type');
+        $category = Input::get('category');
+        $invoiceNo = Input::get('invoiceNo');
+        $refNum = Input::get('refNum');
+
+
+        if($startDate == null)
+            $startDate = date('d-m-Y', strtotime('09/01/2012'));
+        if($endDate == null)
+            $endDate = date('d-m-Y');
+        $tempDate = DateTime::createFromFormat('d-m-Y H:i:s', $startDate.' 00:00:00');
+        $start = $tempDate->format('Y-m-d H:i:s');
+        $tempDate = DateTime::createFromFormat('d-m-Y H:i:s', $endDate.' 23:59:59');
+        $end = $tempDate->format('Y-m-d H:i:s');
+
+        $criteria = array(
+            'date' => array( 'between', $start, $end )
+        );
+
+        if ($name != null && $name != '') {
+            $criteria['name'] =  array( 'like', $name );
+        }
+        if ($code != null && $code != '') {
+            $criteria['code'] =  array( 'like', $code );
+        }
+        if ($invoiceNo != null && $invoiceNo != '') {
+            $criteria['invoiceNo'] =  array( 'like', $invoiceNo );
+        }
+        if ($refNum != null && $refNum != '') {
+            $criteria['refNum'] =  array( 'like', $refNum );
+        }
+        if ($type != null && $type != '') {
+            $criteria['type'] =  array( 'like', $type );
+        }
+        if ($category != null && $category != '' &&  $category!=0) {
+            $criteria['category'] =  array( '=', $category );
+        }
+
+        $lstCategory = ItemCategory::listAll(array());
+        $selectionCategory = array();
+        $selectionCategory[0] = '--ALL--';
+        foreach($lstCategory as $ctg) {
+            $selectionCategory[$ctg->id] = $ctg->name;
+        }
+
+        $listStockHistory = ItemStockFlow::list_report($criteria);
+        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('report.warehouse.application', 'js/report/warehouse/application.js', array('jquery.timeentry'));
+        return $this->layout->nest('content', 'report.warehouse.stock', array(
+            'name' => $name,
+            'code' => $code,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'stock' => $stock,
+            'invoiceNo' => $invoiceNo,
+            'refNum' => $refNum,
+            'type' => $type,
+            'category' => $category,
+            'lstCategory' => $selectionCategory,
+            'listStockHistory' => $listStockHistory,
+        ));
     }
 
     public function action_history_price_item() {
-        return $this->layout->nest('content', 'report.warehouse.price', array());
+        $name = Input::get('name');
+        $code = Input::get('code');
+        $startDate = Input::get('startDate');
+        $endDate = Input::get('endDate');
+        $opQryStock = Input::get('opQryStock');
+        $type = Input::get('type');
+        $category = Input::get('category');
+        $price = Input::get('price');
+
+        if($startDate == null)
+            $startDate = date('d-m-Y', strtotime('09/01/2012'));
+        if($endDate == null)
+            $endDate = date('d-m-Y');
+        $tempDate = DateTime::createFromFormat('d-m-Y H:i:s', $startDate.' 00:00:00');
+        $start = $tempDate->format('Y-m-d H:i:s');
+        $tempDate = DateTime::createFromFormat('d-m-Y H:i:s', $endDate.' 23:59:59');
+        $end = $tempDate->format('Y-m-d H:i:s');
+
+        $criteria = array(
+            'date' => array( 'between', $start, $end )
+        );
+
+        if ($name != null && $name != '') {
+            $criteria['name'] =  array( 'like', $name );
+        }
+        if ($code != null && $code != '') {
+            $criteria['code'] =  array( 'like', $code );
+        }
+        if ($price != null && $price != '') {
+            $criteria['price'] =  array( ($opQryStock != null && $opQryStock != '') ? $opQryStock : '=', $price );
+        }
+        if ($type != null && $type != '') {
+            $criteria['type'] =  array( 'like', $type );
+        }
+        if ($category != null && $category != '' &&  $category!=0) {
+            $criteria['category'] =  array( '=', $category );
+        }
+
+        $lstCategory = ItemCategory::listAll(array());
+        $selectionCategory = array();
+        $selectionCategory[0] = '--ALL--';
+        foreach($lstCategory as $ctg) {
+            $selectionCategory[$ctg->id] = $ctg->name;
+        }
+
+
+        $listPriceHistory = ItemPrice::list_report($criteria);
+        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('report.warehouse.application', 'js/report/warehouse/application.js', array('jquery.timeentry'));
+        return $this->layout->nest('content', 'report.warehouse.price', array(
+            'name' => $name,
+            'code' => $code,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'price' => $price,
+            'opQryStock' => $opQryStock,
+            'type' => $type,
+            'category' => $category,
+            'lstCategory' => $selectionCategory,
+            'listPriceHistory' => $listPriceHistory,
+        ));
     }
 }

@@ -505,6 +505,7 @@ class Item_Controller extends Secure_Controller {
             'item_category_id' => $item_category->id,
             'status' => array(statusType::ACTIVE, statusType::INACTIVE)
         ));
+        Asset::add('function_item', 'js/item/application.list.history.js',  array('jquery', 'jquery-ui'));
         return $this->layout->nest('content', 'item.history', array(
             'listItemPrice' => $listItemPrice,
             'listItemStokFlow' => $listItemStockFlow,

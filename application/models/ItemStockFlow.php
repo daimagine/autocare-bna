@@ -72,4 +72,96 @@ class ItemStockFlow extends Eloquent {
             ->delete();
     }
 
+
+
+    public static function list_report($criteria=array()) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'list');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+
+            } elseif($val[0] === 'like') {
+                $criterion[] = "LOWER($key) like ?";
+                $value = '%'. strtolower($val[1]) . '%';
+                array_push($param, $value);
+
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+
+        $q = "SELECT ".
+            "isf.id as isfid, ".
+            "it.name as name, ".
+            "ic.name as category, ".
+            "ty.name as type, ".
+            "ut.name as unit, ".
+            "it.code as code, ".
+            "isf.quantity as stock, ".
+            "at.invoice_no as invoiceno, ".
+            "at.reference_no as refnum, ".
+            "isf.date as createdate, ".
+            "us.name as configuredby ";
+
+        $q .= "FROM item_stock_flow isf " .
+            "INNER JOIN item it ON it.id=isf.item_id " .
+            "INNER JOIN item_type ty ON ty.id=it.item_type_id  " .
+            "INNER JOIN unit_type ut ON ut.id=it.unit_id " .
+            "INNER JOIN item_category ic ON ic.id=it.item_category_id " .
+            "INNER JOIN sub_account_trx sat ON sat.id=isf.sub_account_trx_id " .
+            "INNER JOIN account_transactions at ON sat.account_trx_id=at.id " .
+            "INNER JOIN user us ON us.id=isf.configured_by "
+        ;
+
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .= "ORDER BY name, createdate desc "
+        ;
+
+        $data = DB::query($q, $param);
+//        {{dd($data);}}
+        $clean = array();
+        foreach($data as $d) {
+            if($d->isfid !== null && strtoupper($d->isfid) !== 'NULL') {
+                array_push($clean, $d);
+            }
+        }
+        return $clean;
+    }
+
+    public static function criteria_lookup($key, $category = null) {
+        $keystore = array();
+        if($category == 'list') {
+            $keystore = array(
+                'date' => 'isf.date',
+                'invoiceNo' => 'at.invoice_no',
+                'refNum' => 'at.reference_no',
+                'name' => 'it.name',
+                'code' => 'it.code',
+                'vendor' => 'it.vendor',
+                'stock' => 'it.stock',
+                'type' => 'ty.name',
+                'category' => 'ic.id'
+            );
+        }
+        return($keystore[$key]);
+    }
+
 }
