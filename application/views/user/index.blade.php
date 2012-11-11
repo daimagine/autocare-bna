@@ -27,7 +27,7 @@
             @foreach($users as $user)
             <tr class="">
                 <td>{{ $user->staff_id }}</td>
-				<td>{{ $user->name }}</td>
+				<td class="name">{{ $user->name }}</td>
 				<td>{{ $user->login_id }}</td>
 				<td>{{ $user->phone1 }}</td>
 				<td>{{ $user->role->name }}</td>
@@ -44,6 +44,11 @@
 						dialog-confirm-title="Update Confirmation">
 							<span class="iconb" data-icon=""></span>
 					</a>
+                    <a href="#"
+                       class="linkUpdatePswd tablectrl_small bDefault tipS"
+                       ref-num="{{ $user->id }}">
+                        <span class="iconb" data-icon=""></span>
+                    </a>
                     <a href="/user/delete/{{ $user->id }}{{ $user->status == 1 ? '' : '/purge' }}"
                        class="appconfirm tablectrl_small bDefault tipS"
                        original-title="Remove"
@@ -67,6 +72,30 @@
             <span>Add User</span>
         </a></div>
     </div>
+</div>
+
+<!-- Dialog content -->
+<div id="update-password-dialog" class="dialog" title="Update Password Form" style="display: none;">
+    <form id="formUpdatePassword" name="formUpdatePassword" method="POST" action="/user/update_password">
+        <div class="messageTo">
+            <span> Change Password for Login Id <strong><span id="user-name"></span></strong></span>
+        </div>
+        <div class="divider"><span></span></div>
+        <div class="dialogSelect m10" id="update-pswd-notification"></div>
+        <div class="dialogSelect m10">
+            <label>Password *</label>
+            <input type="password" id="password" name="password"/>
+        </div>
+        <div class="dialogSelect m10">
+            <label>Retype Password *</label>
+            <input type="password" id="password_confirmation" name="password_confirmation"/>
+        </div>
+        <input type="hidden" id="userId" name="id"/>
+    </form>
+</div>
+
+<!-- Dialog content select items-->
+<div id="submit-confirm" class="dialog" title="Submit Confirmation" style="display: none;">
 </div>
 
 @endsection

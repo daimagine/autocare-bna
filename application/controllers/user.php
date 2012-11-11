@@ -67,6 +67,8 @@ class User_Controller extends Secure_Controller {
     public function get_list() {
         $criteria = array();
         $users = User::listAll($criteria);
+        Asset::add('jquery.validate', 'js/plugins/wizards/jquery.validate.js',  array('jquery', 'jquery-ui'));
+        Asset::add('jquery.application.user', 'js/user/application.js',  array('jquery', 'jquery-ui'));
         return $this->layout->nest('content', 'user.index', array(
             'users' => $users
         ));
@@ -92,8 +94,22 @@ class User_Controller extends Secure_Controller {
 		$validation = Validator::make(Input::all(), $this->getRules('edit'));
         $user = User::find($id);
         $userdata = Input::all();
-		if(!$validation->fails()) {
-			if(User::unique_login_id($userdata['login_id'], $id)) {				
+//        {dd($user->picture );}
+        if(!$validation->fails()) {
+			if(User::unique_login_id($userdata['login_id'], $id)) {
+                if (Input::file('picture.name') != null && Input::file('picture.name') != '' ) {
+                    //===clean prev image====
+                    if ($user->picture != null && $user->picture != '') {
+                        File::delete('public/images/uploads/user/'.$user->picture);
+                    }
+                    //===uploading image=====
+                    $filename = Str::random(32) . '.' . File::extension(Input::file('picture.name'));
+                    Input::upload('picture', 'public/images/uploads/user', $filename);
+                    $userdata['picture'] = $filename;
+                } else {
+                    $userdata['picture']='';
+                }
+
 				$success = User::update($id, $userdata);
 				if($success) {
 					//success login
@@ -128,9 +144,16 @@ class User_Controller extends Secure_Controller {
     public function post_add() {
         $validation = Validator::make(Input::all(), $this->getRules());
         $userdata = Input::all();
-		//dd($userdata);
         if(!$validation->fails()) {
 			if(User::unique_login_id($userdata['login_id'])) {
+                if (Input::file('picture.name') != null && Input::file('picture.name') != '' ) {
+                    //===uploading image=====
+                    $filename = Str::random(32) . '.' . File::extension(Input::file('picture.name'));
+                    Input::upload('picture', 'public/images/uploads/user', $filename);
+                    $userdata['picture'] = $filename;
+                } else {
+                    $userdata['picture']='';
+                }
 				$success = User::create($userdata);
 				if($success) {
 					//success login
@@ -179,10 +202,11 @@ class User_Controller extends Secure_Controller {
     private function getRules($method='add') {
         $additional = array();
         $rules = array(
+            'photo_profile'     => 'mimes:jpg,gif,png|image|max:100',
             'login_id' 	=> 'required|min:5|max:50|alpha_dash',
 			'name'		=> 'required|min:3|max:50',
 			'phone1' 	=> 'required|min:12|max:18',
-            'status' 	=> 'required'
+            'status' 	=> 'required',
         );
         if($method == 'add') {
             $additional = array(
@@ -201,6 +225,33 @@ class User_Controller extends Secure_Controller {
         $users = User::find_name_ajax(Auth::user(), $name);
         $result =  json_encode(array('q' => $name, 'results' => $users));
         return $result;
+    }
+
+
+    public function post_update_password() {
+        $validation = Validator::make(Input::all(), array(
+            'id' => 'required',
+            'password' => 'required|min:5|max:50|confirmed'
+        ));
+        $all_input = Input::all();
+        if(!$validation->fails()) {
+            $user = User::find($all_input['id']);
+            $success = User::update($user->id, array(
+                    'password' => $all_input['password']
+            ));
+            if ($success) {
+                Session::flash('message', 'Success update password user '.$user->name);
+                return Redirect::to('user/index');
+            } else {
+                Session::flash('message_error', 'Failed update password user '.$user->name);
+            return Redirect::to('user/index');
+            }
+        } else {
+            Log::info('Validation fails. error : ' + print_r($validation->errors, true));
+            return Redirect::to('user/index')
+                ->with_errors($validation)
+                ->with_input();
+        }
     }
 
 }

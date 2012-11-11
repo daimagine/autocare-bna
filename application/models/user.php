@@ -57,17 +57,21 @@ class User extends Eloquent {
         $user = User::where_id($id)
             ->where_status(1)
             ->first();
-        $role = Role::find($data['role_id']);
-        $user->role_id = $role->id;
-        $user->login_id = $data['login_id'];
-        $user->status = $data['status'];
-        $user->name = $data['name'];
-        $user->staff_id = $data['staff_id'];
-        $user->address1 = $data['address1'];
-        $user->address2 = $data['address2'];
-        $user->city = $data['city'];
-        $user->phone1 = $data['phone1'];
-        $user->phone2 = $data['phone2'];
+        if (isset($data['role_id'])) {
+            $role = Role::find($data['role_id']);
+            $user->role_id = $role->id;
+        }
+        if (isset($data['login_id'])) {$user->login_id = $data['login_id'];}
+        if (isset($data['status'])) {$user->status = $data['status'];}
+        if (isset($data['name'])) {$user->name = $data['name'];}
+        if (isset($data['staff_id'])) {$user->staff_id = $data['staff_id'];}
+        if (isset($data['address1'])) {$user->address1 = $data['address1'];}
+        if (isset($data['address2'])) {$user->address2 = $data['address2'];}
+        if (isset($data['city'])) {$user->city = $data['city'];}
+        if (isset($data['phone1'])) {$user->phone1 = $data['phone1'];}
+        if (isset($data['phone2'])) {$user->phone2 = $data['phone2'];}
+        if (isset($data['picture'])) {$user->picture = $data['picture'];}
+        if (isset($data['password'])) { $user->password = Hash::make($data['password']);}
         $user->save();
         return $user->id;
     }
@@ -86,6 +90,7 @@ class User extends Eloquent {
         $user->city = $data['city'];
         $user->phone1 = $data['phone1'];
         $user->phone2 = $data['phone2'];
+        $user->picture = $data['picture'];
         $user->save();
         return $user->id;
     }

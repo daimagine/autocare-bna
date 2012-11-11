@@ -3,7 +3,8 @@
 @include('partial.notification')
 <br>
 
-{{ Form::open('user/add', 'POST') }}
+<!--{{ Form::open('user/add', 'POST') }}-->
+{{ Form::open_for_files('user/add', 'POST') }}
 <fieldset>
     <div class="widget fluid">
         <div class="whead">
@@ -35,6 +36,15 @@
 
         {{ Form::nginput('text', 'phone2', Input::old('phone2'), 'Phone 2')}}
 
+        <div class="formRow">
+            <div class="grid3">
+                <label>Photo</label>
+            </div>
+            <div class="grid5">
+                {{Form::file('picture', $attributes = array('class' => 'fileInput'))}}
+            </div>
+            <div class="clear"></div>
+        </div>
 
         <div class="formRow noBorderB">
             <div class="status" id="status3"></div>

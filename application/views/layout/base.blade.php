@@ -38,7 +38,7 @@
         <div class="mainNav">
             <div class="user">
                 <a title="" class="leftUserDrop">
-                    <img src="/images/userLogin.png" alt="" width="72" height="70"/><span></span>
+                    <img src="{{ (Auth::user()->picture != null &&  Auth::user()->picture != '') ? '/images/uploads/user/'.Auth::user()->picture : '/images/userLogin.png'}}" alt="" width="72" height="70"/><span></span>
                 </a>
                 <span>{{ Auth::user()->name }}</span>
                 <ul class="leftUser">
