@@ -429,12 +429,17 @@ class Item_Controller extends Secure_Controller {
                     if($data['item_id']==null || $data['item_id']=='') {
 //                        {{dd($data);}}
                         $item = Item::create($data);
-                        $success = ItemStockFlow::create(array(
+                        $successAddStockFlow = ItemStockFlow::create(array(
                             'item_id' => $item,
                             'sub_account_trx_id' => $subAccountTrxId,
                             'quantity' => $data['stock_opname']
                         ));
-                        if($success && $item) {
+
+                        $successAddPrice = ItemPrice::create(array(
+                            'item_id' => $item,
+                            'purchase_price' => $data['price']
+                        ));
+                        if($successAddStockFlow && $item && $successAddPrice) {
                             Session::flash('message', 'Success Closed');
                         } else {
                             Session::flash('message_error', 'Failed Closed approved invoice');
