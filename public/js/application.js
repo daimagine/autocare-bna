@@ -49,8 +49,10 @@ $(function() {
         "bJQueryUI": false,
         "bAutoWidth": true,
         "sPaginationType": "full_numbers",
+        "sDom":  'T<"clear"><"H"lf>rt<"F"ip>',
 //        "sDom": '<"H"fl>t<"F"ip>',
-        "sDom": 'T<"clear">lfrtip',
+//        "sDom": 'T<"H"lfr>t<"F"ip>',
+//        "sDom": 'T<"clear">lfrtip',
 //        "sDom": "<'row-fluid'<'span6'T><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
         "oTableTools": {
             "sSwfPath": "../media/swf/copy_csv_xls_pdf.swf",

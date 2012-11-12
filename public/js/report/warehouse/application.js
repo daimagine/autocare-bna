@@ -35,7 +35,8 @@ $(function() {
         "bJQueryUI": false,
         "bAutoWidth": true,
         "sPaginationType": "full_numbers",
-        "sDom": "<'row-fluid'<'span6'T><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+        "sDom":  'T<"clear"><"H"lf>rt<"F"ip>',
+//        "sDom": "<'row-fluid'<'span6'T><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
         "oTableTools": {
             "sSwfPath": "../../media/swf/copy_csv_xls_pdf.swf",
             "mColumns": "visible",

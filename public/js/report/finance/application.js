@@ -40,8 +40,9 @@ $(function() {
         "bJQueryUI": false,
         "bAutoWidth": true,
         "sPaginationType": "full_numbers",
+        "sDom":  'T<"clear"><"H"lf>rt<"F"ip>',
 //        "sDom": '<"H"fl>t<"F"ip>',
-        "sDom": 'T<"clear">lfrtip',
+//        "sDom": 'T<"clear">lfrtip',
         "oTableTools": {
             "sSwfPath": "../../media/swf/copy_csv_xls_pdf.swf",
             "mColumns": "visible",
@@ -83,8 +84,9 @@ $(function() {
         "bJQueryUI": false,
         "bAutoWidth": true,
         "sPaginationType": "full_numbers",
+        "sDom":  'T<"clear"><"H"lf>rt<"F"ip>',
 //        "sDom": '<"H"fl>t<"F"ip>',
-        "sDom": 'T<"clear">lfrtip',
+//        "sDom": 'T<"clear">lfrtip',
         "oTableTools": {
             "sSwfPath": "../../media/swf/copy_csv_xls_pdf.swf",
             "mColumns": "visible",
