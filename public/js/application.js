@@ -275,3 +275,69 @@ function toFixed(value, precision) {
 
     return precision ? integral + '.' +  padding + fraction : integral;
 }
+
+
+function AutoChart(config) {
+    var defaultOption = {
+        customize: {
+            autoRender: true
+        },
+        chart: {
+            renderTo: 'container-chart',
+            type: 'column'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            categories: []
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: ''
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            backgroundColor: '#FFFFFF',
+            align: 'left',
+            verticalAlign: 'top',
+            x: 100,
+            y: 70,
+            floating: true,
+            shadow: true
+        },
+        tooltip: {
+            formatter: function() {
+                return ''+ this.series.name +': '+ this.y +' millions';
+            }
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: []
+    }
+
+    this.chart = {};
+
+    //merge user option with default
+    $.extend(true, defaultOption, config);
+
+    this.render = function() {
+        console.log(defaultOption);
+        this.chart = new Highcharts.Chart(defaultOption);
+    }
+
+    //render if auto
+    if(defaultOption.customize.autoRender === true)
+        this.render();
+
+}
+

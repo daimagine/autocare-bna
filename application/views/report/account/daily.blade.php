@@ -107,137 +107,90 @@
         <div class="clear"></div>
     </div>
 
+
     <!-- Bars chart -->
     <div class="widget grid6 chartWrapper">
         <div class="whead"><h6>Statistics Overview</h6><div class="clear"></div></div>
-        <div class="body"><div class="bars" id="placeholder1"></div></div>
+        <div class="body">
+            <div id="container-chart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+        </div>
     </div>
 
 
 @endsection
 
+array(2) {
+    ["Cash In"]=> array(2) {
+        ["2012-10-01"]=> float(7900)
+        ["2012-10-02"]=> string(7) "9900.00"
+    }
+    ["Cash Out"]=> array(2) {
+        ["2012-10-01"]=> float(31000)
+        ["2012-10-02"]=> int(0)
+    }
+}
 
 
 @section('additional_js')
 
     <script type="text/javascript">
 
-        $(function () {
-            var previousPoint;
+        <?php
+            $dates = array();
+            foreach($accounts as $a) :
+                $d = date('Y-m-d', strtotime($a->invoice_date));
+                if(!in_array($d, $dates)) {
+                    array_push($dates, $d);
+                }
+            endforeach;
 
-            /**
-             * <?php //echo htmlentities(print_r($graphData, true)); ?>
-             */
-
-<!--            var datas = --><?php //echo json_encode($graphData) ?><!--;-->
-<!--            console.log('data');-->
-<!--            console.log(datas);-->
-
-            var ds = new Array();
-            var d = new Array();
-            var dmin = new Date('2012-09-30').getTime();
-            var dmax = new Date('2012-10-5').getTime();
-            <?php foreach($graphData as $key => $d) : ?>
-                d[0] = '<?php echo $key ?>';
-                d[1] = new Array();
-                <?php foreach($d as $date => $val) : ?>
-                    if(dmin > new Date('<?php echo $date ?>').getTime()) {
-                        dmin = new Date('<?php echo $date ?>').getTime();
+            //var_dump($dates);print "<br>";
+            $data = array();
+            foreach($graphData as $key => $val) :
+                $d = array();
+                $d['name'] = $key;
+                $d['data'] = array();
+                foreach($val as $k => $v) :
+                    if(in_array($k, $dates)) {
+                        array_push($d['data'], floatval($v));
+                    } else {
+                        array_push($d['data'], 0);
                     }
-                    if(dmax < new Date('<?php echo $date ?>').getTime()) {
-                        dmax = new Date('<?php echo $date ?>').getTime();
-                    }
-                    d[1].push([ new Date('<?php echo $date ?>').getTime(), parseFloat(<?php echo $val ?>) ]);
-                <?php endforeach; ?>
-                console.log(d);
-                ds.push(d);
-                d = new Array();
-            <?php endforeach; ?>
-            console.log('data store');
-            console.log(ds);
+                endforeach;
+                array_push($data, $d);
+            endforeach;
+            //print_r($data);
 
-            var dsa = new Array();
-            $.each(ds, function(i, obj) {
-                console.log("ds ke " + i);
-                console.log(obj[0]);
-                console.log(obj[1]);
-                dsa.push(
-                    {
-                        data: obj[1],
-                        bars: {
-                            show: true,
-                            barWidth: 1 * 60 * 60 * 1000,
-                            order: i
-                        },
-                        label: obj[0]
-                    }
-                );
-            });
-            //Display graph
-            $.plot($("#placeholder1"), dsa, {
-                grid:{
-                    hoverable:true
+        ?>
+
+        $(function() {
+
+            var data = <?php echo json_encode($data); ?>;
+            console.log(data);
+
+            var chart = new AutoChart({
+                chart: {
+                    renderTo: 'container-chart'
                 },
-                legend: true,
-                xaxis: {
-                    mode: "time",
-                    minTickSize: [1, "day"],
-                    min: dmin,
-                    max: dmax
-                }
-            });
-
-            //tooltip function
-            function showTooltip(x, y, contents, areAbsoluteXY) {
-                var rootElt = 'body';
-
-                $('<div id="tooltip2" class="tooltip">' + contents + '</div>').css( {
-                    position: 'absolute',
-                    display: 'none',
-                    top: y - 35,
-                    left: x - 5,
-                    'z-index': '9999',
-                    'color': '#fff',
-                    'font-size': '11px',
-                    opacity: 0.8
-                }).prependTo(rootElt).show();
-            }
-
-            //add tooltip event
-            $("#placeholder1").bind("plothover", function (event, pos, item) {
-                if (item) {
-                    if (previousPoint != item.datapoint) {
-                        previousPoint = item.datapoint;
-
-                        //delete de prГ©cГ©dente tooltip
-                        $('.tooltip').remove();
-
-                        var x = item.datapoint[0];
-
-                        //All the bars concerning a same x value must display a tooltip with this value and not the shifted value
-                        if(item.series.bars.order){
-                            for(var i=0; i < item.series.data.length; i++){
-                                if(item.series.data[i][3] == item.datapoint[0])
-                                    x = item.series.data[i][0];
-                            }
-                        }
-                        var d = new Date(x);
-                        x = $.datepicker.formatDate('dd MM yy', d);;
-                        var y = "IDR " + item.datapoint[1];
-
-                        showTooltip(item.pageX+5, item.pageY+5, x + " = " + y);
-
+                xAxis: {
+                    categories: <?php echo utilities\Stringutils::js_array($dates); ?>
+                },
+                yAxis: {
+                    title: {
+                        text: 'Transaction Amount'
                     }
-                }
-                else {
-                    $('.tooltip').remove();
-                    previousPoint = null;
-                }
-
+                },
+                title: {
+                    text: 'Account Report'
+                },
+                subtitle: {
+                    text: 'Daily Transactions'
+                },
+                series: data
             });
 
+        })();
 
-        });
     </script>
 
 @endsection

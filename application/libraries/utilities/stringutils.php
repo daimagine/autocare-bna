@@ -67,4 +67,15 @@ class Stringutils {
         echo(snippetwop("this is not too long to run on the column on the left, perhaps, or perhaps yes, no idea") . "<br>");
         echo(snippetgreedy("this is not too long to run on the column on the left, perhaps, or perhaps yes, no idea"));
     */
+
+    public static function js_str($s) {
+        return '"'.addcslashes($s, "\0..\37\"\\").'"';
+    }
+
+    public static function js_array($array) {
+        $temp=array();
+        foreach ($array as $value)
+            $temp[] = Stringutils::js_str($value);
+        return '['.implode(',', $temp).']';
+    }
 }

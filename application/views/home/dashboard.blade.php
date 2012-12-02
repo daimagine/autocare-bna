@@ -98,40 +98,41 @@
             </div>
         </div>
 
-        <div class="widget">
-            <div class="whead">
-                <h6>Invoices statistics</h6>
-                <div class="titleOpt">
-                    <a href="#" data-toggle="dropdown"><span class="iconb" data-icon=""></span><span class="clear"></span></a>
-                    <ul class="dropdown-menu pull-right">
-                        <li><a href="#" class=""><span class="icon-plus"></span>Add</a></li>
-                        <li><a href="#" class=""><span class="icon-remove"></span>Remove</a></li>
-                        <li><a href="#" class=""><span class="icon-pen_alt2"></span>Edit</a></li>
-                        <li><a href="#" class=""><span class="icon-heart"></span>Do whatever you like</a></li>
-                    </ul>
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div class="body">
-                <ul class="wInvoice">
-                    <li><h4 class="green">63,456</h4><span>amount paid</span></li>
-                    <li><h4 class="blue">218,518</h4><span>in queue</span></li>
-                    <li><h4 class="red">16,542</h4><span>total taxes</span></li>
-                </ul>
-                <div class="clear"></div>
-
-                <div class="invList fluid">
-                    <a href="#" title="" class="buttonS bGreen grid6">Print invoices</a>
-                    <a href="#" title="" class="buttonS bLightBlue grid6">Generate report</a>
-                </div>
-                <div class="clear"></div>
-            </div>
-        </div>
+        <!--        <div class="widget">-->
+<!--            <div class="whead">-->
+<!--                <h6>Invoices statistics</h6>-->
+<!--                <div class="titleOpt">-->
+<!--                    <a href="#" data-toggle="dropdown"><span class="iconb" data-icon=""></span><span class="clear"></span></a>-->
+<!--                    <ul class="dropdown-menu pull-right">-->
+<!--                        <li><a href="#" class=""><span class="icon-plus"></span>Add</a></li>-->
+<!--                        <li><a href="#" class=""><span class="icon-remove"></span>Remove</a></li>-->
+<!--                        <li><a href="#" class=""><span class="icon-pen_alt2"></span>Edit</a></li>-->
+<!--                        <li><a href="#" class=""><span class="icon-heart"></span>Do whatever you like</a></li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+<!--                <div class="clear"></div>-->
+<!--            </div>-->
+<!--            <div class="body">-->
+<!--                <ul class="wInvoice">-->
+<!--                    <li><h4 class="green">63,456</h4><span>amount paid</span></li>-->
+<!--                    <li><h4 class="blue">218,518</h4><span>in queue</span></li>-->
+<!--                    <li><h4 class="red">16,542</h4><span>total taxes</span></li>-->
+<!--                </ul>-->
+<!--                <div class="clear"></div>-->
+<!---->
+<!--                <div class="invList fluid">-->
+<!--                    <a href="#" title="" class="buttonS bGreen grid6">Print invoices</a>-->
+<!--                    <a href="#" title="" class="buttonS bLightBlue grid6">Generate report</a>-->
+<!--                </div>-->
+<!--                <div class="clear"></div>-->
+<!--            </div>-->
+<!--        </div>-->
 
     </div>
 
 </div>
 
 <div id="detailNews" class="dialog" title="Detail News" ></div>
+
 
 @endsection

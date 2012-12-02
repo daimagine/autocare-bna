@@ -109,5 +109,7 @@ return array(
         'report/finance/part_daily',
         'report/finance/part_weekly',
         'report/finance/part_monthly',
+
+        'home/sandbox',
     ),
 );

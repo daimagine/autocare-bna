@@ -41,9 +41,10 @@ class Secure_Controller extends Controller {
 
         Asset::add('jquery.collapsible', 'js/plugins/ui/jquery.collapsible.min.js', array('jquery', 'jquery-ui'));
 
-
         Asset::add('jquery.breadcrumbs', 'js/plugins/ui/jquery.breadcrumbs.js', array('jquery', 'jquery-ui'));
         Asset::add('jquery.tipsy', 'js/plugins/ui/jquery.tipsy.js', array('jquery', 'jquery-ui'));
+
+        Asset::add('charts.highcharts', 'js/highcharts/highcharts.src.js', array('jquery', 'jquery-ui'));
 
         Asset::add('bootstrap-js', 'js/bootstrap.js', array('jquery-uniform'));
         Asset::add('application-js', 'js/application.js', array('jquery-uniform'));
