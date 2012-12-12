@@ -129,5 +129,67 @@
     }
 </style>
 
+<!-- Bars chart -->
+<div class="widget grid6 chartWrapper">
+    <div class="whead"><h6>Statistics Overview</h6><div class="clear"></div></div>
+    <div class="body">
+        <div id="container-chart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+    </div>
+</div>
+
 @endsection
 
+
+@section('additional_js')
+
+<script type="text/javascript">
+
+    <?php
+    $xAxis = array();
+    $data = array(
+        array(
+            'name' => 'WO Amount',
+            'data' => []
+        )
+    );
+    foreach($transactions as $a) :
+        $lbl = "$a->monthname $a->year";
+        if(!in_array($lbl, $xAxis)) {
+            array_push($xAxis, $lbl);
+        }
+        array_push($data[0]['data'], floatval($a->total_amount));
+    endforeach;
+
+    ?>
+
+    $(function() {
+
+        var data = <?php echo json_encode($data); ?>;
+        console.log(data);
+
+        var chart = new AutoChart({
+            chart: {
+                renderTo: 'container-chart'
+            },
+            xAxis: {
+                categories: <?php echo utilities\Stringutils::js_array($xAxis); ?>
+            },
+            yAxis: {
+                title: {
+                    text: 'Work Order Amount'
+                }
+            },
+            title: {
+                text: 'Finance Work Order Report'
+            },
+            subtitle: {
+                text: 'Monthly Transactions'
+            },
+            series: data
+        });
+
+    });
+
+</script>
+
+@endsection
