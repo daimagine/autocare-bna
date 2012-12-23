@@ -22,9 +22,9 @@ class Seed_Access_Wo_2012_12_23 extends S2\Seed {
         $parent->save();
 
         $s = new Access();
-        $s->name = 'Work Order';
-        $s->description = 'Work Order';
-        $s->action = 'work_order@';
+        $s->name = 'Work Order Add';
+        $s->description = 'Work Order Add';
+        $s->action = 'work_order@add';
         $s->status = true;
         $s->parent = false;
         $s->visible = true;
