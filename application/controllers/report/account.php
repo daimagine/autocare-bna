@@ -48,7 +48,6 @@ class Report_Account_Controller extends Secure_Controller {
 
         $graphData = $this->create_daily_graph($accounts);
 
-        $this->inject_js();
         Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
         Asset::add('report.account.application', 'js/report/account/application.js', array('jquery.timeentry'));
         return $this->layout->nest('content', 'report.account.daily', array(
@@ -105,7 +104,6 @@ class Report_Account_Controller extends Secure_Controller {
             $accounts = AccountTransaction::weekly($criteria);
         }
 
-        $this->inject_js();
         Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
         Asset::add('report.account.application', 'js/report/account/application.js', array('jquery.flot', 'jquery.timeentry'));
         return $this->layout->nest('content', $view, array(

@@ -102,10 +102,119 @@
     <div class="clear"></div>
 </div>
 
+
+<!-- Bars chart -->
+<div class="widget grid6 chartWrapper">
+    <div class="whead"><h6>Statistics Overview</h6><div class="clear"></div></div>
+    <div class="body">
+        <div id="container-chart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+    </div>
+</div>
+
+
 <style type="text/css">
     .ui-datepicker-calendar {
         display: none;
     }
 </style>
+
+@endsection
+
+
+@section('additional_js')
+
+    <script type="text/javascript">
+
+        <?php
+        $accounts = array_reverse($accounts);
+            $xAxis = array();
+            $label = array();
+            foreach($accounts as $a) :
+                $lbl = "$a->monthname $a->year";
+                if(!in_array($lbl, $xAxis)) {
+                    array_push($xAxis, $lbl);
+                }
+                if(!in_array($a->name, $label)) {
+                    array_push($label, $a->name);
+                }
+            endforeach;
+//            print "\n## Axis\n".print_r($xAxis, true)."\n";
+//            print "\n## Legend\n".print_r($label, true)."\n";
+            /**
+               @source
+               period | account name | amount
+
+               @target series
+               [{"name":"Cash In","data":[7900,9900]},{"name":"Cash Out","data":[31000,0]}];
+
+               @target series
+               ["2012-10-01","2012-10-02"]
+
+             */
+            //var_dump($dates);print "<br>";
+            $series = array();
+            foreach($xAxis as $axis) :
+                foreach($label as $legend) :
+                    $val = 0;
+                    foreach($accounts as $a) :
+                        $pr  = "$a->monthname $a->year";
+                        $lbl = $a->name;
+                        if($lbl == $legend && $pr == $axis) {
+                            $val = floatval($a->amount);
+                        }
+                    endforeach;
+
+                    //store
+                    $new = true;
+                    for($i=0; $i<sizeof($series); $i++) {
+                        //if not exist
+                        if(array_key_exists('name', $series[$i]) && $series[$i]['name'] == $legend) {
+//                            print "\n### Push [$val] to [$legend]\n";
+                            array_push($series[$i]['data'], $val);
+                            $new = false;
+                            break;
+                        }
+                    }
+                    //store
+                    if($new) {
+                        $dt['name'] = $legend;
+                        $dt['data'] = array( $val );
+                        array_push($series, $dt);
+//                        print "\n## Push [$val] to [$legend]\n";
+                    }
+                endforeach;
+            endforeach;
+
+        ?>
+
+        $(function() {
+
+            var data = <?php echo json_encode($series); ?>;
+            console.log(data);
+
+            var chart = new AutoChart({
+                chart: {
+                    renderTo: 'container-chart'
+                },
+                xAxis: {
+                    categories: <?php echo utilities\Stringutils::js_array($xAxis); ?>
+                },
+                yAxis: {
+                    title: {
+                        text: 'Transaction Amount'
+                    }
+                },
+                title: {
+                    text: 'Account Report'
+                },
+                subtitle: {
+                    text: 'Monthly Transactions'
+                },
+                series: data
+            });
+
+        });
+
+    </script>
 
 @endsection

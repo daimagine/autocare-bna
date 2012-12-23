@@ -135,5 +135,100 @@
     <div class="clear"></div>
 </div>
 
+<!-- Bars chart -->
+<div class="widget grid6 chartWrapper">
+    <div class="whead"><h6>Statistics Overview</h6><div class="clear"></div></div>
+    <div class="body">
+        <div id="container-chart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+    </div>
+</div>
+
 @endsection
 
+
+@section('additional_js')
+
+<script type="text/javascript">
+
+    <?php
+    $parts = array_reverse($parts);
+    $xAxis = array();
+    $label = array();
+    foreach($parts as $a) :
+        $lbl = "$a->monthname $a->year";
+        if(!in_array($lbl, $xAxis)) {
+            array_push($xAxis, $lbl);
+        }
+        if(!in_array($a->part_desc, $label)) {
+            array_push($label, $a->part_desc);
+        }
+    endforeach;
+//            print "\n## Axis\n".print_r($xAxis, true)."\n";
+//            print "\n## Legend\n".print_r($label, true)."\n";
+
+    $series = array();
+    foreach($xAxis as $axis) :
+        foreach($label as $legend) :
+            $val = 0;
+            foreach($parts as $a) :
+                $pr  = "$a->monthname $a->year";
+                $lbl = $a->part_desc;
+                if($lbl == $legend && $pr == $axis) {
+                    $val = floatval($a->amount);
+                }
+            endforeach;
+
+            //store
+            $new = true;
+            for($i=0; $i<sizeof($series); $i++) {
+                //if not exist
+                if(array_key_exists('name', $series[$i]) && $series[$i]['name'] == $legend) {
+//                            print "\n### Push [$val] to [$legend]\n";
+                    array_push($series[$i]['data'], $val);
+                    $new = false;
+                    break;
+                }
+            }
+            //store
+            if($new) {
+                $dt['name'] = $legend;
+                $dt['data'] = array( $val );
+                array_push($series, $dt);
+//                        print "\n## Push [$val] to [$legend]\n";
+            }
+        endforeach;
+    endforeach;
+
+    ?>
+
+    $(function() {
+
+        var data = <?php echo json_encode($series); ?>;
+        console.log(data);
+
+        var chart = new AutoChart({
+            chart: {
+                renderTo: 'container-chart'
+            },
+            xAxis: {
+                categories: <?php echo utilities\Stringutils::js_array($xAxis); ?>
+            },
+            yAxis: {
+                title: {
+                    text: 'Transaction Amount'
+                }
+            },
+            title: {
+                text: 'Finance Part Report'
+            },
+            subtitle: {
+                text: 'Monthly Transactions'
+            },
+            series: data
+        });
+
+    });
+
+</script>
+
+@endsection

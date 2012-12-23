@@ -189,7 +189,7 @@ array(2) {
                 series: data
             });
 
-        })();
+        });
 
     </script>
 

@@ -133,5 +133,77 @@
     <div class="clear"></div>
 </div>
 
+<!-- Bars chart -->
+<div class="widget grid6 chartWrapper">
+    <div class="whead"><h6>Statistics Overview</h6><div class="clear"></div></div>
+    <div class="body">
+        <div id="container-chart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+    </div>
+</div>
+
 @endsection
 
+
+@section('additional_js')
+
+<script type="text/javascript">
+
+    <?php
+    $dates = array();
+    foreach($parts as $a) :
+        $d = date('Y-m-d', strtotime($a->part_date));
+        if(!in_array($d, $dates)) {
+            array_push($dates, $d);
+        }
+    endforeach;
+
+    //var_dump($dates);print "<br>";
+    $data = array();
+    foreach($graphData as $key => $val) :
+        $d = array();
+        $d['name'] = $key;
+        $d['data'] = array();
+        foreach($val as $k => $v) :
+            if(in_array($k, $dates)) {
+                array_push($d['data'], floatval($v));
+            } else {
+                array_push($d['data'], 0);
+            }
+        endforeach;
+        array_push($data, $d);
+    endforeach;
+    //print_r($data);
+
+    ?>
+
+    $(function() {
+
+        var data = <?php echo json_encode($data); ?>;
+        console.log(data);
+
+        var chart = new AutoChart({
+            chart: {
+                renderTo: 'container-chart'
+            },
+            xAxis: {
+                categories: <?php echo utilities\Stringutils::js_array($dates); ?>
+            },
+            yAxis: {
+                title: {
+                    text: 'Transaction Amount'
+                }
+            },
+            title: {
+                text: 'Finance Part Report'
+            },
+            subtitle: {
+                text: 'Daily Transactions'
+            },
+            series: data
+        });
+
+    });
+
+</script>
+
+@endsection

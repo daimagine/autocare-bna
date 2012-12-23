@@ -293,7 +293,14 @@ function AutoChart(config) {
             text: ''
         },
         xAxis: {
-            categories: []
+            categories: [],
+            labels: {
+                rotation: -45,
+                align: 'right',
+                style: {
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
         },
         yAxis: {
             min: 0,

@@ -137,6 +137,8 @@ class Report_Finance_Controller extends Secure_Controller {
         $services = Service::finance_daily($criteria);
         $service_type_opt = Service::allSelect();
 
+        $graphData = $this->service_daily_graph($services);
+
         Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
         Asset::add('report.finance.application', 'js/report/finance/application.js', array('jquery.timeentry'));
         return $this->layout->nest('content', 'report.finance.service.daily', array(
@@ -145,6 +147,7 @@ class Report_Finance_Controller extends Secure_Controller {
             'service_type_opt' => @$service_type_opt,
             'startdate' => $startdate,
             'enddate' => $enddate,
+            'graphData' => @$graphData
         ));
     }
 
@@ -246,6 +249,8 @@ class Report_Finance_Controller extends Secure_Controller {
         $part_category_opt = ItemCategory::allSelect();
         $part_unit_opt = UnitType::allSelect();
 
+        $graphData = $this->part_daily_graph($parts);
+
         Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
         Asset::add('report.finance.application', 'js/report/finance/application.js', array('jquery.timeentry'));
         return $this->layout->nest('content', 'report.finance.part.daily', array(
@@ -258,6 +263,7 @@ class Report_Finance_Controller extends Secure_Controller {
             'part_unit_opt' => @$part_unit_opt,
             'startdate' => $startdate,
             'enddate' => $enddate,
+            'graphData' => @$graphData
         ));
     }
 
@@ -329,4 +335,75 @@ class Report_Finance_Controller extends Secure_Controller {
             'enddate' => $enddate,
         ));
     }
+
+    private function part_daily_graph($part) {
+        $ct = array();
+        $data = array();
+        foreach($part as $p) {
+            if(!in_array($p->part_desc, $ct))
+                array_push($ct, $p->part_desc);
+        }
+        foreach($ct as $c) {
+            foreach($part as $p) {
+                $idx = date('Y-m-d', strtotime($p->part_date));
+                if($c === $p->part_desc) {
+                    if(array_key_exists($c, $data)) {
+                        if(array_key_exists($idx, $data[$c])) {
+                            $data[$c][$idx] = $p->amount + $data[$c][$idx];
+                        } else {
+                            $data[$c][$idx] = $p->amount;
+                        }
+                    } else {
+                        $data[$c][$idx] = $p->amount;
+                    }
+                } else {
+                    if(array_key_exists($c, $data)) {
+                        if(array_key_exists($idx, $data[$c])) {
+                        } else {
+                            $data[$c][$idx] = 0;
+                        }
+                    } else {
+                        $data[$c][$idx] = 0;
+                    }
+                }
+            }
+        }
+        return $data;
+    }
+
+    private function service_daily_graph($part) {
+        $ct = array();
+        $data = array();
+        foreach($part as $p) {
+            if(!in_array($p->service_desc, $ct))
+                array_push($ct, $p->service_desc);
+        }
+        foreach($ct as $c) {
+            foreach($part as $p) {
+                $idx = date('Y-m-d', strtotime($p->service_date));
+                if($c === $p->service_desc) {
+                    if(array_key_exists($c, $data)) {
+                        if(array_key_exists($idx, $data[$c])) {
+                            $data[$c][$idx] = $p->amount + $data[$c][$idx];
+                        } else {
+                            $data[$c][$idx] = $p->amount;
+                        }
+                    } else {
+                        $data[$c][$idx] = $p->amount;
+                    }
+                } else {
+                    if(array_key_exists($c, $data)) {
+                        if(array_key_exists($idx, $data[$c])) {
+                        } else {
+                            $data[$c][$idx] = 0;
+                        }
+                    } else {
+                        $data[$c][$idx] = 0;
+                    }
+                }
+            }
+        }
+        return $data;
+    }
+
 }

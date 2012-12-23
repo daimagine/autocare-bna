@@ -79,7 +79,6 @@ $(function() {
         "sScrollXInner": "160%"
     });
 
-    console.log(oTable.attr('dtable-sortlist'));
     try {
         if(oTable) {
             //console.log(oTable.attr('dtable-sortlist'));
