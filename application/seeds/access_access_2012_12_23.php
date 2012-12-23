@@ -55,14 +55,14 @@ class Seed_Access_access_2012_12_23 extends S2\Seed {
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Access List';
-        $access->description = 'Access Management List';
-        $access->action = 'access@list';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = true;
-        $access->type = 'S';
-        $access->save();
+        $child->name = 'Access List';
+        $child->description = 'Access Management List';
+        $child->action = 'access@list';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = true;
+        $child->type = 'S';
+        $child->save();
 
     }
 
