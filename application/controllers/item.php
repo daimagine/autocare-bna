@@ -149,6 +149,7 @@ class Item_Controller extends Secure_Controller {
             $success = Item::create($itemdata);
             $storeItemPrice = ItemPrice::create(array(
                 'item_id' => $success,
+                'price' => $itemdata['price'],
                 'purchase_price' => $itemdata['purchase_price']
             ));
             if($success and $storeItemPrice) {
@@ -215,18 +216,20 @@ class Item_Controller extends Secure_Controller {
         }
         $item = Input::all();
         $prevPrice=Item::find($id)->price;
+//        {{dd(('PrevPrice: '.strval($prevPrice).' ,and newPrice: '.$item['price']));}}
         if ($prevPrice !== $item['price']) {
             //get price active from DB
             $oldPrice = ItemPrice::getSingleResult(array(
                 'item_id' => $id
             ));
-//            {{dd($oldPrice);}}
+//            {{dd($item['purchase_price']);}}
             if ($oldPrice) {
                 $updateItemPrice = ItemPrice::update($oldPrice->id, array(
                     'status' => statusType::INACTIVE
                 ));
                 $newPrice = ItemPrice::create(array(
                     'item_id' => $id,
+                    'price' => $item['price'],
                     'purchase_price' => $item['purchase_price']
                 ));
                 if ($updateItemPrice==null || $newPrice==null) {
@@ -437,7 +440,8 @@ class Item_Controller extends Secure_Controller {
 
                         $successAddPrice = ItemPrice::create(array(
                             'item_id' => $item,
-                            'purchase_price' => $data['price']
+                            'price' => $data['price'],
+                            'purchase_price' => $data['purchase_price']
                         ));
                         if($successAddStockFlow && $item && $successAddPrice) {
                             Session::flash('message', 'Success Closed');

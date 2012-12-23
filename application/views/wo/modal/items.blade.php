@@ -1,6 +1,5 @@
 <!-- Tabs -->
-<script src="http://autocare-bna.dev/js/wo/application.js" type="text/javascript"></script>
-<!--<script src="../../js/wo/application.js" type="text/javascript"></script>-->
+<script src="/js/wo/application.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(function() {
         console.log(':: define new table items jquery');

@@ -147,7 +147,7 @@ class Item extends Eloquent {
             }
         }
         $q = "select ".
-            "i.name as name, ".
+            "distinct i.name as name, ".
             "ic.name as category, ".
             "it.name as type, ".
             "ut.name as unit, ".
@@ -160,7 +160,10 @@ class Item extends Eloquent {
             "i.vendor as vendor, ".
             "i.status as status, ".
             "i.created_at as create_date, ".
-            "i.updated_at as last_update ";
+            "i.updated_at as last_update, ".
+            "year(trx.date) AS year, ".
+            "month(trx.date) AS month, ".
+            "(select count(trxit.quantity) from transaction_item trxit inner join transaction trx on trx.id=trxit.transaction_id where trxit.item_id = i.id and trx.status='D') as sales_count ";
 
         $q .= "from " .
             "item i " .
@@ -168,7 +171,9 @@ class Item extends Eloquent {
             "inner join item_type it on i.item_type_id=it.id " .
             "inner join unit_type ut on i.unit_id=ut.id " .
             "left join item_stock_flow isf on isf.item_id= i.id ".
-            "left join item_price ip on ip.item_id= i.id "
+            "left join item_price ip on ip.item_id= i.id ".
+            "left join transaction_item ti on ti.item_id=it.id ".
+            "left join transaction trx on ti.transaction_id=trx.id "
         ;
 
 
@@ -232,7 +237,15 @@ class Item extends Eloquent {
                 'part_unit' => 'i.unit_id',
                 'date' => 't.date',
             );
+        } elseif($category == 'sales_stock_monthly') {
+            $keystore = array(
+                'name' => 'i.name',
+                'category' => 'ic.id',
+                'startYear' => 'year(trx.date)',
+                'endYear' => 'year(trx.date)'
+            );
         }
+
         return($keystore[$key]);
     }
 
@@ -425,5 +438,125 @@ class Item extends Eloquent {
         return $data;
     }
 
+    public static function list_sales_stock_monthly($criteria=array(), $startYear, $endYear) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'sales_stock_monthly');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+
+            } elseif($val[0] === 'like') {
+                $criterion[] = "LOWER($key) like ?";
+                $value = '%'. strtolower($val[1]) . '%';
+                array_push($param, $value);
+
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+        $q = "SELECT ".
+            "i.name AS name, ".
+            "(SELECT SUM(ti.quantity) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id WHERE ti.item_id = i.id AND status='D' AND payment_state='D' AND month(trx.date)='01' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS jan_salescount, ".
+            "(SELECT SUM(ti.quantity) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id WHERE ti.item_id = i.id AND status='D' AND payment_state='D' AND month(trx.date)='02' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS feb_salescount, ".
+            "(SELECT SUM(ti.quantity) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id WHERE ti.item_id = i.id AND status='D' AND payment_state='D' AND month(trx.date)='03' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS mar_salescount, ".
+            "(SELECT SUM(ti.quantity) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id WHERE ti.item_id = i.id AND status='D' AND payment_state='D' AND month(trx.date)='04' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS apr_salescount, ".
+            "(SELECT SUM(ti.quantity) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id WHERE ti.item_id = i.id AND status='D' AND payment_state='D' AND month(trx.date)='05' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS may_salescount, ".
+            "(SELECT SUM(ti.quantity) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id WHERE ti.item_id = i.id AND status='D' AND payment_state='D' AND month(trx.date)='06' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS jun_salescount, ".
+            "(SELECT SUM(ti.quantity) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id WHERE ti.item_id = i.id AND status='D' AND payment_state='D' AND month(trx.date)='07' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS jul_salescount, ".
+            "(SELECT SUM(ti.quantity) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id WHERE ti.item_id = i.id AND status='D' AND payment_state='D' AND month(trx.date)='08' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS aug_salescount, ".
+            "(SELECT SUM(ti.quantity) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id WHERE ti.item_id = i.id AND status='D' AND payment_state='D' AND month(trx.date)='09' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS sep_salescount, ".
+            "(SELECT SUM(ti.quantity) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id WHERE ti.item_id = i.id AND status='D' AND payment_state='D' AND month(trx.date)='10' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS oct_salescount, ".
+            "(SELECT SUM(ti.quantity) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id WHERE ti.item_id = i.id AND status='D' AND payment_state='D' AND month(trx.date)='11' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS nov_salescount, ".
+            "(SELECT SUM(ti.quantity) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id WHERE ti.item_id = i.id AND status='D' AND payment_state='D' AND month(trx.date)='12' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS dec_salescount ";
+
+        $q .= "FROM item i " .
+            "INNER JOIN item_category ic ON i.item_category_id=ic.id "
+        ;
+
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .= "ORDER BY name desc "
+        ;
+
+        $data = DB::query($q, $param);
+        return $data;
+    }
+
+
+    public static function list_sales_amount_monthly($criteria=array(), $startYear, $endYear) {
+        $param = array();
+        $criterion = array();
+        foreach($criteria as $key => $val) {
+            $key = static::criteria_lookup($key, 'sales_stock_monthly');
+            if($val[0] === 'not_null') {
+                $criterion[] = "$key is not null";
+
+            } elseif($val[0] === 'like') {
+                $criterion[] = "LOWER($key) like ?";
+                $value = '%'. strtolower($val[1]) . '%';
+                array_push($param, $value);
+
+            } elseif($val[0] === 'between') {
+                $criterion[] = "$key $val[0] ? and ?";
+                array_push($param, $val[1]);
+                array_push($param, $val[2]);
+
+            } else {
+                $criterion[] = "$key $val[0] ?";
+                array_push($param, $val[1]);
+            }
+        }
+        $q = "SELECT ".
+            "i.name AS name, ".
+            "(SELECT SUM(ti.quantity * ip.price) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id INNER JOIN item_price ip ON ip.id=ti.item_price_id WHERE ti.item_id = i.id AND trx.status='D' AND payment_state='D' AND month(trx.date)='01' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS jan_salesamount, ".
+            "(SELECT SUM(ti.quantity * ip.price) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id INNER JOIN item_price ip ON ip.id=ti.item_price_id WHERE ti.item_id = i.id AND trx.status='D' AND payment_state='D' AND month(trx.date)='02' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS feb_salesamount, ".
+            "(SELECT SUM(ti.quantity * ip.price) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id INNER JOIN item_price ip ON ip.id=ti.item_price_id WHERE ti.item_id = i.id AND trx.status='D' AND payment_state='D' AND month(trx.date)='03' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS mar_salesamount, ".
+            "(SELECT SUM(ti.quantity * ip.price) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id INNER JOIN item_price ip ON ip.id=ti.item_price_id WHERE ti.item_id = i.id AND trx.status='D' AND payment_state='D' AND month(trx.date)='04' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS apr_salesamount, ".
+            "(SELECT SUM(ti.quantity * ip.price) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id INNER JOIN item_price ip ON ip.id=ti.item_price_id WHERE ti.item_id = i.id AND trx.status='D' AND payment_state='D' AND month(trx.date)='05' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS may_salesamount, ".
+            "(SELECT SUM(ti.quantity * ip.price) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id INNER JOIN item_price ip ON ip.id=ti.item_price_id WHERE ti.item_id = i.id AND trx.status='D' AND payment_state='D' AND month(trx.date)='06' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS jun_salesamount, ".
+            "(SELECT SUM(ti.quantity * ip.price) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id INNER JOIN item_price ip ON ip.id=ti.item_price_id WHERE ti.item_id = i.id AND trx.status='D' AND payment_state='D' AND month(trx.date)='07' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS jul_salesamount, ".
+            "(SELECT SUM(ti.quantity * ip.price) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id INNER JOIN item_price ip ON ip.id=ti.item_price_id WHERE ti.item_id = i.id AND trx.status='D' AND payment_state='D' AND month(trx.date)='08' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS aug_salesamount, ".
+            "(SELECT SUM(ti.quantity * ip.price) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id INNER JOIN item_price ip ON ip.id=ti.item_price_id WHERE ti.item_id = i.id AND trx.status='D' AND payment_state='D' AND month(trx.date)='09' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS sep_salesamount, ".
+            "(SELECT SUM(ti.quantity * ip.price) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id INNER JOIN item_price ip ON ip.id=ti.item_price_id WHERE ti.item_id = i.id AND trx.status='D' AND payment_state='D' AND month(trx.date)='10' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS oct_salesamount, ".
+            "(SELECT SUM(ti.quantity * ip.price) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id INNER JOIN item_price ip ON ip.id=ti.item_price_id WHERE ti.item_id = i.id AND trx.status='D' AND payment_state='D' AND month(trx.date)='11' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS nov_salesamount, ".
+            "(SELECT SUM(ti.quantity * ip.price) FROM transaction_item ti INNER JOIN transaction trx ON trx.id=ti.transaction_id INNER JOIN item_price ip ON ip.id=ti.item_price_id WHERE ti.item_id = i.id AND trx.status='D' AND payment_state='D' AND month(trx.date)='12' AND year(trx.date)>='".$startYear."' AND year(trx.date)<='".$endYear."') AS dec_salesamount ";
+
+        $q .= "FROM item i " .
+            "INNER JOIN item_category ic ON i.item_category_id=ic.id "
+        ;
+
+
+        $where = " ";
+        if(strlen(trim($where)) > 0)
+            $where .= " and ";
+        else
+            $where .= " where ";
+        $where .= implode(" and ", $criterion). " ";
+
+        if(is_array($criterion) && !empty($criterion))
+            $q.= $where;
+
+        $q .= "ORDER BY name desc "
+        ;
+
+        $data = DB::query($q, $param);
+        return $data;
+    }
 
 }

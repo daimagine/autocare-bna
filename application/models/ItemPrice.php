@@ -50,7 +50,7 @@ class ItemPrice extends Eloquent {
         $item = Item::find($data['item_id']);
         $itemPrice->purchase_price = $data['purchase_price'];
         $itemPrice->item_id = $item->id;
-        $itemPrice->price = $item->price;
+        $itemPrice->price = $data['purchase_price'];
         $itemPrice->status = statusType::ACTIVE;
         $itemPrice->configured_by = Auth::user()->id;
         $itemPrice->save();

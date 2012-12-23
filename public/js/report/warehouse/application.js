@@ -28,6 +28,23 @@ $(function() {
         spinnerIncDecOnly: true // Only up and down arrows
     });
 
+    $('.yearpicker').datepicker( {
+        changeDate: false,
+        changeMonth: false,
+        changeYear: true,
+        showButtonPanel: true,
+        minDate: '-10Y',
+        dateFormat: 'yy',
+        onClose: function(dateText, inst) {
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(year, 1));
+            console.log($(this).attr('data-mask'));
+            var id = $(this).attr('data-mask');
+            $('#'+id).val(year );
+            console.log($('#'+id));
+        }
+    });
+
 
     //===== Dynamic data table =====//
 
