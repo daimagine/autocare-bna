@@ -7,13 +7,13 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class Seed_Access_access_2012_12_23 extends S2\Seed {
+class Seed_Access_settlement_2012_12_23 extends S2\Seed {
 
     public function grow() {
         $access = new Access();
-        $access->name = 'Access';
-        $access->description = 'Access Management';
-        $access->action = 'access@index';
+        $access->name = 'Settlement';
+        $access->description = 'Settlement Management';
+        $access->action = 'settlement@index';
         $access->status = true;
         $access->parent = true;
         $access->visible = true;
@@ -22,9 +22,9 @@ class Seed_Access_access_2012_12_23 extends S2\Seed {
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Access Add';
-        $access->description = 'Access Management Add';
-        $access->action = 'access@add';
+        $access->name = 'Settlement List';
+        $access->description = 'Settlement Management List';
+        $access->action = 'settlement@list';
         $access->status = true;
         $access->parent = false;
         $access->visible = true;
@@ -33,9 +33,20 @@ class Seed_Access_access_2012_12_23 extends S2\Seed {
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Access Edit';
-        $access->description = 'Access Management Edit';
-        $access->action = 'access@edit';
+        $access->name = 'Settlement Add';
+        $access->description = 'Settlement Management Add';
+        $access->action = 'settlement@add';
+        $access->status = true;
+        $access->parent = false;
+        $access->visible = true;
+        $access->type = 'S';
+        $access->save();
+
+        $child = new Access();
+        $child->parent_id = $access->id;
+        $access->name = 'Settlement Edit';
+        $access->description = 'Settlement Management Edit';
+        $access->action = 'settlement@edit';
         $access->status = true;
         $access->parent = false;
         $access->visible = false;
@@ -44,29 +55,18 @@ class Seed_Access_access_2012_12_23 extends S2\Seed {
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Access Delete';
-        $access->description = 'Access Management Delete';
-        $access->action = 'access@delete';
+        $access->name = 'Settlement Delete';
+        $access->description = 'Settlement Management Delete';
+        $access->action = 'settlement@delete';
         $access->status = true;
         $access->parent = false;
         $access->visible = false;
         $access->type = 'L';
         $access->save();
-
-        $child = new Access();
-        $child->parent_id = $access->id;
-        $child->name = 'Access List';
-        $child->description = 'Access Management List';
-        $child->action = 'access@list';
-        $child->status = true;
-        $child->parent = false;
-        $child->visible = true;
-        $child->type = 'S';
-        $child->save();
 
     }
 
     public function order() {
-        return 2;
+        return 10;
     }
 }

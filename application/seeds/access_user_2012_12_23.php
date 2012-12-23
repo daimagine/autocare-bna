@@ -22,58 +22,58 @@ class Seed_Access_user_2012_12_23 extends S2\Seed {
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'User List';
-        $access->description = 'User Management List';
-        $access->action = 'user@list';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = true;
-        $access->type = 'S';
-        $access->save();
+        $child->name = 'User List';
+        $child->description = 'User Management List';
+        $child->action = 'user@list';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = true;
+        $child->type = 'S';
+        $child->save();
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'User Add';
-        $access->description = 'User Management Add';
-        $access->action = 'user@add';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = true;
-        $access->type = 'S';
-        $access->save();
+        $child->name = 'User Add';
+        $child->description = 'User Management Add';
+        $child->action = 'user@add';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = true;
+        $child->type = 'S';
+        $child->save();
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'User Edit';
-        $access->description = 'User Management Edit';
-        $access->action = 'user@edit';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = false;
-        $access->type = 'L';
-        $access->save();
+        $child->name = 'User Edit';
+        $child->description = 'User Management Edit';
+        $child->action = 'user@edit';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = false;
+        $child->type = 'L';
+        $child->save();
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'User Delete';
-        $access->description = 'User Management Delete';
-        $access->action = 'user@delete';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = false;
-        $access->type = 'L';
-        $access->save();
+        $child->name = 'User Delete';
+        $child->description = 'User Management Delete';
+        $child->action = 'user@delete';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = false;
+        $child->type = 'L';
+        $child->save();
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'User Find';
-        $access->description = 'User Management Find Ajax Name';
-        $access->action = 'user@find';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = false;
-        $access->type = 'L';
-        $access->save();
+        $child->name = 'User Find';
+        $child->description = 'User Management Find Ajax Name';
+        $child->action = 'user@find';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = false;
+        $child->type = 'L';
+        $child->save();
 
     }
 
