@@ -58,6 +58,7 @@ class Initialize_Main_Table {
             $table->string('post_code', 6)->nullable();
             $table->string('phone1', 16)->nullable();
             $table->string('phone2', 16)->nullable();
+            $table->text('additional_info')->nullable();
             $table->timestamp('last_visit')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
@@ -108,7 +109,8 @@ class Initialize_Main_Table {
             $table->increments('id');
             $table->string('name', 120);
             $table->string('goods_type', 1)->nullable();
-            $table->integer('item_category_id');
+            $table->integer('item_category_id')->unsigned();
+            $table->index('item_category_id');
             $table->foreign('item_category_id')
                 ->references('id')
                 ->on('item_category')
@@ -119,7 +121,8 @@ class Initialize_Main_Table {
         //item_type
         Schema::create('item_type', function($table){
             $table->increments('id');
-            $table->integer('item_category_id');
+            $table->integer('item_category_id')->unsigned();
+            $table->index('item_category_id');
             $table->string('name', 80);
             $table->string('description', 255)->nullable();
             $table->boolean('status')->default(true);
@@ -133,11 +136,12 @@ class Initialize_Main_Table {
         //item
         Schema::create('item', function($table){
             $table->increments('id');
-            $table->integer('item_type_id');
+            $table->integer('item_type_id')->unsigned();
             $table->index('item_type_id');
-            $table->integer('item_category_id');
+            $table->integer('item_category_id')->unsigned();
             $table->index('item_category_id');
-            $table->integer('unit_id');
+            $table->integer('unit_id')->unsigned();
+            $table->index('unit_id');
             $table->string('name', 150);
             $table->string('code', 10)->nullable();
             $table->integer('stock')->default(0);
@@ -177,8 +181,10 @@ class Initialize_Main_Table {
             $table->string('city', 80)->nullable();
             $table->string('phone1', 16)->nullable();
             $table->string('phone2', 16)->nullable();
-            $table->integer('role_id');
+            $table->integer('role_id')->unsigned();
+            $table->index('role_id');
             $table->boolean('status')->default(true);
+            $table->string('picture', 100)->nullable();
             $table->timestamps();
             $table->foreign('role_id')
                 ->references('id')
@@ -190,8 +196,10 @@ class Initialize_Main_Table {
         //item_price
         Schema::create('item_price', function($table) {
             $table->increments('id');
-            $table->integer('item_id');
-            $table->integer('configured_by');
+            $table->integer('item_id')->unsigned();
+            $table->index('item_id');
+            $table->integer('configured_by')->unsigned();
+            $table->index('configured_by');
             $table->decimal('price', 14, 2)->default(0.00);
             $table->decimal('purchase_price', 14, 2)->default(0.00);
             $table->boolean('status')->default(true);
@@ -215,12 +223,13 @@ class Initialize_Main_Table {
             $table->boolean('batch_status')->default(0);
             $table->timestamp('open_time')->nullable();
             $table->timestamp('close_time')->nullable();
-            $table->integer('sales_count', 11)->nullable();
+            $table->integer('sales_count')->default(0.0);
             $table->decimal('sales_amount', 14, 2)->default(0.0);
             $table->decimal('clerk_amount', 14, 2)->default(0.0);
             $table->boolean('clerk_status')->default(0);
             $table->timestamp('clerk_time')->nullable();
-            $table->integer('clerk_user_id')->nullable();
+            $table->integer('clerk_user_id')->nullable()->unsigned();
+            $table->index('clerk_user_id');
             $table->decimal('fraction_50', 14, 2)->default(0.0);
             $table->decimal('fraction_100', 14, 2)->default(0.0);
             $table->decimal('fraction_200', 14, 2)->default(0.0);
@@ -259,10 +268,12 @@ class Initialize_Main_Table {
             $table->timestamp('paid_date')->nullable();
             $table->string('subject', 255)->nullable();
             $table->date('invoice_date');
-            $table->integer('create_by');
+            $table->integer('create_by')->unsigned();
+            $table->index('create_by');
             $table->string('approved_status', 1)->nullable();
             $table->string('subject_payment', 255)->nullable();
-            $table->integer('account_id');
+            $table->integer('account_id')->unsigned();
+            $table->index('account_id');
             $table->timestamps();
             $table->foreign('create_by')
                 ->references('id')
@@ -283,8 +294,10 @@ class Initialize_Main_Table {
             $table->text('description')->nullable();
             $table->decimal('unit_price', 14, 2)->nullable();
             $table->decimal('amount', 14, 2)->nullable();
-            $table->integer('account_type_id')->nullable();
-            $table->integer('account_trx_id')->nullable();
+            $table->integer('account_type_id')->nullable()->unsigned();
+            $table->index('account_type_id');
+            $table->integer('account_trx_id')->nullable()->unsigned();
+            $table->index('account_trx_id');
             $table->string('approved_status', 1);
             $table->text('remarks')->nullable();
             $table->integer('quantity')->default(0);
@@ -308,8 +321,10 @@ class Initialize_Main_Table {
         //conversation_user
         Schema::create('conversation_user', function($table) {
             $table->increments('id');
-            $table->integer('user_id');
-            $table->integer('conversation_id');
+            $table->integer('user_id')->unsigned();
+            $table->index('user_id');
+            $table->integer('conversation_id')->unsigned();
+            $table->index('conversation_id');
             $table->boolean('deleted');
             $table->boolean('read');
             $table->string('key', 200)->nullable();
@@ -335,7 +350,8 @@ class Initialize_Main_Table {
             $table->string('model', 50)->nullable();
             $table->string('brand', 50)->nullable();
             $table->string('description', 255)->nullable();
-            $table->integer('customer_id');
+            $table->integer('customer_id')->unsigned();
+            $table->index('customer_id');
             $table->string('year', 4)->nullable();
             $table->boolean('status')->default(1);
             $table->timestamps();
@@ -350,9 +366,12 @@ class Initialize_Main_Table {
         Schema::create('memberships', function($table) {
             $table->increments('id');
             $table->string('number', 50);
-            $table->integer('discount_id');
-            $table->integer('customer_id');
-            $table->integer('vehicle_id');
+            $table->integer('discount_id')->unsigned();
+            $table->index('discount_id');
+            $table->integer('customer_id')->unsigned();
+            $table->index('customer_id');
+            $table->integer('vehicle_id')->unsigned();
+            $table->index('vehicle_id');
             $table->timestamp('registration_date');
             $table->timestamp('expiry_date');
             $table->boolean('status')->default(1);
@@ -377,8 +396,10 @@ class Initialize_Main_Table {
         //role_access
         Schema::create('role_access', function($table) {
             $table->increments('id');
-            $table->integer('role_id');
-            $table->integer('access_id');
+            $table->integer('role_id')->unsigned();
+            $table->index('role_id');
+            $table->integer('access_id')->unsigned();
+            $table->index('access_id');
             $table->integer('sequence');
             $table->timestamps();
             $table->foreign('role_id')
@@ -396,8 +417,10 @@ class Initialize_Main_Table {
         //service_formula
         Schema::create('service_formula', function($table) {
             $table->increments('id');
-            $table->integer('service_id');
-            $table->integer('configured_by');
+            $table->integer('service_id')->unsigned();
+            $table->index('service_id');
+            $table->integer('configured_by')->unsigned();
+            $table->index('configured_by');
             $table->decimal('price', 14, 2)->default(0.0);
             $table->timestamp('date');
             $table->timestamp('expiry_date');
@@ -420,9 +443,12 @@ class Initialize_Main_Table {
             $table->increments('id');
             $table->string('workorder_no', 30);
             $table->string('invoice_no', 30);
-            $table->integer('vehicle_id');
-            $table->integer('membership_id');
-            $table->integer('batch_id');
+            $table->integer('vehicle_id')->unsigned();
+            $table->index('vehicle_id');
+            $table->integer('membership_id')->unsigned();
+            $table->index('membership_id');
+            $table->integer('batch_id')->unsigned();
+            $table->index('batch_id');
             $table->timestamp('date');
             $table->timestamp('complete_date')->nullable();
             $table->timestamp('payment_date')->nullable();
@@ -444,7 +470,7 @@ class Initialize_Main_Table {
                 ->on_delete('restrict');
             $table->foreign('membership_id')
                 ->references('id')
-                ->on('membership')
+                ->on('memberships')
                 ->on_update('restrict')
                 ->on_delete('restrict');
             $table->foreign('batch_id')
@@ -453,6 +479,146 @@ class Initialize_Main_Table {
                 ->on_update('restrict')
                 ->on_delete('restrict');
         });
+
+
+        //transaction_item
+         Schema::create('transaction_item', function($table) {
+             $table->increments('id');
+             $table->integer('item_id')->unsigned();
+             $table->index('item_id');
+             $table->integer('item_price_id')->unsigned();
+             $table->index('item_price_id');
+             $table->integer('transaction_id')->unsigned();
+             $table->index('transaction_id');
+             $table->integer('quantity')->default(0);
+             $table->string('description', 255)->nullable();
+             $table->foreign('item_id')
+                 ->references('id')
+                 ->on('item')
+                 ->on_update('restrict')
+                 ->on_delete('restrict');
+             $table->foreign('item_price_id')
+                 ->references('id')
+                 ->on('item_price')
+                 ->on_update('restrict')
+                 ->on_delete('restrict');
+             $table->foreign('transaction_id')
+                 ->references('id')
+                 ->on('transaction')
+                 ->on_update('restrict')
+                 ->on_delete('restrict');
+         });
+
+        Schema::create('user_workorder', function($table) {
+            $table->increments('id');
+            $table->integer('transaction_id')->unsigned();
+            $table->index('transaction_id');
+            $table->integer('user_id')->unsigned();
+            $table->index('user_id');
+            $table->string('description', 255)->nullable();
+            $table->foreign('transaction_id')
+                ->references('id')
+                ->on('transaction')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+        });
+
+        Schema::create('message', function($table) {
+            $table->increments('id');
+            $table->integer('topic_id');
+            $table->integer('user_id')->unsigned();
+            $table->index('user_id');
+            $table->integer('sender_id')->unsigned();
+            $table->index('sender_id');
+            $table->boolean('deleted')->default(false);
+            $table->boolean('read')->default(false);
+            $table->text('message')->nullable();
+            $table->timestamps();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('sender_id')
+                ->references('id')
+                ->on('user')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+        });
+
+        Schema::create('item_stock_flow', function($table) {
+            $table->increments('id');
+            $table->integer('item_id')->unsigned();
+            $table->index('item_id');
+            $table->integer('account_transaction_id')->unsigned();
+            $table->index('account_transaction_id');
+            $table->integer('quantity')->default(0);
+            $table->string('type', 1)->nullable();
+            $table->timestamp('date');
+            $table->string('status', 1);
+            $table->integer('configured_by')->unsigned();
+            $table->index('configured_by');
+            $table->integer('sub_account_trx_id')->unsigned();
+            $table->index('sub_account_trx_id');
+            $table->foreign('item_id')
+                ->references('id')
+                ->on('item')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('account_transaction_id')
+                ->references('id')
+                ->on('account_transactions')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('configured_by')
+                ->references('id')
+                ->on('user')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('sub_account_trx_id')
+                ->references('id')
+                ->on('sub_account_trx')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+        });
+
+        Schema::create('settlement', function($table) {
+            $table->increments('id');
+            $table->decimal('fraction_50', 14, 2)->default(0.0);
+            $table->decimal('fraction_100', 14, 2)->default(0.0);
+            $table->decimal('fraction_200', 14, 2)->default(0.0);
+            $table->decimal('fraction_500', 14, 2)->default(0.0);
+            $table->decimal('fraction_1000', 14, 2)->default(0.0);
+            $table->decimal('fraction_2000', 14, 2)->default(0.0);
+            $table->decimal('fraction_5000', 14, 2)->default(0.0);
+            $table->decimal('fraction_10000', 14, 2)->default(0.0);
+            $table->decimal('fraction_20000', 14, 2)->default(0.0);
+            $table->decimal('fraction_50000', 14, 2)->default(0.0);
+            $table->decimal('fraction_100000', 14, 2)->default(0.0);
+            $table->decimal('amount', 14, 2)->default(0.0);
+            $table->decimal('amount_cash', 14, 2)->default(0.0);
+            $table->decimal('amount_non_cash', 14, 2)->default(0.0);
+            $table->integer('user_id')->unsigned();
+            $table->index('user_id');
+            $table->string('state', 1);
+            $table->timestamp('settlement_Date', 1);
+            $table->boolean('match', 1)->default(false);
+            $table->integer('success_transaction')->default(0);
+            $table->boolean('status')->default(true);
+            $table->text('notes')->nullable();
+            $table->timestamps();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+        });
+
     }
 
     /**
@@ -486,6 +652,11 @@ class Initialize_Main_Table {
             'role_access',
             'service_formula',
             'transaction',
+            'transaction_item',
+            'user_workorder',
+            'message',
+            'item_stock_flow',
+            'settlement',
         ));
 	}
 
