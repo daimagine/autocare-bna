@@ -78,6 +78,6 @@ class Seed_Access_user_2012_12_23 extends S2\Seed {
     }
 
     public function order() {
-        return 3;
+        return 12;
     }
 }

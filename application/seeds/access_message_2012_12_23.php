@@ -56,6 +56,6 @@ class Seed_Access_settlement_2012_12_23 extends S2\Seed {
     }
 
     public function order() {
-        return 11;
+        return 6;
     }
 }

@@ -89,6 +89,6 @@ class Seed_Access_news_2012_12_23 extends S2\Seed {
     }
 
     public function order() {
-        return 9;
+        return 7;
     }
 }

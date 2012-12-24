@@ -144,6 +144,6 @@ class Seed_Access_membership_2012_12_23 extends S2\Seed {
     }
 
     public function order() {
-        return 6;
+        return 5;
     }
 }
