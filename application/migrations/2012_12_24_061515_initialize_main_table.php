@@ -453,6 +453,159 @@ class Initialize_Main_Table {
                 ->on_update('restrict')
                 ->on_delete('restrict');
         });
+
+        //transaction_item
+        Schema::create('transaction_item', function($table) {
+            $table->increments('id');
+            $table->integer('item_id');
+            $table->integer('item_price_id');
+            $table->integer('transaction_id');
+            $table->integer('quantity');
+            $table->string('description', 255)->nullable();
+            $table->foreign('item_id')
+                ->references('id')
+                ->on('item')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('item_price_id')
+                ->references('id')
+                ->on('item_price')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('transaction_id')
+                ->references('id')
+                ->on('transaction')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+        });
+
+        //user_workorder
+        Schema::create('user_workorder', function($table) {
+            $table->increments('id');
+            $table->integer('transaction_id');
+            $table->integer('user_id');
+            $table->string('description', 255)->nullable();
+            $table->foreign('transaction_id')
+                ->references('id')
+                ->on('transaction')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->on_update('restrict')
+                ->on_update('restrict');
+        });
+
+        //batch_item
+        Schema::create('batch_item', function($table) {
+            $table->increments('id');
+            $table->integer('batch_id');
+            $table->integer('item_id');
+            $table->integer('sales_count');
+            $table->decimal('sales_amount', 14, 2)->default(0.0);
+            $table->foreign('batch_id')
+                ->references('id')
+                ->on('batch')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('item_id')
+                ->references('id')
+                ->on('item')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+        });
+
+        //message
+        Schema::create('message', function($table) {
+            $table->increments('id');
+            $table->integer('topic_id');
+            $table->integer('user_id');
+            $table->integer('sender_id');
+            $table->boolean('deleted')->default(0);
+            $table->boolean('read')->default(0);
+            $table->text('message');
+            $table->timestamps();
+            $table->foreign('topic_id')
+                ->references('id')
+                ->on('conversation')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('sender_id')
+                ->references('id')
+                ->on('user')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+        });
+
+        //item_stock_flow
+        Schema::create('item_stock_flow', function($table) {
+            $table->increments('id');
+            $table->integer('item_id');
+            $table->integer('account_transaction_id');
+            $table->string('quantity', 80);
+            $table->string('type', 1)->nullable();
+            $table->timestamp('date');
+            $table->boolean('status')->default(true);
+            $table->integer('configured_by');
+            $table->integer('sub_account_trx_id');
+            $table->foreign('item_id')
+                ->references('id')
+                ->on('item')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('account_transaction_id')
+                ->references('id')
+                ->on('account_transaction')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('configured_by')
+                ->references('id')
+                ->on('user')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('sub_account_trx_id')
+                ->references('id')
+                ->on('sub_account_trx')
+                ->on_update('restrict')
+                ->on_update('restrict');
+            $table->foreign('item_id')
+                ->references('id')
+                ->on('item')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+        });
+
+        //settlement
+        Schema::create('settlement', function($table) {
+            $table->increments('id');
+            $table->decimal('fraction_50', 14, 2)->default(0.0);
+            $table->decimal('fraction_100', 14, 2)->default(0.0);
+            $table->decimal('fraction_200', 14, 2)->default(0.0);
+            $table->decimal('fraction_500', 14, 2)->default(0.0);
+            $table->decimal('fraction_1000', 14, 2)->default(0.0);
+            $table->decimal('fraction_2000', 14, 2)->default(0.0);
+            $table->decimal('fraction_5000', 14, 2)->default(0.0);
+            $table->decimal('fraction_10000', 14, 2)->default(0.0);
+            $table->decimal('fraction_20000', 14, 2)->default(0.0);
+            $table->decimal('fraction_100000', 14, 2)->default(0.0);
+            $table->decimal('amount', 14, 2)->default(0.0);
+            $table->decimal('amount_cash', 14, 2)->default(0.0);
+            $table->decimal('amount_non_cash', 14, 2)->default(0.0);
+            $table->integer('user_id');
+            $table->string('state', 1)->default('U');
+            $table->timestamp('settlement_date');
+            $table->boolean('match')->default(false);
+            $table->integer('success_transaction')->default(0);
+            $table->boolean('status')->default(0);
+            $table->text('notes')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -486,6 +639,12 @@ class Initialize_Main_Table {
             'role_access',
             'service_formula',
             'transaction',
+            'transaction_item',
+            'user_workorder',
+            'batch_item',
+            'message',
+            'item_stock_flow',
+            'settlement'
         ));
 	}
 
