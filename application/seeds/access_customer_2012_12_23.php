@@ -22,46 +22,46 @@ class Seed_Access_Customer_2012_12_23 extends S2\Seed {
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Customer List';
-        $access->description = 'Customer Management List';
-        $access->action = 'customer@list';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = true;
-        $access->type = 'S';
-        $access->save();
+        $child->name = 'Customer List';
+        $child->description = 'Customer Management List';
+        $child->action = 'customer@list';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = true;
+        $child->type = 'S';
+        $child->save();
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Customer Add';
-        $access->description = 'Customer Management Add';
-        $access->action = 'customer@add';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = true;
-        $access->type = 'S';
-        $access->save();
+        $child->name = 'Customer Add';
+        $child->description = 'Customer Management Add';
+        $child->action = 'customer@add';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = true;
+        $child->type = 'S';
+        $child->save();
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Customer Edit';
-        $access->description = 'Customer Management Edit';
-        $access->action = 'customer@edit';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = false;
-        $access->type = 'L';
-        $access->save();
+        $child->name = 'Customer Edit';
+        $child->description = 'Customer Management Edit';
+        $child->action = 'customer@edit';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = false;
+        $child->type = 'L';
+        $child->save();
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Customer Delete';
-        $access->description = 'Customer Management Delete';
-        $access->action = 'customer@delete';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = false;
-        $access->type = 'L';
+        $child->name = 'Customer Delete';
+        $child->description = 'Customer Management Delete';
+        $child->action = 'customer@delete';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = false;
+        $child->type = 'L';
         $access->save();
 
     }

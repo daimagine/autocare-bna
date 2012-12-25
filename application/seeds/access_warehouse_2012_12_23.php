@@ -17,7 +17,6 @@ class Seed_Access_Warehouse_2012_12_23 extends S2\Seed {
         $parent->parent = true;
         $parent->visible = true;
         $parent->type = 'M';
-        $parent->parent_id = 0;
         $parent->save();
 
         $s = new Access();

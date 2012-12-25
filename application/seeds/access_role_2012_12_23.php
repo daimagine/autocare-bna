@@ -18,7 +18,6 @@ class Seed_Access_Role_2012_12_23 extends S2\Seed {
         $parentRole->parent = true;
         $parentRole->visible = true;
         $parentRole->type = 'M';
-        $parentRole->parent_id = 0;
         $parentRole->save();
 
         $rs = new Access();
