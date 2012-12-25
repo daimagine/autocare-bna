@@ -22,47 +22,47 @@ class Seed_Access_settlement_2012_12_23 extends S2\Seed {
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Settlement List';
-        $access->description = 'Settlement Management List';
-        $access->action = 'settlement@list';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = true;
-        $access->type = 'S';
-        $access->save();
+        $child->name = 'Settlement List';
+        $child->description = 'Settlement Management List';
+        $child->action = 'settlement@list';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = true;
+        $child->type = 'S';
+        $child->save();
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Settlement Add';
-        $access->description = 'Settlement Management Add';
-        $access->action = 'settlement@add';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = true;
-        $access->type = 'S';
-        $access->save();
+        $child->name = 'Settlement Add';
+        $child->description = 'Settlement Management Add';
+        $child->action = 'settlement@add';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = true;
+        $child->type = 'S';
+        $child->save();
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Settlement Edit';
-        $access->description = 'Settlement Management Edit';
-        $access->action = 'settlement@edit';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = false;
-        $access->type = 'L';
-        $access->save();
+        $child->name = 'Settlement Edit';
+        $child->description = 'Settlement Management Edit';
+        $child->action = 'settlement@edit';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = false;
+        $child->type = 'L';
+        $child->save();
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Settlement Delete';
-        $access->description = 'Settlement Management Delete';
-        $access->action = 'settlement@delete';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = false;
-        $access->type = 'L';
-        $access->save();
+        $child->name = 'Settlement Delete';
+        $child->description = 'Settlement Management Delete';
+        $child->action = 'settlement@delete';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = false;
+        $child->type = 'L';
+        $child->save();
 
     }
 

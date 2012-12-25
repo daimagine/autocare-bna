@@ -22,25 +22,25 @@ class Seed_Access_preferences_2012_12_23 extends S2\Seed {
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Preferences List';
-        $access->description = 'Preferences List';
-        $access->action = 'preferences@list';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = true;
-        $access->type = 'S';
-        $access->save();
+        $child->name = 'Preferences List';
+        $child->description = 'Preferences List';
+        $child->action = 'preferences@list';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = true;
+        $child->type = 'S';
+        $child->save();
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Change Password';
-        $access->description = 'Change Password';
-        $access->action = 'preferences@change_password';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = false;
-        $access->type = 'L';
-        $access->save();
+        $child->name = 'Change Password';
+        $child->description = 'Change Password';
+        $child->action = 'preferences@change_password';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = false;
+        $child->type = 'L';
+        $child->save();
 
     }
 

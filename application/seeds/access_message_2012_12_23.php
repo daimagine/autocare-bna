@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class Seed_Access_settlement_2012_12_23 extends S2\Seed {
+class Seed_Access_Message_2012_12_23 extends S2\Seed {
 
     public function grow() {
         $access = new Access();
@@ -22,36 +22,36 @@ class Seed_Access_settlement_2012_12_23 extends S2\Seed {
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Message New';
-        $access->description = 'Message New';
-        $access->action = 'conversation@new';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = false;
-        $access->type = 'L';
-        $access->save();
+        $child->name = 'Message New';
+        $child->description = 'Message New';
+        $child->action = 'conversation@new';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = false;
+        $child->type = 'L';
+        $child->save();
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Message Send';
-        $access->description = 'Message Send';
-        $access->action = 'conversation@send';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = false;
-        $access->type = 'L';
-        $access->save();
+        $child->name = 'Message Send';
+        $child->description = 'Message Send';
+        $child->action = 'conversation@send';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = false;
+        $child->type = 'L';
+        $child->save();
 
         $child = new Access();
         $child->parent_id = $access->id;
-        $access->name = 'Message View';
-        $access->description = 'Message View';
-        $access->action = 'conversation@view';
-        $access->status = true;
-        $access->parent = false;
-        $access->visible = false;
-        $access->type = 'L';
-        $access->save();
+        $child->name = 'Message View';
+        $child->description = 'Message View';
+        $child->action = 'conversation@view';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = false;
+        $child->type = 'L';
+        $child->save();
 
     }
 
