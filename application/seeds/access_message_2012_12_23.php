@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class Seed_Access_settlement_2012_12_23 extends S2\Seed {
+class Seed_Access_Message_2012_12_23 extends S2\Seed {
 
     public function grow() {
         $access = new Access();

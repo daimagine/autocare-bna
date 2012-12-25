@@ -9,11 +9,14 @@
 class ItemCategory  extends Eloquent
 {
     public static $table = 'item_category';
+    public static $timestamps = false;
 
     public function item() {
         return $this->has_many('Item', 'item_category_id')
             ->where('status', '=', statusType::ACTIVE);
     }
+
+
 
     public static function listAll($criteria) {
         $item_category = ItemCategory::with('item');

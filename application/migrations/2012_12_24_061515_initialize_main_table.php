@@ -363,7 +363,7 @@ class Initialize_Main_Table {
         });
 
         //memberships
-        Schema::create('memberships', function($table) {
+        Schema::create('membership', function($table) {
             $table->increments('id');
             $table->string('number', 50);
             $table->integer('discount_id')->unsigned();
@@ -470,7 +470,7 @@ class Initialize_Main_Table {
                 ->on_delete('restrict');
             $table->foreign('membership_id')
                 ->references('id')
-                ->on('memberships')
+                ->on('membership')
                 ->on_update('restrict')
                 ->on_delete('restrict');
             $table->foreign('batch_id')
@@ -509,6 +509,7 @@ class Initialize_Main_Table {
                  ->on_delete('restrict');
          });
 
+        //user_workorde
         Schema::create('user_workorder', function($table) {
             $table->increments('id');
             $table->integer('transaction_id')->unsigned();
@@ -528,6 +529,7 @@ class Initialize_Main_Table {
                 ->on_delete('restrict');
         });
 
+        //message
         Schema::create('message', function($table) {
             $table->increments('id');
             $table->integer('topic_id');
@@ -551,6 +553,8 @@ class Initialize_Main_Table {
                 ->on_delete('restrict');
         });
 
+
+        //item stock flow
         Schema::create('item_stock_flow', function($table) {
             $table->increments('id');
             $table->integer('item_id')->unsigned();
@@ -587,6 +591,7 @@ class Initialize_Main_Table {
                 ->on_delete('restrict');
         });
 
+        //settlement
         Schema::create('settlement', function($table) {
             $table->increments('id');
             $table->decimal('fraction_50', 14, 2)->default(0.0);
@@ -619,6 +624,16 @@ class Initialize_Main_Table {
                 ->on_delete('restrict');
         });
 
+        //news
+         Schema::create('news', function($table) {
+             $table->increments('id');
+             $table->string('title', 150);
+             $table->string('resume', 255)->nullable();
+             $table->string('file_path', 100)->nullable();
+             $table->text('content')->nullable();
+             $table->boolean('status')->default(1);
+             $table->timestamps();
+         });
     }
 
     /**
@@ -657,6 +672,7 @@ class Initialize_Main_Table {
             'message',
             'item_stock_flow',
             'settlement',
+            'news',
         ));
 	}
 
