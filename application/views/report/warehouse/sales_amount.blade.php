@@ -140,18 +140,20 @@
 
     <?php
     $data = $dataGraph;
-    $d=$data['data'];
     $joka='';
-    for($i=0; $i<count($dataGraph['categories']); $i++) {
-        $joka = $joka . "{y: ".strval(($d['y'][$i])).",".
-            "color: colors[".$d['color'][$i]."],".
-            "drilldown: {".
-            "name: '".$d['drilldown']['name'][$i]."',".
-            "categories: ".utilities\Stringutils::js_array($d['drilldown']['categories'][$i]).",".
-            "data: [".implode(',', $d['drilldown']['data'][$i])."],".
-            "color: colors[".$d['drilldown']['color'][$i]."],".
-            "}".
-            "},";
+    if(is_array($data) && array_key_exists('data', $data)) {
+        $d=$data['data'];
+        for($i=0; $i<count($dataGraph['categories']); $i++) {
+            $joka = $joka . "{y: ".strval(($d['y'][$i])).",".
+                "color: colors[".$d['color'][$i]."],".
+                "drilldown: {".
+                "name: '".$d['drilldown']['name'][$i]."',".
+                "categories: ".utilities\Stringutils::js_array($d['drilldown']['categories'][$i]).",".
+                "data: [".implode(',', $d['drilldown']['data'][$i])."],".
+                "color: colors[".$d['drilldown']['color'][$i]."],".
+                "}".
+                "},";
+        }
     }
 
 //    dd($joka);
@@ -161,8 +163,8 @@
         var chart;
         $(document).ready(function() {
             var colors = Highcharts.getOptions().colors,
-                categories = <?php echo utilities\Stringutils::js_array($data['categories']); ?>,
-                name = <?php echo "'".$data['name']."'" ?>,
+                categories = <?php  if($data != null) echo utilities\Stringutils::js_array($data['categories']); ?>,
+                name = <?php if($data != null) echo "'".$data['name']."'" ?>,
                 data = [ <?php echo $joka ?> ];
 
 

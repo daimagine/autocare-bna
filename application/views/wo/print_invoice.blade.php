@@ -12,7 +12,7 @@
 	<script type='text/javascript' src='../../js/wo/print/example.js'></script>
 </head>
 
-<body onload="javascript:print_today()">
+<body onload="javascript:window.print()">
 
 <div style="margin-top: 10px;text-align: center;">
     <a href="javascript:window.print()" class="buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>PRINT</span></a>

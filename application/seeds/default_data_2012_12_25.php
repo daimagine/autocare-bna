@@ -11,18 +11,21 @@ class Seed_Default_Data_2012_12_25 extends S2\Seed {
 
     public function grow() {
         $roleAdmin = new Role();
+        $roleAdmin->id = 1; //static value-> issue value static at program
         $roleAdmin->name = 'Administrator';
         $roleAdmin->status = true;
         $roleAdmin->description = 'Administrator';
         $roleAdmin->save();
 
         $role = new Role();
+        $role->id = 2; //static value-> issue value static at program
         $role->name = 'Operator';
         $role->status = true;
         $role->description = 'Operator';
         $role->save();
 
         $role = new Role();
+        $role->id = 3; //static value-> issue value static at program
         $role->name = 'Mechanic';
         $role->status = true;
         $role->description = 'Mechanic';
@@ -61,7 +64,7 @@ class Seed_Default_Data_2012_12_25 extends S2\Seed {
         $table->save();
 
         $table = new UnitType();
-        $table->item_category_id = $ctgrOil->id;
+        $table->item_category_id = $ctgrAcc->id;
         $table->name = 'Other';
         $table->save();
 
