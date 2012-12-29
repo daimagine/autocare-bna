@@ -35,7 +35,7 @@
 
 return array(
 
-	'docs' => array('handles' => 'docs'),
-    'plant' => array('handles' => 'plant')
+	'docs'  => array('handles' => 'docs'),
+    'plant' => array('handles' => 'plant'),
 
 );
