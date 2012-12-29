@@ -16,6 +16,10 @@ class Conversation_Controller extends Secure_Controller {
         Session::put('active.main.nav', 'conversation@list');
     }
 
+    public function get_index() {
+        $this->get_list();
+    }
+
     public function get_list() {
         $conversations = Conversation::listAll();
         Asset::add('jquery.chosen', 'js/plugins/forms/jquery.chosen.min.js', array('jquery'));

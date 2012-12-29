@@ -57,7 +57,7 @@ class Work_Order_Controller extends Secure_Controller
 
         //------------GET MECHANIC----------------------//
         $lstMechanic=User::listByCiteria(array(
-           'role_id' => 4
+           'role_id' => 3
         ));
         $selectionMechanic = array();
         $selectionMechanic[0] = '-- select mechanic --';

@@ -341,7 +341,10 @@ class Report_Warehouse_Controller extends Secure_Controller {
     }
 
     private function create_sales_graph($items, $type) {
-//        $bulan=array('Jan');
+        if($items === null || count($items) == 0) {
+            return null;
+        }
+
         $bulan=array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');//, 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
         $test = array(
             'categories' => array(),

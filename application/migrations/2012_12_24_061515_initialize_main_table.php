@@ -445,8 +445,8 @@ class Initialize_Main_Table {
             $table->string('invoice_no', 30);
             $table->integer('vehicle_id')->unsigned();
             $table->index('vehicle_id');
-            $table->integer('membership_id')->unsigned();
-            $table->index('membership_id');
+            $table->integer('membership_id')->nullable();
+//            $table->index('membership_id');
             $table->integer('batch_id')->unsigned();
             $table->index('batch_id');
             $table->timestamp('date');
@@ -461,18 +461,18 @@ class Initialize_Main_Table {
             $table->string('basket', 255)->nullable();
             $table->string('description', 255)->nullable();
             $table->timestamp('sync_time');
-            $table->boolean('status')->default(1);
+            $table->string('status', 1);
             $table->timestamps();
             $table->foreign('vehicle_id')
                 ->references('id')
                 ->on('vehicle')
                 ->on_update('restrict')
                 ->on_delete('restrict');
-            $table->foreign('membership_id')
-                ->references('id')
-                ->on('membership')
-                ->on_update('restrict')
-                ->on_delete('restrict');
+//            $table->foreign('membership_id')
+//                ->references('id')
+//                ->on('membership')
+//                ->on_update('restrict')
+//                ->on_delete('restrict');
             $table->foreign('batch_id')
                 ->references('id')
                 ->on('batch')
@@ -559,8 +559,7 @@ class Initialize_Main_Table {
             $table->increments('id');
             $table->integer('item_id')->unsigned();
             $table->index('item_id');
-            $table->integer('account_transaction_id')->unsigned();
-            $table->index('account_transaction_id');
+            $table->integer('account_transaction_id')->nullable();
             $table->integer('quantity')->default(0);
             $table->string('type', 1)->nullable();
             $table->timestamp('date');
@@ -572,11 +571,6 @@ class Initialize_Main_Table {
             $table->foreign('item_id')
                 ->references('id')
                 ->on('item')
-                ->on_update('restrict')
-                ->on_delete('restrict');
-            $table->foreign('account_transaction_id')
-                ->references('id')
-                ->on('account_transactions')
                 ->on_update('restrict')
                 ->on_delete('restrict');
             $table->foreign('configured_by')
@@ -634,6 +628,71 @@ class Initialize_Main_Table {
              $table->boolean('status')->default(1);
              $table->timestamps();
          });
+
+        //transaction_item
+        Schema::create('transaction_service', function($table) {
+            $table->increments('id');
+            $table->integer('transaction_id')->unsigned();
+            $table->index('transaction_id');
+            $table->integer('service_formula_id')->unsigned();
+            $table->index('service_formula_id');
+            $table->float('tax')->default(0);
+            $table->decimal('tax_amount', 14, 2)->default(0);
+            $table->string('description', 255)->nullable();
+            $table->foreign('transaction_id')
+                ->references('id')
+                ->on('transaction')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('service_formula_id')
+                ->references('id')
+                ->on('service_formula')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+        });
+
+
+        //batch_service
+        Schema::create('batch_service', function($table) {
+            $table->increments('id');
+            $table->integer('batch_id')->unsigned();
+            $table->index('batch_id');
+            $table->integer('service_id')->unsigned();
+            $table->index('service_id');
+            $table->float('sales_count')->default(0);
+            $table->decimal('sales_amount', 14, 2)->default(0);
+            $table->foreign('batch_id')
+                ->references('id')
+                ->on('batch')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('service_id')
+                ->references('id')
+                ->on('service')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+        });
+
+        //batch_item
+        Schema::create('batch_item', function($table) {
+            $table->increments('id');
+            $table->integer('batch_id')->unsigned();
+            $table->index('batch_id');
+            $table->integer('item_id')->unsigned();
+            $table->index('item_id');
+            $table->float('sales_count')->default(0);
+            $table->decimal('sales_amount', 14, 2)->default(0);
+            $table->foreign('batch_id')
+                ->references('id')
+                ->on('batch')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+            $table->foreign('item_id')
+                ->references('id')
+                ->on('item')
+                ->on_update('restrict')
+                ->on_delete('restrict');
+        });
     }
 
     /**
@@ -668,11 +727,14 @@ class Initialize_Main_Table {
             'service_formula',
             'transaction',
             'transaction_item',
+            'transaction_service',
             'user_workorder',
             'message',
             'item_stock_flow',
             'settlement',
             'news',
+            'batch_service',
+            'batch_item',
         ));
 	}
 
