@@ -80,6 +80,7 @@
             </div>
         </div>
     </form>
+    <div class="clear"></div>
 
     <div class="divider"><span></span></div>
 

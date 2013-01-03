@@ -74,6 +74,7 @@
             </div>
         </div>
     </form>
+    <div class="clear"></div>
 
     <div class="divider"><span></span></div>
 
@@ -136,7 +137,7 @@
     $data = array(
         array(
             'name' => 'WO Amount',
-            'data' => []
+            'data' => array()
         )
     );
     foreach($transactions as $a) :
