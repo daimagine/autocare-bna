@@ -29,9 +29,30 @@
                                 @if($vh->membership != null)
                                     <ul>
                                         <li class="on_off">
-                                            <label><span class="icos-postcard"></span>Membership Number &nbsp; <a href="#" class="red">{{ $vh->membership->number }}</a> </label>
+                                            <label>
+                                                <span class="icos-postcard"></span>Membership Number &nbsp; <a href="#" class="red">{{ $vh->membership->number }}</a>
+                                            </label>
                                             <div class="clear"></div>
                                         </li>
+                                        @if(strtotime($vh->membership->expiry_date) < strtotime(date('Y-m-d H:i:s')))
+                                            <li class="on_off">
+                                                <label>
+                                                    <span class="icos-block"></span><span class="red">EXPIRED</span>
+                                                </label>
+                                                <div class="clear"></div>
+                                            </li>
+                                            <li class="on_off">
+                                                <label>
+                                                    <span class="icos-cross"></span>
+                                                    <a href="/member/delete/{{ $vh->membership->id }}"
+                                                       class="appconfirm pointer red"
+                                                       dialog-confirm-title="Remove Confirmation">Revoke Membership
+                                                    </a>
+                                                </label>
+                                                <div class="clear"></div>
+                                            </li>
+                                        @endif
+
                                         <li class="on_off">
                                             <label><span class="icos-cog2"></span>
                                                 <a href="#memberDetail" class="pointer" onclick="detailMember('{{ $vh->membership->id }}')">Show Detail</a>

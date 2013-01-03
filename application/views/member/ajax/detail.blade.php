@@ -17,7 +17,7 @@
             <div class="clear"></div>
         </li>
         <li class="on_off">
-            <label><span class="icos-dates"></span>Membership valid until &nbsp; {{ date('d F Y', strtotime($member->registration_date)) }} </label>
+            <label><span class="icos-dates"></span>Membership valid until &nbsp; {{ date('d F Y', strtotime($member->expiry_date)) }} </label>
             <div class="clear"></div>
         </li>
         <li class="on_off">

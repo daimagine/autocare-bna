@@ -113,7 +113,8 @@ class Member extends Eloquent {
 
     public static function remove($id) {
         $member = Member::find($id);
-        return $member->delete();
+        $member->status = false;
+        return $member->save();
     }
 	
 	public function get_description() {

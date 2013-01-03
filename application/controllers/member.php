@@ -20,7 +20,7 @@ class Member_Controller extends Secure_Controller {
 
     public function get_list() {
         $criteria = array();
-        $member = Customer::allWithMembership($criteria);
+        $member = Customer::where_status(true)->get();
         //dd($member);
 		$allDisc = Discount::listAll();
 		$discounts = array();

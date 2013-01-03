@@ -17,7 +17,8 @@ class Vehicle extends Eloquent {
     }
 
     public function membership() {
-        return $this->has_one('Member', 'vehicle_id');
+        return $this->has_one('Member', 'vehicle_id')
+            ->where('status','=',1);
     }
 
 	public function get_owner() {
