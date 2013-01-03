@@ -87,12 +87,14 @@ class Initialize_Main_Table {
             $table->timestamps();
         });
 
+
         //service
         Schema::create('service', function($table) {
             $table->increments('id');
             $table->string('name', 120);
             $table->string('description', 255)->nullable();
             $table->boolean('status')->default(true);
+            $table->timestamps();
         });
 
         //item_category
@@ -102,6 +104,7 @@ class Initialize_Main_Table {
             $table->string('description', 255)->nullable();
             $table->boolean('status')->default(true);
             $table->string('picture', 100);
+            $table->timestamps();
         });
 
         //unit_type
@@ -111,6 +114,7 @@ class Initialize_Main_Table {
             $table->string('goods_type', 1)->nullable();
             $table->integer('item_category_id')->unsigned();
             $table->index('item_category_id');
+            $table->timestamps();
             $table->foreign('item_category_id')
                 ->references('id')
                 ->on('item_category')
@@ -126,6 +130,7 @@ class Initialize_Main_Table {
             $table->string('name', 80);
             $table->string('description', 255)->nullable();
             $table->boolean('status')->default(true);
+            $table->timestamps();
             $table->foreign('item_category_id')
                 ->references('id')
                 ->on('item_category')
@@ -205,6 +210,7 @@ class Initialize_Main_Table {
             $table->boolean('status')->default(true);
             $table->timestamp('date');
             $table->timestamp('expiry_date');
+            $table->timestamps();
             $table->foreign('item_id')
                 ->references('id')
                 ->on('item')
@@ -492,6 +498,7 @@ class Initialize_Main_Table {
              $table->index('transaction_id');
              $table->integer('quantity')->default(0);
              $table->string('description', 255)->nullable();
+             $table->timestamps();
              $table->foreign('item_id')
                  ->references('id')
                  ->on('item')
@@ -517,6 +524,7 @@ class Initialize_Main_Table {
             $table->integer('user_id')->unsigned();
             $table->index('user_id');
             $table->string('description', 255)->nullable();
+            $table->timestamps();
             $table->foreign('transaction_id')
                 ->references('id')
                 ->on('transaction')
@@ -568,6 +576,7 @@ class Initialize_Main_Table {
             $table->index('configured_by');
             $table->integer('sub_account_trx_id')->unsigned();
             $table->index('sub_account_trx_id');
+            $table->timestamps();
             $table->foreign('item_id')
                 ->references('id')
                 ->on('item')
@@ -629,7 +638,7 @@ class Initialize_Main_Table {
              $table->timestamps();
          });
 
-        //transaction_item
+        //transaction_service
         Schema::create('transaction_service', function($table) {
             $table->increments('id');
             $table->integer('transaction_id')->unsigned();
@@ -639,6 +648,7 @@ class Initialize_Main_Table {
             $table->float('tax')->default(0);
             $table->decimal('tax_amount', 14, 2)->default(0);
             $table->string('description', 255)->nullable();
+            $table->timestamps();
             $table->foreign('transaction_id')
                 ->references('id')
                 ->on('transaction')
@@ -661,6 +671,7 @@ class Initialize_Main_Table {
             $table->index('service_id');
             $table->float('sales_count')->default(0);
             $table->decimal('sales_amount', 14, 2)->default(0);
+            $table->timestamps();
             $table->foreign('batch_id')
                 ->references('id')
                 ->on('batch')
@@ -682,6 +693,7 @@ class Initialize_Main_Table {
             $table->index('item_id');
             $table->float('sales_count')->default(0);
             $table->decimal('sales_amount', 14, 2)->default(0);
+            $table->timestamps();
             $table->foreign('batch_id')
                 ->references('id')
                 ->on('batch')
