@@ -11,7 +11,7 @@
         <li>
             <div class="exp pointer">
                 <div class="wNews">
-                    <a href="#" title="" class="headline"><img src="/images/live/face2.png" alt=""></a>
+                    <a href="#" title="" class="headline"></a>
                     <div class="announce">
                         <a href="#" title="">{{ $m->name }}</a>
                         <span>{{ $m->address1 . ' ' . $m->address2 }}</span>

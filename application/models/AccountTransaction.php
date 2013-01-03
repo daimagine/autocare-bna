@@ -128,6 +128,20 @@ class AccountTransaction extends Eloquent {
         return $data;
     }
 
+    public static function getAll($type=AUTOCARE_ACCOUNT_TYPE_DEBIT, $paid=null) {
+        $tbl = static::$table;
+        $paid_criteria = "";
+        if($paid !== null) {
+            if($paid) {
+                $paid_criteria = "AND $tbl.paid_date IS NOT NULL";
+            } else {
+                $paid_criteria = "AND ( $tbl.paid_date IS NULL OR $tbl.paid < $tbl.due )";
+            }
+        }
+        $query = "SELECT * FROM $tbl INNER JOIN account ON account.id = $tbl.account_id WHERE $tbl.status = TRUE AND $tbl.type = ? " . $paid_criteria;
+        return DB::query($query, array($type));
+    }
+
     public static function monthly($criteria=array()) {
         $param = array();
         $criterion = array();

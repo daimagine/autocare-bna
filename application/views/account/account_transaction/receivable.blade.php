@@ -39,7 +39,7 @@
             <tbody>
             @foreach($accounts as $account)
             <tr class="">
-                <td>{{ $account->account->name }}</td>
+                <td>{{ $account->name }}</td>
                 <td>{{ $account->invoice_no }}</td>
                 <td>{{ $account->reference_no }}</td>
                 <td>{{ $account->subject }}</td>

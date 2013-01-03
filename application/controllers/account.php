@@ -130,10 +130,12 @@ class Account_Controller extends Secure_Controller {
         $referenceNo = AccountTransaction::reference_new();
         $data = Session::get('accountTrans');
         $accounts = Account::allSelect(array(
-            'category' => array('=', AccountCategory::ITEM)
+            'category' => array('=', AccountCategory::ITEM),
+            'type' => array('=', $type)
         ));
         $accountAccountings = Account::allSelect(array(
-            'category' => array('=', AccountCategory::ACCOUNTING)
+            'category' => array('=', AccountCategory::ACCOUNTING),
+            'type' => array('=', $type)
         ));
         return $this->layout->nest('content', 'account.account_transaction.add', array(
             'accountTrans' => $data,
@@ -170,15 +172,15 @@ class Account_Controller extends Secure_Controller {
         }
     }
 
-    public function get_account_receivable($type=null) {
-        $criteria = array(
-            'type' => array('=', AUTOCARE_ACCOUNT_TYPE_DEBIT)
-        );
-        if($type === 'paid')
-            $criteria['paid_date'] = array( 'not_null', '' );
-        elseif($type === 'unpaid')
-            $criteria['paid_date'] = array( 'null', '' );
-        $accounts = AccountTransaction::listAll($criteria);
+    public function get_account_receivable($paid=null) {
+        $paid_criteria = null;
+        if($paid === 'paid')
+            $paid_criteria = true;
+        elseif($paid === 'unpaid') {
+            $paid_criteria = false;
+        }
+        $type = AUTOCARE_ACCOUNT_TYPE_DEBIT;
+        $accounts = AccountTransaction::getAll($type, $paid_criteria);
 
         Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
         Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));

@@ -168,7 +168,8 @@ $(function() {
     //===== Collapsible elements management =====//
 
     $('.exp').collapsible({
-        defaultOpen: 'current',
+        //defaultOpen: 'current',
+        defaultOpen: 'toggleOpened',
         cookieName: 'navAct',
         cssOpen: 'subOpened',
         cssClose: 'subClosed',
@@ -208,7 +209,7 @@ $(function() {
     //===== Animated dropdown for the right links group on breadcrumbs line =====//
 
     $('.breadLinks ul li').click(function () {
-        $(this).children("ul").slideToggle(150);
+        //$(this).children("ul").slideToggle(150);
     });
     $(document).bind('click', function(e) {
         var $clicked = $(e.target);
