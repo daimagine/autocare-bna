@@ -16,6 +16,18 @@
             </div>
         </div>
 
+        <div class="widget">
+            <div class="whead">
+                <h6>XML Example</h6>
+                <div class="clear"></div>
+            </div>
+            <div class="body">
+                <div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </div>

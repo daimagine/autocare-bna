@@ -22,10 +22,22 @@
                     <li class="tipN" title="Logout">{{ HTML::link('logout', '', array('class' => 'logout')) }}</li>
                     <li class="showTabletP"><a href="#" title="" class="sidebar"></a></li>
                 </ul>
+                <a title="" class="iButton"></a>
+                <a title="" class="iTop"></a>
+                <div class="topSearch">
+                    <div class="topDropArrow"></div>
+                    <!--form action="">
+                        <input type="text" placeholder="search..." name="topSearch" />
+                        <input type="submit" value="" />
+                    </form-->
+                </div>
             </div>
 
             <!-- Responsive nav -->
             <ul class="altMenu">
+                @section('navigation')
+                    {{ HTML::alt_nav() }}
+                @yield_section
             </ul>
             <div class="clear"></div>
         </div>

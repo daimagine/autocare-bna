@@ -181,3 +181,40 @@ HTML::macro('sub_nav', function() {
     echo $html;
 
 });
+
+
+/**
+ * Alternate navigation (Media Queries 483px)
+ */
+HTML::macro('alt_nav', function() {
+    $mainActive = Session::get('active.main.nav');
+    $html = '';
+    foreach(Auth::navigation() as $menu) {
+        $html .= '<li><a href="';
+        if(isset($menu['childs']) && $menu['childs'] != null) {
+            $html .= '#';
+        } else {
+            $html .= URL::to_action($menu['action']);
+        }
+        $html .= '"';
+        if($menu['action'] == $mainActive) {
+            $html .= 'id="current"';
+        }
+        if(isset($menu['childs']) && $menu['childs'] != null) {
+            $html .= 'class="exp"';
+        }
+        $html .= '>' . $menu['title'] . '</a>';
+        if(isset($menu['childs']) && $menu['childs'] != null) {
+            $html .= '<ul>';
+            foreach($menu['childs'] as $child) {
+                $html .= '<li><a href="' . URL::to_action($child['action']) . '">';
+                $html .= $child['title'];
+                $html .= '</a></li>';
+            }
+            $html .= '</ul>';
+        }
+        $html .= '</li>';
+    }
+    $html .= '<li><a href="' . URL::to_action('/logout') . '"><span>Logout</span></a></li>';
+    echo $html;
+});

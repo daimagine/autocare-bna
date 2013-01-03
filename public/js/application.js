@@ -43,6 +43,28 @@ $(function() {
         draggingClass:"dragging"
     });
 
+    //===== 2 responsive buttons (320px - 480px) =====//
+
+    $('.iTop').click(function () {
+        $('#sidebar').slideToggle(100);
+    });
+
+    $('.iButton').click(function () {
+        $('.altMenu').slideToggle(100);
+    });
+
+
+    //===== Animated dropdown for the right links group on breadcrumbs line =====//
+
+    $('.breadLinks ul li').click(function () {
+        $(this).children("ul").slideToggle(150);
+    });
+    $(document).bind('click', function(e) {
+        var $clicked = $(e.target);
+        if (! $clicked.parents().hasClass("has"))
+            $('.breadLinks ul li').children("ul").slideUp(150);
+    });
+
     //===== Dynamic data table =====//
 
     oTable = $('.dTable').dataTable({
@@ -143,6 +165,41 @@ $(function() {
     };
 
 
+    //===== Collapsible elements management =====//
+
+    $('.exp').collapsible({
+        defaultOpen: 'current',
+        cookieName: 'navAct',
+        cssOpen: 'subOpened',
+        cssClose: 'subClosed',
+        speed: 200
+    });
+
+    $('.opened').collapsible({
+        defaultOpen: 'opened,toggleOpened',
+        cssOpen: 'inactive',
+        cssClose: 'normal',
+        speed: 200
+    });
+
+    $('.closed').collapsible({
+        defaultOpen: '',
+        cssOpen: 'inactive',
+        cssClose: 'normal',
+        speed: 200
+    });
+
+
+    //===== Accordion =====//
+
+    $('div.menu_body:eq(0)').show();
+    $('.acc .whead:eq(0)').show().css({color:"#2B6893"});
+
+    $(".acc .whead").click(function() {
+        $(this).css({color:"#2B6893"}).next("div.menu_body").slideToggle(200).siblings("div.menu_body").slideUp("slow");
+        $(this).siblings().css({color:"#404040"});
+    });
+
     //===== Breadcrumbs =====//
 
     $('#breadcrumbs').xBreadcrumbs();
@@ -199,30 +256,6 @@ $(function() {
     //===== Form elements styling =====//
     $("select, .check, .check :checkbox, input:radio, input:file").uniform();
 
-
-    //===== Collapsible elements management =====//
-
-    $('.exp').collapsible({
-        defaultOpen: 'current',
-        cookieName: 'navAct',
-        cssOpen: 'subOpened',
-        cssClose: 'subClosed',
-        speed: 200
-    });
-
-    $('.opened').collapsible({
-        defaultOpen: 'opened,toggleOpened',
-        cssOpen: 'inactive',
-        cssClose: 'normal',
-        speed: 200
-    });
-
-    $('.closed').collapsible({
-        defaultOpen: '',
-        cssOpen: 'inactive',
-        cssClose: 'normal',
-        speed: 200
-    });
 	
 	$( "#dialog:ui-dialog" ).dialog( "destroy" );
 	

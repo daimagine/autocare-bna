@@ -134,6 +134,6 @@ class Seed_Default_Data_2012_12_25 extends S2\Seed {
 
 
     public function order() {
-        return 1;
+        return 15;
     }
 }

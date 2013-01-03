@@ -111,5 +111,9 @@ return array(
         'report/finance/part_monthly',
 
         'home/sandbox',
+
+        'sync/local/sync_data',
+        'sync/production/fetch_last_id',
+        'sync/production/sync_data',
     ),
 );
