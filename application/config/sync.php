@@ -18,7 +18,21 @@ return array(
      */
 
     'tables' => array(
+        'access',
+        'account',
+        'autocare_properties',
+        'customer',
+        'discount',
+        'item_category',
+        'service',
         'role',
+
+        'user',
+        'item_type',
+        'unit_type',
+
+        'memberships',
+        'role_access',
     ),
 
     /*
@@ -40,8 +54,11 @@ return array(
      */
 
     'url' => array(
-        'last_id'   => 'http://mirror.autocare-bna.dev/sync/production/fetch_last_id',
-        'sync_data' => 'http://mirror.autocare-bna.dev/sync/production/sync_data',
+        //'last_id'   => 'http://mirror.autocare-bna.dev/sync/production/fetch_last_id',
+        //'sync_data' => 'http://mirror.autocare-bna.dev/sync/production/sync_data',
+
+        'last_id'   => 'http://autocare-bna.com/sync/production/fetch_last_id',
+        'sync_data' => 'http://autocare-bna.com/sync/production/sync_data',
     )
 
 );
