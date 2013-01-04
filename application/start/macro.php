@@ -205,7 +205,7 @@ HTML::macro('alt_nav', function() {
         }
         $html .= '>' . $menu['title'] . '</a>';
         if(isset($menu['childs']) && $menu['childs'] != null) {
-            $html .= '<ul>';
+            $html .= '<ul class="leftSubMenu">';
             foreach($menu['childs'] as $child) {
                 $html .= '<li><a href="' . URL::to_action($child['action']) . '">';
                 $html .= $child['title'];

@@ -734,7 +734,7 @@ class Initialize_Main_Table {
             'sub_account_trx',
             'conversation_user',
             'vehicle',
-            'memberships',
+            'membership',
             'role_access',
             'service_formula',
             'transaction',

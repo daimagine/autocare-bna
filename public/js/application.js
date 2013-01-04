@@ -189,7 +189,12 @@ $(function() {
         cssClose: 'normal',
         speed: 200
     });
-
+    $(document).bind('click', function(e) {
+        var $clicked = $(e.target);
+//        var classvalue = $clicked.hasClass("exp");
+        if (!$clicked.hasClass("exp"))
+            $(".leftSubMenu").slideUp(200);
+    });
 
     //===== Accordion =====//
 
