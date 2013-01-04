@@ -167,8 +167,35 @@ $(function() {
 
     //===== Collapsible elements management =====//
 
+    $(document).bind('click', function(e) {
+        var closeit = false;
+        var $clicked = $(e.target);
+        var $opened = $('.exp.subOpened');
+        $opened.each(function() {
+            var a = $(this).html() === $clicked.html();
+            if(a === false) {
+                //console.log($(this).parent().find(".leftSubMenu"));
+                $(this).parent().find(".leftSubMenu").slideUp(200);
+                $(this).removeClass('subOpened');
+                $(this).addClass('subClosed');
+            }
+        });
+        if (!$clicked.hasClass("exp")){
+            closeit = true;
+        }
+        if(closeit === true) {
+            $(".leftSubMenu").slideUp(200);
+//            console.log($clicked);
+            //switching all subOpened into subClosed
+            var $open = $('.exp.subOpened');
+            $open.removeClass('subOpened');
+            $open.addClass('subClosed');
+        }
+    });
+
     $('.exp').collapsible({
         //defaultOpen: 'current',
+        create: function(event, ui) { console.log('Show when collapse');},
         defaultOpen: 'toggleOpened',
         cookieName: 'navAct',
         cssOpen: 'subOpened',
@@ -189,12 +216,8 @@ $(function() {
         cssClose: 'normal',
         speed: 200
     });
-    $(document).bind('click', function(e) {
-        var $clicked = $(e.target);
-//        var classvalue = $clicked.hasClass("exp");
-        if (!$clicked.hasClass("exp"))
-            $(".leftSubMenu").slideUp(200);
-    });
+
+
 
     //===== Accordion =====//
 
