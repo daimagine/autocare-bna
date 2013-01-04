@@ -10,7 +10,7 @@
 class Service extends Eloquent {
 
     public static $table = 'service';
-    public static $timestamps = false;
+//    public static $timestamps = false;
 
     public function service_formula() {
         return $this->has_many('ServiceFormula', 'service_id')

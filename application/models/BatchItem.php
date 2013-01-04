@@ -9,7 +9,7 @@
 class BatchItem extends Eloquent {
 
     public static $table = 'batch_item';
-    public static $timestamps = false;
+//    public static $timestamps = false;
 
     //===jo edit====//
     public static function getSingleResult($criteria) {

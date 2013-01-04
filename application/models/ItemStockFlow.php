@@ -10,7 +10,7 @@
 class ItemStockFlow extends Eloquent {
 
     public static $table = 'item_stock_flow';
-    public static $timestamps = false;
+//    public static $timestamps = false;
 
     public function item() {
         return $this->belongs_to('Item', 'item_id');

@@ -9,7 +9,7 @@
 class ItemCategory  extends Eloquent
 {
     public static $table = 'item_category';
-    public static $timestamps = false;
+//    public static $timestamps = false;
 
     public function item() {
         return $this->has_many('Item', 'item_category_id')

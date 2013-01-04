@@ -10,7 +10,7 @@
 class Transaction extends Eloquent {
 
     public static $table = 'transaction';
-    public static $timestamps = false;
+//    public static $timestamps = false;
 
     public static $sqlformat = 'Y-m-d H:i:s';
     public static $yyyymmdd_format = 'Ymd';

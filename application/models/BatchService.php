@@ -9,7 +9,7 @@
 class BatchService extends Eloquent {
 
     public static $table = 'batch_service';
-    public static $timestamps = false;
+//    public static $timestamps = false;
 
     //===jo edit====//
     public static function getSingleResult($criteria) {

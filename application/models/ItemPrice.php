@@ -10,7 +10,7 @@
 class ItemPrice extends Eloquent {
 
     public static $table = 'item_price';
-    public static $timestamps = false;
+//    public static $timestamps = false;
    public static $criteria;
 
     public function users() {

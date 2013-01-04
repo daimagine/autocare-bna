@@ -10,7 +10,7 @@
 class UnitType extends Eloquent{
 
     public static $table = 'unit_type';
-    public static $timestamps = false;
+//    public static $timestamps = false;
 
     public function item_category() {
         return $this->belongs_to('ItemCategory');
