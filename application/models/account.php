@@ -31,6 +31,7 @@ class Account extends Eloquent {
         $account->description = @$data['description'];
         $account->type = @$data['type'];
         $account->status = $data['status'];
+        $account->category = $data['category'];
         //save
         $account->save();
         return $account->id;
@@ -42,6 +43,7 @@ class Account extends Eloquent {
         $account->description = @$data['description'];
         $account->type = @$data['type'];
         $account->status = $data['status'];
+        $account->category = $data['category'];
         $account->save();
         return $account->id;
     }

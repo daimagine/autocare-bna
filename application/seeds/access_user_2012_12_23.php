@@ -75,6 +75,17 @@ class Seed_Access_user_2012_12_23 extends S2\Seed {
         $child->type = 'L';
         $child->save();
 
+        $child = new Access();
+        $child->parent_id = $access->id;
+        $child->name = 'User Update Password';
+        $child->description = 'User Update Password';
+        $child->action = 'user@update_password';
+        $child->status = true;
+        $child->parent = false;
+        $child->visible = false;
+        $child->type = 'L';
+        $child->save();
+
     }
 
     public function order() {

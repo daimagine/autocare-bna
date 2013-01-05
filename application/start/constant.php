@@ -62,6 +62,15 @@ abstract class batchStatus {
 
 abstract class AccountCategory {
     const   ITEM = 'I',
-            ACCOUNTING = 'A'
+            ACCOUNTING = 'A',
+            ASSET = 'O' //own asset
+    ;
+}
+
+
+abstract class AssetCondition {
+    const   GOOD = 'G', //this condition for new asset
+        FAIR = 'F', //this condition if asset still can used but not on good condition
+        BAD = 'B' //this condition it's mean the asset can't be used again
     ;
 }

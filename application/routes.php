@@ -42,6 +42,7 @@ Route::get('account/edit/(:num)', 'account@edit');
 Route::get('discount/edit/(:num)', 'discount@edit');
 Route::get('member/edit/(:num)', 'member@edit');
 Route::get('item/edit/(:num)', 'item@edit');
+Route::get('asset_activa/edit/(:num)', 'asset_activa@edit');
 Route::get('service/edit/(:num)', 'service@edit');
 Route::get('account/invoice_edit/(:any)/(:num)', 'account@invoice_edit');
 Route::get('customer/edit/(:num)', 'customer@edit');
@@ -52,7 +53,7 @@ Route::get('settlement/edit/(:num)', 'settlement@edit');
 
 Route::controller(array(
     'home', 'user', 'role', 'access', 'account', 'discount', 'member', 'item', 'customer', 'vehicle',
-    'service', 'work_order', 'news', 'preferences', 'settlement', 'conversation',
+    'service', 'work_order', 'news', 'preferences', 'settlement', 'conversation', 'asset_activa',
     'report.dashboard', 'report.account', 'report.transaction', 'report.warehouse', 'report.finance',
     'sync.local', 'sync.production'
 ));

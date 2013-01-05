@@ -284,7 +284,8 @@ class Item_Controller extends Secure_Controller {
             'approved_status' => approvedStatus::NEW_ACCOUNT_INVOICE,
             'account_trx_id' => null,
             'account_trx_status' => accountTrxStatus::AWAITING_PAYMENT,
-            'account_trx_type' => AUTOCARE_ACCOUNT_TYPE_CREDIT
+            'account_trx_type' => AUTOCARE_ACCOUNT_TYPE_CREDIT,
+            'account_category' => AccountCategory::ITEM,
         ));
         return $lstAte;
     }
@@ -451,6 +452,7 @@ class Item_Controller extends Secure_Controller {
                             Session::flash('message', 'Success Closed');
                         } else {
                             Session::flash('message_error', 'Failed Closed approved invoice');
+                            return Redirect::to('item/list_approved');
                         }
                     } else {
                         $item = Item::find($data['item_id']);
@@ -465,6 +467,7 @@ class Item_Controller extends Secure_Controller {
                             Session::flash('message', 'Success Closed');
                         } else {
                             Session::flash('message_error', 'Failed Closed approved invoice');
+                            return Redirect::to('item/list_approved');
                         }
                     }
                 }
