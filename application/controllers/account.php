@@ -130,7 +130,7 @@ class Account_Controller extends Secure_Controller {
         $referenceNo = AccountTransaction::reference_new();
         $data = Session::get('accountTrans');
         $accounts = Account::allSelect(array(
-            'category' => array('=', AccountCategory::ITEM),
+            //'category' => array('=', AccountCategory::ITEM),
             'type' => array('=', $type)
         ));
         $accountAccountings = Account::allSelect(array(
