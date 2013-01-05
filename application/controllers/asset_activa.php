@@ -104,7 +104,7 @@ class Asset_Activa_Controller extends Secure_Controller {
 
     public function get_list_approved(){
         Session::forget(ACCOUNT_TRX_ID);
-        $lstSubAte=Asset_Controller::get_lstSubAccountTrx(null);
+        $lstSubAte=$this::get_lstSubAccountTrx(null);
 //        dd($lstSubAte);
         return $this->layout->nest('content', 'asset.listapproved', array(
             'lstSubAte' => $lstSubAte
