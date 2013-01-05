@@ -118,6 +118,12 @@
     </div>
 </div>
 
+<style type="text/css">
+    .ui-datepicker-calendar {
+        display: none;
+    }
+</style>
+
 @endsection
 
 

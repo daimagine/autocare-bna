@@ -355,6 +355,9 @@ class Item_Controller extends Secure_Controller {
             Session::flash('message', 'System Failed');
             return Redirect::to('/');
         }
+        //get price for this sub account transaction
+        $actTrx=SubAccountTrx::find($subAccountTrxId);
+//        dd($actTrx);
 
         $item_category = ItemCategory::find($id);
         if ($item_category==null) {
@@ -381,7 +384,8 @@ class Item_Controller extends Secure_Controller {
             'itemType' => $selectionType,
             'unitType'  => $selectionUnit,
             'itemCategory' => $item_category,
-            'sub_account_trx_id' => $subAccountTrxId
+            'sub_account_trx_id' => $subAccountTrxId,
+            'purchase_price' => $actTrx->unit_price,
         ));
     }
 

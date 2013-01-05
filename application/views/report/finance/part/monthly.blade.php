@@ -32,7 +32,11 @@
                 <div class="grid6">
                     <ul class="timeRange">
                         <li style="width:120px; margin-top:2px;">Start Date</li>
-                        <li><input name="startdate" type="text" class="datepicker" value="{{ $startdate }}" /></li>
+                        <li>
+                            <input name="startdateDisplay" type="text" class="monthpicker" value="{{ date('F Y', strtotime($startdate)) }}" data-mask="startdate"/>
+                            <input type="hidden" id="startdate" name="startdate" value="{{ $startdate }}"/>
+                        </li>
+<!--                        <li><input name="startdate" type="text" class="datepicker" value="{{ $startdate }}" /></li>-->
                     </ul>
                     <div class="clear"></div>
                     <ul class="timeRange fixoptTime">
@@ -64,7 +68,11 @@
                 <div class="grid6">
                     <ul class="timeRange">
                         <li style="width:120px; margin-top:2px;">End Date</li>
-                        <li><input name="enddate" type="text" class="datepicker" value="{{ $enddate }}" /></li>
+<!--                        <li><input name="enddate" type="text" class="datepicker" value="{{ $enddate }}" /></li>-->
+                        <li>
+                            <input name="enddateDisplay" type="text" class="monthpicker" value="{{ date('F Y', strtotime($enddate)) }}" data-mask="enddate"/>
+                            <input type="hidden" id="enddate" name="enddate" value="{{ $enddate }}"/>
+                        </li>
                     </ul>
                     <div class="clear"></div>
                     <ul class="timeRange fixoptTime">
@@ -143,6 +151,12 @@
         <div id="container-chart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
     </div>
 </div>
+
+<style type="text/css">
+    .ui-datepicker-calendar {
+        display: none;
+    }
+</style>
 
 @endsection
 

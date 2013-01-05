@@ -76,7 +76,7 @@
                 </div>
                 <div class="dialogSelect m10">
                     <label>Purchase Price *</label><br>
-                    <input type="text" id="itempurchase_price" name="purchase_price" class="required"/>
+                    <input type="text" id="itempurchase_price" name="purchase_price" class="required" value="{{$purchase_price}}"/>
                 </div>
                 <div class="dialogSelect m10">
                     <label>Vendor</label><br>
