@@ -127,7 +127,7 @@ class Service extends Eloquent {
         $q =    "SELECT ".
                     "s.name as service_desc, ".
                     "count(distinct ts.id) as service_count, ".
-                    "sum(t.amount) as amount, ".
+                    "sum(sf.price) as amount, ".
                     "date(t.date) as service_date ".
                 "FROM transaction t ".
                     "INNER JOIN transaction_service AS ts ON ts.transaction_id = t.id ".
@@ -187,7 +187,7 @@ class Service extends Eloquent {
                     "Date_add(t.date, INTERVAL(7-Dayofweek(t.date)) day) AS week_end, ".
                     "s.name as service_desc, ".
                     "count(distinct ts.id) as service_count, ".
-                    "sum(t.amount) as amount ";
+                    "sum(sf.price) as amount ";
 
         $q .=   "FROM transaction t ".
                     "INNER JOIN transaction_service AS ts ON ts.transaction_id = t.id ".
@@ -239,7 +239,7 @@ class Service extends Eloquent {
                     "monthname(t.date) AS monthname, ".
                     "s.name as service_desc, ".
                     "count(distinct ts.id) as service_count, ".
-                    "sum(t.amount) as amount ";
+                    "sum(sf.price) as amount ";
 
         $q .=   "FROM transaction t ".
                     "INNER JOIN transaction_service AS ts ON ts.transaction_id = t.id ".

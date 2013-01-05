@@ -133,12 +133,12 @@ class AccountTransaction extends Eloquent {
         $paid_criteria = "";
         if($paid !== null) {
             if($paid) {
-                $paid_criteria = "AND $tbl.paid_date IS NOT NULL";
+                $paid_criteria = "AND at.paid_date IS NOT NULL";
             } else {
-                $paid_criteria = "AND ( $tbl.paid_date IS NULL OR $tbl.paid < $tbl.due )";
+                $paid_criteria = "AND ( at.paid_date IS NULL OR at.paid < at.due )";
             }
         }
-        $query = "SELECT * FROM $tbl INNER JOIN account ON account.id = $tbl.account_id WHERE $tbl.status = TRUE AND $tbl.type = ? " . $paid_criteria;
+        $query = "SELECT at.*, ac.name as account_name FROM $tbl as at INNER JOIN account as ac ON ac.id = at.account_id WHERE at.status = TRUE AND at.type = ? " . $paid_criteria;
         return DB::query($query, array($type));
     }
 

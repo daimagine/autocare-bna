@@ -189,16 +189,19 @@ class Customer extends Eloquent {
 	}
 	
 	public static function updateMembership($id, $data) {
-		$discount = Discount::find($data['discount_id'])->first();
+        //dd($data['discount_id']);
+		$discount = Discount::find(intval($data['discount_id']));
+        //dd(DB::last_query());
 		//dd($discount);
+        $id = intval($id);
         $vehicle = Vehicle::find($id);
 
 		//cleanup membership
-//		$affected = DB::table('membership')
-//			->where('vehicle_id', '=', $vehicle->id)
+		$affected = DB::table('membership')
+			->where('vehicle_id', '=', $vehicle->id)
+			->update(array('status' => 'false'));
 //			->delete();
-			//->update(array('status' => 'false'));
-			
+
 		//save membership
 		$registration_date = date(static::$sqlformat);// registration_date
 		$period = $discount->duration_period == 'M' ? 'month' : 

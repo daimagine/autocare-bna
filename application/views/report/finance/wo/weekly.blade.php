@@ -89,7 +89,7 @@
                 <th>Total Closed</th>
                 <th>Total Canceled</th>
                 <th>Amount</th>
-                <th>Action</th>
+<!--                <th>Action</th>-->
             </tr>
             </thead>
 
@@ -103,11 +103,11 @@
                 <td>{{ $transaction->total_canceled }}</td>
                 <td>IDR {{  number_format($transaction->total_amount, 2) }}</td>
 
-                <td class="tableActs" align="center">
-                    <a href="#detail" class="tablectrl_small bDefault tipS" original-title="Detail">
-                        <span class="iconb" data-icon=""></span>
-                    </a>
-                </td>
+<!--                <td class="tableActs" align="center">-->
+<!--                    <a href="#detail" class="tablectrl_small bDefault tipS" original-title="Detail">-->
+<!--                        <span class="iconb" data-icon=""></span>-->
+<!--                    </a>-->
+<!--                </td>-->
             </tr>
             @endforeach
             </tbody>

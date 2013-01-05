@@ -285,8 +285,18 @@ $(function() {
     //===== Form elements styling =====//
     $("select, .check, .check :checkbox, input:radio, input:file").uniform();
 
-	
-	$( "#dialog:ui-dialog" ).dialog( "destroy" );
+    //===== Notification boxes =====//
+
+    $(".nNote").click(function() {
+        $(this).fadeTo(200, 0.00, function(){ //fade
+            $(this).slideUp(200, function() { //slide up
+                $(this).remove(); //then remove from the DOM
+            });
+        });
+    });
+
+
+    $( "#dialog:ui-dialog" ).dialog( "destroy" );
 	
 	$('.appconfirm').click(function(e) {
 		e.preventDefault();

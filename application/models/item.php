@@ -218,23 +218,23 @@ class Item extends Eloquent {
             );
         } elseif($category == 'finance_daily') {
             $keystore = array(
-                'part_type' => 'i.item_type_id',
-                'part_category' => 'i.item_category_id',
-                'part_unit' => 'i.unit_id',
+                'part_type' => 's.item_type_id',
+                'part_category' => 's.item_category_id',
+                'part_unit' => 's.unit_id',
                 'date' => 't.date',
             );
         } elseif($category == 'finance_weekly') {
             $keystore = array(
-                'part_type' => 'i.item_type_id',
-                'part_category' => 'i.item_category_id',
-                'part_unit' => 'i.unit_id',
+                'part_type' => 's.item_type_id',
+                'part_category' => 's.item_category_id',
+                'part_unit' => 's.unit_id',
                 'date' => 't.date',
             );
         } elseif($category == 'finance_monthly') {
             $keystore = array(
-                'part_type' => 'i.item_type_id',
-                'part_category' => 'i.item_category_id',
-                'part_unit' => 'i.unit_id',
+                'part_type' => 's.item_type_id',
+                'part_category' => 's.item_category_id',
+                'part_unit' => 's.unit_id',
                 'date' => 't.date',
             );
         } elseif($category == 'sales_stock_monthly') {
@@ -279,7 +279,7 @@ class Item extends Eloquent {
                     "sc.name as part_category, ".
                     "ut.name as unit_type, ".
                     "count(distinct ts.id) as part_count, ".
-                    "sum(t.amount) as amount, ".
+                    "sum(sf.price) as amount, ".
                     "date(t.date) as part_date ".
                     "FROM transaction t ".
                     "INNER JOIN transaction_item AS ts ON ts.transaction_id = t.id ".
@@ -345,7 +345,7 @@ class Item extends Eloquent {
                     "sc.name as part_category, ".
                     "ut.name as unit_type, ".
                     "count(distinct ts.id) as part_count, ".
-                    "sum(t.amount) as amount ";
+                    "sum(sf.price) as amount ";
 
         $q .=   "FROM transaction t ".
                     "INNER JOIN transaction_item AS ts ON ts.transaction_id = t.id ".
@@ -405,7 +405,7 @@ class Item extends Eloquent {
                     "sc.name as part_category, ".
                     "ut.name as unit_type, ".
                     "count(distinct ts.id) as part_count, ".
-                    "sum(t.amount) as amount ";
+                    "sum(sf.price) as amount ";
 
         $q .=   "FROM transaction t ".
                     "INNER JOIN transaction_item AS ts ON ts.transaction_id = t.id ".
