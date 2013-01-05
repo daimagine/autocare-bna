@@ -180,17 +180,6 @@ $(function() {
                 $(this).addClass('subClosed');
             }
         });
-        if (!$clicked.hasClass("exp")){
-            closeit = true;
-        }
-        if(closeit === true) {
-            $(".leftSubMenu").slideUp(200);
-//            console.log($clicked);
-            //switching all subOpened into subClosed
-            var $open = $('.exp.subOpened');
-            $open.removeClass('subOpened');
-            $open.addClass('subClosed');
-        }
     });
 
     $('.exp').collapsible({
