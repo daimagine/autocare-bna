@@ -336,6 +336,9 @@ Account.Item = {
         if($(this._form.price).val().trim() === '') {
             msg += ', Price';
         }
+        if($(this._form.tax).val().trim() === '') {
+            msg += ', Tax Percentage';
+        }
         var required = 'Following fields are required : ' + msg;
         if(msg === '')
             return true;
