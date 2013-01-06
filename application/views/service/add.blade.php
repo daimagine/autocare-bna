@@ -17,7 +17,7 @@
             <div class="grid3"><label>Service Name</label></div>
             <div class="grid9">
                 <div class="grid5">
-                    <input name="name" type="text" id="name" value="{{ @$service['name'] }}" class="validate[required]"/>
+                    <input name="name" type="text" id="name" value="{{ @$service['name'] }}" class="validate[required,minSize[5]]"/>
                 </div>
             </div>
             <div class="clear"></div>

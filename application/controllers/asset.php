@@ -37,7 +37,7 @@ class Asset_Controller extends Secure_Controller {
         }
         $asset = AssetActiva::find($id);
 
-        $lstAssetType = AssetType::listAll(array());
+        $lstAssetType = AssetType::listAll(array('status' => array(statusType::ACTIVE, statusType::INACTIVE)));
         $assetTypes=array();
         foreach($lstAssetType as $type) {
             $assetTypes[$type->id] = $type->name;
@@ -88,6 +88,109 @@ class Asset_Controller extends Secure_Controller {
         }
     }
 
+    //============================ Asset Type Management ============================
+    public function get_list_asset_type() {
+        $lstAssetType = AssetType::listAll(array('status' => array(statusType::ACTIVE, statusType::INACTIVE)));
+            return $this->layout->nest('content', 'asset.listassettype', array(
+                'lstAssetType' => $lstAssetType,
+            ));
+    }
+
+    private function inject_asset_assetType(){
+        Asset::add('jquery.validationEngine-en', 'js/plugins/forms/jquery.validationEngine-en.js',  array('jquery', 'jquery-ui'));
+        Asset::add('jquery.validate', 'js/plugins/wizards/jquery.validate.js',  array('jquery', 'jquery-ui'));
+        Asset::add('validationEngine.form', 'js/plugins/forms/jquery.validationEngine.js',  array('jquery', 'jquery-ui'));
+        Asset::add('function_item', 'js/asset/application.js',  array('jquery', 'jquery-ui'));
+    }
+
+    public function get_add_asset_type() {
+        Asset_Controller::inject_asset_assetType();
+        $asset_type = Session::get('asset_type');
+        return $this->layout->nest('content', 'asset.addassettype', array(
+            'asset_type' => $asset_type
+        ));
+    }
+
+    public function post_add_asset_type() {
+        $inputData=Input::all();
+        $validation = Validator::make(Input::all(), array(
+            'name' => 'required|min:5|max:50',
+            'description' => 'required|min:5',
+            'status' => 'required|min:1|max:1',
+        ));
+
+        if(!$validation->fails()) {
+            $storeAssetType = AssetType::create($inputData);
+            if ($storeAssetType) {
+                Session::flash('message', 'Success add asset type');
+                return Redirect::to('asset/list_asset_type');
+            }
+        }
+
+        Asset_Controller::inject_asset_assetType();
+        Session::flash('message_error', 'Failed add asset type');
+        return Redirect::to('asset/add_asset_type')
+            ->with_errors($validation)
+            ->with('asset_type', $inputData);
+    }
+
+
+    public function get_edit_asset_type($id=null) {
+        Asset_Controller::inject_asset_assetType();
+        $asset_type = AssetType::find($id);
+        if ($asset_type === null) {
+            return Redirect::to('asset/list_asset_type');
+        }
+        return $this->layout->nest('content', 'asset.editassettype', array(
+            'asset_type' => $asset_type
+        ));
+    }
+
+
+    public function post_edit_asset_type(){
+        $id = Input::get('id');
+        if($id===null) {
+            Session::flash('message_error', 'Failed update');
+            return Redirect::to('asset/list_asset_type');
+        }
+
+        $inputData=Input::all();
+//        dd($inputData);
+        $validation = Validator::make(Input::all(), array(
+            'name' => 'required|min:5|max:50',
+            'description' => 'required|min:5',
+            'status' => 'required|min:1|max:1',
+        ));
+        if(!$validation->fails()) {
+            $storeAssetType = AssetType::update($id, $inputData);
+            if ($storeAssetType) {
+                Session::flash('message', 'Success edit asset type');
+                return Redirect::to('asset/list_asset_type');
+            }
+        }
+
+        Asset_Controller::inject_asset_assetType();
+        Session::flash('message_error', 'Failed edit asset type');
+        return Redirect::to('asset/add_asset_type')
+            ->with_errors($validation)
+            ->with('asset_type', $inputData);
+
+    }
+
+    public function get_delete_asset_type($id=null){
+        if($id===null) {
+            return Redirect::to('asset/list_asset_type');
+        }
+        $updated = AssetType::update($id, array('status' => statusType::INACTIVE));
+        if ($updated) {
+            Session::flash('message', 'Success Inactive');
+        } else {
+            Session::flash('message_error', 'Failed Inactive type');
+        }
+        return Redirect::to('asset/list_asset_type');
+    }
+
+
 
     //============================= START CONTROLLER FOR APPROVED HERE ====================
     private function get_lstSubAccountTrx($id){
@@ -122,7 +225,7 @@ class Asset_Controller extends Secure_Controller {
             return Redirect::to('asset/index');
         }
         $subAccountTrx = SubAccountTrx::find($id);
-        $lstAssetType = AssetType::listAll(array());
+        $lstAssetType = AssetType::listAll(array('status' => array(statusType::ACTIVE, statusType::INACTIVE)));
 
         $assetTypes=array();
         foreach($lstAssetType as $type) {

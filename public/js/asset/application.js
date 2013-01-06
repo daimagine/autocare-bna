@@ -25,10 +25,10 @@ $(function() {
     });
 
     $('#buttonConfirmApproved').click(function () {
-        var $nameField = $('#assetName');
-        var $descField = $('#assetDesc');
-        var $vendorField = $('#assetVendor');
-        var $remarksField = $('#remarks');
+        var $nameField = $('#assetName').val();
+        var $descField = $('#assetDesc').val();
+        var $vendorField = $('#assetVendor').val();
+        var $remarksField = $('#remarks').val();
         var $reqField = $('.cssOnBox.reqField');
         var $status = false;
         console.log($reqField);
@@ -137,6 +137,34 @@ $(function() {
     });
     $('.tOptions').click(function () {
         $(this).toggleClass("act");
+    });
+
+
+    $('#dialogAdd').dialog({
+        autoOpen: false,
+        width: 400,
+        modal: true,
+        resizable: false,
+        buttons: {
+            "Submit Form": function() {
+                document.formAutocare.submit();
+                $("#formAutocare").validationEngine();
+                $(this).dialog("close");
+            },
+            "Cancel": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    $('#confirmAddButton').click(function () {
+        var name = $("input#name").val();
+        var desc = $("textarea#description").val();
+        if(name!='' && desc!='' ) {
+            $("span#typeName").html(name);
+            $("span#typeDesc").html(desc);
+            $('#dialogAdd').dialog('open');
+        }
     });
 
 });

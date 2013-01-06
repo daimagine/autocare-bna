@@ -8,7 +8,7 @@
 
     <div class="widget fluid">
         <div class="whead">
-            <h6>Add Service</h6>
+            <h6>Edit Service</h6>
 
             <div class="clear"></div>
         </div>
@@ -17,7 +17,7 @@
             <div class="grid3"><label>Service Name</label></div>
             <div class="grid9">
                 <div class="grid5">
-                    <input name="name" type="text" id="name" value="{{ $service->name }}" class="validate[required]"/>
+                    <input name="name" type="text" id="name" value="{{ $service->name }}" class="validate[required,minSize[]]"/>
                 </div>
             </div>
             <div class="clear"></div>

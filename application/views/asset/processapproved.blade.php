@@ -33,11 +33,11 @@
 
         {{ Form::nyelect('asset_type_id', @$assetTypes, '', 'Asset Type *', array('class' => 'validate[required]')) }}
 
-        {{ Form::nginput('text', 'name', $subAccountTrx->item, 'Name *', array('class' => 'validate[required]', 'id' => 'assetName')) }}
+        {{ Form::nginput('text', 'name', $subAccountTrx->item, 'Name *', array('class' => 'validate[required,minSize[5]]', 'id' => 'assetName')) }}
 
         {{ Form::nginput('text', 'description', @$asset['description'], 'Description', array('class' => 'validate[required]', 'id' => 'assetDesc')) }}
 
-        {{ Form::nginput('text', 'vendor', @$asset['vendor'], 'Vendor', array('class' => 'validate[required]', 'id' => 'assetVendor')) }}
+        {{ Form::nginput('text', 'vendor', @$asset['vendor'], 'Vendor', array('class' => 'validate[required,minSize[6]]', 'id' => 'assetVendor')) }}
 
         <div class="formRow" style="padding-top: 5px;" id="asset-body">
             <table cellpadding="0" cellspacing="0" width="100%" class="tDark" id="asset-table">
