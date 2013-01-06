@@ -12,7 +12,7 @@
         </div>
 
             <!-- Table with opened toolbar -->
-            {{ Form::open('/asset_activa/edit', 'POST',  array('id' => 'formAutocare', 'name' => 'formAutocare')) }}
+            {{ Form::open('/asset/edit', 'POST',  array('id' => 'formAutocare', 'name' => 'formAutocare')) }}
 
             {{ Form::hidden('id', $asset->id) }}
 
@@ -38,7 +38,7 @@
         <div class="formRow noBorderB">
                 <div class="status" id="status3"></div>
                 <div class="formSubmit">
-                    {{ HTML::link('asset_activa/index', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
+                    {{ HTML::link('asset/index', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
                     {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5', 'id' => 'buttonUpdate' )) }}
                 </div>
                 <div class="clear"></div>

@@ -4,7 +4,7 @@
 @include('partial.notification')
 
 <!-- Table with opened toolbar -->
-{{ Form::open('/asset_activa/approved_action', 'POST',  array('id' => 'formAutocare', 'name' => 'formAutocare')) }}
+{{ Form::open('/asset/approved_action', 'POST',  array('id' => 'formAutocare', 'name' => 'formAutocare')) }}
 {{ Form::hidden('action', '-', array('id' => 'action')) }}
 
 <fieldset>

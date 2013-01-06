@@ -13,7 +13,7 @@ class Asset_Controller extends Secure_Controller {
 
     public function __construct() {
         parent::__construct();
-        Session::put('active.main.nav', 'asset_activa@index');
+        Session::put('active.main.nav', 'asset@index');
     }
 
     public function get_index() {
@@ -33,7 +33,7 @@ class Asset_Controller extends Secure_Controller {
         Asset::add('validationEngine.form', 'js/plugins/forms/jquery.validationEngine.js',  array('jquery', 'jquery-ui'));
         Asset::add('function_item', 'js/asset/application.js',  array('jquery', 'jquery-ui'));
         if($id===null) {
-            return Redirect::to('asset_activa/index');
+            return Redirect::to('asset/index');
         }
         $asset = AssetActiva::find($id);
 
@@ -55,7 +55,7 @@ class Asset_Controller extends Secure_Controller {
 //        dd($dataEdit);
         if($id===null) {
             Session::flash('message_error', 'Failed update asset');
-            return Redirect::to('asset_activa/index');
+            return Redirect::to('asset/index');
         }
         $validation = Validator::make(Input::all(), $this->getRules());
         if(!$validation->fails()) {
@@ -66,25 +66,25 @@ class Asset_Controller extends Secure_Controller {
                 Session::flash('message_error', 'Failed update asset');
             }
         } else {
-            return Redirect::to('asset_activa/edit/'.$id)
+            return Redirect::to('asset/edit/'.$id)
                 ->with('service', $dataEdit);
         }
 
-        return Redirect::to('asset_activa/index');
+        return Redirect::to('asset/index');
     }
 
 
     public function get_delete($id=null) {
         if($id===null) {
-            return Redirect::to('asset_activa/index');
+            return Redirect::to('asset/index');
         }
         $success = AssetActiva::updateStatus($id, statusType::INACTIVE);
         if($success) {
             Session::flash('message', 'Inactive asset success');
-            return Redirect::to('asset_activa/index');
+            return Redirect::to('asset/index');
         } else {
             Session::flash('message_error', 'Inactive asset failed');
-            return Redirect::to('asset_activa/index');
+            return Redirect::to('asset/index');
         }
     }
 
@@ -119,7 +119,7 @@ class Asset_Controller extends Secure_Controller {
         Session::forget(ACCOUNT_TRX_ID);
         Session::put(ACCOUNT_TRX_ID, $id);
         if($id===null) {
-            return Redirect::to('asset_activa/index');
+            return Redirect::to('asset/index');
         }
         $subAccountTrx = SubAccountTrx::find($id);
         $lstAssetType = AssetType::listAll(array());
@@ -152,7 +152,7 @@ class Asset_Controller extends Secure_Controller {
                 Session::flash('message', 'Success add Asset');
             } else {
                 Session::flash('message_error', 'Failed add Asset');
-                return Redirect::to('asset_activa/list_approved');
+                return Redirect::to('asset/list_approved');
             }
         } else if ($action = 'reject') {
             $subAccountTrx->approved_status = approvedStatus::REVIEW_BY_WAREHOUSE;
@@ -163,7 +163,7 @@ class Asset_Controller extends Secure_Controller {
             //success update sub account trx
         }
 
-        return Redirect::to('asset_activa/list_approved');
+        return Redirect::to('asset/list_approved');
     }
 
 
