@@ -119,7 +119,7 @@
             <div class="dialogSelect m10" id="vehicle-dialog-notification"></div>
             <div class="dialogSelect m10">
                 <label>Vehicle Number *</label>
-                <input type="text" id="vehicle-no"/>
+                <input type="text" id="vehicle-no" class="upperCase"/>
             </div>
             <div class="dialogSelect m10">
                 <label>Vehicle Type</label>

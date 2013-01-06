@@ -149,7 +149,7 @@ class Account_Controller extends Secure_Controller {
     public function post_invoice_in() {
         $validation = Validator::make(Input::all(), $this->getInvoiceRules());
         $data = Input::all();
-        //dd($data);
+//        dd($data);
         $type = @$data['type'];
         if(!$validation->fails()) {
             $success = AccountTransaction::create($data);

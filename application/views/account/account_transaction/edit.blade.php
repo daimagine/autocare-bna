@@ -105,10 +105,12 @@
                             <td class="v-tax-amount-{{ $i }}">{{ $items[$i]->tax_amount }}</td>
                             <td class="v-amount-{{ $i }}">{{ $items[$i]->amount }}</td>
                             <td>
+                                @if($items[$i]->approved_status !== approvedStatus::CONFIRM_BY_WAREHOUSE)
                                 <div>
                                     <a href="#item-tbody" onclick="Account.Item.edit('v-rows-{{ $i }}','{{ $i }}')">edit</a> |
                                     <a href="#item-tbody" onclick="Account.Item.remove('v-rows-{{ $i }}')">remove</a>
                                 </div>
+                                @endif
                             </td>
                             <td style="display: none; ">
                                 <input type="hidden" class="v-item-hid-{{ $i }}" name="items[{{ $i }}][item]" value="{{ $items[$i]->item }}" />
@@ -121,6 +123,7 @@
                                 <input type="hidden" class="v-unit-price-hid-{{ $i }}" name="items[{{ $i }}][unit_price]" value="{{ $items[$i]->unit_price }}" />
                                 <input type="hidden" class="v-disc-hid-{{ $i }}" name="items[{{ $i }}][discount]" value="{{ $items[$i]->discount }}" />
                                 <input type="hidden" name="items[{{ $i }}][status]" value="{{ $items[$i]->status }}" />
+                                <input type="hidden" name="items[{{ $i }}][approved_status]" value="{{ $items[$i]->approved_status }}" />
                             </td>
                         </tr>
                         <?php $tax += $items[$i]->tax_amount; $amount += $items[$i]->amount; ?>

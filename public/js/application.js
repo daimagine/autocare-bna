@@ -321,6 +321,19 @@ $(function() {
 
 		$("#dialog-confirm").dialog("open");
 	});
+
+    //============ upper case input when keyUp ======================
+    $(".upperCase").bind('keyup', function (e) {
+        if (e.which >= 97 && e.which <= 122) {
+            var newKey = e.which - 32;
+            // I have tried setting those
+            e.keyCode = newKey;
+            e.charCode = newKey;
+        }
+        var idTarget = $(e.target).attr('id');
+//        console.log('ID Target '+idTarget);
+        $("#"+idTarget).val(($(".upperCase").val()).toUpperCase());
+    });
 	
 });
 
