@@ -55,7 +55,7 @@ Route::controller(array(
     'home', 'user', 'role', 'access', 'account', 'discount', 'member', 'item', 'customer', 'vehicle',
     'service', 'work_order', 'news', 'preferences', 'settlement', 'conversation', 'asset_activa',
     'report.dashboard', 'report.account', 'report.transaction', 'report.warehouse', 'report.finance',
-    'sync.local', 'sync.production'
+    'sync.local', 'sync.production', 'asset'
 ));
 
 Route::get('/', 'home@index');

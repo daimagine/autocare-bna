@@ -32,7 +32,7 @@
                 <td>{{ $ate->account_transaction->invoice_no }}</td>
                 <td>{{ $ate->account_transaction->reference_no }}</td>
                 <td>{{ $ate->item }}</td>
-                <td>{{ $ate->qty }}</td>
+                <td>{{ $ate->quantity }}</td>
                 <td>{{ $ate->description }}</td>
                 <td>{{ $ate->account_transaction->input_date }}</td>
                 <td>{{ $ate->account_transaction->due_date }}</td>

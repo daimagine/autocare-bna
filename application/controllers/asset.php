@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class Asset_Activa_Controller extends Secure_Controller {
+class Asset_Controller extends Secure_Controller {
 
     public $restful = true;
 

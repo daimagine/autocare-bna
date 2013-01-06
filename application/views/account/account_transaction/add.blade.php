@@ -101,7 +101,7 @@
             <div class="divider"></div>
             <div class="fluid">
                 <div class="rtl-inputs">
-                    <div class="grid5">
+                    <div class="grid7">
                         <ul class="wInvoice">
                             <li><h4 class="blue" id="item-subtotal">0</h4><span>Subtotal</span></li>
                             <li><h4 class="red" id="item-subtotal-tax">0</h4><span>Total Tax</span></li>
