@@ -31,10 +31,10 @@ $(function() {
         var $remarksField = $('#remarks');
         var $reqField = $('.cssOnBox.reqField');
         var $status = false;
-//        console.log($reqField);
+        console.log($reqField);
         $reqField.each(function() {
             console.log('-'+$(this).val());
-            if ($(this).val() != ''){
+            if ($(this).val() !== ''){
                 $status = true;
             } else {
                 $status = false;
@@ -42,10 +42,11 @@ $(function() {
             }
         });
 
-        if ($descField != '' && $nameField!='' && $vendorField!='' && $remarksField!='') {
+        console.log('status --> '+$status);
+        if ($status && $descField != '' && $nameField!='' && $vendorField!='' && $remarksField!='') {
             $status = true;
         }
-
+        console.log('status --> '+$status);
         if ($status) {
         $("#formDialogApproved").html('<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>' +
             ' Are you sure the data is correct and you want to closed this approved print ?' +
