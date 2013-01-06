@@ -274,15 +274,41 @@ class AccountTransaction extends Eloquent {
         //register items
         $due_amount = 0;
         if(isset($data['items']) && is_array($data['items'])) {
-            //cleanup items
-            $affected = DB::table('sub_account_trx')
-                ->where('account_trx_id', '=', $ate->id)
-                ->delete();
+            //get all items id submitted [selected_id]
+            $items_id = array();
             foreach($data['items'] as $item) {
-                $ate->items()->insert($item);
+                if(array_key_exists('id', $item)) {
+                    $items_id[] = $item['id'];
+                }
                 $due_amount += $item['amount'];
                 //var_dump($item['amount']);
             }
+            //dd($items_id);
+
+            //inactivate all items excluding [selected_id]
+            $queryCleanup = DB::table('sub_account_trx')
+                ->where('account_trx_id', '=', $ate->id)
+                ->where('approved_status','<>', approvedStatus::CONFIRM_BY_WAREHOUSE);
+
+            if(!empty($items_id) && sizeof($items_id) > 0) {
+                $queryCleanup->where_not_in('id', $items_id);
+            }
+            $queryCleanup->update(
+                array('status' => false)
+            );
+
+            foreach($data['items'] as $item) {
+                if(array_key_exists('id', $item) && trim($item['id']) != '') {
+                    //update item if exist
+                    SubAccountTrans::update($item['id'],$item);
+
+                } else {
+                    //add new item if not exist
+                    $item['approved_status'] = approvedStatus::NEW_ACCOUNT_INVOICE;
+                    $ate->items()->insert($item);
+                }
+            }
+
         }
 
         //dd($data);

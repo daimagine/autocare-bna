@@ -27,6 +27,8 @@
 
         {{ Form::nginput('text', 'code', $item->code, 'Code', array('class' => 'validate[required]', 'disabled' => 'true')) }}
 
+        {{ Form::nginput('text', 'stock_minimum', $item->stock_minimum, 'Stock Minimum', array('class' => 'validate[required,custom[number]]')) }}
+
         {{ Form::nginput('text', 'description', $item->description, 'Description', array('class' => 'validate[required]')) }}
 
         {{ Form::nginput('text', 'price', $item->price, 'Selling Price', array('class' => 'validate[required,custom[number]]', 'id' => 'sellingPrice')) }}

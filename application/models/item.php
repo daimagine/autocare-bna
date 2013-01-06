@@ -59,6 +59,7 @@ class Item extends Eloquent {
             $item->unit_id=$unit_type->id;
         }
         if(isset($data['stock'])){$item->stock=$data['stock'];}
+        if(isset($data['stock_minimum'])){$item->stock=$data['stock_minimum'];}
         if(isset($data['name'])){$item->name=$data['name'];}
         if(isset($data['code'])){$item->code=$data['code'];}
         if(isset($data['description'])){$item->description=$data['description'];}
@@ -81,7 +82,7 @@ class Item extends Eloquent {
         $unit_type = UnitType::find($data['unit_id']);
         $item->unit_id=$unit_type->id;
         $item->name=$data['name'];
-        $item->name=$data['name'];
+        $item->stock_minimum=$data['stock_minimum'];
         $item->code=$data['code'];
         $item->description=$data['description'];
         if(isset($data['stock'])) {

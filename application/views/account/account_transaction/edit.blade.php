@@ -3,7 +3,7 @@
 @include('partial.notification')
 <br>
 
-{{ Form::open('/account/invoice_edit/'.$account->type, 'POST') }}
+{{ Form::open('/account/invoice_edit/'.$account->type, 'POST', array('id' => 'formAccountCore')) }}
 
 {{ Form::hidden('id', $account->id) }}
 
@@ -101,16 +101,18 @@
                             <td class="v-item v-num-{{ $i }}">{{ $items[$i]->item }}</td>
                             <td class="v-qty-{{ $i }}">{{ $items[$i]->quantity }}</td>
                             <td class="v-account-{{ $i }}">{{ $items[$i]->account->name }}</td>
-                            <td class="v-tax-{{ $i }}">{{ $items[$i]->tax }}</td>
+                            <td class="v-tax-{{ $i }}">{{ $items[$i]->tax }}%</td>
                             <td class="v-tax-amount-{{ $i }}">{{ $items[$i]->tax_amount }}</td>
                             <td class="v-amount-{{ $i }}">{{ $items[$i]->amount }}</td>
                             <td>
-                                @if($items[$i]->approved_status !== approvedStatus::CONFIRM_BY_WAREHOUSE)
                                 <div>
-                                    <a href="#item-tbody" onclick="Account.Item.edit('v-rows-{{ $i }}','{{ $i }}')">edit</a> |
-                                    <a href="#item-tbody" onclick="Account.Item.remove('v-rows-{{ $i }}')">remove</a>
+                                    @if($items[$i]->approved_status == approvedStatus::CONFIRM_BY_WAREHOUSE)
+                                        <a href="#">APPROVED</a>
+                                    @else
+                                        <a href="#item-tbody" onclick="Account.Item.edit('v-rows-{{ $i }}','{{ $i }}')">edit</a> |
+                                        <a href="#item-tbody" onclick="Account.Item.remove('v-rows-{{ $i }}')">remove</a>
+                                    @endif
                                 </div>
-                                @endif
                             </td>
                             <td style="display: none; ">
                                 <input type="hidden" class="v-item-hid-{{ $i }}" name="items[{{ $i }}][item]" value="{{ $items[$i]->item }}" />
@@ -122,6 +124,8 @@
                                 <input type="hidden" class="v-desc-hid-{{ $i }}" name="items[{{ $i }}][description]" value="{{ $items[$i]->description }}" />
                                 <input type="hidden" class="v-unit-price-hid-{{ $i }}" name="items[{{ $i }}][unit_price]" value="{{ $items[$i]->unit_price }}" />
                                 <input type="hidden" class="v-disc-hid-{{ $i }}" name="items[{{ $i }}][discount]" value="{{ $items[$i]->discount }}" />
+                                <input type="hidden" class="v-approved-status-hid-{{ $i }}" name="items[{{ $i }}][approved_status]" value="{{ $items[$i]->approved_status }}" />
+                                <input type="hidden" class="v-id-hid-{{ $i }}" name="items[{{ $i }}][id]" value="{{ $items[$i]->id }}" />
                                 <input type="hidden" name="items[{{ $i }}][status]" value="{{ $items[$i]->status }}" />
                                 <input type="hidden" name="items[{{ $i }}][approved_status]" value="{{ $items[$i]->approved_status }}" />
                             </td>
@@ -163,7 +167,11 @@
                 <div class="grid4">
                     <div class="formSubmit">
                         {{ HTML::link( $accountTransType === 'D' ? 'account/account_receivable' : 'account/account_payable', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
-                        {{ Form::submit( 'Save', array( 'class' => 'buttonL bGreen mb10 mt5' )) }}
+                        <input class="appconfirm buttonL bGreen mb10 mt5" type="submit" value="Save"
+                               original-title="Save Account"
+                               dialog-confirm-title="Save Confirmation"
+                               dialog-confirm-content="Please be assure of information you filled. This will save respected account. Are you sure?"
+                               dialog-confirm-callback="$('#formAccountCore').submit();">
                     </div>
                 </div>
             </div>
@@ -232,6 +240,8 @@
             </div>
             <input type="hidden" id="item-method" value="add"/>
             <input type="hidden" id="item-addkey" value="-1"/>
+            <input type="hidden" id="item-approved-status"/>
+            <input type="hidden" id="item-id"/>
         </form>
     </div>
 

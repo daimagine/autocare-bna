@@ -3,7 +3,7 @@
 @include('partial.notification')
 <br>
 
-{{ Form::open('/account/invoice_in', 'POST') }}
+{{ Form::open('/account/invoice_in', 'POST', array('id' => 'formAccountCore')) }}
 
 {{ Form::hidden('type', $accountTransType) }}
 
@@ -128,7 +128,11 @@
                 <div class="grid4">
                     <div class="formSubmit">
                         {{ HTML::link( $accountTransType === 'D' ? 'account/account_receivable' : 'account/account_payable', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
-                        {{ Form::submit( 'Save', array( 'class' => 'buttonL bGreen mb10 mt5' )) }}
+                        <input class="appconfirm buttonL bGreen mb10 mt5" type="submit" value="Save"
+                               original-title="Save Account"
+                               dialog-confirm-title="Save Confirmation"
+                               dialog-confirm-content="Please be assure of information you filled. This will save respected account. Are you sure?"
+                               dialog-confirm-callback="$('#formAccountCore').submit();">
                     </div>
                 </div>
             </div>

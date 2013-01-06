@@ -23,18 +23,21 @@
 		
 		<div id="identity">
 		
-            <textarea id="address" readonly="true">Autocare BNA
-123 Rawa Buayo Street
-CONDET, 12220
+            <div>
+                <div style="width: 300px; float: left; margin-top: 5px;">
+                    <p>Autocare BNA</p>
+                    <p>Jl. T. Imum Lueng Bata no.90 Panteriek</p>
+                    <p>Banda Aceh 23247</p>
+                    <p>Telp. 0651 - 637032</p>
+                </div>
 
-Phone: (6221) 555-5555</textarea>
+                <div style="float: right;vertical-align: top;text-align: right;margin: 0px 0px 30px 0px;">
+                    <div id="">
+                        <img id="image" src="../../images/autocare-2.png" alt="logo" width="63%" height="63%">
+                    </div>
+                </div>
+            </div>
 
-            <div id="logoctr">
-                &nbsp;
-            </div>
-            <div id="logo">
-              <img id="image" src="../../images/logo.png" alt="logo" />
-            </div>
 		
 		</div>
 		
@@ -78,8 +81,8 @@ Phone: (6221) 555-5555</textarea>
               <td class="description">{{ $trx_service->service_formula->service->name }}</td>
               <td class="item-name" align="center">-</td>
               <td class="qty" align="center">1</td>
-              <td class="cost">IDR {{ $trx_service->service_formula->price }}</td>
-		      <td class="price">IDR {{ ($trx_service->service_formula->price)}}</span></td>
+              <td class="cost" style="min-width:120px;">IDR {{ $trx_service->service_formula->price }}</td>
+		      <td class="price" style="min-width:120px;">IDR {{ ($trx_service->service_formula->price)}}</span></td>
 		  </tr>
           @endforeach
 

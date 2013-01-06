@@ -30,6 +30,8 @@
 
         {{ Form::nginput('text', 'code', @$code, 'Code', array('class' => 'validate[required]', 'readonly' => 'true')) }}
 
+        {{ Form::nginput('text', 'stock_minimum', @$item['stock_minimum'], 'Stock Minimum', array('class' => 'validate[required,custom[number]]')) }}
+
 <!--        @if($accountTransaction!=null)-->
 <!--        {{ Form::nyelect('account_transaction_id', @$accountTransaction, isset($item['account_transaction_id']) ? $item['account_transaction_id'] : null, 'Account Transaction', array('class' => 'validate[required]')) }}-->
 <!---->
