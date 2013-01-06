@@ -293,7 +293,7 @@ class Item_Controller extends Secure_Controller {
     public function get_list_approved(){
         Session::forget(ACCOUNT_TRX_ID);
         $lstSubAte=Item_Controller::get_lstSubAccountTrx(null);
-        dd(DB::last_query());
+        //dd(DB::last_query());
         return $this->layout->nest('content', 'item.approved.list', array(
             'lstSubAte' => $lstSubAte
         ));
