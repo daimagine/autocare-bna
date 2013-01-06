@@ -24,7 +24,15 @@
             <tbody>
             @foreach($account as $account)
             <tr class="">
-                <td>{{ $account->category == AccountCategory::ITEM ? 'Item' : 'Accounting' }}</td>
+                @if($account->category == AccountCategory::ITEM)
+                    <td>Item</td>
+                @elseif($account->category == AccountCategory::ACCOUNTING)
+                    <td>Accounting</td>
+                @elseif($account->category == AccountCategory::ASSET)
+                    <td>Asset</td>
+                @else
+                    <td>&nbsp;</td>
+                @endif
                 <td>{{ $account->name }}</td>
                 <td>{{ $account->description }}</td>
                 <td>{{ HTML::account_type($account->type) }}</td>

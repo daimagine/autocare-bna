@@ -1,20 +1,23 @@
 
 @if (isset($errors) && count($errors->all()) > 0)
-<div class="nNote nFailure">
     @foreach ($errors->all('<p>:message</p>') as $message)
-    {{ $message }}
+        <div class="nNote nFailure">
+            {{ $message }}
+        </div>
     @endforeach
-</div>
+
 @elseif (!is_null(Session::get('message_error')))
-<div class="nNote nFailure">
     @if (is_array(Session::get('message_error')))
-    @foreach (Session::get('message_error') as $error)
-    <p>{{ $error }}</p>
-    @endforeach
+        @foreach (Session::get('message_error') as $error)
+            <div class="nNote nFailure">
+                {{ $error }}
+            </div>
+        @endforeach
     @else
-    <p>{{ Session::get('message') }}</p>
+        <div class="nNote nFailure">
+            <p>{{ Session::get('message') }}</p>
+        </div>
     @endif
-</div>
 @endif
 
 @if (!is_null(Session::get('message')))

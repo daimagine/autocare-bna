@@ -63,6 +63,8 @@ class Account extends Eloquent {
                     $q->where_null($key);
                 } elseif($val[0] === 'not_null') {
                     $q->where_not_null($key);
+                } elseif($val[0] === 'or') {
+                    $q->or_where($key, $val[0], $val[1]);
                 } elseif($val[0] === 'within') {
                     $q->where($key, '>=', $val[1]);
                     $q->where($key, '<=', $val[2]);

@@ -199,8 +199,13 @@ Account.Item = {
         //td.after($('<td class="v-price-' + nextidx + '">').append($(this._form.price).val()));
         //td.after($('<td class="v-disc-' + nextidx + '">').append($(this._form.disc).val()));
         //extract account
-        var aidx = $(Account.Item._form.account).find(':selected').attr('id').slice(-1);
+        var aidx = $(Account.Item._form.account).find(':selected').attr('id');
+        console.log('aidx : ' + aidx);
+        aidx = aidx.substring((aidx.lastIndexOf('-')) + 1);
+        console.log('id : ' + aidx);
         var account_name = $('#select-account-id-' + aidx).text();
+        console.log('Account for item :');
+        console.log($('#select-account-id-' + aidx));
         td.after($('<td class="v-account-' + nextidx + '">').append(account_name));
         td.after($('<td class="v-tax-' + nextidx + '">').append($(this._form.tax).val()));
         td.after($('<td class="v-tax-amount-' + nextidx + '">').append($(this._form.taxamount).val()));
@@ -257,7 +262,8 @@ Account.Item = {
                 .attr('name','items[' + nextidx + '][discount]')
                 .val($(this._form.disc).val())
         );
-        var aidx = $(Account.Item._form.account).find(':selected').attr('id').slice(-1);
+        var aidx = $(Account.Item._form.account).find(':selected').attr('id');
+        aidx = aidx.substring((aidx.lastIndexOf('-')) + 1);
         hiddiv.append(
             $('<input>')
                 .attr('class', 'v-account-hid-' + nextidx)
@@ -320,9 +326,9 @@ Account.Item = {
     },
 
     _validateNull : function() {
-        var msg = null;
+        var msg = '';
         if($(this._form.item).val().trim() === '') {
-            msg = 'Item';
+            msg += 'Item Information';
         }
         if($(this._form.qty).val().trim() === '') {
             msg += ', Quantity';
@@ -331,7 +337,7 @@ Account.Item = {
             msg += ', Price';
         }
         var required = 'Following fields are required : ' + msg;
-        if(msg === null)
+        if(msg === '')
             return true;
         else
             this.notification('error', required);
@@ -344,7 +350,7 @@ Account.Item = {
             $('tr .v-item').each(function(index) {
                 if($(this).text() === $(Account.Item._form.item).val().trim()) {
                     if($(this).parent().attr('id') !== id)
-                        msg = 'Item';
+                        msg = 'Item Information';
                 }
             });
         });
@@ -359,7 +365,7 @@ Account.Item = {
     _validateLength : function() {
         var msg = null;
         if($(this._form.item).val().trim().length < 5) {
-            msg = 'Item length must be more than 5 characters';
+            msg = 'Item Information length must be more than 5 characters';
         }
         if(msg === null)
             return true;
@@ -407,7 +413,8 @@ Account.Item = {
         $(this._form.account).find('option').each(function(idx) {
             if(this.value == account.val()) {
                 console.log(account);
-                var aidx = account.val().slice(-1);
+                var aidx = account.val();
+                aidx = aidx.substring((aidx.lastIndexOf('-')) + 1);
                 var temp = $('#select-account-id-' + aidx);
                 console.log(temp);
                 $(this).attr('selected' , 'selected');
@@ -433,9 +440,9 @@ Account.Item = {
 
         var row = $('#'+id);
         console.log(row);
-        var idx = id.slice(-1);
+        var idx = id.substring((id.lastIndexOf('-')) + 1);;
 
-        var item = row.find('.v-item-' + idx);
+        var item = row.find('.v-item.v-num-' + idx);
         var itemhid = row.find('.v-item-hid-' + idx);
         item.html($(this._form.item).val());
         itemhid.val($(this._form.item).val());
@@ -460,7 +467,14 @@ Account.Item = {
 //        disc.html($(this._form.disc).val());
         dischid.val($(this._form.disc).val());
 
-        var aidx = $(Account.Item._form.account).find(':selected').attr('id').slice(-1);
+        //extract account
+        var aidx = $(Account.Item._form.account).find(':selected').attr('id');
+        console.log('aidx : ' + aidx);
+        aidx = aidx.substring((aidx.lastIndexOf('-')) + 1);
+        console.log('id : ' + aidx);
+        var account_name = $('#select-account-id-' + aidx).text();
+        console.log('Account for item :');
+        console.log($('#select-account-id-' + aidx));
         var account_name = $('#select-account-id-' + aidx).text();
         var account = row.find('.v-account-' + idx);
         var accounthid = row.find('.v-account-hid-' + idx);
