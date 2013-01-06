@@ -49,14 +49,23 @@
                                     <th style="display: none" class="item-id">{{$item->id}}</th>
                                     <td class="name">{{ $item->name }}</td>
                                     <td class="code">{{ $item->code }}</td>
-                                    <td class="stock">{{ $item->stock }}</td>
+                                    @if( $item->stock == 0 || $item->stock < $item->stock_minimum )
+                                        <td class="stock redBack">{{ $item->stock }}</td>
+                                    @else
+                                        <td class="stock">{{ $item->stock }}</td>
+                                    @endif
 <!--                                    <td class="desc">{{ $item->description }}</td>-->
                                     <td class="price">{{ $item->price }}</td>
                                     <td class="vendor">{{ $item->vendor }}</td>
                                     <td class="type">{{ $item->item_type->name}}</td>
                                     <td class="unit">{{ $item->item_unit->name}}</td>
                                     <td>{{ $item->expiry_date }}</td>
-                                    <td align="center" class="tableActs "><a href="#" class="select-item fs1 iconb tipS" original-title="Select This" data-icon=""></a></td>
+                                    @if( $item->stock > 0 )
+                                        <td align="center" class="tableActs "><a href="#" class="select-item fs1 iconb tipS" original-title="Select This" data-icon=""></a></td>
+                                    @else
+                                        <td>&nbsp;</td>
+                                    @endif
+
                                 </tr>
                             @endif
                         @endforeach

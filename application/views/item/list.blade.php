@@ -23,6 +23,7 @@
                 <th>Name<span class="sorting" style="display: block;"></span></th>
                 <th>Code</th>
                 <th>Stock</th>
+                <th>Stock Minimum</th>
                 <th>Description</th>
                 <th>Price</th>
                 <th>Vendor</th>
@@ -37,6 +38,7 @@
                 <td class="name">{{ $item->name }}</td>
                 <td>{{ $item->code }}</td>
                 <td>{{ $item->stock }}</td>
+                <td>{{ $item->stock_minimum }}</td>
                 <td>{{ $item->description }}</td>
                 <td>{{ $item->price }}</td>
                 <td>{{ $item->vendor }}</td>

@@ -150,6 +150,7 @@ class Initialize_Main_Table {
             $table->string('name', 150);
             $table->string('code', 10)->nullable();
             $table->integer('stock')->default(0);
+            $table->integer('stock_minimum')->default(0);
             $table->string('description', 255)->nullable();
             $table->decimal('price', 14, 2)->default(0.00);
             $table->string('vendor', 120)->nullable();
