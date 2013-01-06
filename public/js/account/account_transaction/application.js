@@ -88,7 +88,9 @@ Account.Item = {
         tax    : '#item-tax',
         taxamount : '#item-tax-amount',
         amount : '#item-amount',
-        notif  : '#item-dialog-notification'
+        notif  : '#item-dialog-notification',
+        approved_status  : '#item-approved-status',
+        id : '#item-id'
     },
 
     //function to initialize dialog form
@@ -132,6 +134,8 @@ Account.Item = {
         $(this._form.qty).val('');
         $(this._form.tax).val('');
         $(this._form.taxamount).val('');
+        $(this._form.approved_status).val('');
+        $(this._form.id).val('');
         $(this._addkey).val('');
     },
 
@@ -294,6 +298,13 @@ Account.Item = {
         );
         hiddiv.append(
             $('<input>')
+                .attr('class', 'v-approved-status v-approved-status-hid-' + nextidx)
+                .attr('type', 'hidden')
+                .attr('name','items[' + nextidx + '][approved_status]')
+                .val('O')
+        );
+        hiddiv.append(
+            $('<input>')
                 .attr('type', 'hidden')
                 .attr('name','items[' + nextidx + '][status]')
                 .val(1)
@@ -401,6 +412,8 @@ Account.Item = {
         var tax = row.find('.v-tax-hid-' + idx);
         var taxamount = row.find('.v-tax-amount-hid-' + idx);
         var amount = row.find('.v-amount-hid-' + idx);
+        var approved_status = row.find('.v-approved-status-hid-' + idx);
+        var item_id = row.find('.v-id-hid-' + idx);
 
         //clean up
         $(this._form.item).val(item.val());
@@ -411,6 +424,8 @@ Account.Item = {
         $(this._form.tax).val(tax.val());
         $(this._form.taxamount).val(taxamount.val());
         $(this._form.amount).val(amount.val());
+        $(this._form.approved_status).val(approved_status.val());
+        $(this._form.id).val(item_id.val());
 
         console.log($(this._form.account));
         $(this._form.account).find('option').each(function(idx) {
@@ -499,6 +514,12 @@ Account.Item = {
         amount.html(toFixed($(this._form.amount).val(),2));
         amounthid.val($(this._form.amount).val());
 
+        var approved_status_hid = row.find('v-approved-status-hid-' + idx);
+        approved_status_hid.val($(this._form.approved_status).val());
+
+        var item_id = row.find('v-id-hid-' + idx);
+        item_id.val($(this._form.id).val());
+
         this.calculateTotal();
 
         return true;
@@ -577,9 +598,9 @@ Account.Item = {
         amount = toFixed(amount, 2);
         subtotal = toFixed(subtotal, 2);
 
-        subtotaldiv.html(amount);
-        subtotaltaxdiv.html(taxtotalamount);
-        totaldiv.html(subtotal);
+        subtotaldiv.html(number_format(amount));
+        subtotaltaxdiv.html(number_format(taxtotalamount));
+        totaldiv.html(number_format(subtotal));
 
     }
 
