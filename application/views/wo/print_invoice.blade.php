@@ -12,8 +12,8 @@
 	<script type='text/javascript' src='../../js/wo/print/example.js'></script>
 </head>
 
-<body onload="javascript:window.print()">
-<!--<body>-->
+<!--<body onload="javascript:window.print()">-->
+<body>
 
 <div style="margin-top: 10px;text-align: center;">
 </div>
@@ -22,7 +22,7 @@
 		
             <div>
                 <div style="width: 300px; float: left; margin-top: 5px;">
-                    <p>Autocare</p>
+                    <p>AUTOCARE</p>
                     <p>Jl. T. Imum Lueng Bata no.90 Panteriek</p>
                     <p>Banda Aceh 23247</p>
                     <p>Telp. 0651 - 637032</p>
@@ -30,7 +30,7 @@
 
                 <div style="float: right;vertical-align: top;text-align: right;margin: 0px 0px 30px 0px;">
                     <div id="">
-                        <img id="image" src="../../images/autocare-2.png" alt="logo" width="63%" height="63%">
+<!--                        <img id="image" src="../../images/autocare-2.png" alt="logo" width="63%" height="63%">-->
                     </div>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                 <tr>
                     <td class="meta-head">Amount Due</td>
                     <td style="text-align: right">:</td>
-                    <td><div class="due">Rp. {{$transaction->paid_amount}}</div></td>
+                    <td><div class="due">Rp. {{number_format($transaction->paid_amount, 0,",",".")}},-</div></td>
                 </tr>
 
             </table>
@@ -64,11 +64,11 @@
 		<table id="items">
 		
 		  <tr>
-		      <th>Description</th>
-		      <th>Unit</th>
-              <th>Quantity</th>
-              <th>Unit Price</th>
-		      <th>Sub Total</th>
+		      <td style="text-align: center">Description</td>
+		      <td style="text-align: center">Unit</td>
+              <td style="text-align: center">Quantity</td>
+              <td style="text-align: center">Unit Price</td>
+		      <td style="text-align: center">Sub Total</td>
 		  </tr>
 
           @foreach($transaction->transaction_service as  $trx_service)
@@ -76,8 +76,8 @@
               <td class="description">{{ $trx_service->service_formula->service->name }}</td>
               <td class="item-name" align="center">-</td>
               <td class="qty" align="center">1</td>
-              <td class="cost" style="min-width:120px;text-align: right;">Rp. {{ $trx_service->service_formula->price }}</td>
-		      <td class="price" style="min-width:120px;text-align: right;">Rp. {{ ($trx_service->service_formula->price)}}</span></td>
+              <td class="cost" style="min-width:120px;text-align: right;">Rp. {{ number_format($trx_service->service_formula->price, 0,",",".") }},-</td>
+		      <td class="price" style="min-width:120px;text-align: right;">Rp. {{ number_format(($trx_service->service_formula->price), 0,",",".")}},-</span></td>
 		  </tr>
           @endforeach
 
@@ -87,8 +87,8 @@
                 <td class="description">{{ $trx_item->item_price->item->name}}</td>
                 <td class="item-name" align="center">{{ $trx_item->item_price->item->item_unit->name}}</td>
                 <td class="qty" align="center">{{ $trx_item->quantity}}</td>
-                <td class="cost" style="text-align: right;">Rp. {{ $trx_item->item_price->price}}</td>
-                <td style="text-align: right;"><span style="">Rp.</span><span class="price"> {{$total}}</span></td>
+                <td class="cost" style="text-align: right;">Rp. {{ number_format($trx_item->item_price->price, 0,",",".") }},-</td>
+                <td style="text-align: right;"><span style="">Rp.</span><span class="price"> {{ number_format($total, 0,",",".") }},-</span></td>
             </tr>
             @endforeach
 		  <tr style="border-bottom: 1px solid black;">
@@ -98,7 +98,7 @@
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Subtotal</td>
-		      <td class="total-value" style="text-align: right"><div id="subtotal">Rp.  {{$transaction->amount}}</div></td>
+		      <td class="total-value" style="text-align: right"><div id="subtotal">Rp.  {{ number_format($transaction->amount, 0,",",".") }},-</div></td>
 		  </tr>
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
@@ -113,18 +113,18 @@
                   {{$transaction->vehicle->membership->discount->value}} %
                   @endif
               </td>
-		      <td class="total-value"  style="text-align: right"><div id="discount">Rp. {{$transaction->discount_amount}}</div></td>
+		      <td class="total-value"  style="text-align: right"><div id="discount">Rp. {{ number_format($transaction->discount_amount, 0,",",".") }},-</div></td>
 		  </tr>
             <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Total</td>
-		      <td class="total-value"  style="text-align: right"><div id="total">Rp.  {{$transaction->paid_amount}}</div></td>
+		      <td class="total-value"  style="text-align: right"><div id="total">Rp.  {{ number_format($transaction->paid_amount, 0,",",".") }},-</div></td>
 		  </tr>
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Amount Paid</td>
 
-		      <td class="total-value" style="text-align: right">Rp.  {{$transaction->paid_amount}}</td>
+		      <td class="total-value" style="text-align: right">Rp.  {{ number_format($transaction->paid_amount, 0,",",".") }},-</td>
 		  </tr>
 		</table>
 <!--		<div id="terms">-->
