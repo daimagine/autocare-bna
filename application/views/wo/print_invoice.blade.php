@@ -13,19 +13,16 @@
 </head>
 
 <body onload="javascript:window.print()">
+<!--<body>-->
 
 <div style="margin-top: 10px;text-align: center;">
-    <a href="javascript:window.print()" class="buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>PRINT</span></a>
 </div>
 	<div id="page-wrap">
-
-		<textarea id="header">INVOICE</textarea>
-		
 		<div id="identity">
 		
             <div>
                 <div style="width: 300px; float: left; margin-top: 5px;">
-                    <p>Autocare BNA</p>
+                    <p>Autocare</p>
                     <p>Jl. T. Imum Lueng Bata no.90 Panteriek</p>
                     <p>Banda Aceh 23247</p>
                     <p>Telp. 0651 - 637032</p>
@@ -37,29 +34,27 @@
                     </div>
                 </div>
             </div>
-
-		
 		</div>
-		
 		<div style="clear:both"></div>
-		
 		<div id="customer">
-
             <textarea id="customer-title">To : {{$transaction->vehicle->customer->name}}</textarea>
 
             <table id="meta">
                 <tr>
                     <td class="meta-head">Invoice</td>
+                    <td style="text-align: right">:</td>
                     <td><textarea>{{$transaction->invoice_no}}</textarea></td>
                 </tr>
                 <tr>
 
                     <td class="meta-head">Date</td>
+                    <td style="text-align: right">:</td>
                     <td id="currentTime"></td>
                 </tr>
                 <tr>
                     <td class="meta-head">Amount Due</td>
-                    <td><div class="due">IDR {{$transaction->paid_amount}}</div></td>
+                    <td style="text-align: right">:</td>
+                    <td><div class="due">Rp. {{$transaction->paid_amount}}</div></td>
                 </tr>
 
             </table>
@@ -81,8 +76,8 @@
               <td class="description">{{ $trx_service->service_formula->service->name }}</td>
               <td class="item-name" align="center">-</td>
               <td class="qty" align="center">1</td>
-              <td class="cost" style="min-width:120px;">IDR {{ $trx_service->service_formula->price }}</td>
-		      <td class="price" style="min-width:120px;">IDR {{ ($trx_service->service_formula->price)}}</span></td>
+              <td class="cost" style="min-width:120px;text-align: right;">Rp. {{ $trx_service->service_formula->price }}</td>
+		      <td class="price" style="min-width:120px;text-align: right;">Rp. {{ ($trx_service->service_formula->price)}}</span></td>
 		  </tr>
           @endforeach
 
@@ -92,8 +87,8 @@
                 <td class="description">{{ $trx_item->item_price->item->name}}</td>
                 <td class="item-name" align="center">{{ $trx_item->item_price->item->item_unit->name}}</td>
                 <td class="qty" align="center">{{ $trx_item->quantity}}</td>
-                <td class="cost">IDR {{ $trx_item->item_price->price}}</td>
-                <td><span class="price">IDR {{$total}}</span></td>
+                <td class="cost" style="text-align: right;">Rp. {{ $trx_item->item_price->price}}</td>
+                <td style="text-align: right;"><span style="">Rp.</span><span class="price"> {{$total}}</span></td>
             </tr>
             @endforeach
 		  <tr style="border-bottom: 1px solid black;">
@@ -103,12 +98,12 @@
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Subtotal</td>
-		      <td class="total-value"><div id="subtotal">IDR {{$transaction->amount}}</div></td>
+		      <td class="total-value" style="text-align: right"><div id="subtotal">Rp.  {{$transaction->amount}}</div></td>
 		  </tr>
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Pph 0%</td>
-		      <td class="total-value"><div id="pph">IDR 0.00</div></td>
+		      <td class="total-value" style="text-align: right"><div id="pph">Rp. 0.00</div></td>
 		  </tr>
             <tr>
 		      <td colspan="2" class="blank"> </td>
@@ -118,27 +113,24 @@
                   {{$transaction->vehicle->membership->discount->value}} %
                   @endif
               </td>
-		      <td class="total-value"><div id="discount">IDR {{$transaction->discount_amount}}</div></td>
+		      <td class="total-value"  style="text-align: right"><div id="discount">Rp. {{$transaction->discount_amount}}</div></td>
 		  </tr>
             <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Total</td>
-		      <td class="total-value"><div id="total">IDR {{$transaction->paid_amount}}</div></td>
+		      <td class="total-value"  style="text-align: right"><div id="total">Rp.  {{$transaction->paid_amount}}</div></td>
 		  </tr>
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Amount Paid</td>
 
-		      <td class="total-value">IDR {{$transaction->paid_amount}}</td>
+		      <td class="total-value" style="text-align: right">Rp.  {{$transaction->paid_amount}}</td>
 		  </tr>
-		
 		</table>
-		
-		<div id="terms">
-		  <h5>Terms</h5>
-		  <textarea>NET 30 Days. Finance Charge of 1.5% will be made on unpaid balances after 30 days.</textarea>
-        </div>
-
+<!--		<div id="terms">-->
+<!--		  <h5>Terms</h5>-->
+<!--		  <textarea>NET 30 Days. Finance Charge of 1.5% will be made on unpaid balances after 30 days.</textarea>-->
+<!--        </div>-->
 	</div>
 </body>
 

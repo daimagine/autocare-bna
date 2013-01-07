@@ -12,7 +12,7 @@ function print_today() {
   function fourdigits(number) {
     return (number < 1000) ? number + 1900 : number;
   }
-  var today =  months[now.getMonth()] + " " + date + ", " + (fourdigits(now.getYear()));
+  var today =  date + ", " +  months[now.getMonth()] + " " + (fourdigits(now.getYear()));
   $('#currentTime').html(today);
 }
 
