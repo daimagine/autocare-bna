@@ -420,6 +420,23 @@ class Work_Order_Controller extends Secure_Controller
         ));
     }
 
+    public function get_print_wo($id=null){
+        if ($id===null) {
+            return Redirect::to('work_order/list');
+        }
+        Asset::add('style', 'css/print/style.css');
+        Asset::add('print', 'css/print/print.css');
+        Asset::add('jquery', 'js/wo/print/jquery-1.3.2.min.js');
+        Asset::add('exemple', 'js/wo/print/example.js', array('jquery'));
+        $action = Input::get('type');
+        $transaction = Transaction::get_detail_trx($id);
+        return View::make('wo.print_wo', array(
+            'transaction' => $transaction,
+            'action' => $action
+        ));
+    }
+
+
     public function get_print_invoice($id=null){
         if ($id===null) {
             return Redirect::to('work_order/list');

@@ -23,9 +23,9 @@
             <div>
                 <div style="width: 300px; float: left; margin-top: 5px;">
                     <p>AUTOCARE</p>
-                    <p>Jl. T. Imum Lueng Bata no.90 Panteriek</p>
-                    <p>Banda Aceh 23247</p>
-                    <p>Telp. 0651 - 637032</p>
+                    <p style="font-size: 0.85em;">Jl. T. Imum Lueng Bata no.90 Panteriek</p>
+                    <p style="font-size: 0.85em;">Banda Aceh 23247</p>
+                    <p style="font-size: 0.85em;">Telp. 0651 - 637032</p>
                 </div>
 
                 <div style="float: right;vertical-align: top;text-align: right;margin: 0px 0px 30px 0px;">

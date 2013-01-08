@@ -32,7 +32,7 @@
                 <td>{{ $trx->vehicle->number }}</td>
                 <td>{{ ($trx->status == 'O' ? 'Open' : ($trx->status == 'D' ? 'Closed' : 'Canceled')) }}</td>
                 <td class="tableActs" align="center">
-                    <a href="detail/{{ $trx->id }}?type=D" class=" tablectrl_small bBlue tipS" original-title="Detail"><span class="iconb" data-icon=""></span></a>
+                    <a href="detail/{{ $trx->id }}?type=D" class=" tablectrl_small bBlue tipS" original-title="Detail" style="margin-top: 5px;"><span class="iconb" data-icon=""></span></a>
                     @if($trx->status == 'O')
                     <a href="edit/{{ $trx->id }}"
                        class="appconfirm tablectrl_small bRed tipS"
@@ -41,20 +41,23 @@
                        dialog-confirm-content="You want edit this WO ?">
                         <span class="iconb" data-icon=""></span>
                     </a>
-                    <a href="to_invoice/{{ $trx->id }}?type=C" class="tablectrl_small bGreen tipS" original-title="Close"><span class="iconb"  data-icon=""></span></a>
+                    <a href="to_invoice/{{ $trx->id }}?type=C" class="tablectrl_small bGreen tipS" original-title="Close" style="margin-top: 5px;"><span class="iconb"  data-icon=""></span></a>
                     <a href="do_canceled/{{ $trx->id }}"
                        class="appconfirm tablectrl_small bGreyish tipS"
+                       style="margin-top: 5px;"
                        original-title="Cancel"
                        dialog-confirm-title="Canceled WO Confirmation"
                        dialog-confirm-content="Are you sure want to cancel this work order, this action can't be undone ?">
                         <span class="iconb"  data-icon=""></span>
                     </a>
+
                     @endif
                     @if($trx->status == 'D' or $trx->status == 'O')
-                    <a href="to_invoice/{{ $trx->id }}" class="tablectrl_small bGold tipS" original-title="Invoice"><span class="iconb"  data-icon=""></span></a>
+                    <a href="to_invoice/{{ $trx->id }}" class="tablectrl_small bGold tipS" original-title="Invoice"><span class="iconb"  data-icon="" style="margin-top: 5px;" ></span></a>
                     @endif
+
                     <a href="print_wo/{{ $trx->id }}"
-                       class="tablectrl_small bDefault tipS"  original-title="Print WO">
+                       class="tablectrl_small bDefault tipS"  original-title="Print WO" target="_blank" style="margin-top: 5px;">
                         <span class="iconb"  data-icon=""></span>
                     </a>
                 </td>
