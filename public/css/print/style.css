@@ -5,12 +5,12 @@
 */
 
 * { margin: 0; padding: 0; }
-body { font: 16px/1.4 Georgia, serif; }
+body { font: 15px/1.4 sans-serif; }
 #page-wrap { width: 800px; margin: 0 auto; }
 
-textarea { border: 0; font: 14px Georgia, Serif; overflow: hidden; resize: none; }
+textarea { border: 0; font: 14px sans-serif; overflow: hidden; resize: none; }
 table { border-collapse: collapse; }
-table td, table th { border: 1px solid white; padding: 5px; }
+table td, table th { border: 1px solid white; padding: 0px; }
 
 #header { height: 15px; width: 100%; margin: 20px 0; background: #222; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
 
@@ -37,8 +37,9 @@ table td, table th { border: 1px solid white; padding: 5px; }
 #items th { background: #fff; }
 #items textarea { width: 80px; height: 50px; }
 #items tr.item-row td { border: 0; vertical-align: top; }
-#items td.description { width: 300px; }
-#items td.item-name { width: 175px; }
+#items td.description { width: 260px; }
+#items td.qty { width: 80px; }
+#items td.item-name { width: 100px; }
 #items td.description textarea, #items td.item-name textarea { width: 100%; }
 #items td.total-line { border-right: 0; text-align: right; }
 #items td.total-value { border-left: 0; padding: 10px; }

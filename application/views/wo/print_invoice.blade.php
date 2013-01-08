@@ -78,7 +78,7 @@
               <td class="item-name" align="center">-</td>
               <td class="qty" align="center">1</td>
               <td class="cost" style="min-width:120px;text-align: right;">Rp. {{ number_format($trx_service->service_formula->price, 0,",",".") }},-</td>
-		      <td class="price" style="min-width:120px;text-align: right;">Rp. {{ number_format(($trx_service->service_formula->price), 0,",",".")}},-</span></td>
+		      <td class="price" style="min-width:150px;text-align: right;">Rp. {{ number_format(($trx_service->service_formula->price), 0,",",".")}},-</span></td>
 		  </tr>
           @endforeach
 
