@@ -37,10 +37,11 @@ class Vehicle extends Eloquent {
     }
 
 	public static function create($data=array()) {
+
 		if($data['customer_id'] == '0')
-			return false;
-			
-		$vehicle = new Vehicle;
+        return false;
+
+        $vehicle = new Vehicle;
         $vehicle->number = $data['number'];
         $vehicle->customer_id = $data['customer_id'];
 		$vehicle->status = $data['status'];

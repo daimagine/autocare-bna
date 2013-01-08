@@ -10,8 +10,8 @@ class User extends Eloquent {
 
     public static $table = 'user';
 	
-    private static $USER_PREFIX = 'BNA';
-    private static $USER_LENGTH = 9;
+    private static $USER_PREFIX = 'AC-';
+    private static $USER_LENGTH = 3;
 
     public function role() {
         return $this->belongs_to('Role');
@@ -26,9 +26,13 @@ class User extends Eloquent {
     }
 	
     public static function listAll($criteria) {
-        return User::with(array( 'role' ))
-//				->where('status', '=', 1)
-				->get();
+        $users = User::with(array( 'role' ));
+        $users = $users->where_not_in('id', array(0,));
+        $users = $users->where_not_in('staff_id', array('AC-000',)); //set here staff_id for superadmin
+        $users = $users->get();
+        return $users;
+//        return User::with(array( 'role' ))
+//				->get();
     }
 
     //====jojo update====//

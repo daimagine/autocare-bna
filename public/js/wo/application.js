@@ -13,9 +13,40 @@ $(function() {
     var methodType='';
     //-====================== FORM DIALOG LIST CUSTOMER ========================//
     $('form#formAutocare').submit(function(e){
+        return false;
+    });
+
+    $('#buttonSaveWO').click(function () {
         console.log(':: SUBMIT FORM ACTION');
-        e.preventDefault();
         var isvalid =true;
+        var msg = '';
+        var customer = $('#customerName').val();
+        var vehicle = $('#vehicle-rows').val();
+        var service = $('#service-rows').val();
+        if (customer.trim() === '')
+            msg += 'Customer, ';
+        if (vehicle.trim() === '0')
+            msg += 'Vehicle, ';
+        if (service.trim() === '0')
+            msg += 'Services, ';
+        if (msg === '') {
+            console.log(':: Show confirmation add wo');
+            var customerName = $('#customerName').val();
+            var vehicleNumber = $('#vehiclesnumber').val();
+            msg ='<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>Are you sure do this action ?</p>' +
+                '<p>Customer Name : '+customerName+'</p>' +
+                '<p>Vehcile No : '+vehicleNumber+'</p>';
+        } else {
+            console.log(':: Show alert data null');
+            msg ='Data ' + msg + ' cant be empty..!!';
+            isvalid=false;
+        }
+
+        $('#action-button').val('save');
+        $("#submit-confirm").html(msg);
+        $('#submit-confirm').dialog('open');
+    });
+    $('#buttonSaveClosedWO').click(function () {
         var msg = '';
         var customer = $('#customerName').val();
         var vehicle = $('#vehicle-rows').val();
@@ -28,44 +59,37 @@ $(function() {
         if (service.trim() === '0')
             msg += 'Services, ';
 
-
-        if (msg === '') {
-            console.log(':: Show confirmation add wo');
-            var customerName = $('#customerName').val();
-            var vehicleNumber = $('#vehiclesnumber').val();
-            msg ='<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>Are you sure do this action ?</p>' +
-                    '<p>Customer Name : '+customerName+'</p>' +
-                    '<p>Vehcile No : '+vehicleNumber+'</p>';
-        } else {
-            console.log(':: Show alert data null');
-            msg ='Data ' + msg + ' cant be empty..!!';
-            isvalid=false;
-        }
-        console.log(':: isvalid => '+isvalid);
         console.log(':: MSG => '+msg);
-
-        $('#submit-confirm').dialog({
-            autoOpen: false,
-            width: 400,
-            modal: true,
-            resizable: false,
-            buttons: {
-                "Yes": function() {
-                    if (isvalid){
-                        document.formAutocare.submit();
-                    }
-                    $(this).dialog("close");
-                },
-                "Cancel": function() {
-                    $(this).dialog("close");
-                }
-            }
-        });
-
-        $("#submit-confirm").html(msg);
-        $('#submit-confirm').dialog('open');
-        return false;
+        if(msg==='') {
+            $('#action-button').val('saveandclosed');
+            methodType = 'closed';
+            $("#msg-closed").html('Are you sure want to save and closed this wo ?, if yes please select Payment method first and then press button yes ');
+            $('#closed_confirmation').dialog('open');
+        } else {
+            msg ='Data ' + msg + ' cant be empty..!!';
+            $("#submit-confirm").html(msg);
+            $('#submit-confirm').dialog('open');
+        }
     });
+
+    $('#submit-confirm').dialog({
+        autoOpen: false,
+        width: 400,
+        modal: true,
+        resizable: false,
+        buttons: {
+            "Yes": function() {
+                if (isvalid){
+                    document.formAutocare.submit();
+                }
+                $(this).dialog("close");
+            },
+            "Cancel": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+
 
     $("#serviceType").change(function(event){
         //alert("Click event on Select has occurred!");
@@ -130,7 +154,7 @@ $(function() {
         width: 550,
         modal: true,
         buttons: {
-            "Yes": function() {
+            "Yes Sure": function() {
                 if (methodType === 'closed'){
                     var paymentMethod = $('#option_payment_method').val();
                     console.log(':: Payment method '+paymentMethod);
@@ -206,6 +230,7 @@ $(function() {
 var WorkOrder = {};
 WorkOrder.customer = {
     //selector helper
+    _action : '#action-button',
     _method : '#customer-method',
     _addkey : '#customer-addkey',
     _whead  : '#customer-whead',
@@ -221,6 +246,7 @@ WorkOrder.customer = {
     _divcustomerdatahid : '#customerdatahid',
     _vehiclecustomername : '#vehicle-customer-name',
     _customernamefield : '#customer-name',
+    _customerregistercheckbox : '#checkbox-register',
     _addvehicle : '#add-new-vehicle',
 
     //form selector helper
@@ -284,7 +310,11 @@ WorkOrder.customer = {
                 modal: true,
                 buttons : {
                     "Confirm" : function() {
-                       $(WorkOrder.customer._method).val('list');
+                       //----------------cleanup & hide checkbox register------------
+                        $(WorkOrder.customer._customerregistercheckbox).parent().removeAttr('class')
+                        $(WorkOrder.customer._customerregistercheckbox).removeAttr('checked');
+                        $('.check').hide();
+                        $(WorkOrder.customer._method).val('list');
                         var flag = $(WorkOrder.customer._method).val();
                         console.log('============');
                         console.log(customerName);
@@ -309,38 +339,6 @@ WorkOrder.customer = {
                 }
             });
             $("#dialog-confirm").dialog("open");
-//            if (confirmesi== true) {
-//                //-------------get value from table-----------------
-//                var vehicle_id = $(this).parent().parent().children('th.id').html();
-//                var vehicle_no = $(this).parent().parent().children('td.vehicleNo').html();
-//                var type = $(this).parent().parent().children('th.type').html();  // a.delete -> td -> tr -> td.name
-//                var color = $(this).parent().parent().children('th.color').html();
-//                var model = $(this).parent().parent().children('th.model').html();
-//                var brand = $(this).parent().parent().children('th.brand').html();
-//                var description = $(this).parent().parent().children('th.description').html();
-//                var customerName = $(this).parent().parent().children('td.customerName').html();
-//                var customerId = $(this).parent().parent().children('th.customerId').html();
-//                var customerStatus = $(this).parent().parent().children('th.status').html();
-//
-//                $(WorkOrder.customer._method).val('list');
-//                var flag = $(WorkOrder.customer._method).val();
-//                console.log('============');
-//                console.log(customerName);
-//                console.log('============');
-//                WorkOrder.customer._putVehicle(vehicle_id,vehicle_no,type,color,model,brand,description);
-//                WorkOrder.customer._putCustomer(customerId,customerName,customerStatus);
-//                //display table
-//                var vnotice = $(WorkOrder.customer._notice);
-//                var vtable = $(WorkOrder.customer._table);
-//                var vaddlink = $(WorkOrder.customer._addvehicle);
-//                vnotice.hide();
-//                vaddlink.hide();
-//                vtable.show();
-//                $(WorkOrder.customer._dialog).dialog( "close" );
-//                console.log('close dialog');
-//            }else {
-//                console.log('customer not confirm');
-//            }
             return false;
         });
 
@@ -796,6 +794,11 @@ WorkOrder.customer = {
                 .attr('name','additional_info')
                 .val(additional_info)
         );
+
+        //----checked and show register checkbox-----
+        $(this._customerregistercheckbox).parent().attr('class', 'checked')
+        $(this._customerregistercheckbox).prop('checked','checked');
+        $('.check').show();
 
         return true;
     },

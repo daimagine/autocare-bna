@@ -116,20 +116,22 @@ class Work_Order_Controller extends Secure_Controller
     public function post_add(){
         $validation = Validator::make(Input::all(), $this->getRules());
         $wodata = Input::all();
-
         if(!$validation->fails()) {
+            //------set customer want register or not------------
+            $register = false;
+            if(isset($wodata['checkbox-register']) && $wodata['checkbox-register']=='on') {
+                $register = true;
+            }
             //==check item stock first====
             $msgvalitem=null;
             if(isset($wodata['items'])) {
                 foreach($wodata['items'] as $it) {
                     $item = Item::find($it['item_id']);
-//                    {{dd($item->stock);}}
                     if ($item->stock < ((int)$it['quantity'])) {
                         $msgvalitem .=   'stock item '.($item->name).' not enough, current stock '.($item->stock);
                     }
                 }
             }
-//            {{dd($msgvalitem);}}
             if ($msgvalitem !== null){
                 Session::flash('message_error', $msgvalitem);
                 return Redirect::to('work_order/add')
@@ -137,51 +139,78 @@ class Work_Order_Controller extends Secure_Controller
             }
 
             //=== check status customer ===//
-            if($wodata['customerId']==null or $wodata['customerId']==''){
-                //thisis new customer & new vehicle
-                $customer = Customer::create(array(
-                    'name' => $wodata['customerName'],
-                    'address1' => $wodata['address1'],
-                    'address2' => $wodata['address2'],
-                    'city' => $wodata['city'],
-                    'post_code' => $wodata['post_code'],
-                    'phone1' => $wodata['phone1'],
-                    'phone2' => $wodata['phone2'],
-                    'additional_info' => $wodata['additional_info'],
-                    'status' => statusType::ACTIVE
-                ));
+            if($wodata['customerId']==null or $wodata['customerId']=='') {
+                $customer = null;
+                if($register) {
+                    $customer = Customer::create(array(
+                        'name' => $wodata['customerName'],
+                        'address1' => $wodata['address1'],
+                        'address2' => $wodata['address2'],
+                        'city' => $wodata['city'],
+                        'post_code' => $wodata['post_code'],
+                        'phone1' => $wodata['phone1'],
+                        'phone2' => $wodata['phone2'],
+                        'additional_info' => $wodata['additional_info'],
+                        'status' => statusType::ACTIVE
+                    ));
+                } else if(!$register) {
+                    $customer = Customer::find(1)->first(); //used for dummy customer
+                    $customer = $customer->id;
+                } else {
+                    Session::flash('message_error', 'Failed save workorder');
+                    return Redirect::to('work_order/add')
+                        ->with('wodata',$wodata);
+                }
                 $wodata['customerId'] = $customer;
             }
 
-            if($wodata['vehiclesid']==null or $wodata['vehiclesid']=='' or $wodata['vehiclesid']==0){
-                    $vehicle = Vehicle::create(array(
-                    'customer_id' => $wodata['customerId'],
-                    'status' => statusType::ACTIVE,
-                    'number' => $wodata['vehiclesnumber'],
-                    'type' => $wodata['vehiclestype'],
-                    'color' => $wodata['vehiclescolor'],
-                    'model' => $wodata['vehiclesmodel'],
-                    'brand' => $wodata['vehiclesbrand'],
-                    'description' => $wodata['vehiclesdescription']
-                ));
-
+            if($wodata['vehiclesid']==null or $wodata['vehiclesid']=='' or $wodata['vehiclesid']==='0'){
+                    //--------------validation vehicle no (unique Id)-------------
+                    $checkVehicle = Vehicle::where('number', '=', $wodata['vehiclesnumber'])->first();
+                    $vehicle = null;
+                    if (!$register && $checkVehicle){
+                        $vehicle = $checkVehicle->id;
+                    } else if($register && !$checkVehicle) {
+                        $vehicle = Vehicle::create(array(
+                            'customer_id' => $wodata['customerId'],
+                            'status' => statusType::ACTIVE,
+                            'number' => $wodata['vehiclesnumber'],
+                            'type' => $wodata['vehiclestype'],
+                            'color' => $wodata['vehiclescolor'],
+                            'model' => $wodata['vehiclesmodel'],
+                            'brand' => $wodata['vehiclesbrand'],
+                            'description' => $wodata['vehiclesdescription']
+                        ));
+                    } else if($register && $checkVehicle) {
+                        Session::flash('message_error', 'Vehicle No has been register');
+                        return Redirect::to('work_order/add')
+                            ->with('wodata',$wodata);
+                    }
                 if($vehicle) {
-                    //success create new vehicle
                     $wodata['vehiclesid'] = $vehicle;
                 }
             } else {
                 $vehicle = Vehicle::getSingleResult(array(
                     'customer_id' => $wodata['customerId'],
                     'vehicle_number' => $wodata['vehiclesnumber']
-                ));//TEMPORARY MAKE SURE KE ADI RELASI CUSTOMER DGN VEHICLE (1 to 1 / 1 to m)
+                ));
                 $wodata['vehiclesid'] = $vehicle->id;
             }
-
             $success = Transaction::create($wodata);
             if($success) {
-                //success
-                Session::flash('message', 'Success add wo');
-                return Redirect::to('work_order/list');
+                if($wodata['action-button'] === 'saveandclosed') {
+                    $update = Transaction::update_status($success, statusWorkOrder::CLOSE, array(
+                        'complete_date' => date('Y-m-d H:i:s'),
+                        'payment_date' => date('Y-m-d H:i:s'),
+                        'payment_method' => $wodata['payment_method'],
+                        'payment_state' => paymentState::DONE,
+                    ));
+                    Session::flash('message', 'Success add and closed wo');
+                    return Redirect::to('work_order/to_invoice/'.$success);
+                } else {
+                    Session::flash('message', 'Success add wo');
+                    return Redirect::to('work_order/list');
+                }
             } else {
                 Session::flash('message_error', 'Failed add wo');
                 return Redirect::to('work_order/add')
@@ -225,7 +254,7 @@ class Work_Order_Controller extends Secure_Controller
             'payment_state' => paymentState::DONE,
         ));
         if($update) {
-            //success
+
             Session::flash('message', 'Success closed wo '.$update->workorder_no);
             return Redirect::to('work_order/list');
         } else {
@@ -263,20 +292,6 @@ class Work_Order_Controller extends Secure_Controller
         }
     }
 
-//    public function get_do_reopen($id=null){
-//        if ($id===null) {
-//            return Redirect::to('work_order/list');
-//        }
-//        $update = Transaction::update_status($id, statusWorkOrder::OPEN, array());
-//        if($update) {
-//            //success
-//            Session::flash('message', 'Success reopen wo '.$update->workorder_no);
-//            return Redirect::to('work_order/list');
-//        } else {
-//            Session::flash('message_error', 'Failed reopen wo');
-//            return Redirect::to('work_order/add');
-//        }
-//    }
 
 
     //GET UPDATE or EDIT

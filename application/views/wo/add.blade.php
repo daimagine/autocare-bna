@@ -5,8 +5,11 @@
 @include('partial.notification')
 <br>
 {{ Form::open('/work_order/add', 'POST', array('id' => 'formAutocare', 'name' => 'formAutocare')) }}
+<div id="inputhid">
+<input type="hidden" id="action-button" name="action-button" value="{{@$wodata[action-button]}}">
+</div>
 <fieldset>
-<div class="widget fluid">
+<div class="widget fluid" style="margin-top: 15px;">
     <div class="whead">
         <h6>Customer Add</h6>
         <a href="#vehicle-body" id="add-new-customer" class="buttonH bBlue" title="" onclick="WorkOrder.customer.openDialog_newcustomer();">New Customer</a>
@@ -22,6 +25,10 @@
                     <a onclick="WorkOrder.customer.openDialog_lst_customer('add')"><span class="icos-search" style="position: absolute;top: 0;right: 0;"></span></a>
                 </form>
             </div>
+        </div>
+        <div class="grid4 check" style="display: none">
+            <input type="checkbox" id="checkbox-register" name="checkbox-register" />
+            <label for="checkbox-register"  class="mr20">Register this customer</label>
         </div>
         <div class="clear"></div>
     </div>
@@ -53,7 +60,7 @@
 </div>
 
 
-    <div class="widget fluid">
+    <div class="widget fluid" style="margin-top: 15px;">
         <div id="vehicle-whead" class="whead " >
             <h6>Vehicle</h6>
             <a href="#vehicle-body" id="add-new-vehicle" class="buttonH bBlue" title="" onclick="WorkOrder.customer.openDialog_vehicle();">New Vehicle</a>
@@ -109,7 +116,7 @@
         </div>
     </div>
 
-    <div class="widget fluid">
+    <div class="widget fluid" style="margin-top: 15px;">
         <div class="whead">
             <h6>Add Service</h6>
 
@@ -175,7 +182,7 @@
             </div>
     </div>
 
-    <div class="widget fluid">
+    <div class="widget fluid" style="margin-top: 15px;">
         <div id="item-whead" class="whead " >
             <h6>Item</h6>
             <a href="#vehicle-body" class="buttonH bBlue" title="" onclick="WorkOrder.items.openDialog_lst_items('add');">Add</a>
@@ -237,7 +244,7 @@
         </div>
     </div>
 
-    <div class="widget fluid">
+    <div class="widget fluid" style="margin-top: 15px;">
         <div class="whead">
             <h6>Assign Mechanic</h6>
             <div class="clear"></div>
@@ -288,7 +295,7 @@
         </div>
     </div>
 
-    <div class="widget fluid">
+    <div class="widget fluid" style="margin-top: 15px;">
         <div class="wheadLight2">
             <h6>Action</h6>
             <div class="clear"></div>
@@ -301,7 +308,8 @@
                 </div>
                 <div class="grid7">
                     <div class="formSubmit">
-                        {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5' )) }}
+                        {{ Form::submit('Save & Closed', array( 'class' => 'buttonL bGold mb10 mt5', 'id' => 'buttonSaveClosedWO' )) }} &nbsp;&nbsp;
+                        {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5', 'id' => 'buttonSaveWO' )) }}
                     </div>
                 </div>
             </div>
@@ -309,7 +317,6 @@
             <div class="clear"></div>
         </div>
     </div>
-
 
     <!-- Dialog add service confirmation -->
     <div id="service-dialog" class="dialog" title="Add Service Confirmation" style="display: none;">
@@ -335,6 +342,19 @@
 
     </div>
 
+    <div id="closed_confirmation" class="dialog" title="Confirmation" style="display: none;">
+        <div id="msg-closed"></div>
+        <div class="divider"><span></span></div>
+        <div class="fluid">
+            <div class="grid9">
+                <div class="dialogSelect m10">
+                    <label>Payment Method *</label>
+                    {{Form::select('option_payment_method', array('' => '--Select This--', 'C' => 'CASH', 'E' => 'EDC', 'M' => 'MONTHLY', 'O' => 'CORPORATE'), '', array('id' => 'option_payment_method'));}}
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="vehicle-dialog" class="dialog" title="Vehicle Registration Form" style="display: none;">
         <form id="vehicle-form" name="vehicle-form">
             <div class="messageTo">
@@ -343,7 +363,7 @@
             <div class="divider"><span></span></div>
             <div class="dialogSelect m10">
                 <label>Vehicle Number *</label>
-                <input type="text" id="vehicle-no"/>
+                <input type="text" id="vehicle-no" class="upperCase"/>
             </div>
             <div class="dialogSelect m10">
                 <label>Vehicle Type</label>

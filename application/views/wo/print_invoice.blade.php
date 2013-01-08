@@ -12,8 +12,8 @@
 	<script type='text/javascript' src='../../js/wo/print/example.js'></script>
 </head>
 
-<!--<body onload="javascript:window.print()">-->
-<body>
+<body onload="javascript:window.print()">
+<!--<body>-->
 
 <div style="margin-top: 10px;text-align: center;">
 </div>
@@ -37,7 +37,8 @@
 		</div>
 		<div style="clear:both"></div>
 		<div id="customer">
-            <textarea id="customer-title">To : {{$transaction->vehicle->customer->name}}</textarea>
+<!--            <textarea id="customer-title">To : {{$transaction->vehicle->customer->name}}</textarea>-->
+            <textarea id="customer-title">To : {{$transaction->customer_name}}</textarea>
 
             <table id="meta">
                 <tr>

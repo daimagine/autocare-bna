@@ -22,11 +22,11 @@
             </tr>
             </thead>
             <tbody>
-
             @foreach($transactions as $trx)
             <tr class="">
                 <td class="name">{{ $trx->workorder_no }}</td>
-                <td>{{ $trx->vehicle->customer->name }}</td>
+<!--                <td>{{ $trx->vehicle->customer->name }}</td>-->
+                <td>{{ $trx->customer_name }}</td>
                 <td>{{ $trx->vehicle->model }}</td>
                 <td>{{ $trx->vehicle->number }}</td>
                 <td>{{ $trx->date }}</td>
@@ -53,15 +53,6 @@
                     @if($trx->status == 'D' or $trx->status == 'O')
                     <a href="to_invoice/{{ $trx->id }}" class="tablectrl_small bGold tipS" original-title="Invoice"><span class="iconb"  data-icon=""></span></a>
                     @endif
-<!--                    @if($trx->status == 'C' or $trx->status == 'D')-->
-<!--                    <a href="do_reopen/{{ $trx->id }}"-->
-<!--                       class="appconfirm tablectrl_small bSea tipS"-->
-<!--                       original-title="Reopen"-->
-<!--                       dialog-confirm-title="Reopen WO Confirmation"-->
-<!--                       dialog-confirm-content="Are you sure want to reopen this work order ?">-->
-<!--                        <span class="iconb"  data-icon=""></span>-->
-<!--                    </a>-->
-<!--                    @endif-->
                 </td>
             </tr>
             @endforeach

@@ -63,6 +63,7 @@ class Transaction extends Eloquent {
     public static function create($data = array()){
         //prepare save to db
         $trx = new Transaction();
+        $trx->customer_name = $data['customerName'];
         $trx->vehicle_id = $data['vehiclesid'];
         $trx->status = statusWorkOrder::OPEN;
         $trx->payment_state = paymentState::INITIATE;

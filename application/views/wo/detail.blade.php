@@ -38,7 +38,7 @@
     <div class="formRow">
         <div class="grid3"><label>Customer</label> </div>
         <div class="grid5">
-            <input type="text"  name="customerName" class="ac ui-autocomplete-input" readonly="true" value="{{$transaction->vehicle->customer->name}}">
+            <input type="text"  name="customerName" class="ac ui-autocomplete-input" readonly="true" value="{{$transaction->customer_name}}">
         </div>
         <div class="clear"></div>
     </div>
