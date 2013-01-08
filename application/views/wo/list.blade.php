@@ -12,11 +12,11 @@
         <table cellpadding="0" cellspacing="0" border="0" class="dTable">
             <thead>
             <tr>
-                <th>WO Id<span class="sorting" style="display: block;"></span></th>
+                <th class="sorting_desc">Service Time</th>
+                <th>WO Id</th>
                 <th>Customer Name</th>
                 <th>Vehicle Name</th>
                 <th>Vehicle No</th>
-                <th>Service Time</th>
                 <th>WO Status</th>
                 <th>Action</th>
             </tr>
@@ -24,12 +24,12 @@
             <tbody>
             @foreach($transactions as $trx)
             <tr class="">
+                <td>{{ $trx->date }}</td>
                 <td class="name">{{ $trx->workorder_no }}</td>
-<!--                <td>{{ $trx->vehicle->customer->name }}</td>-->
+                <!--                <td>{{ $trx->vehicle->customer->name }}</td>-->
                 <td>{{ $trx->customer_name }}</td>
                 <td>{{ $trx->vehicle->model }}</td>
                 <td>{{ $trx->vehicle->number }}</td>
-                <td>{{ $trx->date }}</td>
                 <td>{{ ($trx->status == 'O' ? 'Open' : ($trx->status == 'D' ? 'Closed' : 'Canceled')) }}</td>
                 <td class="tableActs" align="center">
                     <a href="detail/{{ $trx->id }}?type=D" class=" tablectrl_small bBlue tipS" original-title="Detail"><span class="iconb" data-icon=""></span></a>
@@ -53,6 +53,10 @@
                     @if($trx->status == 'D' or $trx->status == 'O')
                     <a href="to_invoice/{{ $trx->id }}" class="tablectrl_small bGold tipS" original-title="Invoice"><span class="iconb"  data-icon=""></span></a>
                     @endif
+                    <a href="print_wo/{{ $trx->id }}"
+                       class="tablectrl_small bDefault tipS"  original-title="Print WO">
+                        <span class="iconb"  data-icon=""></span>
+                    </a>
                 </td>
             </tr>
             @endforeach

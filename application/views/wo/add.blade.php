@@ -68,7 +68,7 @@
         </div>
         <div id="vehicle-body" class="body" style="display: block; ">
             @if(!isset($wodata))
-            <span id="vehicle-addnotice" class="">Search customer member first <br/> or click add button to add new vehicle for customer non member</span>
+            <span id="vehicle-addnotice" class="">Search customer member first, or click add button to add new vehicle for customer non member</span>
             @endif
 
             <table id="vehicle-table" cellpadding="0" cellspacing="0" width="100%" class="tDark" style=" {{ !isset($wodata) ? 'display:none;' : '' }} ">
