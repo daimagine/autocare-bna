@@ -334,7 +334,7 @@ class AccountTransaction extends Eloquent {
             ->first();
 
         $ate->subject_payment = $data['subject_payment'];
-        $ate->paid = round($data['paid'], 2);
+        $ate->paid = $ate->paid + round($data['paid'], 2);
 
         //datetime fields
         $payment_date = $data['payment_date'] . $data['payment_time'];

@@ -276,7 +276,7 @@ class Work_Order_Controller extends Secure_Controller
                     $update = Transaction::update_status($success, statusWorkOrder::CLOSE, array(
                         'complete_date' => date('Y-m-d H:i:s'),
                         'payment_date' => date('Y-m-d H:i:s'),
-                        'payment_method' => $wodata['payment_method'],
+                        'payment_method' => @$wodata['payment_method'],
                         'payment_state' => paymentState::DONE,
                     ));
                     Session::flash('message', 'Success add and closed wo'.$wodata['customerName']);

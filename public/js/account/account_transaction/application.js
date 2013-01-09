@@ -587,16 +587,16 @@ Account.Item = {
             taxtotal += tax[i];
             taxtotalamount += taxamount[i];
         }
-
         amount = subtotal - taxtotalamount;
-        console.log('tax : ' + taxtotal);
-        console.log('tax amount : ' + taxtotalamount);
-        console.log('total : ' + subtotal);
-        console.log('amount : ' + amount);
 
         taxtotalamount = toFixed(taxtotalamount, 2);
         amount = toFixed(amount, 2);
         subtotal = toFixed(subtotal, 2);
+
+        console.log('tax : ' + taxtotal);
+        console.log('tax amount : ' + taxtotalamount);
+        console.log('total : ' + subtotal);
+        console.log('amount : ' + amount);
 
         subtotaldiv.html(number_format(amount));
         subtotaltaxdiv.html(number_format(taxtotalamount));

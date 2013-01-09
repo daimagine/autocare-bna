@@ -135,9 +135,12 @@ Route::filter('csrf', function()
  */
 Route::filter('auth', function()
 {
-    if ( ! Auth::check() || ! Auth::has_permissions() ) {
+    if ( ! Auth::check() ) {
         return Redirect::to('login')
-            ->with('message', '<strong>Error!</strong> You must be logged in to access that page.')
-            ->with('message_class', 'error');
+            ->with('message_error', 'You must be logged in to access that page.');
+    }
+    if ( ! Auth::has_permissions() ) {
+        return Redirect::to('home/index')
+            ->with('message_error', '<strong>Permission Denied.</strong> You dont have privilege to access the page.');
     }
 });

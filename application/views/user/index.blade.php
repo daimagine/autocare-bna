@@ -45,18 +45,20 @@
 							<span class="iconb" data-icon=""></span>
 					</a>
                     @if($user->status)
-                    <a href="#"
-                       class="linkUpdatePswd tablectrl_small bDefault tipS"
-                       ref-num="{{ $user->id }}">
-                        <span class="iconb" data-icon=""></span>
-                    </a>
-                    <a href="/user/delete/{{ $user->id }}{{ $user->status == 1 ? '' : '/purge' }}"
-                       class="appconfirm tablectrl_small bDefault tipS"
-                       original-title="Remove"
-                       dialog-confirm-title="Remove Confirmation"
-                       dialog-confirm-content="{{ $user->status == 1 ? 'This action will make this user to be inactive. Are you sure?' : 'This user is inactive. Removing will purge all data and information linked with this user. Are you sure?' }}">
-                        <span class="iconb" data-icon=""></span>
-                    </a>
+                        <a href="#"
+                           class="linkUpdatePswd tablectrl_small bDefault tipS"
+                           ref-num="{{ $user->id }}">
+                            <span class="iconb" data-icon=""></span>
+                        </a>
+                        @if($user->id != Config::get('default.role.admin'))
+                            <a href="/user/delete/{{ $user->id }}{{ $user->status == 1 ? '' : '/purge' }}"
+                               class="appconfirm tablectrl_small bDefault tipS"
+                               original-title="Remove"
+                               dialog-confirm-title="Remove Confirmation"
+                               dialog-confirm-content="{{ $user->status == 1 ? 'This action will make this user to be inactive. Are you sure?' : 'This user is inactive. Removing will purge all data and information linked with this user. Are you sure?' }}">
+                                <span class="iconb" data-icon=""></span>
+                            </a>
+                        @endif
                     @endif
                 </td>
             </tr>

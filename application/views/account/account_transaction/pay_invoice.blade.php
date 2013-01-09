@@ -94,23 +94,6 @@
 
         </div>
 
-<!--        <div class="inFooter">-->
-<!--            <div class="footnote">Fill belows information to record and pay invoice.</div>-->
-<!--            <div class="clear"></div>-->
-<!---->
-<!--            <div class="grid" style="float: right; margin: 0 20px;">-->
-<!--                <div class="formSubmit">-->
-<!--                    {{ HTML::link( $accountTransType === 'D' ? 'account/account_receivable' : 'account/account_payable', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}-->
-<!--                    {{ Form::submit( 'Save', array( 'class' => 'buttonL bGreen mb10 mt5' )) }}-->
-<!--                </div>-->
-<!--            </div>-->
-<!---->
-<!--            <div class="grid" style="float: right; margin: 0 20px;">-->
-<!---->
-<!--            </div>-->
-<!---->
-<!--            <div class="clear"></div>-->
-<!--        </div>-->
     </div>
 </div>
 
@@ -158,6 +141,10 @@
             <div class="grid4">
                 <div class="formSubmit">
                     {{ HTML::link( $accountTransType === 'D' ? 'account/account_receivable' : 'account/account_payable', 'Cancel', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
+                    <a href='{{ url("account/print/$accountTransType/$account->id") }}'
+                       class="buttonL bDefault mb10 mt5"
+                       original-title="Print Invoice" target="_blank">Print
+                    </a>
                     <input class="appconfirm buttonL bGreen mb10 mt5" type="submit" value="Save"
                            original-title="Pay Invoice"
                            dialog-confirm-title="Payment Confirmation"

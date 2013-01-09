@@ -43,12 +43,14 @@
 						dialog-confirm-title="Update Confirmation">
 							<span class="iconb" data-icon=""></span>
 					</a>
-                    <a href="/role/delete/{{ $role->id }}" 
-						class="appconfirm tablectrl_small bDefault tipS" 
-						original-title="Remove"
-						dialog-confirm-title="Remove Confirmation">
-							<span class="iconb" data-icon=""></span>
-					</a>
+                    @if($role->id != Config::get('default.role.admin'))
+                        <a href="/role/delete/{{ $role->id }}"
+                            class="appconfirm tablectrl_small bDefault tipS"
+                            original-title="Remove"
+                            dialog-confirm-title="Remove Confirmation">
+                                <span class="iconb" data-icon=""></span>
+                        </a>
+                    @endif
                 </td>
             </tr>
             @endforeach
