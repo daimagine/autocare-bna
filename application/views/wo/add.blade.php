@@ -6,7 +6,8 @@
 <br>
 {{ Form::open('/work_order/add', 'POST', array('id' => 'formAutocare', 'name' => 'formAutocare')) }}
 <div id="inputhid">
-<input type="hidden" id="action-button" name="action-button" value="{{@$wodata[action-button]}}">
+<input type="hidden" id="action-button" name="action-button" value="">
+    <input type="hidden" id="transaction-type" name="transaction-type" value="{{TransactionType::WO_TRANSACTION}}">
 </div>
 <fieldset>
 <div class="widget fluid" style="margin-top: 15px;">
@@ -308,7 +309,7 @@
                 </div>
                 <div class="grid7">
                     <div class="formSubmit">
-                        {{ Form::submit('Save & Closed', array( 'class' => 'buttonL bGold mb10 mt5', 'id' => 'buttonSaveClosedWO' )) }} &nbsp;&nbsp;
+<!--                        {{ Form::submit('Save & Closed', array( 'class' => 'buttonL bGold mb10 mt5', 'id' => 'buttonSaveClosedWO' )) }} &nbsp;&nbsp;-->
                         {{ Form::submit('Save', array( 'class' => 'buttonL bGreen mb10 mt5', 'id' => 'buttonSaveWO' )) }}
                     </div>
                 </div>
@@ -337,7 +338,12 @@
 
     </div>
 
-    <!-- Dialog confirmation assign mechanic-->
+    <!-- Dialog content select items-->
+    <div id="notif-dialog" class="dialog" title="Notification" style="display: none;">
+
+    </div>
+
+<!-- Dialog confirmation assign mechanic-->
     <div id="mechanic-dialog" class="dialog" title="Item list" style="display: none;">
 
     </div>

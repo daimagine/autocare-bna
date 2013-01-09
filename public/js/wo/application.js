@@ -11,6 +11,7 @@ $(function() {
 
     var selectedUrl = '';
     var methodType='';
+    var isvalid =false;
     //-====================== FORM DIALOG LIST CUSTOMER ========================//
     $('form#formAutocare').submit(function(e){
         return false;
@@ -18,7 +19,6 @@ $(function() {
 
     $('#buttonSaveWO').click(function () {
         console.log(':: SUBMIT FORM ACTION');
-        var isvalid =true;
         var msg = '';
         var customer = $('#customerName').val();
         var vehicle = $('#vehicle-rows').val();
@@ -36,25 +36,28 @@ $(function() {
             msg ='<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>Are you sure do this action ?</p>' +
                 '<p>Customer Name : '+customerName+'</p>' +
                 '<p>Vehcile No : '+vehicleNumber+'</p>';
+            $('#action-button').val('save');
+            $("#submit-confirm").html(msg);
+            $('#submit-confirm').dialog('open');
+            isvalid=true;
         } else {
             console.log(':: Show alert data null');
             msg ='Data ' + msg + ' cant be empty..!!';
             isvalid=false;
+            $("#notif-dialog").html(msg);
+            $('#notif-dialog').dialog('open');
         }
 
-        $('#action-button').val('save');
-        $("#submit-confirm").html(msg);
-        $('#submit-confirm').dialog('open');
     });
     $('#buttonSaveClosedWO').click(function () {
         var msg = '';
         var customer = $('#customerName').val();
-        var vehicle = $('#vehicle-rows').val();
+        var vehicle = $('#vehiclesnumber').val();
         var service = $('#service-rows').val();
 
         if (customer.trim() === '')
             msg += 'Customer, ';
-        if (vehicle.trim() === '0')
+        if (vehicle.trim() === '')
             msg += 'Vehicle, ';
         if (service.trim() === '0')
             msg += 'Services, ';
@@ -65,10 +68,12 @@ $(function() {
             methodType = 'closed';
             $("#msg-closed").html('Are you sure want to save and closed this wo ?, if yes please select Payment method first and then press button yes ');
             $('#closed_confirmation').dialog('open');
+            isvalid=true;
         } else {
             msg ='Data ' + msg + ' cant be empty..!!';
-            $("#submit-confirm").html(msg);
-            $('#submit-confirm').dialog('open');
+            $("#notif-dialog").html(msg);
+            $('#notif-dialog').dialog('open');
+            isvalid=false;
         }
     });
 
@@ -89,6 +94,19 @@ $(function() {
             }
         }
     });
+
+    $('#notif-dialog').dialog({
+        autoOpen: false,
+        width: 400,
+        modal: true,
+        resizable: false,
+        buttons: {
+            "Closed": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+
 
 
     $("#serviceType").change(function(event){

@@ -77,6 +77,50 @@ class Work_Order_Controller extends Secure_Controller
         ));
     }
 
+    //================ get for simple transaction =============================
+    public function get_add_simple_trx() {
+        Asset::add('jquery.ui.spinner','js/plugins/forms/ui.spinner.js', array('jquery'));
+        Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
+        Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
+        Asset::add('function_wo', 'js/wo/application.js',  array('jquery', 'jquery.timeentry'));
+
+        $wodata = Session::get('wodata');
+        $customer = Session::get('customer');
+        $service = Session::get('service');
+        $mechanic = Session::get('mechanic');
+
+        //------------get service list---------------------//
+        $lstService = Service::list_all(array(
+            'status' => array(statusType::ACTIVE)
+        ));
+        $selectionService = array();
+        $selectionService[0] = '-- select service --';
+        foreach($lstService as $srv) {
+            $selectionService[$srv->id] = $srv->name;
+        }
+
+        //------------GET MECHANIC----------------------//
+        $lstMechanic=User::listByCiteria(array(
+            'role_id' => 3
+        ));
+        $selectionMechanic = array();
+        $selectionMechanic[0] = '-- select mechanic --';
+        foreach($lstMechanic as $mch) {
+            $selectionMechanic[$mch->id] = $mch->name;
+        }
+
+
+        return $this->layout->nest('content', 'wo.add_simple_trx', array(
+            'wodata' => $wodata,
+            'customers' => $customer,
+            'selectionService' => $selectionService,
+            'lstService' => $lstService,
+            'service' => $service,
+            'selectionMechanic' => $selectionMechanic,
+            'mechanic' => $mechanic
+        ));
+    }
+
 
     private function define_asset(){
         Asset::add('style', 'css/styles.css');
@@ -116,11 +160,23 @@ class Work_Order_Controller extends Secure_Controller
     public function post_add(){
         $validation = Validator::make(Input::all(), $this->getRules());
         $wodata = Input::all();
+        $trxType = $wodata['transaction-type'];
+        $redirectFailedUrl = 'work_order/list';
+        if ($trxType == TransactionType::SIMPLE_TRANSACTION) {
+            $redirectFailedUrl = 'work_order/add_simple_trx';
+        } else if ($trxType == TransactionType::WO_TRANSACTION)  {
+            $redirectFailedUrl = 'work_order/add';
+        }
+
+        Log::info('customer id  ['.$wodata['customerId'].']');
+        Log::info('vehicle id   ['.$wodata['vehiclesid'].']');
+
         if(!$validation->fails()) {
             //------set customer want register or not------------
             $register = false;
             if(isset($wodata['checkbox-register']) && $wodata['checkbox-register']=='on') {
                 $register = true;
+                Log::info('register this account..');
             }
             //==check item stock first====
             $msgvalitem=null;
@@ -134,92 +190,112 @@ class Work_Order_Controller extends Secure_Controller
             }
             if ($msgvalitem !== null){
                 Session::flash('message_error', $msgvalitem);
-                return Redirect::to('work_order/add')
+                return Redirect::to($redirectFailedUrl)
                     ->with('wodata',$wodata);
             }
 
             //=== check status customer ===//
-            if($wodata['customerId']==null or $wodata['customerId']=='') {
+            if($wodata['customerId']==null or $wodata['customerId']=='' or $wodata['customerId']=='0') {
+                Log::info('Non customer');
                 $customer = null;
                 if($register) {
+                    Log::info('register new customer');
                     $customer = Customer::create(array(
                         'name' => $wodata['customerName'],
-                        'address1' => $wodata['address1'],
-                        'address2' => $wodata['address2'],
-                        'city' => $wodata['city'],
-                        'post_code' => $wodata['post_code'],
-                        'phone1' => $wodata['phone1'],
-                        'phone2' => $wodata['phone2'],
-                        'additional_info' => $wodata['additional_info'],
+                        'address1' => (isset($wodata['address1']) ? $wodata['address1'] : ''),
+                        'address2' => (issset($wodata['address2']) ? $wodata['address2'] : ''),
+                        'city' => (isset($wodata['city']) ? $wodata['city'] : ''),
+                        'post_code' => (isset($wodata['post_code']) ? $wodata['post_code'] : ''),
+                        'phone1' => (isset($wodata['phone1']) ? $wodata['phone1'] : ''),
+                        'phone2' => (isset($wodata['phone2']) ? $wodata['phone2'] : ''),
+                        'additional_info' => (isset($wodata['additional_info']) ? $wodata['additional_info'] : ''),
                         'status' => statusType::ACTIVE
                     ));
                 } else if(!$register) {
-                    $customer = Customer::find(1)->first(); //used for dummy customer
-                    $customer = $customer->id;
+                    Log::info('used customer dummy');
+                    $customer = 1;
                 } else {
+                    Log::info('failed save wo');
                     Session::flash('message_error', 'Failed save workorder');
-                    return Redirect::to('work_order/add')
+                    return Redirect::to($redirectFailedUrl)
                         ->with('wodata',$wodata);
                 }
                 $wodata['customerId'] = $customer;
             }
 
-            if($wodata['vehiclesid']==null or $wodata['vehiclesid']=='' or $wodata['vehiclesid']==='0'){
-                    //--------------validation vehicle no (unique Id)-------------
-                    $checkVehicle = Vehicle::where('number', '=', $wodata['vehiclesnumber'])->first();
-                    $vehicle = null;
-                    if (!$register && $checkVehicle){
-                        $vehicle = $checkVehicle->id;
-                    } else if($register && !$checkVehicle) {
-                        $vehicle = Vehicle::create(array(
-                            'customer_id' => $wodata['customerId'],
-                            'status' => statusType::ACTIVE,
-                            'number' => $wodata['vehiclesnumber'],
-                            'type' => $wodata['vehiclestype'],
-                            'color' => $wodata['vehiclescolor'],
-                            'model' => $wodata['vehiclesmodel'],
-                            'brand' => $wodata['vehiclesbrand'],
-                            'description' => $wodata['vehiclesdescription']
-                        ));
-                    } else if($register && $checkVehicle) {
-                        Session::flash('message_error', 'Vehicle No has been register');
-                        return Redirect::to('work_order/add')
-                            ->with('wodata',$wodata);
-                    }
+            Log::info('customer_id..'.$wodata['customerId']);
+            if($wodata['vehiclesid']==null or $wodata['vehiclesid']=='' or $wodata['vehiclesid']== '0'){
+                Log::info('masuk create vehicle..');
+                //--------------validation vehicle no (unique Id)-------------
+                $checkVehicle = Vehicle::where('number', '=', $wodata['vehiclesnumber'])->first();
+                $vehicle = null;
+                $dataVehicle = array(
+                    'customer_id' => $wodata['customerId'],
+                    'status' => statusType::ACTIVE,
+                    'number' => $wodata['vehiclesnumber'],
+                    'type' => ((isset($wodata['vehiclestype']) ? $wodata['vehiclestype'] : "")),
+                    'color' => ((isset($wodata['vehiclescolor']) ? $wodata['vehiclescolor'] : "")),
+                    'model' => ((isset($wodata['vehiclesmodel']) ? $wodata['vehiclesmodel'] : "")),
+                    'brand' => ((isset($wodata['vehiclesbrand']) ? $wodata['vehiclesbrand'] : "")),
+                    'description' => ((isset($wodata['vehiclesdescription']) ? $wodata['vehiclesdescription'] : ""))
+                );
+
+                if (!$register && $checkVehicle){
+                    Log::info('vehicle found ');
+                    $vehicle = $checkVehicle->id;
+                } else if($register && !$checkVehicle) {
+                    Log::info('create vehicle with register custmer ');
+                    $vehicle = Vehicle::create($dataVehicle);
+                    Log::info('vehicle id '.$vehicle);
+                } else if(!$register && !$checkVehicle) {
+                    Log::info('create vehicle without register customer');
+                    $vehicle = Vehicle::create($dataVehicle);
+                    Log::info('vehicle id '.$vehicle);
+                } else if($register && $checkVehicle) {
+                    Session::flash('message_error', 'Vehicle No has been register');
+                    return Redirect::to($redirectFailedUrl)
+                        ->with('wodata',$wodata);
+                }
+
                 if($vehicle) {
                     $wodata['vehiclesid'] = $vehicle;
                 }
             } else {
+                Log::info('get vehicle from database..');
                 $vehicle = Vehicle::getSingleResult(array(
                     'customer_id' => $wodata['customerId'],
                     'vehicle_number' => $wodata['vehiclesnumber']
                 ));
                 $wodata['vehiclesid'] = $vehicle->id;
             }
+
+            Log::info('vehicle id from db ['.$wodata['vehiclesid'].']');
             $success = Transaction::create($wodata);
             if($success) {
-                if($wodata['action-button'] === 'saveandclosed') {
+                if($trxType == TransactionType::SIMPLE_TRANSACTION) {
                     $update = Transaction::update_status($success, statusWorkOrder::CLOSE, array(
                         'complete_date' => date('Y-m-d H:i:s'),
                         'payment_date' => date('Y-m-d H:i:s'),
                         'payment_method' => $wodata['payment_method'],
                         'payment_state' => paymentState::DONE,
                     ));
-                    Session::flash('message', 'Success add and closed wo');
+                    Session::flash('message', 'Success add and closed wo'.$wodata['customerName']);
                     return Redirect::to('work_order/to_invoice/'.$success);
                 } else {
-                    Session::flash('message', 'Success add wo');
+                    Session::flash('message', 'Success add wo for '.$wodata['customerName']);
                     return Redirect::to('work_order/list');
                 }
             } else {
                 Session::flash('message_error', 'Failed add wo');
-                return Redirect::to('work_order/add')
+                return Redirect::to($redirectFailedUrl)
                     ->with('wodata',$wodata);
             }
         } else {
             Log::info('Validation fails. error : ' + print_r($validation->errors, true));
-            return Redirect::to('work_order/add')
-                ->with_errors($validation);
+            return Redirect::to($redirectFailedUrl)
+                ->with_errors($validation)
+                ->with('wodata',$wodata);
+
         }
     }
 

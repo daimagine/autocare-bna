@@ -74,3 +74,10 @@ abstract class AssetCondition {
         BAD = 'B' //this condition it's mean the asset can't be used again
     ;
 }
+
+
+abstract class TransactionType {
+    const   SIMPLE_TRANSACTION = 'S',
+        WO_TRANSACTION = 'W' //own asset
+    ;
+}

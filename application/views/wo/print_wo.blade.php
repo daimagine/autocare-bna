@@ -186,7 +186,7 @@
             </tr>
             <tr>
                 <td align="center"> {{$transaction->customer_name}} <br>(customer)</td>
-                <td align="center">Fahmi Buy, <br> (Mgr. Operational)</td>
+                <td align="center">Fahmi Buy, <br> (Kepala Mekanik)</td>
             </tr>
         </table>
     </div>

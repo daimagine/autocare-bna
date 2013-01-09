@@ -112,6 +112,7 @@
             </tr>
             </thead>
             <tbody>
+            @if(isset($transaction->transaction_item) && count($transaction->transaction_item) > 0)
             @foreach($transaction->transaction_item as $trx_item)
             <tr>
                 <td>{{ $trx_item->item_price->item->item_category->name}}</td>
@@ -121,6 +122,7 @@
                 <td>{{ $trx_item->item_price->price}}</td>
             </tr>
             @endforeach
+            @endif
             </tbody>
         </table>
     </div>
@@ -170,6 +172,7 @@
                 <td align="right">IDR {{ ($trx_service->service_formula->price)}}</td>
             </tr>
             @endforeach
+            @if(isset($transaction->transaction_item) && count($transaction->transaction_item) > 0)
             @foreach($transaction->transaction_item as $trx_item)
             <?php $total=number_format((float)(($trx_item->item_price->price) * ($trx_item->quantity)), 2, '.', ''); ?>
             <tr>
@@ -180,6 +183,7 @@
                 <td align="right">IDR {{$total}}</td>
             </tr>
             @endforeach
+            @endif
             <tr>
                 <td></td><td></td><td></td>
                 <td style="color: #ff0000;"><strong>Sub Total</strong></td>
