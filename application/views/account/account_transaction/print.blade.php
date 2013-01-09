@@ -3,7 +3,7 @@
 <head>
 
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-    <title>Account Invoice</title>
+    <title>AUTOCARE - {{ $accountTransType === 'D' ? 'Tagihan Uang Masuk' : 'Tagihan Uang Keluar' }}</title>
     <?php echo Asset::container('print')->styles(); ?>
     <?php echo Asset::container('print')->scripts(); ?>
 
@@ -42,7 +42,7 @@
                     <td><textarea>{{ $account->invoice_no }}</textarea></td>
                 </tr>
                 <tr>
-                    <td class="meta-head">Nomor Reference</td>
+                    <td class="meta-head">Nomor Referensi</td>
                     <td style="text-align: right">:</td>
                     <td>
                         <div class="due">{{ $account->reference_no }}</div>
@@ -84,21 +84,27 @@
                 </tr>
 
                 <tr>
-                    <td class="table-detail-left">Jumlah Tagihan</td>
-                    <td class="table-detail-mid">:</td>
-                    <td class="table-detail-right">Rp. {{ number_format($amount, 2) }},-</td>
-                </tr>
-
-                <tr>
                     <td class="table-detail-left">Total Pajak</td>
                     <td class="table-detail-mid">:</td>
                     <td class="table-detail-right">Rp. {{ number_format($tax, 2) }},-</td>
                 </tr>
 
                 <tr>
-                    <td class="table-detail-left">Nett Tagihan</td>
+                    <td class="table-detail-left">Tagihan Non Pajak</td>
                     <td class="table-detail-mid">:</td>
                     <td class="table-detail-right">Rp. {{ number_format(( $amount - $tax ), 2) }},-</td>
+                </tr>
+
+                <tr>
+                    <td class="table-detail-left">Total Tagihan</td>
+                    <td class="table-detail-mid">:</td>
+                    <td class="table-detail-right">Rp. {{ number_format($amount, 2) }},-</td>
+                </tr>
+
+                <tr>
+                    <td class="table-detail-left">Pembayaran Saat Ini</td>
+                    <td class="table-detail-mid">:</td>
+                    <td class="table-detail-right">Rp. {{ number_format(( $account->paid ), 2) }},-</td>
                 </tr>
 
                 <tr>
@@ -120,7 +126,7 @@
                     <td style="text-align: center">No</td>
                     <td style="text-align: center">Barang/Jasa</td>
                     <td style="text-align: center">Jumlah</td>
-                    <td style="text-align: center">Account</td>
+                    <td style="text-align: center">Kategori</td>
                     <td style="text-align: center">Persen Pajak</td>
                     <td style="text-align: center">Pajak</td>
                     <td style="text-align: center">Subtotal</td>

@@ -98,7 +98,5 @@ return array(
         'sync/production/fetch_last_id',
         'sync/production/sync_data',
 
-        'account/print',
-        'work_order/print_wo'
     ),
 );
