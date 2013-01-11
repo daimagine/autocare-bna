@@ -356,4 +356,61 @@ class AccountTransaction extends Eloquent {
         );
         return($keystore[$key]);
     }
+
+    public static function dueRemaining($type) {
+        $day_due = Config::get('default.scheduler.settlement.day_due');
+        $tbl = static::$table;
+        $query = "SELECT at.*, ac.name as account_name FROM $tbl as at "
+                    . "INNER JOIN account as ac ON ac.id = at.account_id "
+                    . "WHERE at.status = TRUE "
+                    . "AND at.type = ? "
+                    . "AND ( at.paid_date IS NULL OR at.paid < at.due )"
+                    . "AND at.due_date < (DATE_SUB(CURDATE(), INTERVAL $day_due DAY)) "
+                    . "AND at.due_date >= CURDATE() "
+                    . "ORDER BY at.due_date DESC "
+                    . "LIMIT 5 "
+                ;
+        return DB::query($query, array($type));
+    }
+
+    public static function dueRemainingTotal($type) {
+        $day_due = Config::get('default.scheduler.settlement.day_due');
+        $tbl = static::$table;
+        $query = "SELECT count(*) as count_account FROM $tbl as at "
+            . "INNER JOIN account as ac ON ac.id = at.account_id "
+            . "WHERE at.status = TRUE "
+            . "AND at.type = ? "
+            . "AND ( at.paid_date IS NULL OR at.paid < at.due )"
+            . "AND at.due_date < (DATE_SUB(CURDATE(), INTERVAL $day_due DAY)) "
+            . "AND at.due_date >= CURDATE() "
+        ;
+        return DB::only($query, array($type));
+    }
+
+    public static function expired($type) {
+        $tbl = static::$table;
+        $query = "SELECT at.*, ac.name as account_name FROM $tbl as at "
+            . "INNER JOIN account as ac ON ac.id = at.account_id "
+            . "WHERE at.status = TRUE "
+            . "AND at.type = ? "
+            . "AND ( at.paid_date IS NULL OR at.paid < at.due )"
+            . "AND at.due_date < CURDATE() "
+            . "ORDER BY at.due_date DESC "
+            . "LIMIT 5 "
+        ;
+        return DB::query($query, array($type));
+    }
+
+    public static function expiredTotal($type) {
+        $tbl = static::$table;
+        $query = "SELECT count(*) as account_name FROM $tbl as at "
+            . "INNER JOIN account as ac ON ac.id = at.account_id "
+            . "WHERE at.status = TRUE "
+            . "AND at.type = ? "
+            . "AND ( at.paid_date IS NULL OR at.paid < at.due )"
+            . "AND at.due_date < CURDATE() "
+        ;
+        return DB::only($query, array($type));
+    }
+
 }

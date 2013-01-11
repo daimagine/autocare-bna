@@ -6,41 +6,120 @@
 
     <div class="grid8">
 
-        <div class="searchLine">
-            <div>
-                <span class="icos-archive"></span>
-                <h6 style="margin-bottom: 5px;">Recent News</h6>
+        <div class="widget">
+            <div class="whead">
+                <h6>Purchase Order Alert</h6>
+                <div class="clear"></div>
             </div>
-            <div class="clear"></div>
-
-            <div class="relative">
-                <input id="searchInputNews" type="text" name="search" class="ac" placeholder="Enter search text...">
-                <button id="searchInputBtn" type="submit" name="find" value="">
-                    <span class="icos-search"></span>
-                </button>
-            </div>
-            <div class="sResults">
-                <span class="arrow"></span>
-                <ul class="updates">
-                    @foreach($news as $n)
-                    <li class="newsline">
-                                <span class="uNotice">
-                                    <a href="#detail" onclick="detailNews('{{ $n->id }}')">{{ $n->title }}</a>
-                                    <span>{{ $n->resume }} ...</span>
-                                </span>
-                                <span class="uDate"><span>{{ date('d', strtotime($n->created_at)) }}</span>
-                                    {{ date('M', strtotime($n->created_at)) }}</span>
-                        <span class="clear"></span>
-                    </li>
-                    @endforeach
-                    <li>
-                            <span class="">
-                                <a href="/news/all" title="">Show All News</a>
+            <ul class="updates">
+                @foreach($payablesExp as $a)
+                <li>
+                        <span class="uAlert">
+                            Invoice <a href="#" title="">{{ $a->invoice_no }}</a> {{ $a->type === 'D' ? 'from' : 'to' }} <b>{{ $a->subject }}</b>
+                            <span>
+                                <b>Rp. {{ number_format($a->due, 2) }} </b> &nbsp; {{ abs( floor(( strtotime($a->due_date) - time() )/3600/24) ) }} days passed
+                                <br>{{ $a->due_date }}
                             </span>
-                        <span class="clear"></span>
+                        </span>
+                        <span class="uDate" style="width: 95px;">
+                            <a href="{{ url('account/pay_invoice/'.$a->type.'/'.$a->id) }}" title="" class="sideB bLightBlue mt10">pay invoice</a>
+                        </span>
+                    <span class="clear"></span>
+                </li>
+                @endforeach
+                @if(sizeof($payablesExp)==0)
+                    <li>
+                        <span class="grey">No expired purchase order</span>
                     </li>
-                </ul>
+                @else
+                    <li>
+                        <a href="{{ url('account/account_payable/unpaid') }}">See all {{ ( $totalPayablesExp > 0 ? $totalPayablesExp : '' ) }} expired purchase order</a>
+                    </li>
+                @endif
+
+                @foreach($payables as $a)
+                <li>
+                        <span class="uNotice">
+                            Invoice <a href="#" title="">{{ $a->invoice_no }}</a> {{ $a->type === 'D' ? 'from' : 'to' }} <b>{{ $a->subject }}</b>
+                            <span>
+                                <b>Rp. {{ number_format($a->due, 2) }} </b> &nbsp; {{ abs( floor(( time() - strtotime($a->due_date) )/3600/24) ) }} days remaining
+                                <br>{{ $a->due_date }}
+                            </span>
+                        </span>
+                        <span class="uDate" style="width: 95px;">
+                            <a href="{{ url('account/pay_invoice/'.$a->type.'/'.$a->id) }}" title="" class="sideB bDefault mt10">pay invoice</a>
+                        </span>
+                    <span class="clear"></span>
+                </li>
+                @endforeach
+                @if(sizeof($payables)==0)
+                    <li>
+                        <span class="grey">No upcoming purchase order for {{ Config::get('default.scheduler.settlement.day_due') }} following days</span>
+                    </li>
+                @else
+                    <li>
+                        <a href="{{ url('account/account_payable/unpaid') }}">See all {{ ( $totalPayables > 0 ? $totalPayables : '' ) }} upcoming due purchase order</a>
+                    </li>
+                @endif
+            </ul>
+        </div>
+
+        <div class="widget">
+            <div class="whead">
+                <h6>Account Receivable Alert</h6>
+                <div class="clear"></div>
             </div>
+            <ul class="updates">
+                @foreach($receivablesExp as $a)
+                <li>
+                        <span class="uAlert">
+                            Invoice <a href="#" title="">{{ $a->invoice_no }}</a> {{ $a->type === 'D' ? 'from' : 'to' }} <b>{{ $a->subject }}</b>
+                            <span>
+                                <b>Rp. {{ number_format($a->due, 2) }} </b> &nbsp; {{ abs( floor(( strtotime($a->due_date) - time() )/3600/24) ) }} days passed
+                                <br>{{ $a->due_date }}
+                            </span>
+                        </span>
+                        <span class="uDate" style="width: 95px;">
+                            <a href="{{ url('account/pay_invoice/'.$a->type.'/'.$a->id) }}" title="" class="sideB bLightBlue mt10">pay invoice</a>
+                        </span>
+                    <span class="clear"></span>
+                </li>
+                @endforeach
+                @if(sizeof($receivablesExp)==0)
+                    <li>
+                        <span class="grey">No expired account receivable</span>
+                    </li>
+                @else
+                    <li>
+                        <a href="{{ url('account/account_receivable/unpaid') }}">See all {{ ( $totalReceivablesExp > 0 ? $totalReceivablesExp : '' ) }} expired account receivable</a>
+                    </li>
+                @endif
+
+                @foreach($receivables as $a)
+                <li>
+                        <span class="uNotice">
+                            Invoice <a href="#" title="">{{ $a->invoice_no }}</a> {{ $a->type === 'D' ? 'from' : 'to' }} <b>{{ $a->subject }}</b>
+                            <span>
+                                <b>Rp. {{ number_format($a->due, 2) }} </b> &nbsp; {{ abs( floor(( time() - strtotime($a->due_date) )/3600/24) ) }} days remaining
+                                <br>{{ $a->due_date }}
+                            </span>
+                        </span>
+                        <span class="uDate" style="width: 95px;">
+                            <a href="{{ url('account/pay_invoice/'.$a->type.'/'.$a->id) }}" title="" class="sideB bDefault mt10">pay invoice</a>
+                        </span>
+                    <span class="clear"></span>
+                </li>
+                @endforeach
+                @if(sizeof($receivables)==0)
+                    <li>
+                        <span class="grey">No upcoming account receivable for {{ Config::get('default.scheduler.settlement.day_due') }} following days</span>
+                    </li>
+                @else
+                    <li>
+                        <a href="{{ url('account/account_receivable/unpaid') }}">See all {{ ( $totalReceivables > 0 ? $totalReceivables : '' ) }} upcoming due account receivable</a>
+                    </li>
+                @endif
+            </ul>
         </div>
 
         <div class="widget">
@@ -74,6 +153,11 @@
             </table>
         </div>
 
+    </div>
+
+
+    <div class="grid4">
+
         <!-- updates item price here -->
         <div class="widget">
             <div class="whead">
@@ -88,8 +172,8 @@
                      <span><b>{{$ip->users->name}}</b> update harga {{$ip->item->name}} dari {{$ip->prev_price}} menjadi {{$ip->price}}</span>
 <!--                     <a href="#" title="" class="sideB bLightBlue mt10">Add new session</a>-->
                  </span>
-                 <span class="uDate"><span>{{ date('d', strtotime($ip->created_at)) }}</span>{{ date('M', strtotime($ip->created_at)) }}</span>
-                 <span class="clear"></span>
+                    <span class="uDate"><span>{{ date('d', strtotime($ip->created_at)) }}</span>{{ date('M', strtotime($ip->created_at)) }}</span>
+                    <span class="clear"></span>
                 </li>
                 @endforeach
                 <li>
@@ -102,45 +186,9 @@
         </div>
     </div>
 
-
-    <div class="grid4">
-
-        <!--        <div class="widget">-->
-<!--            <div class="whead">-->
-<!--                <h6>Invoices statistics</h6>-->
-<!--                <div class="titleOpt">-->
-<!--                    <a href="#" data-toggle="dropdown"><span class="iconb" data-icon=""></span><span class="clear"></span></a>-->
-<!--                    <ul class="dropdown-menu pull-right">-->
-<!--                        <li><a href="#" class=""><span class="icon-plus"></span>Add</a></li>-->
-<!--                        <li><a href="#" class=""><span class="icon-remove"></span>Remove</a></li>-->
-<!--                        <li><a href="#" class=""><span class="icon-pen_alt2"></span>Edit</a></li>-->
-<!--                        <li><a href="#" class=""><span class="icon-heart"></span>Do whatever you like</a></li>-->
-<!--                    </ul>-->
-<!--                </div>-->
-<!--                <div class="clear"></div>-->
-<!--            </div>-->
-<!--            <div class="body">-->
-<!--                <ul class="wInvoice">-->
-<!--                    <li><h4 class="green">63,456</h4><span>amount paid</span></li>-->
-<!--                    <li><h4 class="blue">218,518</h4><span>in queue</span></li>-->
-<!--                    <li><h4 class="red">16,542</h4><span>total taxes</span></li>-->
-<!--                </ul>-->
-<!--                <div class="clear"></div>-->
-<!---->
-<!--                <div class="invList fluid">-->
-<!--                    <a href="#" title="" class="buttonS bGreen grid6">Print invoices</a>-->
-<!--                    <a href="#" title="" class="buttonS bLightBlue grid6">Generate report</a>-->
-<!--                </div>-->
-<!--                <div class="clear"></div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-    </div>
-
 </div>
 
 <div id="detailNews" class="dialog" title="Detail News" ></div>
-
 
 @endsection
 
@@ -163,6 +211,43 @@
             <a href="settlement/list" title="" class="floatR buttonS bLightBlue">Process Settlement</a>
         </div>
         <div class="clear"></div>
+    </div>
+</div>
+
+<div class="searchLine">
+    <div style="padding-left: 5px;">
+        <span class="icos-archive"></span>
+        <h6 style="margin-bottom: 5px;">Recent News</h6>
+    </div>
+    <div class="clear"></div>
+
+    <div class="relative">
+        <input id="searchInputNews" type="text" name="search" class="ac" placeholder="Enter search text...">
+        <button id="searchInputBtn" type="submit" name="find" value="">
+            <span class="icos-search"></span>
+        </button>
+    </div>
+    <div class="sResults">
+        <span class="arrow"></span>
+        <ul class="updates">
+            @foreach($news as $n)
+            <li class="newsline">
+                <span class="uNotice" style="max-width: 72%;">
+                    <a href="#detail" onclick="detailNews('{{ $n->id }}')">{{ $n->title }}</a>
+                    <span>{{ $n->resume }} ...</span>
+                </span>
+                <span class="uDate"><span>{{ date('d', strtotime($n->created_at)) }}</span>
+                    {{ date('M', strtotime($n->created_at)) }}</span>
+                <span class="clear"></span>
+            </li>
+            @endforeach
+            <li>
+                <span class="">
+                    <a href="/news/all" title="">Show All News</a>
+                </span>
+                <span class="clear"></span>
+            </li>
+        </ul>
     </div>
 </div>
 

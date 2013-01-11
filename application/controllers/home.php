@@ -40,14 +40,33 @@ class Home_Controller extends Secure_Controller {
         $news = News::recent();
         $item_prices = ItemPrice::recent();
         $settlements = Settlement::summaryDashboard();
-        $payables = AccountTransaction::dueRemaining();
-        $receivables = AccountTransaction::dueRemaining();
+
+        $payables = AccountTransaction::dueRemaining(AUTOCARE_ACCOUNT_TYPE_CREDIT);
+        $totalPayables = AccountTransaction::dueRemainingTotal(AUTOCARE_ACCOUNT_TYPE_CREDIT);
+        $payablesExp = AccountTransaction::expired(AUTOCARE_ACCOUNT_TYPE_CREDIT);
+        $totalPayablesExp = AccountTransaction::expiredTotal(AUTOCARE_ACCOUNT_TYPE_CREDIT);
+
+        $receivables = AccountTransaction::dueRemaining(AUTOCARE_ACCOUNT_TYPE_DEBIT);
+        $totalReceivables = AccountTransaction::dueRemainingTotal(AUTOCARE_ACCOUNT_TYPE_DEBIT);
+        $receivablesExp = AccountTransaction::expired(AUTOCARE_ACCOUNT_TYPE_DEBIT);
+        $totalReceivablesExp = AccountTransaction::expiredTotal(AUTOCARE_ACCOUNT_TYPE_DEBIT);
+
         Asset::add('home.application', 'js/home/application.js', array('jquery'));
         return $this->layout->nest('content', 'home.dashboard', array(
             'news' => $news,
             'members' => $members,
+            'settlements' => $settlements,
             'item_prices' => $item_prices,
-            'settlements' => $settlements
+
+            'payables' => $payables,
+            'totalPayables' => $totalPayables,
+            'payablesExp' => $payablesExp,
+            'totalPayablesExp' => $totalPayablesExp,
+
+            'receivables' => $receivables,
+            'totalReceivables' => $totalReceivables,
+            'receivablesExp' => $receivablesExp,
+            'totalReceivablesExp' => $totalReceivablesExp,
         ));
 	}
 

@@ -43,7 +43,7 @@ return array(
     'scheduler' => array(
         'settlement' => array(
             //days before settlement overdue
-            'day_due'   => 1,
+            'day_due'   => 3,
             //database key in autocare_properties
             'db_key'    => 'SETTLEMENT_REMINDER_KEY'
         ),
