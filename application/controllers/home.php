@@ -71,6 +71,7 @@ class Home_Controller extends Secure_Controller {
 	}
 
     public function action_sandbox() {
+        return Response::error(500);
         Asset::add('home.application', 'js/home/sandbox.js', array('jquery', 'charts.highcharts'));
         return $this->layout->nest('content', 'home.sandbox', array() );
     }
