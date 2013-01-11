@@ -33,13 +33,14 @@
                 @else
                     <td>&nbsp;</td>
                 @endif
-                <td>{{ $account->name }}</td>
-                <td>{{ $account->description }}</td>
-                <td>{{ HTML::account_type($account->type) }}</td>
+                <td>{{ $account->name }}&nbsp;</td>
+                <td>{{ $account->description }}&nbsp;</td>
+                <td>{{ HTML::account_type($account->type) }}&nbsp;</td>
                 <td class="tableActs" align="center">
                     @if($account->status)
                     <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
                     @endif
+                    &nbsp;
                 </td>
                 <td class="tableActs" align="center">
                     <a href="/account/edit/{{ $account->id }}" 
@@ -56,6 +57,7 @@
                                 <span class="iconb" data-icon=""></span>
                         </a>
                     @endif
+                    &nbsp;
                 </td>
             </tr>
             @endforeach

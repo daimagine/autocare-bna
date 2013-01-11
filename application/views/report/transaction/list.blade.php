@@ -128,11 +128,12 @@
                            data-id="{{ $transaction->transaction_id }}">
                             <span class="iconb" data-icon=""></span>
                         </a>
+                        &nbsp;
                     </td>
-                    <td>{{ $transaction->invoice_no }}</td>
-                    <td>{{ $transaction->workorder_no }}</td>
-                    <td>{{ $transaction->customer_name }}</td>
-                    <td>{{ $transaction->vehicle_no }}</td>
+                    <td>{{ $transaction->invoice_no }}&nbsp;</td>
+                    <td>{{ $transaction->workorder_no }}&nbsp;</td>
+                    <td>{{ $transaction->customer_name }}&nbsp;</td>
+                    <td>{{ $transaction->vehicle_no }}&nbsp;</td>
 
                     @if($transaction->workorder_status === statusWorkOrder::OPEN)
                         <td>Open</td>
@@ -141,14 +142,14 @@
                     @elseif($transaction->workorder_status === statusWorkOrder::CANCELED)
                         <td>Canceled</td>
                     @else
-                        <td></td>
+                        <td>&nbsp;</td>
                     @endif
 
-                    <td>{{ date('Y-m-d', strtotime($transaction->transaction_date)) }}</td>
-                    <td>{{ $transaction->total_services }}</td>
-                    <td>{{ $transaction->total_parts }}</td>
-                    <td>IDR {{  number_format($transaction->total_transactions, 2) }}</td>
-                    <td>IDR {{  number_format($transaction->discount, 2) }}</td>
+                    <td>{{ date('Y-m-d', strtotime($transaction->transaction_date)) }}&nbsp;</td>
+                    <td>{{ $transaction->total_services }}&nbsp;</td>
+                    <td>{{ $transaction->total_parts }}&nbsp;</td>
+                    <td>IDR {{  number_format($transaction->total_transactions, 2) }}&nbsp;</td>
+                    <td>IDR {{  number_format($transaction->discount, 2) }}&nbsp;</td>
 
                     @if($transaction->payment_type === paymentType::CASH)
                         <td>Cash</td>
@@ -159,7 +160,7 @@
                     @elseif($transaction->payment_type === paymentType::CORPORATE)
                         <td>Corporate</td>
                     @else
-                        <td></td>
+                        <td>&nbsp;</td>
                     @endif
                 </tr>
             @endforeach

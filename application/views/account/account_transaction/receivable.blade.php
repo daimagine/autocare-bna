@@ -39,21 +39,22 @@
             <tbody>
             @foreach($accounts as $account)
             <tr class="">
-                <td>{{ $account->account_name }}</td>
-                <td>{{ $account->invoice_no }}</td>
-                <td>{{ $account->reference_no }}</td>
-                <td>{{ $account->subject }}</td>
-                <td>{{ $account->input_date }}</td>
-                <td>{{ $account->invoice_date }}</td>
-                <td>{{ $account->due_date }}</td>
-                <td>{{ $account->paid !== null ? 'IDR' : '' }} {{  number_format($account->paid, 2) }}</td>
-                <td>{{ $account->due !== null ? 'IDR' : '' }} {{  number_format($account->due, 2) }}</td>
-                <td>IDR {{ number_format($account->due - $account->paid, 2) }}</td>
-                <td>{{ $account->paid_date === null ? 'awaiting payment'  : ( ($account->due - $account->paid == 0 ) ? 'paid' : 'partially paid' ) }}</td>
+                <td>{{ $account->account_name }}&nbsp;</td>
+                <td>{{ $account->invoice_no }}&nbsp;</td>
+                <td>{{ $account->reference_no }}&nbsp;</td>
+                <td>{{ $account->subject }}&nbsp;</td>
+                <td>{{ $account->input_date }}&nbsp;</td>
+                <td>{{ $account->invoice_date }}&nbsp;</td>
+                <td>{{ $account->due_date }}&nbsp;</td>
+                <td>{{ $account->paid !== null ? 'IDR' : '' }} {{  number_format($account->paid, 2) }}&nbsp;</td>
+                <td>{{ $account->due !== null ? 'IDR' : '' }} {{  number_format($account->due, 2) }}&nbsp;</td>
+                <td>IDR {{ number_format($account->due - $account->paid, 2) }}&nbsp;</td>
+                <td>{{ $account->paid_date === null ? 'awaiting payment'  : ( ($accunt->due - $account->paid == 0 ) ? 'paid' : 'partially paid' ) }}&nbsp;</td>
                 <td class="tableActs" align="center">
                     @if($account->status)
                     <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
                     @endif
+                    &nbsp;
                 </td>
                 <td class="tableActs" align="center">
                     <a href='{{ url("account/invoice_edit/$accountTransType/$account->id") }}'
@@ -83,6 +84,7 @@
                        original-title="Print Invoice" target="_blank">
                         <span class="iconb" data-icon=""></span>
                     </a>
+                    &nbsp;
                 </td>
             </tr>
             @endforeach

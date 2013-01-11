@@ -35,14 +35,14 @@
             <tbody>
             @foreach($item as $item)
             <tr class="">
-                <td class="name">{{ $item->name }}</td>
-                <td>{{ $item->code }}</td>
-                <td>{{ $item->stock }}</td>
-                <td>{{ $item->stock_minimum }}</td>
-                <td>{{ $item->description }}</td>
-                <td>{{ $item->price }}</td>
-                <td>{{ $item->vendor }}</td>
-                <td>{{ $item->created_at }}</td>
+                <td class="name">{{ $item->name }}&nbsp;</td>
+                <td>{{ $item->code }}&nbsp;</td>
+                <td>{{ $item->stock }}&nbsp;</td>
+                <td>{{ $item->stock_minimum }}&nbsp;</td>
+                <td>{{ $item->description }}&nbsp;</td>
+                <td>{{ $item->price }}&nbsp;</td>
+                <td>{{ $item->vendor }}&nbsp;</td>
+                <td>{{ $item->created_at }}&nbsp;</td>
 <!--                <td>{{ $item->expiry_date }}</td>-->
                 <td class="tableActs" align="center">
                     <a href="edit/{{ $item->id }}" class="classConfirmEdit tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
@@ -50,6 +50,7 @@
                         <span class="iconb" data-icon=""></span>
                         <!-- Dialog modal confirmation delete item-->
                     </a>
+                    &nbsp;
                 </td>
             </tr>
             @endforeach

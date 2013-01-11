@@ -89,11 +89,11 @@
             <tbody>
             @foreach($accounts as $account)
             <tr class="">
-                <td>{{ $account->year }}</td>
-                <td>{{ $account->monthname }}</td>
-                <td>{{ $account->name }}</td>
-                <td>{{ $account->count }}</td>
-                <td>IDR {{  number_format($account->amount, 2) }}</td>
+                <td>{{ $account->year }}&nbsp;</td>
+                <td>{{ $account->monthname }}&nbsp;</td>
+                <td>{{ $account->name }}&nbsp;</td>
+                <td>{{ $account->count }}&nbsp;</td>
+                <td>IDR {{  number_format($account->amount, 2) }}&nbsp;</td>
             </tr>
             @endforeach
             </tbody>

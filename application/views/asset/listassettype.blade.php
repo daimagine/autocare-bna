@@ -24,11 +24,11 @@
             @foreach($lstAssetType as $type)
             <?php $no=0; ?>
             <tr class="">
-                <td>{{ $no+1 }}</td>
-                <td class="name">{{ $type->name }}</td>
-                <td>{{ $type->description }}</td>
-                <td>{{ $type->status ==1 ? 'Active' : 'Inactive' }}</td>
-                <td>{{ $type->created_at }}</td>
+                <td>{{ $no+1 }}&nbsp;</td>
+                <td class="name">{{ $type->name }}&nbsp;</td>
+                <td>{{ $type->description }}&nbsp;</td>
+                <td>{{ $type->status ==1 ? 'Active' : 'Inactive' }}&nbsp;</td>
+                <td>{{ $type->created_at }}&nbsp;</td>
                 <td class="tableActs" align="center">
                     <a href="edit_asset_type/{{ $type->id }}" class="tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
                     @if($type->status == statusType::ACTIVE)
@@ -40,6 +40,7 @@
                         <!-- Dialog modal confirmation delete item-->
                     </a>
                     @endif
+                    &nbsp;
                 </td>
                 <?php $no++; ?>
             </tr>

@@ -25,11 +25,11 @@
             <tbody>
             @foreach($access as $access)
             <tr class="">
-                <td>{{ $access->name }}</td>
-                <td>{{ $access->action }}</td>
-                <td>{{ $access->description }}</td>
-                <td>{{ HTML::access_type($access->type) }}</td>
-                <td>{{ $access->parentName() }}</td>
+                <td>{{ $access->name }}&nbsp;</td>
+                <td>{{ $access->action }}&nbsp;</td>
+                <td>{{ $access->description }}&nbsp;</td>
+                <td>{{ HTML::access_type($access->type) }}&nbsp;</td>
+                <td>{{ $access->parentName() }}&nbsp;</td>
                 <td class="tableActs" align="center">
                     @if($access->visible)
                     <a href="#" class="fs1 iconb tipS" original-title="Visible" data-icon=""></a>
@@ -40,6 +40,7 @@
                     @if($access->parent)
                     <a href="#" class="fs1 iconb tipS" original-title="Parent Nav" data-icon=""></a>
                     @endif
+                    &nbsp;
                 </td>
                 <td class="tableActs" align="center">
                     <a href="/access/edit/{{ $access->id }}"
@@ -54,6 +55,7 @@
 						dialog-confirm-title="Remove Confirmation">
 							<span class="iconb" data-icon=""></span>
 					</a>
+                    &nbsp;
                 </td>
             </tr>
             @endforeach
