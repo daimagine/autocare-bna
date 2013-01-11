@@ -21,7 +21,7 @@
 				<th>Brand</th>
 				<th>Description</th>
 				<th>Status</th>
-				<th>Actions</td>
+				<th>Actions</th>
             </tr>
             </thead>
             <tbody>
