@@ -150,6 +150,7 @@ class Item_Controller extends Secure_Controller {
             $storeItemPrice = ItemPrice::create(array(
                 'item_id' => $success,
                 'price' => $itemdata['price'],
+                'prev_price' => 0,
                 'purchase_price' => $itemdata['purchase_price']
             ));
             if($success and $storeItemPrice) {
@@ -228,16 +229,9 @@ class Item_Controller extends Secure_Controller {
                 $newPrice = ItemPrice::create(array(
                     'item_id' => $id,
                     'price' => $item['price'],
+                    'prev_price' => $oldPrice->price,
                     'purchase_price' => $item['purchase_price']
                 ));
-                //create
-//                $news = new News;
-//                $news->title = $data['title'];
-//                $news->resume = @$data['resume'];
-//                $news->file_path = @$data['file_path'];
-//                $news->content = @$data['content'];//save
-//                $news->save();
-//                return $news->id;
                 if ($updateItemPrice==null || $newPrice==null) {
                     Session::flash('message_error', 'Failed update item');
                 }
@@ -452,6 +446,7 @@ class Item_Controller extends Secure_Controller {
                         $successAddPrice = ItemPrice::create(array(
                             'item_id' => $item,
                             'price' => $data['price'],
+                            'prev_price' => 0,
                             'purchase_price' => $data['purchase_price']
                         ));
                         if($successAddStockFlow && $item && $successAddPrice) {

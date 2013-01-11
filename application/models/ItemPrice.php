@@ -57,6 +57,7 @@ class ItemPrice extends Eloquent {
         $itemPrice->purchase_price = $data['purchase_price'];
         $itemPrice->item_id = $item->id;
         $itemPrice->price = $data['purchase_price'];
+        $itemPrice->prev_price = $data['prev_price'];
         $itemPrice->status = statusType::ACTIVE;
         $itemPrice->configured_by = Auth::user()->id;
         $itemPrice->save();
