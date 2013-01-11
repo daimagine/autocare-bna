@@ -134,14 +134,14 @@
         <table cellpadding="0" cellspacing="0" width="100%" class="tDark">
             <thead>
             <tr>
-                <td>Id</td>
+                <td>Staff Id</td>
                 <td>Name</td>
             </tr>
             </thead>
             <tbody>
             @foreach($transaction->user_workorder as $mechanic)
             <tr>
-                <td>{{ $mechanic->user->id }}</td>
+                <td>{{ $mechanic->user->staff_id }}</td>
                 <td>{{ $mechanic->user->name }}</td>
             </tr>
             @endforeach

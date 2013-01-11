@@ -72,6 +72,20 @@ textarea:hover, textarea:focus, #items td.total-value textarea:hover, #items td.
 #service td.balance { background: #eee; }
 #service td.blank { border: 0; }
 
+#mechanic { clear: both; width: 100%; margin: 30px 0 0 0; border: 1px solid white; }
+#mechanic th { background: #fff; }
+#mechanic textarea { width: 80px; height: 50px; }
+#mechanic tr.mechanic-row td { border: 0; vertical-align: top; }
+#mechanic td.description { width: 260px; }
+#mechanic td.staff-id { width: 80px; }
+#mechanic td.mechanic-name { width: 100px; }
+#mechanic td.description textarea, #mechanic td.mechanic-name textarea { width: 100%; }
+#mechanic td.total-line { border-right: 0; text-align: right; }
+#mechanic td.total-value { border-left: 0; padding: 5px; }
+#mechanic td.total-value textarea { height: 20px; background: none; }
+#mechanic td.balance { background: #eee; }
+#mechanic td.blank { border: 0; }
+
 
 .other{ padding-top: 8px; }
 

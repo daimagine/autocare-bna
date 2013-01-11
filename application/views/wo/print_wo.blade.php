@@ -144,37 +144,74 @@
         <tr>
         <td colspan="6 "><div class="clear"></div> </td>
         </tr>
-<!--        <tr>-->
-<!--            <td colspan="2" class="blank" > </td>-->
-<!--            <td colspan="3" class="total-line" >Subtotal</td>-->
-<!--            <td class="total-value" style="text-align: right; "><div id="subtotal">Rp.  {{ number_format($transaction->amount, 0,",",".") }},-</div></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td colspan="2" class="blank"> </td>-->
-<!--            <td colspan="3" class="total-line">Pph 0%</td>-->
-<!--            <td class="total-value" style="text-align: right"><div id="pph">Rp. 0.00</div></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td colspan="2" class="blank"> </td>-->
-<!--            <td colspan="3" class="total-line">-->
-<!--                Discount Service-->
-<!--                @if(isset($transaction->vehicle->membership->discount))-->
-<!--                {{$transaction->vehicle->membership->discount->value}} %-->
-<!--                @endif-->
-<!--            </td>-->
-<!--            <td class="total-value"  style="text-align: right"><div id="discount">Rp. {{ number_format($transaction->discount_amount, 0,",",".") }},-</div></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td colspan="2" class="blank"> </td>-->
-<!--            <td colspan="3" class="total-line">Total</td>-->
-<!--            <td class="total-value"  style="text-align: right"><div id="total">Rp.  {{ number_format($transaction->paid_amount, 0,",",".") }},-</div></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td colspan="2" class="blank"> </td>-->
-<!--            <td colspan="3" class="total-line">Amount Paid</td>-->
-<!---->
-<!--            <td class="total-value" style="text-align: right">Rp.  {{ number_format($transaction->paid_amount, 0,",",".") }},-</td>-->
-<!--        </tr>-->
+    </table>
+
+
+    <div class="clear"></div>
+
+    <div class="table-name">
+        <h5>MECHANIC LIST</h5>
+    </div>
+    <table id="mechanic" style="margin-top: 0px">
+        <tr>
+            <td style="text-align: center">No</td>
+            <td style="text-align: center">Saff Id</td>
+            <td style="text-align: center">Mechanic Name</td>
+        </tr>
+
+        <?php $i=1; ?>
+        @foreach($transaction->user_workorder as  $mechanic)
+        <tr class="item-row">
+            <td class="other" style="width: 63px" align="center">{{$i}}</td>
+            <td class="staff-id other" align="center">{{ $mechanic->user->staff_id}}</td>
+            <td class="mechanic-name other">{{ $mechanic->user->name}}</td>
+        </tr>
+        <?php $i++; ?>
+        @endforeach
+        <?php $j=0; ?>
+        @while($j<3)
+        <tr class="service-row">
+            <td class="other" style="width: 63px" align="center">{{$i}}</td>
+            <td class="staff-id other" align="center">...............</td>
+            <td class="item-name other" align="center">...............</td>
+        <tr class="service-row">
+            <?php $j++; $i++; ?>
+            @endwhile
+
+        <tr>
+            <td colspan="6 "><div class="clear"></div> </td>
+        </tr>
+        <!--        <tr>-->
+        <!--            <td colspan="2" class="blank" > </td>-->
+        <!--            <td colspan="3" class="total-line" >Subtotal</td>-->
+        <!--            <td class="total-value" style="text-align: right; "><div id="subtotal">Rp.  {{ number_format($transaction->amount, 0,",",".") }},-</div></td>-->
+        <!--        </tr>-->
+        <!--        <tr>-->
+        <!--            <td colspan="2" class="blank"> </td>-->
+        <!--            <td colspan="3" class="total-line">Pph 0%</td>-->
+        <!--            <td class="total-value" style="text-align: right"><div id="pph">Rp. 0.00</div></td>-->
+        <!--        </tr>-->
+        <!--        <tr>-->
+        <!--            <td colspan="2" class="blank"> </td>-->
+        <!--            <td colspan="3" class="total-line">-->
+        <!--                Discount Service-->
+        <!--                @if(isset($transaction->vehicle->membership->discount))-->
+        <!--                {{$transaction->vehicle->membership->discount->value}} %-->
+        <!--                @endif-->
+        <!--            </td>-->
+        <!--            <td class="total-value"  style="text-align: right"><div id="discount">Rp. {{ number_format($transaction->discount_amount, 0,",",".") }},-</div></td>-->
+        <!--        </tr>-->
+        <!--        <tr>-->
+        <!--            <td colspan="2" class="blank"> </td>-->
+        <!--            <td colspan="3" class="total-line">Total</td>-->
+        <!--            <td class="total-value"  style="text-align: right"><div id="total">Rp.  {{ number_format($transaction->paid_amount, 0,",",".") }},-</div></td>-->
+        <!--        </tr>-->
+        <!--        <tr>-->
+        <!--            <td colspan="2" class="blank"> </td>-->
+        <!--            <td colspan="3" class="total-line">Amount Paid</td>-->
+        <!---->
+        <!--            <td class="total-value" style="text-align: right">Rp.  {{ number_format($transaction->paid_amount, 0,",",".") }},-</td>-->
+        <!--        </tr>-->
     </table>
 
 

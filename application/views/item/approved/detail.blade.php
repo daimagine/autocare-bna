@@ -44,7 +44,7 @@
                 <thead>
                 <tr>
                     <td>Type</td>
-                    <td>Unit</td>
+<!--                    <td>Unit</td>-->
                     <td>Code</td>
                     <td>Name</td>
                     <td>Vendor</td>
@@ -60,33 +60,40 @@
             <input type="hidden" id="item-rows" value="0"/>
             <div id="item-input-wrapper" style="display: none;"></div>
         </div>
+    </div>
 
-        <div class="formRow">
-            <div class="grid3"><label>Remarks message :<span class="req">*</span></label></div>
-            <div class="grid9"><textarea rows="8" cols="" name="remarks" class="validate[required]" id="remarks"></textarea></div><div class="clear"></div>
+    <div class="widget fluid" style="margin-top: 15px;">
+        <div class="wheadLight2">
+            <h6>Action</h6>
+            <div class="clear"></div>
         </div>
 
-        <div style="padding: 19px 16px">
-            <div class="formSubmit">
-                {{ Form::submit('Reject', array( 'class' => 'buttonM bRed mb10 mt5', 'id' => 'buttonCloseApproved' )) }}
-                {{ Form::submit('Complete', array( 'class' => 'buttonL bGreen mb10 mt5', 'id' => 'buttonConfirmApproved')) }}
-                <div class="clear"></div>
-            </div>
-            <div class="btn-group dropup" style="display: inline-block; margin-bottom: 0px;">
-                {{ HTML::link('item/list_approved', 'Back', array( 'class' => 'buttonL bDefault mb10 mt5' )) }}
-            </div>
-            <!-- Form Dialog New Item -->
-            <div id="formDialogNewItem" class="dialog" title="Dialog new items" >
-            </div>
-
-            <!-- Form Dialog Add Item -->
-            <div id="formDialogListItem" class="dialog" title="List Item" >
+        <div class="formRow noBorderB">
+            <div class="status" id="status3">
+                <div class="grid5">
+                    <span class="">click Complete button to save and add stock</span>
+                </div>
+                <div class="grid7">
+                    <div class="formSubmit">
+                        {{ HTML::link('item/list_approved', 'Back', array( 'class' => 'buttonL bDefault mb10 mt5' )) }} &nbsp;
+                        {{ Form::submit('Complete', array( 'class' => 'buttonL bGreen mb10 mt5', 'id' => 'buttonConfirmApproved')) }}
+                    </div>
+                </div>
             </div>
 
-            <div id="formDialogApproved" title="Confirmation Closed Approved Invoice">
-            </div>
-
+            <div class="clear"></div>
         </div>
+    </div>
+
+    <!-- Form Dialog New Item -->
+    <div id="formDialogNewItem" class="dialog" title="Dialog new items" >
+    </div>
+
+    <!-- Form Dialog Add Item -->
+    <div id="formDialogListItem" class="dialog" title="List Item" >
+    </div>
+
+    <div id="formDialogApproved" title="Confirmation Closed Approved Invoice">
     </div>
 </fieldset>
 

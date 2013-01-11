@@ -104,6 +104,11 @@
                             {{ HTML::sub_nav() }}
                         @yield_section
                     </div>
+
+                    <div>
+                        @section('sidebar_content')
+                        @yield_section
+                    </div>
                 </div>
             </div>
             <div class="clear"></div>

@@ -207,6 +207,7 @@ class Initialize_Main_Table {
             $table->integer('configured_by')->unsigned();
             $table->index('configured_by');
             $table->decimal('price', 14, 2)->default(0.00);
+            $table->decimal('prev_price', 14, 2)->default(0.00);
             $table->decimal('purchase_price', 14, 2)->default(0.00);
             $table->boolean('status')->default(true);
             $table->timestamp('date');

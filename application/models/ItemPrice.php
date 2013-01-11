@@ -21,6 +21,12 @@ class ItemPrice extends Eloquent {
         return $this->belongs_to('Item', 'item_id');
     }
 
+    public static function recent() {
+        return ItemPrice::where('status', '=', 1)
+            ->order_by('created_at', 'asc')
+            ->take(5)
+            ->get();
+    }
     public static  function listAll($criteria) {
 
         $itemPrice = ItemPrice::where_in('item_price.status', $criteria['status']);

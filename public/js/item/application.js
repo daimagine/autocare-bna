@@ -6,9 +6,6 @@ $(function() {
         return false;
     });
 
-//    $('a.deleteConfirm').click(function () {
-//        document.formBody.action.value = 'confirm';
-//    });
     //===== closed approved dialog confirmation=====//
     $('#formDialogApproved').dialog({
         autoOpen: false,
@@ -26,44 +23,20 @@ $(function() {
         }
     });
 
-    $('#buttonConfirmApproved').click(function () {
-        var remarks = $("textarea#remarks").val();
-        if (remarks!='') {
-        $("#formDialogApproved").html('<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>' +
-            ' Are you sure the data is correct and you want to closed this approved print ?' +
-            '<br/> <em>Please make sure you has write correct information message for accounting team on remarks field</em>' +
-            '</p>');
-        document.formAutocare.action.value = 'confirm';
-        $("#formDialogApproved").dialog('open');
-        }
-    });
-
-    $('#buttonCloseApproved').click(function () {
-        var name = $("textarea#remarks").val();
-        if (name!='') {
-            $("#formDialogApproved").html('<p>' +
-                '<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span> Are you sure want to reject this approved print ? ' +
-                '<br/> <em>Please make sure you has write correct information message for accounting team on remarks box </em>' +
-                '</p>');
-            document.formAutocare.action.value = 'reject';
-            $("#formDialogApproved").dialog('open');
+    $('#dialog-confirm').dialog({
+        autoOpen: false,
+        width: 400,
+        modal: true,
+        resizable: false,
+        buttons: {
+            "Closed": function() {
+                $(this).dialog("close");
+            }
         }
     });
     //===== Validation engine =====//
 
     $("#formAutocare").validationEngine();
-//==============option==============//
-//    var opts = {
-//        'stockValue': {
-//            decimal: 1,
-//            min: 0,
-//            start: 0
-//        }
-//    };
-//
-//    for (var n in opts)
-//        $("#"+n).spinner(opts[n]);
-
 
     $('#confirm-dialog').dialog({
         autoOpen: false,
@@ -82,23 +55,19 @@ $(function() {
     });
 
     $('form#formAutocare').submit(function(){
-//        e.preventDefault();
-        var name = $("input#name").val();
-        var stock = $("input#stock").val();
-        var code = $("input#code").val();
-        var price = $("input#sellingPrice").val();
-        var purchase_price = $("input#purchasePrice").val();
-        var vendor = $("input#vendor").val();
-        console.log('name '+name);
-        console.log('price '+price);
-        console.log('purchase_price '+purchase_price);
-        console.log('code '+code);
-        if(name!='' && code!='' && price!='' && purchase_price!='') {
-            $("span#itemName").html(name);
-            $("span#itemCode").html(code);
-            $("span#itemPrice").html(price);
-            $("span#itemPurchasePrice").html(purchase_price);
-            $('#confirm-dialog').dialog('open');
+        var stockopname = $("#item-stock-opname").val();
+        var itemrows = $("#item-rows").val();
+        if (stockopname!=null && itemrows!=null && stockopname!='' && itemrows!='') {
+            $("#formDialogApproved").html('<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>' +
+                ' Are you sure the data is correct and you want to closed this approved print ?' +
+                '</p>');
+            document.formAutocare.action.value = 'confirm';
+            $("#formDialogApproved").dialog('open');
+        } else {
+            $("#dialog-confirm").attr('title', 'Notification');
+            $("#dialog-confirm-content").html('Please select or add new item');
+            $("#dialog-confirm").dialog('open');
+
         }
         return false;
     });
@@ -261,7 +230,7 @@ items.approved = {
                         var status = $(items.approved._form.status).val();
                         var category = $(items.approved._form.itemcategory).val();
                         $(items.approved._putitembtn).hide();
-                        items.approved._addRow('',type,unit,code,name,vendor,stockOpname,0,sellPrice,purcPrice,desc,category);
+                        items.approved._addRow(0,type,unit,code,name,vendor,stockOpname,0,sellPrice,purcPrice,desc,category);
                         $( this ).dialog( "close" );
                     } else {
                         items.approved.notification('error', items.approved._msgvalidate);
@@ -326,7 +295,7 @@ items.approved = {
         console.log(nextidx);
         //warning : sequence is really important following thead order
         var td = $('<td class="i-no i-type">').append(type);
-        td.after($('<td class="i-unit">').append(unit));
+//        td.after($('<td class="i-unit">').append(unit));
         td.after($('<td class="i-code">').append(code));
         td.after($('<td class="i-name">').append(name));
         td.after($('<td class="i-vendor">').append(vendor));
@@ -336,9 +305,7 @@ items.approved = {
                 .attr('type', 'text')
                 .attr('id','item-stock-opname')
                 .attr('name','stock_opname')
-//                .attr('onchange', 'items.approved.calculateStock()')
                 .val(stockOpname)));
-//        td.after($('<td class="i-total">').append(parseInt(stockOpname)+parseInt(stock))); //just temporary
 
         var divv = $('<div>').append(
             $('<a>')

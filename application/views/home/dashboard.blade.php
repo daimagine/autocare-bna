@@ -74,29 +74,36 @@
             </table>
         </div>
 
+        <!-- updates item price here -->
+        <div class="widget">
+            <div class="whead">
+                <h6>5 Last updates item price</h6>
+                <div class="clear"></div>
+            </div>
+            <ul class="updates">
+                @foreach($item_prices as $ip)
+                <li>
+                 <span class="uAlert">
+                     <a href="#" title="">{{$ip->item->name}}</a>
+                     <span><b>{{$ip->users->name}}</b> update harga {{$ip->item->name}} dari {{$ip->prev_price}} menjadi {{$ip->price}}</span>
+<!--                     <a href="#" title="" class="sideB bLightBlue mt10">Add new session</a>-->
+                 </span>
+                 <span class="uDate"><span>{{ date('d', strtotime($ip->created_at)) }}</span>{{ date('M', strtotime($ip->created_at)) }}</span>
+                 <span class="clear"></span>
+                </li>
+                @endforeach
+                <li>
+                    <span class="">
+                        <a href="/item/list_history" title="">Show All Update</a>
+                    </span>
+                    <span class="clear"></span>
+                </li>
+            </ul>
+        </div>
     </div>
 
 
     <div class="grid4">
-
-        <div class="widget">
-            <div class="whead">
-                <h6>Settlement Notices</h6>
-                <div class="clear"></div>
-            </div>
-            <div class="body">
-                <ul class="wInvoice">
-                    <li style="width:50%"><h4 class="red">{{ number_format($settlements[SettlementState::UNSETTLED]) }}</h4><span class="red">Unsettled</span></li>
-                    <li style="width:50%"><h4 class="blue">{{ number_format($settlements[SettlementState::SETTLED_UNMATCH]) }}</h4><span class="blue">Unmatch</span></li>
-                </ul>
-                <div class="clear"></div>
-
-                <div class="invList fluid">
-                    <a href="settlement/list" title="" class="floatR buttonS bLightBlue">Process Settlement</a>
-                </div>
-                <div class="clear"></div>
-            </div>
-        </div>
 
         <!--        <div class="widget">-->
 <!--            <div class="whead">-->
@@ -134,5 +141,29 @@
 
 <div id="detailNews" class="dialog" title="Detail News" ></div>
 
+
+@endsection
+
+
+@section('sidebar_content')
+
+<div class="widget">
+    <div class="whead">
+        <h6>Settlement Notices</h6>
+        <div class="clear"></div>
+    </div>
+    <div class="body">
+        <ul class="wInvoice">
+            <li style="width:50%"><h4 class="red">{{ number_format($settlements[SettlementState::UNSETTLED]) }}</h4><span class="red">Unsettled</span></li>
+            <li style="width:50%"><h4 class="blue">{{ number_format($settlements[SettlementState::SETTLED_UNMATCH]) }}</h4><span class="blue">Unmatch</span></li>
+        </ul>
+        <div class="clear"></div>
+
+        <div class="invList fluid">
+            <a href="settlement/list" title="" class="floatR buttonS bLightBlue">Process Settlement</a>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
 
 @endsection

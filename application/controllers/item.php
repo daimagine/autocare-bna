@@ -216,13 +216,11 @@ class Item_Controller extends Secure_Controller {
         }
         $item = Input::all();
         $prevPrice=Item::find($id)->price;
-//        {{dd(('PrevPrice: '.strval($prevPrice).' ,and newPrice: '.$item['price']));}}
         if ($prevPrice !== $item['price']) {
             //get price active from DB
             $oldPrice = ItemPrice::getSingleResult(array(
                 'item_id' => $id
             ));
-//            {{dd($item['purchase_price']);}}
             if ($oldPrice) {
                 $updateItemPrice = ItemPrice::update($oldPrice->id, array(
                     'status' => statusType::INACTIVE
@@ -232,6 +230,14 @@ class Item_Controller extends Secure_Controller {
                     'price' => $item['price'],
                     'purchase_price' => $item['purchase_price']
                 ));
+                //create
+//                $news = new News;
+//                $news->title = $data['title'];
+//                $news->resume = @$data['resume'];
+//                $news->file_path = @$data['file_path'];
+//                $news->content = @$data['content'];//save
+//                $news->save();
+//                return $news->id;
                 if ($updateItemPrice==null || $newPrice==null) {
                     Session::flash('message_error', 'Failed update item');
                 }
@@ -435,8 +441,7 @@ class Item_Controller extends Secure_Controller {
         $subAccountTrx = SubAccountTrx::find($subAccountTrxId);
             if ($action == 'confirm') {
                 if (isset($data['item_id'])) {
-                    if($data['item_id']==null || $data['item_id']=='') {
-//                        {{dd($data);}}
+                    if($data['item_id']==null || $data['item_id']=='' || $data['item_id']=='0') {
                         $item = Item::create($data);
                         $successAddStockFlow = ItemStockFlow::create(array(
                             'item_id' => $item,
