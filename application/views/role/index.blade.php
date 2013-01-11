@@ -22,8 +22,8 @@
             <tbody>
             @foreach($roles as $role)
             <tr class="">
-                <td>{{ $role->name }}</td>
-                <td>{{ $role->description }}</td>
+                <td>{{ $role->name }}&nbsp;</td>
+                <td>{{ $role->description }}&nbsp;</td>
                 <td class="tableActs" align="center">
                     @if($role->visible)
                     <a href="#" class="fs1 iconb tipS" original-title="Visible" data-icon=""></a>
@@ -31,6 +31,7 @@
                     @if($role->status)
                     <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
                     @endif
+                    &nbsp;
                 </td>
                 <td class="tableActs" align="center">
                     <a href="/role/detail/{{ $role->id }}" 

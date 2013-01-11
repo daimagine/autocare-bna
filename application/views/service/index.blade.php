@@ -24,12 +24,12 @@
             <tbody>
             @foreach($lstService as $service)
             <tr class="">
-                <td>{{ $service->id }}</td>
-                <td class="name">{{ $service->name }}</td>
-                <td>{{ $service->description }}</td>
+                <td>{{ $service->id }}&nbsp;</td>
+                <td class="name">{{ $service->name }}&nbsp;</td>
+                <td>{{ $service->description }}&nbsp;</td>
                 <td>{{ $service->status ==1 ? 'Active' : 'Inactive' }}</td>
-                <td>{{ $service->service_formula()->price }}</td>
-                <td>{{ $service->service_formula()->created_at }}</td>
+                <td>{{ $service->service_formula()->price }}&nbsp;</td>
+                <td>{{ $service->service_formula()->created_at }}&nbsp;</td>
                 <td class="tableActs" align="center">
                     <a href="edit/{{ $service->id }}" class="tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
                     <a href="delete/{{ $service->id }}" class="classConfirmDelete tablectrl_small bDefault tipS" original-title="Inactive">

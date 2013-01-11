@@ -36,11 +36,11 @@
                         <span class="iconb" data-icon="{{ $settlement->state == SettlementState::UNSETTLED ? '' : '' }}"></span>
                     </a>
                 </td>
-                <td>{{ date('d F Y', strtotime($settlement->open_time)) }}</td>
-                <td class="textC">{{ $settlement->state_description }}</td>
-                <td class="textR">IDR {{ number_format($settlement->sales_amount, 2) }}</td>
-                <td class="textR">IDR {{ number_format($settlement->clerk_amount, 2) }}</td>
-                <td>{{ isset($settlement->clerk->name) ? $settlement->clerk->name : '-' }}</td>
+                <td>{{ date('d F Y', strtotime($settlement->open_time)) }}&nbsp;</td>
+                <td class="textC">{{ $settlement->state_description }}&nbsp;</td>
+                <td class="textR">IDR {{ number_format($settlement->sales_amount, 2) }}&nbsp;</td>
+                <td class="textR">IDR {{ number_format($settlement->clerk_amount, 2) }}&nbsp;</td>
+                <td>{{ isset($settlement->clerk->name) ? $settlement->clerk->name : '-' }}&nbsp;</td>
                 <td>{{ $settlement->state == SettlementState::UNSETTLED ? '-' : date('d F Y H:i:s', strtotime($settlement->close_time)) }}</td>
             </tr>
             @endforeach

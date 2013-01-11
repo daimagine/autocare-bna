@@ -24,12 +24,12 @@
             <tbody>
             @foreach($transactions as $trx)
             <tr class="">
-                <td>{{ $trx->date }}</td>
-                <td class="name">{{ $trx->workorder_no }}</td>
+                <td>{{ $trx->date }}&nbsp;</td>
+                <td class="name">{{ $trx->workorder_no }}&nbsp;</td>
                 <!--                <td>{{ $trx->vehicle->customer->name }}</td>-->
-                <td>{{ $trx->customer_name }}</td>
-                <td>{{ $trx->vehicle->model }}</td>
-                <td>{{ $trx->vehicle->number }}</td>
+                <td>{{ $trx->customer_name }}&nbsp;</td>
+                <td>{{ $trx->vehicle->model }}&nbsp;</td>
+                <td>{{ $trx->vehicle->number }}&nbsp;</td>
                 <td>{{ ($trx->status == 'O' ? 'Open' : ($trx->status == 'D' ? 'Closed' : 'Canceled')) }}</td>
                 <td class="tableActs" align="center">
                     <a href="detail/{{ $trx->id }}?type=D" class=" tablectrl_small bBlue tipS" original-title="Detail" style="margin-top: 5px;"><span class="iconb" data-icon=""></span></a>

@@ -26,16 +26,17 @@
             <tbody>
             @foreach($users as $user)
             <tr class="">
-                <td>{{ $user->staff_id }}</td>
-				<td class="name">{{ $user->name }}</td>
-				<td>{{ $user->login_id }}</td>
-				<td>{{ $user->phone1 }}</td>
-				<td>{{ $user->role->name }}</td>
+                <td>{{ $user->staff_id }}&nbsp;</td>
+				<td class="name">{{ $user->name }}&nbsp;</td>
+				<td>{{ $user->login_id }}&nbsp;</td>
+				<td>{{ $user->phone1 }}&nbsp;</td>
+				<td>{{ $user->role->name }}&nbsp;</td>
                 <td style="display: none;">{{$user->status == 1 ? 'Active' : 'Inactive'}}</td>
                 <td class="tableActs" align="center">
-                @if($user->status)
-                <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
-                @endif
+                    @if($user->status)
+                        <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
+                    @endif
+                    &nbsp;
                 </td>
                 <td class="tableActs" align="center">
                     <a href="/user/edit/{{ $user->id }}" 

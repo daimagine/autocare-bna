@@ -27,17 +27,18 @@
             <tbody>
             @foreach($vehicles as $vehicle)
             <tr class="">
-				<td>{{ $vehicle->owner }}</td>
-                <td>{{ $vehicle->number }}</td>
-                <td>{{ $vehicle->type }}</td>
-                <td>{{ $vehicle->color }}</td>
-                <td>{{ $vehicle->model }}</td>
-                <td>{{ $vehicle->brand }}</td>
-                <td>{{ $vehicle->description }}</td>
+				<td>{{ $vehicle->owner }}&nbsp;</td>
+                <td>{{ $vehicle->number }}&nbsp;</td>
+                <td>{{ $vehicle->type }}&nbsp;</td>
+                <td>{{ $vehicle->color }}&nbsp;</td>
+                <td>{{ $vehicle->model }}&nbsp;</td>
+                <td>{{ $vehicle->brand }}&nbsp;</td>
+                <td>{{ $vehicle->description }}&nbsp;</td>
                 <td class="tableActs" align="center">
                     @if($vehicle->status)
                     	<a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
                     @endif
+                    &nbsp;
                 </td>
                 <td class="tableActs" align="center">
                     <a href="/vehicle/edit/{{ $vehicle->id }}" 
