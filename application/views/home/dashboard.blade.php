@@ -157,7 +157,6 @@
 
 
     <div class="grid4">
-
         <!-- updates item price here -->
         <div class="widget">
             <div class="whead">
@@ -184,6 +183,7 @@
                 </li>
             </ul>
         </div>
+
     </div>
 
 </div>
