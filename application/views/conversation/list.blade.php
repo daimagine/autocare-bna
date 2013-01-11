@@ -4,7 +4,7 @@
 
     <ul class="middleNavR">
         <li><a href="/conversation/new" class="tipN" original-title="Write Message"><img src="/images/icons/middlenav/create.png" alt=""></a></li>
-        <li><a href="/conversation/list" class="tipN" original-title="Messages"><img src="/images/icons/middlenav/dialogs.png" alt=""></a><strong>8</strong></li>
+        <li><a href="/conversation/list" class="tipN" original-title="Messages"><img src="/images/icons/middlenav/dialogs.png" alt=""></a></li>
     </ul>
 
     @if(empty($conversations))
@@ -30,7 +30,7 @@
                         onclick="viewConversation(this);"
                         original-title="view conversation">
 
-                        <a href="#" title=""><img src="/images/userLogin.png" alt="" width="37" height="36"></a>
+                        <a href="#" title=""><img src="{{ url( $conv->list_image() ) }}" alt="" width="37" height="36"></a>
                         <div class="messageArea">
                             <div class="infoRow">
                             <span class="name"><strong>{{ $conv->list_user }}</strong></span>

@@ -3,7 +3,7 @@
 <head>
 
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-    <title>AUTOCARE - {{ $accountTransType === 'D' ? 'Tagihan Uang Masuk' : 'Tagihan Uang Keluar' }}</title>
+    <title>AUTOCARE - {{ $accountTransType === 'D' ? 'Tagihan Uang Masuk' : 'Purchase Order' }}</title>
     <?php echo Asset::container('print')->styles(); ?>
     <?php echo Asset::container('print')->scripts(); ?>
 
@@ -54,7 +54,7 @@
 
         <div style="margin-top: 40px;">
             <div class="table-name">
-                <h5>DETAIL {{ $accountTransType === 'D' ? 'Tagihan Uang Masuk' : 'Tagihan Uang Keluar' }}</h5>
+                <h5>{{ $accountTransType === 'D' ? 'Tagihan Uang Masuk' : 'Purchase Order' }}</h5>
             </div>
             <table class="table-info" style="margin-top: 0px">
                 <?php $tax = 0; $amount = 0; for($i = 0; $i < count($items); $i++) { $tax += $items[$i]->tax_amount; $amount += $items[$i]->amount; } ?>
@@ -118,7 +118,7 @@
 
         <div style="margin-top: 20px;">
             <div class="table-name">
-                <h5>DAFTAR BARANG & JASA</h5>
+                <h5>DAFTAR BARANG</h5>
             </div>
             <table id="service" style="margin-top: 0px">
 
@@ -146,20 +146,6 @@
                     <?php $idx++; ?>
                 @endfor
 
-                <?php $j=0; ?>
-                @while($j<3)
-                    <tr class="service-row">
-                        <td class="other" style="width: 63px" align="center">{{ $idx }}</td>
-                        <td class="description other" style="width: 220px">...................................................</td>
-                        <td class="item-name other" align="center">...........</td>
-                        <td class="qty other" align="center" style="width: 140px">...........................</td>
-                        <td class="cost other" style="text-align: right; width: 30px">...........</td>
-                        <td style="text-align: right;" class="other">...........................</span></td>
-                        <td style="text-align: right;" class="other">...........................</span></td>
-                    <tr class="service-row">
-                    <?php $j++; $i++; ?>
-                @endwhile
-
             </table>
         </div>
         <div class="clear"></div>
@@ -171,7 +157,7 @@
                     <td align="center"><h5 style="border-bottom: 1px solid black; padding: 0 0 8px 0; margin: 0 0 8px 0; width: 180px;"></h5></td>
                 </tr>
                 <tr>
-                    <td align="center"> {{$account->subject}} </td>
+                    <td align="center"> {{$account->subject}}, <br> ({{ $accountTransType === 'D' ? 'Customer' : 'Vendor' }}) </td>
                     <td align="center">{{ Config::get('default.print.account.signed.name') }}, <br> ({{ Config::get('default.print.account.signed.position') }})</td>
                 </tr>
             </table>

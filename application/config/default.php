@@ -34,4 +34,19 @@ return array(
         )
     ),
 
+    /*
+     |--------------------------------------------------------------------------
+     | Settlement Reminder Scheduler
+     |--------------------------------------------------------------------------
+     */
+
+    'scheduler' => array(
+        'settlement' => array(
+            //days before settlement overdue
+            'day_due'   => 1,
+            //database key in autocare_properties
+            'db_key'    => 'SETTLEMENT_REMINDER_KEY'
+        ),
+    ),
+
 );

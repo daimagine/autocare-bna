@@ -137,10 +137,10 @@ Route::filter('auth', function()
 {
     if ( ! Auth::check() ) {
         return Redirect::to('login')
-            ->with('message_error', 'You must be logged in to access that page.');
+            ->with('message_error', 'You have to login first');
     }
-    if ( ! Auth::has_permissions() ) {
+    if ( ! Auth::has_permissions() && URI::$uri != "/" ) {
         return Redirect::to('home/index')
-            ->with('message_error', '<strong>Permission Denied.</strong> You dont have privilege to access the page.');
+            ->with('message_error', "<strong>Permission Denied.</strong> You don't have privilege to access page " . URI::$uri);
     }
 });
