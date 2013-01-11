@@ -112,7 +112,15 @@ class Cube extends \Laravel\Auth\Drivers\Eloquent {
 //                $uri = $temp[0] . '/' . $temp[1];
                 $uri = implode("/", $temp);
             }
-            $val = in_array($uri, Config::get('auth.white_list'));
+            //$val = in_array($uri, Config::get('auth.white_list'));
+            foreach(Config::get('auth.white_list') as $wl) {
+                //var_dump("uri $uri start with $wl : " . ($wl !== '/' && starts_with($uri, $wl)) . " <br>");
+                if($wl !== '/' && starts_with($uri, $wl)) {
+                    $val = true;
+                    break;
+                }
+            }
+            //dd('');
 
         } catch (\Laravel\Database\Exception $err) {
             Log::write('error', 'failed to check has permissions. ' . $err);

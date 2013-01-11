@@ -48,12 +48,14 @@
 						dialog-confirm-title="Update Confirmation">
 							<span class="iconb" data-icon=""></span>
 					</a>
-                    <a href="/account/delete/{{ $account->id }}" 
-						class="appconfirm tablectrl_small bDefault tipS" 
-						original-title="Remove"
-						dialog-confirm-title="Remove Confirmation">
-							<span class="iconb" data-icon=""></span>
-					</a>
+                    @if(Auth::user()->id == Config::get('default.role.admin'))
+                        <a href="/account/delete/{{ $account->id }}"
+                            class="appconfirm tablectrl_small bDefault tipS"
+                            original-title="Remove"
+                            dialog-confirm-title="Remove Confirmation">
+                                <span class="iconb" data-icon=""></span>
+                        </a>
+                    @endif
                 </td>
             </tr>
             @endforeach

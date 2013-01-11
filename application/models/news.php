@@ -19,7 +19,7 @@ class News extends Eloquent {
     public static function recent() {
         return News::where('status', '=', 1)
             ->order_by('created_at', 'asc')
-            ->take(10)
+            ->take(5)
             ->get();
     }
 

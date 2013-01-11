@@ -85,7 +85,6 @@ return array(
     */
 
     'white_list' => array(
-        '/',
         'login',
         'logout',
         'home/index',
@@ -93,27 +92,11 @@ return array(
         'role/select',
         'role/access',
 
-        'report/finance/index',
-
-        'report/finance/wo',
-        'report/finance/wo_daily',
-        'report/finance/wo_weekly',
-        'report/finance/wo_monthly',
-
-        'report/finance/service',
-        'report/finance/service_daily',
-        'report/finance/service_weekly',
-        'report/finance/service_monthly',
-
-        'report/finance/part',
-        'report/finance/part_daily',
-        'report/finance/part_weekly',
-        'report/finance/part_monthly',
-
         'home/sandbox',
 
         'sync/local/sync_data',
         'sync/production/fetch_last_id',
         'sync/production/sync_data',
+
     ),
 );

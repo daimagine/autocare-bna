@@ -13,7 +13,7 @@
     <div id="top">
         <div class="wrapper">
             <a href="index.html" title="" class="logo">
-                <img src="{{ asset('images/autocare.png') }}" alt="" width="129" height="23"/>
+                <img src="{{ asset('images/autocare.png') }}" alt="" width="126" height="38" style="margin-top: -5px;"/>
             </a>
 
             <!-- Right top nav -->

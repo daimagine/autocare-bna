@@ -44,4 +44,15 @@ class Settlement_Task {
 
     }
 
+
+    public function reminder($args) {
+        if(is_array($args) && !empty($args) && $args[0] != null) {
+            $date = date(Settlement::$sql_date_format, strtotime( date('Ymd', strtotime($args[0])) ));
+        } else {
+            $date = date(Settlement::$sql_date_format);
+        }
+        $settlements = Settlement::where()
+            ->get();
+    }
+
 }

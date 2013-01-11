@@ -15,7 +15,7 @@
         @endforeach
     @else
         <div class="nNote nFailure">
-            <p>{{ Session::get('message') }}</p>
+            <p>{{ Session::get('message_error') }}</p>
         </div>
     @endif
 @endif

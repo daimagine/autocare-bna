@@ -43,11 +43,11 @@ class User_Controller extends Secure_Controller {
 
             if(Auth::attempt($userdata)) {
                 //success login
-                return Redirect::to('/');
+                return Redirect::to('/')
+                    ->with('message', "Login success. Welcome, " . Auth::user()->name);
             } else {
                 return Redirect::to('login')
-                    ->with('message', 'Failed to authenticate')
-                    ->with('message_class', 'error');
+                    ->with('message_error', 'Failed to authenticate');
             }
         } else {
             Log::info('Validation fails. error : ' + print_r($validation->errors, true));
@@ -56,8 +56,10 @@ class User_Controller extends Secure_Controller {
     }
 
     public function get_logout() {
+        $username = Auth::user()->name;
         Auth::logout();
-        return Redirect::to('login');
+        return Redirect::to('login')
+            ->with('message', "Logout success");;
     }
 
     public function get_index() {

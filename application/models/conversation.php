@@ -144,6 +144,20 @@ class Conversation extends Eloquent {
         return $res;
     }
 
+    public function list_image() {
+        if(sizeof($this->users) > 2) {
+            return "images/userLogin.png";
+        }
+        $image = 'images/uploads/user/';
+        foreach($this->users() as $u) {
+            if($u->id != Auth::user()->id) {
+                $image .= $u->picture;
+                break;
+            }
+        }
+        return $image;
+    }
+
     public static function generateKey($users_id=array()) {
         $res = "";
         foreach($users_id as $id)

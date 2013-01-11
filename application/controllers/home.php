@@ -40,6 +40,8 @@ class Home_Controller extends Secure_Controller {
         $news = News::recent();
         $item_prices = ItemPrice::recent();
         $settlements = Settlement::summaryDashboard();
+        $payables = AccountTransaction::dueRemaining();
+        $receivables = AccountTransaction::dueRemaining();
         Asset::add('home.application', 'js/home/application.js', array('jquery'));
         return $this->layout->nest('content', 'home.dashboard', array(
             'news' => $news,

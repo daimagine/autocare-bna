@@ -3,10 +3,10 @@
 @include('partial.notification')
 
 <ul class="middleNavA">
-    <li><a href="/account/account_receivable" title="All Receivable Account"><img src="/images/icons/color/refresh.png" alt=""><span>All</span></a></li>
-    <li><a href="/account/invoice_in" title="Add invoice"><img src="/images/icons/color/plus.png" alt=""><span>Add invoice</span></a></li>
-    <li><a href="/account/account_receivable/unpaid" title="Awaiting payment"><img src="/images/icons/color/full-time.png" alt=""><span>Awaiting payment</span></a></li>
-    <li><a href="/account/account_receivable/paid" title="Paid invoice"><img src="/images/icons/color/cost.png" alt=""><span>Paid invoice</span></a></li>
+    <li><a href='{{ url("account/account_receivable") }}' title="All Receivable Account">{{ HTML::image('images/icons/color/refresh.png', '') }}<span>All</span></a></li>
+    <li><a href='{{ url("account/invoice_in") }}' title="Add invoice">{{ HTML::image('images/icons/color/plus.png', '') }}<span>Add invoice</span></a></li>
+    <li><a href='{{ url("account/account_receivable/unpaid") }}' title="Awaiting payment">{{ HTML::image('images/icons/color/full-time.png', '') }}<span>Awaiting payment</span></a></li>
+    <li><a href='{{ url("account/account_receivable/paid") }}' title="Paid Account Receivable">{{ HTML::image('images/icons/color/cost.png', '') }}<span>Paid invoice</span></a></li>
 </ul>
 <div class="divider"><span></span></div>
 
@@ -56,26 +56,33 @@
                     @endif
                 </td>
                 <td class="tableActs" align="center">
-                    <a href="/account/invoice_edit/{{ $accountTransType }}/{{ $account->id }}"
+                    <a href='{{ url("account/invoice_edit/$accountTransType/$account->id") }}'
                        class="appconfirm tablectrl_small bDefault tipS"
                        original-title="Edit"
                        dialog-confirm-title="Update Confirmation">
                         <span class="iconb" data-icon=""></span>
                     </a>
-                    <a href="/account/invoice_delete/{{ $accountTransType }}/{{ $account->id }}"
-                       class="appconfirm tablectrl_small bDefault tipS"
-                       original-title="Remove"
-                       dialog-confirm-title="Remove Confirmation">
-                        <span class="iconb" data-icon=""></span>
-                    </a>
-                    @if($account->due == 0 || $account->paid <> $account->due)
-                    <a href="/account/pay_invoice/{{ $accountTransType }}/{{ $account->id }}"
-                       class="appconfirm tablectrl_small bDefault tipS"
-                       original-title="Pay Invoice"
-                       dialog-confirm-title="Payment Confirmation">
-                        <span class="iconb" data-icon=""></span>
-                    </a>
+                    @if(Auth::user()->id == Config::get('default.role.admin'))
+                        <a href='{{ url("account/invoice_delete/$accountTransType/$account->id") }}'
+                           class="appconfirm tablectrl_small bDefault tipS"
+                           original-title="Remove"
+                           dialog-confirm-title="Remove Confirmation">
+                            <span class="iconb" data-icon=""></span>
+                        </a>
                     @endif
+                    @if($account->due == 0 || $account->paid <> $account->due)
+                        <a href='{{ url("account/pay_invoice/$accountTransType/$account->id") }}'
+                           class="appconfirm tablectrl_small bDefault tipS"
+                           original-title="Pay Invoice"
+                           dialog-confirm-title="Payment Confirmation">
+                            <span class="iconb" data-icon=""></span>
+                        </a>
+                    @endif
+                    <a href='{{ url("account/print/$accountTransType/$account->id") }}'
+                       class="tablectrl_small bDefault tipS"
+                       original-title="Print Invoice" target="_blank">
+                        <span class="iconb" data-icon=""></span>
+                    </a>
                 </td>
             </tr>
             @endforeach
@@ -87,7 +94,7 @@
 
 <div class="fluid">
     <div class="grid2">
-        <div class="wButton"><a href="/account/invoice_in" title="" class="buttonL bLightBlue first">
+        <div class="wButton"><a href="{{ url('/account/invoice_in') }}" title="" class="buttonL bLightBlue first">
             <span class="icol-add"></span>
             <span>Add Account Receivable</span>
         </a></div>

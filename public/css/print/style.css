@@ -91,3 +91,8 @@ textarea:hover, textarea:focus, #items td.total-value textarea:hover, #items td.
 
 
 #signed { clear: both; width: 100%; margin: 30px 0 0 0; border: 1px solid white; }
+
+.table-info tr { padding-top: 8px; display: block; }
+.table-info td.table-detail-left { width: 170px; text-align: right; }
+.table-info td.table-detail-mid { width: 20px; padding-right: 20px; text-align: center; }
+.table-info td.table-detail-right { text-align: left; }

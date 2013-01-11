@@ -324,6 +324,27 @@ class Account_Controller extends Secure_Controller {
         return array_merge($rules, $additional);
     }
 
+    public function get_print($type=AUTOCARE_ACCOUNT_TYPE_DEBIT, $id=null){
+        if($id===null) {
+            if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
+                return Redirect::to('account/account_receivable');
+            else
+                return Redirect::to('account/account_payable');
+        }
+        Asset::container('print')->add('css.style', 'css/print/style.css');
+        Asset::container('print')->add('print.print', 'css/print/print.css');
+        Asset::container('print')->add('jquery', 'js/jquery.min.js');
+        Asset::container('print')->add('account.application.print', 'js/account/account_transaction/print.js', array('jquery'));
+        $action = Input::get('type');
+        $account = AccountTransaction::find($id);
+        $items = $account->items;
+        return View::make('account.account_transaction.print', array(
+            'account' => $account,
+            'accountTransType' => $type,
+            'items' => $items,
+            'action' => $action
+        ));
+    }
 
     /***
      * PAY INVOICE FUNCTIONS
@@ -358,7 +379,7 @@ class Account_Controller extends Secure_Controller {
 
         Asset::add('jquery.timeentry', 'js/plugins/ui/jquery.timeentry.min.js', array('jquery', 'jquery-ui'));
         Asset::add('jquery.ui.mousewheel', 'js/plugins/forms/jquery.mousewheel.js', array('jquery'));
-        Asset::add('role.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
+        Asset::add('account.application', 'js/account/account_transaction/application.js', array('jquery.timeentry'));
 
 //        dd($account);
         return $this->layout->nest('content', 'account.account_transaction.pay_invoice', array(
@@ -391,36 +412,40 @@ class Account_Controller extends Secure_Controller {
             $valid = $this->validatePayInvoice($data);
             if($valid !== true) {
                 Session::flash('message_error', $valid);
-                if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
-                    return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_DEBIT.'/'.$id)
-                        ->with_input();
-                else
-                    return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_CREDIT.'/'.$id)
-                        ->with_input();
+//                if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
+//                    return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_DEBIT.'/'.$id)
+//                        ->with_input();
+//                else
+//                    return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_CREDIT.'/'.$id)
+//                        ->with_input();
             }
 
             $success = AccountTransaction::pay_invoice($id, $data);
             if($success) {
                 //success edit
-                Session::flash('message', 'Success update');
-                if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
-                    return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_DEBIT.'/'.$id);
-                else
-                    return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_CREDIT.'/'.$id);
+                Session::flash('message', 'Success pay invoice');
+//                if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
+//                    return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_DEBIT.'/'.$id);
+//                else
+//                    return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_CREDIT.'/'.$id);
             } else {
-                Session::flash('message_error', 'Failed update');
-                return Redirect::to_action('account@invoice_edit', array($type, $id))
-                    ->with_input();
+                Session::flash('message_error', 'Failed pay invoice');
+//                return Redirect::to_action('account@invoice_edit', array($type, $id))
+//                    ->with_input();
             }
         } else {
-            Session::flash('message_error', 'Failed update');
-            if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
-                return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_DEBIT.'/'.$id)->with_errors($validation)
-                    ->with_input();
-            else
-                return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_CREDIT.'/'.$id)->with_errors($validation)
-                    ->with_input();
+            Session::flash('message_error', 'Failed pay invoice');
+//            if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
+//                return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_DEBIT.'/'.$id)->with_errors($validation)
+//                    ->with_input();
+//            else
+//                return Redirect::to('account/pay_invoice/'.AUTOCARE_ACCOUNT_TYPE_CREDIT.'/'.$id)->with_errors($validation)
+//                    ->with_input();
         }
+        if($type == AUTOCARE_ACCOUNT_TYPE_DEBIT)
+            return Redirect::to('account/account_receivable');
+        else
+            return Redirect::to('account/account_payable');
     }
 
     private function getPayInvoiceRules($method='add') {

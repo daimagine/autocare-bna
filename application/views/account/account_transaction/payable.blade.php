@@ -56,12 +56,14 @@
                        dialog-confirm-title="Update Confirmation">
                         <span class="iconb" data-icon=""></span>
                     </a>
-                    <a href="/account/invoice_delete/{{ $accountTransType }}/{{ $account->id }}"
-                       class="appconfirm tablectrl_small bDefault tipS"
-                       original-title="Remove"
-                       dialog-confirm-title="Remove Confirmation">
-                        <span class="iconb" data-icon=""></span>
-                    </a>
+                    @if(Auth::user()->id == Config::get('default.role.admin'))
+                        <a href="/account/invoice_delete/{{ $accountTransType }}/{{ $account->id }}"
+                           class="appconfirm tablectrl_small bDefault tipS"
+                           original-title="Remove"
+                           dialog-confirm-title="Remove Confirmation">
+                            <span class="iconb" data-icon=""></span>
+                        </a>
+                    @endif
                     @if($account->due == 0 || $account->paid <> $account->due)
                         <a href="/account/pay_invoice/{{ $accountTransType }}/{{ $account->id }}"
                            class="appconfirm tablectrl_small bDefault tipS"
@@ -70,6 +72,11 @@
                             <span class="iconb" data-icon=""></span>
                         </a>
                     @endif
+                    <a href='{{ url("account/print/$accountTransType/$account->id") }}'
+                       class="tablectrl_small bDefault tipS"
+                       original-title="Print Invoice" target="_blank">
+                        <span class="iconb" data-icon=""></span>
+                    </a>
                 </td>
             </tr>
             @endforeach
