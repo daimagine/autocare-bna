@@ -35,6 +35,8 @@
                 <td class="tableActs" align="center">
                     @if($user->status)
                         <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
+                    @else
+                        <a href="#" class="fs1 iconb tipS" original-title="Inactive" data-icon=""></a>
                     @endif
                     &nbsp;
                 </td>

@@ -39,7 +39,8 @@
 
 		{{ Form::nginput('text', 'year', @$vehicle['year'], 'Year') }}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($vehicle['status']) ? $vehicle['status'] : 1, 'Status') }}
+        {{-- Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($vehicle['status']) ? $vehicle['status'] : 1, 'Status') --}}
+        {{ Form::hidden('status', 1) }}
 
         {{ Form::nginput('text', 'description', @$vehicle['description'], 'Description') }}
 

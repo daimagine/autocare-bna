@@ -22,7 +22,8 @@
 
             {{ Form::nyelect('asset_type_id', @$assetTypes, $asset->type, 'Asset Type *', array('class' => 'reqField validate[required]')) }}
 
-            {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $asset->status, 'Status *', array('class' => 'reqField validate[required]', 'id' => 'status')) }}
+            {{-- Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $asset->status, 'Status *', array('class' => 'reqField validate[required]', 'id' => 'status')) --}}
+            {{ Form::hidden('status', 1) }}
 
             {{ Form::nyelect('condition', array(AssetCondition::GOOD => 'Good', AssetCondition::FAIR => 'Fair', AssetCondition::BAD=> 'Bad'), $asset->condition, 'Condition *') }}
 

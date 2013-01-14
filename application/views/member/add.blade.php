@@ -16,7 +16,8 @@
 
         {{ Form::nginput('text', 'number', @$member['number'], 'Number') }}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($member['status']) ? $member['status'] : 1, 'Status') }}
+        {{-- Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($member['status']) ? $member['status'] : 1, 'Status') --}}
+        {{ Form::hidden('status', 1) }}
 
         <!--div class="formRow">
             <div class="grid3"><label>Register Date</label></div>

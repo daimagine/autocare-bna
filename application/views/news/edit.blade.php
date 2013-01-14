@@ -24,7 +24,8 @@
             <div class="clear"></div>
         </div>
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $news->status, 'Status') }}
+        {{-- Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $news->status, 'Status') --}}
+        {{ Form::hidden('status', 1) }}
 
         <div class="formRow noBorderB">
             <div class="status" id="status3"></div>

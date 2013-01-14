@@ -38,7 +38,8 @@
             <div class="clear"></div>
         </div>
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $service->status, 'Status', array('class' => 'validate[required]')) }}
+        {{-- Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $service->status, 'Status', array('class' => 'validate[required]')) --}}
+        {{ Form::hidden('status', 1) }}
 
         <div class="formRow noBorderB">
             <div class="status" id="status3"></div>

@@ -16,7 +16,8 @@
 
         {{ Form::nginput('text', 'name', @$role['name'], 'Name *') }}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($role['status']) ? $role['status'] : 1, 'Status *') }}
+        {{-- Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($role['status']) ? $role['status'] : 1, 'Status *') --}}
+        {{ Form::hidden('status', 1) }}
 
         {{ Form::nginput('text', 'description', @$role['description'], 'Description') }}
 

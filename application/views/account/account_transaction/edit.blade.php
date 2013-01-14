@@ -65,7 +65,8 @@
             <div class="clear"></div>
         </div>
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $account->status, 'Status') }}
+        {{-- Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $account->status, 'Status') --}}
+        {{ Form::hidden('status', 1) }}
 
         {{ Form::nginput('text', 'description', $account->description, 'Description') }}
 

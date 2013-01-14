@@ -36,26 +36,6 @@
 		
     </div>
 
-<!--    <div class="widget fluid">-->
-<!--        <div class="whead">-->
-<!--            <h6>Membership</h6>-->
-<!--            <div class="clear"></div>-->
-<!--        </div>-->
-<!---->
-<!--        <div class="body" style="display: block; ">-->
-<!--            <div class="formRow">-->
-<!--                <div class="grid3"><label>Select Available Membership</label> </div>-->
-<!--                <div class="grid9">-->
-<!--                    @foreach($discounts as $id => $desc)-->
-<!--                        <input type="radio" name="discount_id" value="{{ $id }}" {{ isset($discount_id) ? ( $discount_id == $id ? 'checked' : '' ) : ( $id == 0 ? 'checked' : '' ) }} >-->
-<!--                        <label class="mr20">{{ $desc }}</label><div class="clear"></div>-->
-<!--                    @endforeach-->
-<!--                </div>-->
-<!--                <div class="clear"></div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
     <div class="widget">
         <div id="vehicle-whead" class="whead " >
             <h6>Vehicle</h6>

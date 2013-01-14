@@ -26,7 +26,9 @@
 				<td>{{ $customer->address1 . ' ' . $customer->address2 }}</td>
                 <td class="tableActs" align="center">
                     @if($customer->status)
-                    <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
+                        <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
+                    @else
+                        <a href="#" class="fs1 iconb tipS" original-title="Inactive" data-icon=""></a>
                     @endif
                 </td>
                 <td class="tableActs" align="center">

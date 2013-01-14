@@ -19,7 +19,8 @@
 
         {{ Form::nginput('text', 'name', $access->name, 'Name *') }}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $access->status, 'Status *') }}
+        {{-- Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $access->status, 'Status *') --}}
+        {{ Form::hidden('status', 1) }}
 
         {{ Form::nginput('text', 'action', $access->action, 'Action') }}
 
