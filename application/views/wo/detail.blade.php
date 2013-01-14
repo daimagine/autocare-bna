@@ -155,8 +155,8 @@
                 <div class="grid7">
                     <div class="formSubmit">
                         @if($transaction->status == 'O' and $action == 'D')
-                        <a href="../to_invoice/{{ $transaction->id }}?type=C" class="buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>Close WO</span></a>
-                        <a href="../do_canceled/{{$transaction->id }}"
+                        <a href='{{ url("work_order/to_invoice/$transaction->id?type=C" ) }}' class="buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>Close WO</span></a>
+                        <a href='{{ url("work_order/do_canceled/$transaction->id") }}'
                            class="appconfirm buttonM bGreyish"
                            original-title="Canceled WO"
                            dialog-confirm-title="Canceled WO Confirmation"
@@ -165,10 +165,10 @@
                         </a>
                         @endif
                         @if(($transaction->status == 'D' or $transaction->status == 'O') and $action == 'D')
-                        <a href="../to_invoice/{{ $transaction->id }}?type=C" class="buttonM bGold"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>To Invoice</span></a>
+                        <a href='{{ url("work_order/to_invoice/$transaction->id?type=C") }}' class="buttonM bGold"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>To Invoice</span></a>
                         @endif
 <!--                        @if(($transaction->status == 'C' or $transaction->status == 'D') and $action == 'D')-->
-<!--                        <a href="../do_reopen/{{ $transaction->id }}" class="appconfirm buttonM bSea"-->
+<!--                        <a href='{{ url("work_order/do_reopen/$transaction->id") }}' class="appconfirm buttonM bSea"-->
 <!--                           class="appconfirm buttonM bGreyish"-->
 <!--                           original-title="Reopen WO"-->
 <!--                           dialog-confirm-title="Reopen WO Confirmation"-->
@@ -177,7 +177,7 @@
 <!--                        </a>-->
 <!--                        @endif-->
                         @if($action == 'C')
-                        <a href="../to_invoice/{{ $transaction->id }}?type=C" class="buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>Close WO</span></a>
+                        <a href='{{ url("work_order/to_invoice/$transaction->id?type=C") }}' class="buttonM bGreen"><span class="iconb" data-icon="" style="margin-left: 0px;"></span><span>Close WO</span></a>
                         @endif
                     </div>
                 </div>

@@ -259,11 +259,11 @@
     <a title="">
         <i class="icos-money3"></i>
         <span>{{ $accountTransType === 'D' ? 'Account Receivable' : 'Account Payable' }}</span>
-        <span><img src="/images/elements/control/hasddArrow.png" alt="" /></span>
+        <span><img src='{{ asset("images/elements/control/hasddArrow.png") }}' alt="" /></span>
     </a>
     <ul>
-        <li><a href="/account/invoice_in/{{ $accountTransType }}" title=""><span class="icos-add"></span>Add New</a></li>
-        <li><a href="/account/pay_invoice/{{ $accountTransType }}/{{ $account->id }}" title=""><span class="icos-money2"></span>Do Payment</a></li>
+        <li><a href='{{ url("account/invoice_in/$accountTransType") }}' title=""><span class="icos-add"></span>Add New</a></li>
+        <li><a href='{{ url("account/pay_invoice/$accountTransType/$account->id") }}' title=""><span class="icos-money2"></span>Do Payment</a></li>
     </ul>
 </li>
 

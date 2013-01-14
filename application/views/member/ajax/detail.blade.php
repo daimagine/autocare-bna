@@ -26,7 +26,7 @@
         </li>
         <li class="on_off noBorderB">
             <div style="float: right">
-                <a href="/member/delete/{{ $member->id }}"
+                <a href='{{ url("member/delete/$member->id") }}'
                    class="appconfirm buttonM bRed"
                    original-title="Remove"
                    dialog-confirm-title="Remove Confirmation">

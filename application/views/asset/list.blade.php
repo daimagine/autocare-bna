@@ -37,12 +37,12 @@
                 <td>{{ $asset->vendor }}</td>
                 <td>{{ $asset->created_at }}</td>
                 <td class="tableActs" align="center">
-                    <a href="edit/{{ $asset->id }}" class="appconfirm tablectrl_small bDefault tipS"
+                    <a href='{{ url("asset/edit/$asset->id") }}' class="appconfirm tablectrl_small bDefault tipS"
                        original-title="Edit"
                        dialog-confirm-title="Update Confirmation">
                         <span class="iconb" data-icon=""></span>
                     </a>
-                    <a href="delete/{{ $asset->id }}"
+                    <a href='{{ url("asset/delete/$asset->id") }}'
                        class="appconfirm tablectrl_small bDefault tipS"
                        original-title="Remove"
                        dialog-confirm-title="Remove Confirmation">

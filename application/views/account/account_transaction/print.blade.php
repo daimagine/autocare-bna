@@ -22,7 +22,7 @@
                 </div>
                 <div style="float: right;vertical-align: top;text-align: right;margin: 0px 0px 30px 0px;">
                     <div id="">
-                        <!--<img id="image" src="../../images/autocare-2.png" alt="logo" width="63%" height="63%">-->
+                        <!--<img id="image" src='{{ asset("images/autocare-2.png") }}' alt="logo" width="63%" height="63%">-->
                     </div>
                 </div>
             </div>

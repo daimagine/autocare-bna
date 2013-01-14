@@ -94,7 +94,7 @@
 
 <div class="fluid">
     <div class="grid2">
-        <div class="wButton"><a href="{{ url('/account/invoice_in') }}" title="" class="buttonL bLightBlue first">
+        <div class="wButton"><a href="{{ url('account/invoice_in') }}" title="" class="buttonL bLightBlue first">
             <span class="icol-add"></span>
             <span>Add Account Receivable</span>
         </a></div>

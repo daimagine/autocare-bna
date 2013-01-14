@@ -35,7 +35,7 @@
 
 <div class="fluid">
     <div class="grid2">
-        <div class="wButton"><a href="/role/index" title="" class="buttonL bDefault first">
+        <div class="wButton"><a href='{{ url("role/index") }}' title="" class="buttonL bDefault first">
             <span class="icon-undo"></span>
             <span>Back</span>
         </a></div>

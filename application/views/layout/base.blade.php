@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>Autocare BNA :: {{ (isset($title) ? $title : 'Garage Integrated System') }}</title>
-    <!--[if IE]> <link href="css/ie.css" rel="stylesheet" type="text/css"> <![endif]-->
+    <!--[if IE]> <link href='{{ url("css/ie.css") }}' rel="stylesheet" type="text/css"> <![endif]-->
     {{ Asset::styles() }}
 
 </head>
@@ -12,7 +12,7 @@
     <!-- Top line begins -->
     <div id="top">
         <div class="wrapper">
-            <a href="index.html" title="" class="logo">
+            <a href="{{ url('/') }}" title="" class="logo">
                 <img src="{{ asset('images/autocare.png') }}" alt="" width="126" height="38" style="margin-top: -5px;"/>
             </a>
 
@@ -91,9 +91,9 @@
                 <!-- Tabs container -->
                 <div id="tab-container" class="tab-container">
                     <ul class="iconsLine ic3 etabs">
-                        <li><a href="/" title="Dashboard" class="tipS"><span class="icos-fullscreen"></span></a></li>
-                        <li><a href="/preferences/list" title="Change Password" class="tipS"><span class="icos-user"></span></a></li>
-                        <li><a href="/conversation/list" title="Messages" class="tipS"><span class="icos-archive"></span></a></li>
+                        <li><a href="{{ url('/') }}" title="Dashboard" class="tipS"><span class="icos-fullscreen"></span></a></li>
+                        <li><a href='{{ url("preferences/list") }}' title="Change Password" class="tipS"><span class="icos-user"></span></a></li>
+                        <li><a href='{{ url("conversation/list") }}' title="Messages" class="tipS"><span class="icos-archive"></span></a></li>
                     </ul>
 
                     <!-- Putn Sub nav here-->

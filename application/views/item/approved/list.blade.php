@@ -26,7 +26,7 @@
             @foreach($lstSubAte as $ate)
             <tr class="">
                 <td class="tableActs" align="center">
-                    <a href="detail_approved/{{ $ate->id }}" class="tablectrl_small bRed tipS" original-title="Process"><span class="iconb" data-icon=""></span></a>
+                    <a href='{{ url("item/detail_approved/$ate->id") }}' class="tablectrl_small bRed tipS" original-title="Process"><span class="iconb" data-icon=""></span></a>
 <!--                    <a href="detail_approved/{{ $ate->id }}" class="" original-title="Process">Process</span></a>-->
                 </td>
                 <td>{{ $ate->account_transaction->invoice_no }}</td>

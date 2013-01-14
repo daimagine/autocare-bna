@@ -44,7 +44,7 @@
                                             <li class="on_off">
                                                 <label>
                                                     <span class="icos-cross"></span>
-                                                    <a href="/member/delete/{{ $vh->membership->id }}"
+                                                    <a href='{{ url("member/delete/$vh->membership->id") }}'
                                                        class="appconfirm pointer red"
                                                        dialog-confirm-title="Remove Confirmation">Revoke Membership
                                                     </a>

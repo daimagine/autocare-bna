@@ -249,7 +249,7 @@
                         @if($transaction->status == 'O')
                         {{ Form::submit('Close WO', array( 'class' => 'buttonAction buttonM bGreen' )) }}
                         @endif
-                        <a href="../print_invoice/{{$transaction->id}}" target="_blank" class="buttonM bGold"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>Print Invoice</span></a>
+                        <a href='{{ url("work_order/print_invoice/$transaction->id") }}' target="_blank" class="buttonM bGold"><span class="iconb" data-icon=""  style="margin-left: 0px;"></span><span>Print Invoice</span></a>
                     </div>
                 </div>
             </div>

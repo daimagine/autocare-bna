@@ -34,18 +34,18 @@
                     &nbsp;
                 </td>
                 <td class="tableActs" align="center">
-                    <a href="/role/detail/{{ $role->id }}" 
+                    <a href='{{ url("role/detail/$role->id") }}'
 						class="tablectrl_small bDefault tipS">
 							<span class="iconb" data-icon=""></span>
 					</a>
-					<a href="/role/edit/{{ $role->id }}" 
+					<a href='{{ url("role/edit/$role->id") }}'
 						class="appconfirm tablectrl_small bDefault tipS" 
 						original-title="Edit"
 						dialog-confirm-title="Update Confirmation">
 							<span class="iconb" data-icon=""></span>
 					</a>
                     @if($role->id != Config::get('default.role.admin'))
-                        <a href="/role/delete/{{ $role->id }}"
+                        <a href='{{ url("role/delete/$role->id") }}'
                             class="appconfirm tablectrl_small bDefault tipS"
                             original-title="Remove"
                             dialog-confirm-title="Remove Confirmation">
@@ -63,7 +63,7 @@
 
 <div class="fluid">
     <div class="grid2">
-        <div class="wButton"><a href="add" title="" class="buttonL bLightBlue first">
+        <div class="wButton"><a href='{{ url("role/add") }}' title="" class="buttonL bLightBlue first">
             <span class="icol-add"></span>
             <span>Add Role</span>
         </a></div>

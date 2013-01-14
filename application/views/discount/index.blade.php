@@ -36,13 +36,13 @@
                     @endif
                     </td>
                 <td class="tableActs" align="center">
-                    <a href="/discount/edit/{{ $discount->id }}" 
+                    <a href='{{ url("discount/edit/$discount->id") }}'
 						class="appconfirm tablectrl_small bDefault tipS" 
 						original-title="Edit"
 						dialog-confirm-title="Update Confirmation">
 							<span class="iconb" data-icon=""></span>
 					</a>
-                    <a href="/discount/delete/{{ $discount->id }}" 
+                    <a href='{{ url("discount/delete/$discount->id") }}'
 						class="appconfirm tablectrl_small bDefault tipS" 
 						original-title="Remove"
 						dialog-confirm-title="Remove Confirmation">
@@ -59,7 +59,7 @@
 
 <div class="fluid">
     <div class="grid2">
-        <div class="wButton"><a href="add" title="" class="buttonL bLightBlue first">
+        <div class="wButton"><a href='{{ url("discount/add") }}' title="" class="buttonL bLightBlue first">
             <span class="icol-add"></span>
             <span>Add Discount</span>
         </a></div>

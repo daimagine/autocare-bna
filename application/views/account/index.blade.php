@@ -42,14 +42,14 @@
                     @endif
                 </td>
                 <td class="tableActs" align="center">
-                    <a href="/account/edit/{{ $account->id }}" 
+                    <a href='{{ url("account/edit/$account->id") }}'
 						class="appconfirm tablectrl_small bDefault tipS" 
 						original-title="Edit"
 						dialog-confirm-title="Update Confirmation">
 							<span class="iconb" data-icon=""></span>
 					</a>
                     @if(Auth::user()->id == Config::get('default.role.admin'))
-                        <a href="/account/delete/{{ $account->id }}"
+                        <a href='{{ url("account/delete/$account->id") }}'
                             class="appconfirm tablectrl_small bDefault tipS"
                             original-title="Remove"
                             dialog-confirm-title="Remove Confirmation">
