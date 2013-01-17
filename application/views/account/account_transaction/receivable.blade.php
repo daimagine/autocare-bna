@@ -32,7 +32,6 @@
                 <th>Due</th>
                 <th>Remaining</th>
                 <th>Status</th>
-                <th>Attributes</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -50,11 +49,6 @@
                 <td>{{ $account->due !== null ? 'IDR' : '' }} {{  number_format($account->due, 2) }}</td>
                 <td>IDR {{ number_format($account->due - $account->paid, 2) }}</td>
                 <td>{{ $account->paid_date === null ? 'awaiting payment'  : ( ($account->due - $account->paid == 0 ) ? 'paid' : 'partially paid' ) }}</td>
-                <td class="tableActs" align="center">
-                    @if($account->status)
-                    <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
-                    @endif
-                </td>
                 <td class="tableActs" align="center">
                     <a href='{{ url("account/invoice_edit/$accountTransType/$account->id") }}'
                        class="appconfirm tablectrl_small bDefault tipS"
