@@ -90,10 +90,10 @@
             <tbody>
             @foreach($services as $service)
             <tr class="">
-                <td>{{ date('Y-m-d', strtotime($service->week_start)) }} - {{ date('Y-m-d', strtotime($service->week_end)) }}</td>
-                <td>{{ $service->service_desc }}</td>
-                <td>{{ $service->service_count }}</td>
-                <td>IDR {{  number_format($service->amount, 2) }}</td>
+                <td>{{ date('Y-m-d', strtotime($service->week_start)) }} - {{ date('Y-m-d', strtotime($service->week_end)) }}&nbsp;</td>
+                <td>{{ $service->service_desc }}&nbsp;</td>
+                <td>{{ $service->service_count }}&nbsp;</td>
+                <td>IDR {{  number_format($service->amount, 2) }}&nbsp;</td>
             </tr>
             @endforeach
             </tbody>

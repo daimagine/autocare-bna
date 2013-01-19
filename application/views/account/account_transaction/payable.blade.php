@@ -38,17 +38,17 @@
             <tbody>
             @foreach($accounts as $account)
             <tr class="">
-                <td>{{ $account->account->name }}</td>
-                <td>{{ $account->invoice_no }}</td>
-                <td>{{ $account->reference_no }}</td>
-                <td>{{ $account->subject }}</td>
-                <td>{{ DateTime::createFromFormat('Y-m-d H:i:s', $account->input_date)->format('d M Y') }}</td>
-                <td>{{ DateTime::createFromFormat('Y-m-d H:i:s', $account->invoice_date)->format('d M Y') }}</td>
-                <td>{{ DateTime::createFromFormat('Y-m-d H:i:s', $account->due_date)->format('d M Y') }}</td>
-                <td>{{ $account->paid !== null ? 'IDR' : '' }} {{  number_format($account->paid, 2) }}</td>
-                <td>{{ $account->due !== null ? 'IDR' : '' }} {{  number_format($account->due, 2) }}</td>
-                <td>IDR {{ number_format($account->due - $account->paid, 2) }}</td>
-                <td>{{ $account->paid_date === null ? 'awaiting payment'  : ( ($account->due - $account->paid == 0 ) ? 'paid' : 'partially paid' ) }}</td>
+                <td>{{ $account->account->name }}&nbsp;</td>
+                <td>{{ $account->invoice_no }}&nbsp;</td>
+                <td>{{ $account->reference_no }}&nbsp;</td>
+                <td>{{ $account->subject }}&nbsp;</td>
+                <td>{{ DateTime::createFromFormat('Y-m-d H:i:s', $account->input_date)->format('d M Y') }}&nbsp;</td>
+                <td>{{ DateTime::createFromFormat('Y-m-d H:i:s', $account->invoice_date)->format('d M Y') }}&nbsp;</td>
+                <td>{{ DateTime::createFromFormat('Y-m-d H:i:s', $account->due_date)->format('d M Y') }}&nbsp;</td>
+                <td>{{ $account->paid !== null ? 'IDR' : '' }} {{  number_format($account->paid, 2) }}&nbsp;</td>
+                <td>{{ $account->due !== null ? 'IDR' : '' }} {{  number_format($account->due, 2) }}&nbsp;</td>
+                <td>IDR {{ number_format($account->due - $account->paid, 2) }}&nbsp;</td>
+                <td>{{ $account->paid_date === null ? 'awaiting payment'  : ( ($account->due - $account->paid == 0 ) ? 'paid' : 'partially paid' ) }}&nbsp;</td>
                 <td class="tableActs" align="center">
                     <a href='{{ url("account/invoice_edit/$accountTransType/$account->id") }}'
                        class="appconfirm tablectrl_small bDefault tipS"

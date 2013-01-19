@@ -77,14 +77,14 @@
                 <tbody>
                 @foreach($accounts as $account)
                 <tr class="">
-                    <td>{{ date('Y-m-d', strtotime($account->invoice_date)) }}</td>
-                    <td>{{ $account->account->name }}</td>
-                    <td>{{ date('Y-m-d', strtotime($account->due_date)) }}</td>
-                    <td>{{ $account->invoice_no }}</td>
-                    <td>IDR {{  number_format($account->paid, 2) }}</td>
-                    <td>{{ $account->type === AUTOCARE_ACCOUNT_TYPE_DEBIT ? 'Debit'  : 'Credit' }}</td>
-                    <td>{{ $account->description }}</td>
-                    <td>{{ $account->user->name }}</td>
+                    <td>{{ date('Y-m-d', strtotime($account->invoice_date)) }}&nbsp;</td>
+                    <td>{{ $account->account->name }}&nbsp;</td>
+                    <td>{{ date('Y-m-d', strtotime($account->due_date)) }}&nbsp;</td>
+                    <td>{{ $account->invoice_no }}&nbsp;</td>
+                    <td>IDR {{  number_format($account->paid, 2) }}&nbsp;</td>
+                    <td>{{ $account->type === AUTOCARE_ACCOUNT_TYPE_DEBIT ? 'Debit'  : 'Credit' }}&nbsp;</td>
+                    <td>{{ $account->description }}&nbsp;</td>
+                    <td>{{ $account->user->name }}&nbsp;</td>
                     <td class="tableActs" align="center">
                         <a href='{{ url("account/invoice_edit/$account->type/$account->id") }}'
                            class="appconfirm tablectrl_small bDefault tipS"

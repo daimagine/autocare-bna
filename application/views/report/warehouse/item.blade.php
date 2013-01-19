@@ -119,27 +119,27 @@
             <tbody>
             @foreach($items as $item)
             <tr class="">
-                <td>{{ $item->name }}</td>
-                <td>{{ $item->category }}</td>
-                <td>{{ $item->type }}</td>
-                <td>{{ $item->unit }}</td>
-                <td>{{ $item->code }}</td>
-                <td>{{ $item->current_stock }}</td>
-                <td>{{ $item->total_update_stock }}</td>
-                <td>IDR {{  number_format($item->sell_price, 2) }}</td>
-                <td>{{ $item->total_update_sell_price }}</td>
-                <td>IDR {{  number_format($item->purchase_price, 2) }}</td>
-                <td>{{ $item->vendor }}</td>
+                <td>{{ $item->name }}&nbsp;</td>
+                <td>{{ $item->category }}&nbsp;</td>
+                <td>{{ $item->type }}&nbsp;</td>
+                <td>{{ $item->unit }}&nbsp;</td>
+                <td>{{ $item->code }}&nbsp;</td>
+                <td>{{ $item->current_stock }}&nbsp;</td>
+                <td>{{ $item->total_update_stock }}&nbsp;</td>
+                <td>IDR {{  number_format($item->sell_price, 2) }}&nbsp;</td>
+                <td>{{ $item->total_update_sell_price }}&nbsp;</td>
+                <td>IDR {{  number_format($item->purchase_price, 2) }}&nbsp;</td>
+                <td>{{ $item->vendor }}&nbsp;</td>
 
                 @if($item->status == statusType::ACTIVE)
                 <td>Active</td>
                 @elseif($item->status == statusType::INACTIVE)
                 <td>Inactive</td>
                 @else
-                <td></td>
+                <td>&nbsp;</td>
                 @endif
-                <td>{{ date('Y-m-d', strtotime($item->create_date)) }}</td>
-                <td>{{ date('Y-m-d', strtotime($item->last_update)) }}</td>
+                <td>{{ date('Y-m-d', strtotime($item->create_date)) }}&nbsp;</td>
+                <td>{{ date('Y-m-d', strtotime($item->last_update)) }}&nbsp;</td>
             </tr>
             @endforeach
             </tbody>

@@ -56,8 +56,8 @@
                 @while($no < $subAccountTrx->quantity)
                 <tr id="i-rows-{{$no}}">
                     <td style="padding: 4px 4px">{{$no+1}}</td>
-<!--                    <td style="padding: 4px 4px"><div class="grid2"><input class="cssOnBox" name="assets[{{$no}}][name]" value="{{$subAccountTrx->item}}"></td>-->
-                    <td style="padding: 4px 4px"><div class="grid2"><input class="cssOnBox reqField validate[required]" name="assets[{{$no}}][code]" id="assets[{{$no}}][code]" value=""></div></td>
+<!--                    <td style="padding: 4px 4px"><div class="grid2"><input class="cssOnBox reqField" name="assets[{{$no}}][name]" value="{{$subAccountTrx->item}}"></td>-->
+                    <td style="padding: 4px 4px"><div class="grid2"><input class="cssOnBox" name="assets[{{$no}}][code]" id="assets[{{$no}}][code]" value=""></div></td>
                     <td style="padding: 4px 4px">
                         <div class="grid2">
                             <select name="assets[{{$no}}][condition]" >
@@ -78,14 +78,14 @@
             <div id="item-input-wrapper" style="display: none;"></div>
         </div>
 
-        <div class="formRow">
-            <div class="grid3"><label>Remarks message :<span class="req">*</span></label></div>
-            <div class="grid9"><textarea rows="8" cols="" name="remarks" class="validate[required]" id="remarks"></textarea></div><div class="clear"></div>
-        </div>
+<!--        <div class="formRow">-->
+<!--            <div class="grid3"><label>Remarks message :<span class="req">*</span></label></div>-->
+<!--            <div class="grid9"><textarea rows="8" cols="" name="remarks" class="validate[required]" id="remarks"></textarea></div><div class="clear"></div>-->
+<!--        </div>-->
 
         <div style="padding: 19px 16px">
             <div class="formSubmit">
-                {{ HTML::link('/adfafd', 'Reject', array( 'class' => 'closeApproved buttonL bRed mb10 mt5', 'id' => 'buttonCloseApproved' )) }}
+<!--                {{ HTML::link('/adfafd', 'Reject', array( 'class' => 'closeApproved buttonL bRed mb10 mt5', 'id' => 'buttonCloseApproved' )) }}-->
                 {{ Form::submit('Complete', array( 'class' => 'buttonL bGreen mb10 mt5', 'id' => 'buttonConfirmApproved')) }}
                 <div class="clear"></div>
             </div>

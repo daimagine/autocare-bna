@@ -103,13 +103,13 @@
             <tbody>
             @foreach($transactions as $transaction)
             <tr class="">
-                <td>{{ $transaction->year }}</td>
-                <td>{{ $transaction->monthname }}</td>
-                <td>{{ $transaction->total_wo }}</td>
-                <td>{{ $transaction->total_open }}</td>
-                <td>{{ $transaction->total_closed }}</td>
-                <td>{{ $transaction->total_canceled }}</td>
-                <td>IDR {{  number_format($transaction->total_amount, 2) }}</td>
+                <td>{{ $transaction->year }}&nbsp;</td>
+                <td>{{ $transaction->monthname }}&nbsp;</td>
+                <td>{{ $transaction->total_wo }}&nbsp;</td>
+                <td>{{ $transaction->total_open }}&nbsp;</td>
+                <td>{{ $transaction->total_closed }}&nbsp;</td>
+                <td>{{ $transaction->total_canceled }}&nbsp;</td>
+                <td>IDR {{  number_format($transaction->total_amount, 2) }}&nbsp;</td>
 
 <!--                <td class="tableActs" align="center">-->
 <!--                    <a href="#detail" class="tablectrl_small bDefault tipS" original-title="Detail">-->

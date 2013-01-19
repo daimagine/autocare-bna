@@ -100,18 +100,18 @@
             @foreach($items as $item)
             <tr class="">
                 <td>{{ $item->name }}</td>
-                <td>@if($item->jan_salescount != null) {{ $item->jan_salescount }} @else 0 @endif</td>
-                <td>@if($item->feb_salescount != null) {{ $item->feb_salescount }} @else 0 @endif</td>
-                <td>@if($item->mar_salescount != null) {{ $item->mar_salescount }} @else 0 @endif</td>
-                <td>@if($item->apr_salescount != null) {{ $item->apr_salescount }} @else 0 @endif</td>
-                <td>@if($item->may_salescount != null) {{ $item->may_salescount }} @else 0 @endif</td>
-                <td>@if($item->jun_salescount != null) {{ $item->jun_salescount }} @else 0 @endif</td>
-                <td>@if($item->jul_salescount != null) {{ $item->jul_salescount }} @else 0 @endif</td>
-                <td>@if($item->aug_salescount != null) {{ $item->aug_salescount }} @else 0 @endif</td>
-                <td>@if($item->sep_salescount != null) {{ $item->sep_salescount }} @else 0 @endif</td>
-                <td>@if($item->oct_salescount != null) {{ $item->oct_salescount }} @else 0 @endif</td>
-                <td>@if($item->nov_salescount != null) {{ $item->nov_salescount }} @else 0 @endif</td>
-                <td>@if($item->dec_salescount != null) {{ $item->dec_salescount }} @else 0 @endif</td>
+                <td>@if($item->jan_salescount != null) {{ $item->jan_salescount }} @else 0 @endif &nbsp;</td>
+                <td>@if($item->feb_salescount != null) {{ $item->feb_salescount }} @else 0 @endif &nbsp;</td>
+                <td>@if($item->mar_salescount != null) {{ $item->mar_salescount }} @else 0 @endif &nbsp;</td>
+                <td>@if($item->apr_salescount != null) {{ $item->apr_salescount }} @else 0 @endif &nbsp;</td>
+                <td>@if($item->may_salescount != null) {{ $item->may_salescount }} @else 0 @endif &nbsp;</td>
+                <td>@if($item->jun_salescount != null) {{ $item->jun_salescount }} @else 0 @endif &nbsp;</td>
+                <td>@if($item->jul_salescount != null) {{ $item->jul_salescount }} @else 0 @endif &nbsp;</td>
+                <td>@if($item->aug_salescount != null) {{ $item->aug_salescount }} @else 0 @endif &nbsp;</td>
+                <td>@if($item->sep_salescount != null) {{ $item->sep_salescount }} @else 0 @endif &nbsp;</td>
+                <td>@if($item->oct_salescount != null) {{ $item->oct_salescount }} @else 0 @endif &nbsp;</td>
+                <td>@if($item->nov_salescount != null) {{ $item->nov_salescount }} @else 0 @endif &nbsp;</td>
+                <td>@if($item->dec_salescount != null) {{ $item->dec_salescount }} @else 0 @endif &nbsp;</td>
             </tr>
             @endforeach
             </tbody>

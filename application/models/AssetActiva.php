@@ -55,7 +55,7 @@ class AssetActiva extends Eloquent {
             $asset = new AssetActiva();
             $asset->name=$data['name'];
             $asset->status=statusType::ACTIVE;
-            $asset->code=$newAsset['code'];
+            $asset->code=($newAsset['code']!=null && $newAsset['code']!='' ? $newAsset['code'] : "00000000");
             $asset_type= AssetType::find($data['asset_type_id']);
             $asset->type_id = $asset_type->id;
             $asset->configured_by = Auth::user()->id;
@@ -73,12 +73,12 @@ class AssetActiva extends Eloquent {
 
     public static function update($id, $data=array()) {
         $asset = AssetActiva::where_id($id)
-            ->where_status(1)
             ->first();
         if(isset($data['asset_type_id'])){
             $asset_type= AssetType::find($data['asset_type_id']);
             $asset->type_id = $asset_type->id;
         }
+        if(isset($data['name'])){$asset->name=$data['name'];}
         if(isset($data['code'])){$asset->code=$data['code'];}
         if(isset($data['status'])){$asset->status=$data['status'];}
         if(isset($data['location'])){$asset->location=$data['location'];}

@@ -22,14 +22,15 @@
             <tbody>
             @foreach($customers as $customer)
             <tr class="">
-                <td>{{ $customer->name }}</td>
-				<td>{{ $customer->address1 . ' ' . $customer->address2 }}</td>
+                <td>{{ $customer->name }}&nbsp;</td>
+				<td>{{ $customer->address1 . ' ' . $customer->address2 }}&nbsp;</td>
                 <td class="tableActs" align="center">
                     @if($customer->status)
                         <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
                     @else
                         <a href="#" class="fs1 iconb tipS" original-title="Inactive" data-icon=""></a>
                     @endif
+                    &nbsp;
                 </td>
                 <td class="tableActs" align="center">
                     <a href='{{ url("customer/edit/$customer->id") }}'

@@ -71,10 +71,10 @@
             <tbody>
             @foreach($accounts as $account)
             <tr class="">
-                <td>{{ date('Y-m-d', strtotime($account->week_start)) }} - {{ date('Y-m-d', strtotime($account->week_end)) }}</td>
-                <td>{{ $account->name }}</td>
-                <td>{{ $account->count }}</td>
-                <td>IDR {{  number_format($account->amount, 2) }}</td>
+                <td>{{ date('Y-m-d', strtotime($account->week_start)) }} - {{ date('Y-m-d', strtotime($account->week_end)) }}&nbsp;</td>
+                <td>{{ $account->name }}&nbsp;</td>
+                <td>{{ $account->count }}&nbsp;</td>
+                <td>IDR {{  number_format($account->amount, 2) }}&nbsp;</td>
             </tr>
             @endforeach
             </tbody>

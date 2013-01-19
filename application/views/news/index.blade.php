@@ -25,13 +25,14 @@
             <tbody>
             @foreach($newslist as $news)
             <tr class="">
-                <td>{{ $news->title }}</td>
-                <td>{{ $news->resume }}</td>
-                <td>{{ date('d F Y', strtotime($news->created_at)) }}</td>
+                <td>{{ $news->title }}&nbsp;</td>
+                <td>{{ $news->resume }}&nbsp;</td>
+                <td>{{ date('d F Y', strtotime($news->created_at)) }}&nbsp;</td>
                 <td class="tableActs" align="center">
                     @if($news->status)
                     <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
                     @endif
+                    &nbsp;
                 </td>
                 <td class="tableActs" align="center">
                     <a href='{{ url("news/edit/$news->id") }}'
@@ -46,6 +47,7 @@
                        dialog-confirm-title="Remove Confirmation">
                         <span class="iconb" data-icon=""></span>
                     </a>
+                    &nbsp;
                 </td>
             </tr>
             @endforeach

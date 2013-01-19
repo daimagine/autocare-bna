@@ -168,7 +168,7 @@
                 <li>
                  <span class="uAlert">
                      <a href="#" title="">{{$ip->item->name}}</a>
-                     <span><b>{{$ip->users->name}}</b> update harga {{$ip->item->name}} dari {{$ip->prev_price}} menjadi {{$ip->price}}</span>
+                     <span><b>{{$ip->users->name}}</b> update harga {{$ip->item->name}}, unit type {{$ip->item->item_unit->name}} dari {{$ip->prev_price}} menjadi {{$ip->price}}</span>
 <!--                     <a href="#" title="" class="sideB bLightBlue mt10">Add new session</a>-->
                  </span>
                     <span class="uDate"><span>{{ date('d', strtotime($ip->created_at)) }}</span>{{ date('M', strtotime($ip->created_at)) }}</span>

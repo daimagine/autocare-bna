@@ -118,14 +118,14 @@
             <tbody>
             @foreach($parts as $part)
             <tr class="">
-                <td>{{ date('Y-m-d', strtotime($part->week_start)) }} - {{ date('Y-m-d', strtotime($part->week_end)) }}</td>
-                <td>{{ $part->part_code }}</td>
-                <td>{{ $part->part_desc }}</td>
-                <td>{{ $part->part_category }}</td>
-                <td>{{ $part->part_vendor }}</td>
-                <td>{{ $part->unit_type }}</td>
-                <td>{{ $part->part_count }}</td>
-                <td>IDR {{  number_format($part->amount, 2) }}</td>
+                <td>{{ date('Y-m-d', strtotime($part->week_start)) }} - {{ date('Y-m-d', strtotime($part->week_end)) }}&nbsp;</td>
+                <td>{{ $part->part_code }}&nbsp;</td>
+                <td>{{ $part->part_desc }}&nbsp;</td>
+                <td>{{ $part->part_category }}&nbsp;</td>
+                <td>{{ $part->part_vendor }}&nbsp;</td>
+                <td>{{ $part->unit_type }}&nbsp;</td>
+                <td>{{ $part->part_count }}&nbsp;</td>
+                <td>IDR {{  number_format($part->amount, 2) }}&nbsp;</td>
             </tr>
             @endforeach
             </tbody>

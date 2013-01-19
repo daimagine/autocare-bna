@@ -27,15 +27,15 @@
             <tbody>
             @foreach($assets as $asset)
             <tr>
-                <td class="type">{{ $asset->asset_type->name }}</td>
-                <td class="name">{{ $asset->name }}</td>
-                <td class="code">{{ $asset->code }}</td>
-                <td>{{ ($asset->condition == AssetCondition::GOOD ? 'Good' : ($asset->condition == AssetCondition::FAIR ? 'Fair' : ($asset->condition == AssetCondition::BAD ? 'Bad' : '-')))}}</td>
-                <td>{{ $asset->location }}</td>
-                <td>{{ $asset->purchase_price }}</td>
-                <td>{{ $asset->status ==1 ? 'Active' : 'Inactive' }}</td>
-                <td>{{ $asset->vendor }}</td>
-                <td>{{ $asset->created_at }}</td>
+                <td class="type">{{ $asset->asset_type->name }}&nbsp;</td>
+                <td class="name">{{ $asset->name }}&nbsp;</td>
+                <td class="code">{{ $asset->code }}&nbsp;</td>
+                <td>{{ ($asset->condition == AssetCondition::GOOD ? 'Good' : ($asset->condition == AssetCondition::FAIR ? 'Fair' : ($asset->condition == AssetCondition::BAD ? 'Bad' : '-')))}}&nbsp;</td>
+                <td>{{ $asset->location }}&nbsp;</td>
+                <td>{{ $asset->purchase_price }}&nbsp;</td>
+                <td>{{ $asset->status ==1 ? 'Active' : 'Inactive' }}&nbsp;</td>
+                <td>{{ $asset->vendor }}&nbsp;</td>
+                <td>{{ $asset->created_at }}&nbsp;</td>
                 <td class="tableActs" align="center">
                     <a href='{{ url("asset/edit/$asset->id") }}' class="appconfirm tablectrl_small bDefault tipS"
                        original-title="Edit"
@@ -49,6 +49,7 @@
                         <span class="iconb" data-icon=""></span>
                         <!-- Dialog modal confirmation delete item-->
                     </a>
+                    &nbsp;
                 </td>
             </tr>
             @endforeach

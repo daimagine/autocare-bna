@@ -32,11 +32,11 @@
             @foreach($listItemStokFlow as $its)
 
             <tr class="">
-                <td>{{ $its->item->name }}</td>
-                <td>{{ $its->sub_account_trx->id }}</td>
-                <td>{{ $its->quantity }}</td>
-                <td>{{ $its->date }}</td>
-                <td>{{ $its->user->name }}</td>
+                <td>{{ $its->item->name }}&nbsp;</td>
+                <td>{{ $its->sub_account_trx->id }}&nbsp;</td>
+                <td>{{ $its->quantity }}&nbsp;</td>
+                <td>{{ $its->date }}&nbsp;</td>
+                <td>{{ $its->user->name }}&nbsp;</td>
             </tr>
             @endforeach
             </tbody>
