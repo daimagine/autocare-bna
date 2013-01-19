@@ -30,9 +30,9 @@
                 <td>{{ $type->status ==1 ? 'Active' : 'Inactive' }}&nbsp;</td>
                 <td>{{ $type->created_at }}&nbsp;</td>
                 <td class="tableActs" align="center">
-                    <a href="edit_asset_type/{{ $type->id }}" class="tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
+                    <a href='{{ url("asset/edit_asset_type/$type->id") }}' class="tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
                     @if($type->status == statusType::ACTIVE)
-                    <a href="delete_asset_type/{{ $type->id }}"
+                    <a href='{{ url("asset/delete_asset_type/$type->id") }}'
                        class="appconfirm tablectrl_small bDefault tipS"
                        original-title="Remove"
                        dialog-confirm-title="Remove Confirmation">
@@ -53,7 +53,7 @@
 
 <div class="fluid">
     <div class="grid2">
-        <div class="wButton"><a href="add_asset_type" title="" class="buttonL bLightBlue first">
+        <div class="wButton"><a href='{{ url("asset/add_asset_type") }}'  title="" class="buttonL bLightBlue first">
             <span class="icol-add"></span>
             <span>Add New</span>
         </a></div>

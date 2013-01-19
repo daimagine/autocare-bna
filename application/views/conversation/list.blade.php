@@ -3,8 +3,8 @@
     @include('partial.notification')
 
     <ul class="middleNavR">
-        <li><a href="/conversation/new" class="tipN" original-title="Write Message"><img src="/images/icons/middlenav/create.png" alt=""></a></li>
-        <li><a href="/conversation/list" class="tipN" original-title="Messages"><img src="/images/icons/middlenav/dialogs.png" alt=""></a></li>
+        <li><a href='{{ url("conversation/new") }}' class="tipN" original-title="Write Message"><img src='{{ asset("images/icons/middlenav/create.png") }}' alt=""></a></li>
+        <li><a href='{{ url("conversation/list") }}' class="tipN" original-title="Messages"><img src='{{ asset("images/icons/middlenav/dialogs.png") }}' alt=""></a></li>
     </ul>
 
     @if(empty($conversations))

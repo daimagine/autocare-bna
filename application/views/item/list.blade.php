@@ -4,7 +4,7 @@
 <!-- Rounded buttons -->
 <ul class="middleNavA">
     @foreach($item_category as $item_category)
-    <li><a href="list?category={{$item_category->id}}" title="{{$item_category->name}}" style="width: 100px;height: 65px;"><img src="../images/icons/color/{{$item_category->picture}}" alt="" /><span style="@if($category->name == $item_category->name) color:red @endif">{{$item_category->name}}</span></a></li>
+    <li><a href='{{ url("item/list?category=$item_category->id") }}' title="{{$item_category->name}}" style="width: 100px;height: 65px;"><img src='{{ asset("images/icons/color/$item_category->picture") }}' alt="" /><span style="@if($category->name == $item_category->name) color:red @endif">{{$item_category->name}}</span></a></li>
     @endforeach
 </ul>
 <div class="divider"><span></span></div>
@@ -45,8 +45,8 @@
                 <td>{{ $item->created_at }}&nbsp;</td>
 <!--                <td>{{ $item->expiry_date }}</td>-->
                 <td class="tableActs" align="center">
-                    <a href="edit/{{ $item->id }}" class="classConfirmEdit tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
-                    <a href="delete/{{ $item->id }}" class="classConfirmDelete tablectrl_small bDefault tipS" original-title="Remove">
+                    <a href='{{ url("item/edit/$item->id") }}' class="classConfirmEdit tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
+                    <a href='{{ url("item/delete/$item->id") }}' class="classConfirmDelete tablectrl_small bDefault tipS" original-title="Remove">
                         <span class="iconb" data-icon=""></span>
                         <!-- Dialog modal confirmation delete item-->
                     </a>
@@ -62,7 +62,7 @@
 
 <div class="fluid">
     <div class="grid2">
-        <div class="wButton"><a href="add?category={{$category->id}}" title="" class="buttonL bLightBlue first">
+        <div class="wButton"><a href='{{ url("item/add?category=$category->id") }}' title="" class="buttonL bLightBlue first">
             <span class="icol-add"></span>
             <span>Add New</span>
         </a></div>

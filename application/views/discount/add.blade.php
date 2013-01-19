@@ -21,7 +21,8 @@
 			<div class="grid9"><input name="value" type="text" id="discountValue" value="{{ @$discount['value'] }}" /></div><div class="clear"></div>
 		</div>
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($discount['status']) ? $discount['status'] : 1, 'Status') }}
+        {{-- Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($discount['status']) ? $discount['status'] : 1, 'Status') --}}
+        {{ Form::hidden('status', 1) }}
 
         {{ Form::nginput('text', 'description', @$discount['description'], 'Description') }}
 		

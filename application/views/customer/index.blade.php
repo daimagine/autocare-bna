@@ -26,18 +26,20 @@
 				<td>{{ $customer->address1 . ' ' . $customer->address2 }}&nbsp;</td>
                 <td class="tableActs" align="center">
                     @if($customer->status)
-                    <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
+                        <a href="#" class="fs1 iconb tipS" original-title="Active" data-icon=""></a>
+                    @else
+                        <a href="#" class="fs1 iconb tipS" original-title="Inactive" data-icon=""></a>
                     @endif
                     &nbsp;
                 </td>
                 <td class="tableActs" align="center">
-                    <a href="/customer/edit/{{ $customer->id }}" 
+                    <a href='{{ url("customer/edit/$customer->id") }}'
 						class="appconfirm tablectrl_small bDefault tipS" 
 						original-title="Edit"
 						dialog-confirm-title="Update Confirmation">
 							<span class="iconb" data-icon=""></span>
 					</a>
-                    <a href="/customer/delete/{{ $customer->id }}{{ $customer->status == 1 ? '' : '/purge' }}"
+                    <a href='{{ url("customer/delete/$customer->id". ($customer->status == 1 ? "" : "/purge") ) }}'
 						class="appconfirm tablectrl_small bDefault tipS" 
 						original-title="Remove"
 						dialog-confirm-title="Remove Confirmation"
@@ -55,7 +57,7 @@
 
 <div class="fluid">
     <div class="grid2">
-        <div class="wButton"><a href="add" title="" class="buttonL bLightBlue first">
+        <div class="wButton"><a href='{{ url("customer/add") }}' title="" class="buttonL bLightBlue first">
             <span class="icol-add"></span>
             <span>Add Customer</span>
         </a></div>

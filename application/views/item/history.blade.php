@@ -4,7 +4,7 @@
 <!-- Rounded buttons -->
 <ul class="middleNavA">
     @foreach($item_category as $c)
-    <li><a href="list_history?category={{$c->id}}" title="{{$c->name}}" style="width: 100px;height: 65px;"><img src="../images/icons/color/config.png" alt="" /><span style="@if($category->name == $c->name) color:red @endif">{{$c->name}}</span></a></li>
+    <li><a href='{{ url("item/list_history?category=$c->id") }}' title="{{$c->name}}" style="width: 100px;height: 65px;"><img src='{{ asset("images/icons/color/config.png") }}' alt="" /><span style="@if($category->name == $c->name) color:red @endif">{{$c->name}}</span></a></li>
     @endforeach
 </ul>
 <div class="divider"><span></span></div>

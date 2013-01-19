@@ -37,7 +37,8 @@
 
         {{ Form::nginput('text', 'vendor', $item->vendor, 'Vendor', array('class' => 'validate[required]')) }}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $item->status, 'Status', array('class' => 'validate[required]')) }}
+        {{-- Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), $item->status, 'Status', array('class' => 'validate[required]')) --}}
+        {{ Form::hidden('status', 1) }}
 
         <div class="formRow noBorderB">
             <div class="status" id="status3"></div>

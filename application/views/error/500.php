@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>Autocare BNA :: {{ (isset($title) ? $title : 'Garage Integrated System') }}</title>
-    <!--[if IE]> <link href="css/ie.css" rel="stylesheet" type="text/css"> <![endif]-->
+    <!--[if IE]> <link href="<?php echo url('css/ie.css') ?>" rel="stylesheet" type="text/css"> <![endif]-->
     <link href="<?php echo url('css/styles.css') ?>" media="all" type="text/css" rel="stylesheet" />
 
 </head>
@@ -13,7 +13,7 @@
 <!-- Top line begins -->
 <div id="top">
     <div class="wrapper">
-        <a href="index.html" title="" class="logo">
+        <a href="<?php echo url('/') ?>" title="" class="logo">
             <img src="<?php echo asset('images/autocare.png') ?>" alt="" width="126" height="38" style="margin-top: -5px;"/>
         </a>
 

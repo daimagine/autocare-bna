@@ -4,7 +4,7 @@
 <br>
 <ul class="middleNavA">
     @foreach($allItemCategory as $category)
-    <li><a href="add?category={{$category->id}}" title="{{$category->name}}" style="width: 100px;height: 65px;"><img src="../images/icons/color/config.png" alt="" /><span style="@if($itemCategory->name == $category->name) color:red @endif">{{$category->name}}</span></a></li>
+    <li><a href='{{ url("item/add?category=$category->id") }}' title="{{$category->name}}" style="width: 100px;height: 65px;"><img src='{{ asset("images/icons/color/config.png") }}' alt="" /><span style="@if($itemCategory->name == $category->name) color:red @endif">{{$category->name}}</span></a></li>
     @endforeach
 </ul>
 <div class="divider"><span></span></div>
@@ -54,7 +54,8 @@
 
         {{ Form::nginput('text', 'vendor', @$item['vendor'], 'Vendor', array('class' => 'validate[required]')) }}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($item['status']) ? $item['status'] : 1, 'Status') }}
+        {{-- Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($item['status']) ? $item['status'] : 1, 'Status') --}}
+        {{ Form::hidden('status', 1) }}
 
         <div class="formRow noBorderB">
             <div class="status" id="status3"></div>

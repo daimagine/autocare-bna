@@ -12,7 +12,7 @@
     });
 </script>
 <!-- javascript library -->
-<link href="../css/styles.css" media="all" type="text/css" rel="stylesheet">
+<link href='{{ asset("css/styles.css") }}' media="all" type="text/css" rel="stylesheet">
     <div class="wrapper">
         <div class="widget" style="margin: 10px 0px 10px 0px;">
             <div class="whead">

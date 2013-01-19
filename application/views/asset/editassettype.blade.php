@@ -28,7 +28,8 @@
             <div class="grid9"><textarea rows="8" cols="" name="description" class="validate[required,minSize[6]]" id="description">{{$asset_type->description}}</textarea></div><div class="clear"></div>
         </div>
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($asset_type->status) ? $asset_type->status : 1, 'Status') }}
+        {{-- Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($asset_type->status) ? $asset_type->status : 1, 'Status') --}}
+        {{ Form::hidden('status', 1) }}
 
         <div class="formRow noBorderB">
             <div class="status" id="status3"></div>

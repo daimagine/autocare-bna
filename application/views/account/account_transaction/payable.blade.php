@@ -3,10 +3,10 @@
 @include('partial.notification')
 
 <ul class="middleNavA">
-    <li><a href="/account/account_payable" title="All Payable Account"><img src="/images/icons/color/refresh.png" alt=""><span>All</span></a></li>
-    <li><a href="/account/invoice_in/C" title="Add invoice"><img src="/images/icons/color/plus.png" alt=""><span>Add invoice</span></a></li>
-    <li><a href="/account/account_payable/unpaid" title="Awaiting payment"><img src="/images/icons/color/full-time.png" alt=""><span>Awaiting payment</span></a></li>
-    <li><a href="/account/account_payable/paid" title="Paid invoice"><img src="/images/icons/color/cost.png" alt=""><span>Paid invoice</span></a></li>
+    <li><a href='{{ url("account/account_payable") }}' title="All Payable Account"><img src='{{ asset("images/icons/color/refresh.png") }}' alt=""><span>All</span></a></li>
+    <li><a href='{{ url("account/invoice_in/C") }}' title="Add invoice"><img src='{{ asset("images/icons/color/plus.png") }}' alt=""><span>Add invoice</span></a></li>
+    <li><a href='{{ url("account/account_payable/unpaid") }}' title="Awaiting payment"><img src='{{ asset("images/icons/color/full-time.png") }}' alt=""><span>Awaiting payment</span></a></li>
+    <li><a href='{{ url("account/account_payable/paid") }}' title="Paid invoice"><img src='{{ asset("images/icons/color/cost.png") }}' alt=""><span>Paid invoice</span></a></li>
 </ul>
 <div class="divider"><span></span></div>
 
@@ -50,14 +50,14 @@
                 <td>IDR {{ number_format($account->due - $account->paid, 2) }}&nbsp;</td>
                 <td>{{ $account->paid_date === null ? 'awaiting payment'  : ( ($account->due - $account->paid == 0 ) ? 'paid' : 'partially paid' ) }}&nbsp;</td>
                 <td class="tableActs" align="center">
-                    <a href="/account/invoice_edit/{{ $accountTransType }}/{{ $account->id }}"
+                    <a href='{{ url("account/invoice_edit/$accountTransType/$account->id") }}'
                        class="appconfirm tablectrl_small bDefault tipS"
                        original-title="Edit"
                        dialog-confirm-title="Update Confirmation">
                         <span class="iconb" data-icon=""></span>
                     </a>
                     @if(Auth::user()->id == Config::get('default.role.admin'))
-                        <a href="/account/invoice_delete/{{ $accountTransType }}/{{ $account->id }}"
+                        <a href='{{ url("account/invoice_delete/$accountTransType/$account->id") }}'
                            class="appconfirm tablectrl_small bDefault tipS"
                            original-title="Remove"
                            dialog-confirm-title="Remove Confirmation">
@@ -65,8 +65,8 @@
                         </a>
                     @endif
                     @if($account->due == 0 || $account->paid <> $account->due)
-                        <a href="/account/pay_invoice/{{ $accountTransType }}/{{ $account->id }}"
-                           class="appconfirm tablectrl_small bDefault tipS"
+                        <a href='{{ url("account/pay_invoice/$accountTransType/$account->id") }}'
+                           class='{{ url("appconfirm tablectrl_small bDefault tipS"
                            original-title="Pay Invoice"
                            dialog-confirm-title="Payment Confirmation">
                             <span class="iconb" data-icon=""></span>
@@ -88,7 +88,7 @@
 
 <div class="fluid">
     <div class="grid2">
-        <div class="wButton"><a href="/account/invoice_in/C" title="" class="buttonL bLightBlue first">
+        <div class="wButton"><a href='{{ url("account/invoice_in/C") }}' title="" class="buttonL bLightBlue first">
             <span class="icol-add"></span>
             <span>Add Account Payable</span>
         </a></div>

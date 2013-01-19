@@ -6,10 +6,10 @@
 	
 	<title>Work Order Invoice</title>
 
-	<link rel='stylesheet' type='text/css' href='../../css/print/style.css' />
-	<link rel='stylesheet' type='text/css' href='../../css/print/print.css' media="print" />
-	<script type='text/javascript' src='../../js/wo/print/jquery-1.3.2.min.js'></script>
-	<script type='text/javascript' src='../../js/wo/print/example.js'></script>
+	<link rel='stylesheet' type='text/css' href='{{ asset("css/print/style.css") }}' />
+	<link rel='stylesheet' type='text/css' href='{{ asset("css/print/print.css") }}' media="print" />
+	<script type='text/javascript' src='{{ asset("js/wo/print/jquery-1.3.2.min.js") }}'></script>
+	<script type='text/javascript' src='{{ asset("js/wo/print/example.js") }}'></script>
 </head>
 
 <body onload="javascript:window.print()">
@@ -30,7 +30,7 @@
 
                 <div style="float: right;vertical-align: top;text-align: right;margin: 0px 0px 30px 0px;">
                     <div id="">
-<!--                        <img id="image" src="../../images/autocare-2.png" alt="logo" width="63%" height="63%">-->
+<!--                        <img id="image" src='{{ asset("images/autocare-2.png") }}' alt="logo" width="63%" height="63%">-->
                     </div>
                 </div>
             </div>

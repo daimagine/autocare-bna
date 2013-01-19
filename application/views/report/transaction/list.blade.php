@@ -124,7 +124,7 @@
             @foreach($transactions as $transaction)
                 <tr class="">
                     <td class="tableActs" align="center">
-                        <a href="/report/transaction/detail/{{ $transaction->transaction_id }}" class="tablectrl_small bDefault tipS" original-title="Detail"
+                        <a href='{{ url("report/transaction/detail/$transaction->transaction_id") }}' class="tablectrl_small bDefault tipS" original-title="Detail"
                            data-id="{{ $transaction->transaction_id }}">
                             <span class="iconb" data-icon=""></span>
                         </a>

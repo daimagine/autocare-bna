@@ -43,13 +43,13 @@
                     &nbsp;
                 </td>
                 <td class="tableActs" align="center">
-                    <a href="/access/edit/{{ $access->id }}"
+                    <a href='{{ url("access/edit/$access->id") }}'
 						class="appconfirm tablectrl_small bDefault tipS"
 						original-title="Edit"
 						dialog-confirm-title="Update Confirmation">
 							<span class="iconb" data-icon=""></span>
 					</a>
-                    <a href="/access/delete/{{ $access->id }}"
+                    <a href='{{ url("access/delete/$access->id") }}'
 						class="appconfirm tablectrl_small bDefault tipS"
 						original-title="Remove"
 						dialog-confirm-title="Remove Confirmation">

@@ -44,7 +44,11 @@
             </div>
             <div class="grid5">
                 <div>
-                    <img src="{{$user->picture != null && $user->picture != '' ? '/images/uploads/user/'.$user->picture : '/images/userLogin.png' }}" alt="" width="72" height="70">
+                    @if($user->picture != null && $user->picture !== '')
+                        <img src='{{ asset("images/uploads/user/$user->picture") }}' alt="" width="72" height="70">
+                    @else
+                        <img src='{{ asset("images/userLogin.png") }}' alt="" width="72" height="70">
+                    @endif
                 </div>
                 {{Form::file('picture', $attributes = array('class' => 'fileInput'))}}
             </div>

@@ -3,8 +3,8 @@
     @include('partial.notification')
 
     <ul class="middleNavR">
-        <li><a href="/conversation/new" class="tipN" original-title="Write Message"><img src="/images/icons/middlenav/create.png" alt=""></a></li>
-        <li><a href="/conversation/list" class="tipN" original-title="Messages"><img src="/images/icons/middlenav/dialogs.png" alt=""></a><strong>8</strong></li>
+        <li><a href='{{ url("conversation/new") }}' class="tipN" original-title="Write Message"><img src='{{ asset("images/icons/middlenav/create.png") }}' alt=""></a></li>
+        <li><a href='{{ url("conversation/list") }}' class="tipN" original-title="Messages"><img src='{{ asset("images/icons/middlenav/dialogs.png") }}' alt=""></a><strong>8</strong></li>
     </ul>
 
     @if(empty($conversation->messages))
@@ -39,7 +39,7 @@
                         @endif
 
                         <li class="{{ $message->sender_id }} {{ $message->sender->id }} {{ $message->sender_id == Auth::user()->id ? 'by_user' : 'by_me' }}">
-                            <a href="#" title=""><img src="/images/userLogin.png" alt="" width="37" height="36" alt=""></a>
+                            <a href="#" title=""><img src='{{ asset("images/userLogin.png") }}' alt="" width="37" height="36" alt=""></a>
                             <div class="messageArea">
                                 <span class="aro"></span>
                                 <div class="infoRow">
@@ -84,8 +84,6 @@
                 <span><span class="iconb" data-icon=""></span>Don't forget to set <a href="#" title="">Message Receiver</a></span>
 
                 <div class="sendBtn sendwidget">
-                    <!--                    <a href="#" title="" class="attachPhoto"></a>-->
-                    <!--                    <a href="#" title="" class="attachLink"></a>-->
                     <input type="submit" name="sendMessage" class="buttonM bLightBlue" value="Send message">
                 </div>
                 <div class="clear"></div>

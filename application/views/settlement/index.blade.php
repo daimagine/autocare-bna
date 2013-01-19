@@ -26,10 +26,10 @@
             @foreach($settlements as $settlement)
             <tr class="{{ $settlement->state == SettlementState::UNSETTLED ? 'redBack' : ($settlement->state == SettlementState::SETTLED_UNMATCH ? 'greyBack' : '') }} ">
                 <td class="tableActs" align="center">
-<!--                    <a href="/settlement/detail/{{ $settlement->id }}" class="tablectrl_small bDefault tipS" original-title="Detail">-->
+<!--                    <a href='{{ url("settlement/detail/$settlement->id") }}' class="tablectrl_small bDefault tipS" original-title="Detail">-->
 <!--                        <span class="iconb" data-icon=""></span>-->
 <!--                    </a>-->
-                    <a href="/settlement/edit/{{ $settlement->id }}"
+                    <a href='{{ url("settlement/edit/$settlement->id") }}'
                        class="appconfirm tablectrl_small bDefault tipS"
                        original-title="{{ $settlement->state == SettlementState::UNSETTLED ? 'Settle' : 'Detail' }}"
                        dialog-confirm-title="Settlement Confirmation">

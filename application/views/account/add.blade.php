@@ -16,7 +16,8 @@
 
         {{ Form::nginput('text', 'name', @$account['name'], 'Name *') }}
 
-        {{ Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($account['status']) ? $account['status'] : 1, 'Status *') }}
+        {{-- Form::nyelect('status', array(1 => 'Active', 0 => 'Inactive'), isset($account['status']) ? $account['status'] : 1, 'Status *') --}}
+        {{ Form::hidden('status', 1) }}
 
         {{ Form::nginput('text', 'description', @$account['description'], 'Description') }}
 

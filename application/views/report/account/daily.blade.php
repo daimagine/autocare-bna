@@ -86,13 +86,13 @@
                     <td>{{ $account->description }}&nbsp;</td>
                     <td>{{ $account->user->name }}&nbsp;</td>
                     <td class="tableActs" align="center">
-                        <a href="/account/invoice_edit/{{ $account->type }}/{{ $account->id }}"
+                        <a href='{{ url("account/invoice_edit/$account->type/$account->id") }}'
                            class="appconfirm tablectrl_small bDefault tipS"
                            original-title="Edit"
                            dialog-confirm-title="Update Confirmation">
                             <span class="iconb" data-icon=""></span>
                         </a>
-                        <a href="/account/pay_invoice/{{ $account->type }}/{{ $account->id }}"
+                        <a href='{{ url("account/pay_invoice/$account->type/$account->id") }}'
                            class="appconfirm tablectrl_small bDefault tipS"
                            original-title="Pay Invoice"
                            dialog-confirm-title="Payment Confirmation">

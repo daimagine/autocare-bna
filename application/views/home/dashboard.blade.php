@@ -177,7 +177,7 @@
                 @endforeach
                 <li>
                     <span class="">
-                        <a href="/item/list_history" title="">Show All Update</a>
+                        <a href='{{ url("item/list_history") }}' title="">Show All Update</a>
                     </span>
                     <span class="clear"></span>
                 </li>
@@ -208,7 +208,7 @@
         <div class="clear"></div>
 
         <div class="invList fluid">
-            <a href="settlement/list" title="" class="floatR buttonS bLightBlue">Process Settlement</a>
+            <a href='{{ url("settlement/list") }}' title="" class="floatR buttonS bLightBlue">Process Settlement</a>
         </div>
         <div class="clear"></div>
     </div>
@@ -243,7 +243,7 @@
             @endforeach
             <li>
                 <span class="">
-                    <a href="/news/all" title="">Show All News</a>
+                    <a href='{{ url("news/all") }}' title="">Show All News</a>
                 </span>
                 <span class="clear"></span>
             </li>

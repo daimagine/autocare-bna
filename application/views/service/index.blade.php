@@ -31,8 +31,8 @@
                 <td>{{ $service->service_formula()->price }}&nbsp;</td>
                 <td>{{ $service->service_formula()->created_at }}&nbsp;</td>
                 <td class="tableActs" align="center">
-                    <a href="edit/{{ $service->id }}" class="tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
-                    <a href="delete/{{ $service->id }}" class="classConfirmDelete tablectrl_small bDefault tipS" original-title="Inactive">
+                    <a href='{{ url("service/edit/$service->id") }}' class="tablectrl_small bDefault tipS" original-title="Edit"><span class="iconb" data-icon=""></span></a>
+                    <a href='{{ url("service/delete/$service->id") }}' class="classConfirmDelete tablectrl_small bDefault tipS" original-title="Inactive">
                         <span class="iconb" data-icon=""></span>
                         <!-- Dialog modal confirmation delete item-->
                     </a>
@@ -47,7 +47,7 @@
 
 <div class="fluid">
     <div class="grid2">
-        <div class="wButton"><a href="add" title="" class="buttonL bLightBlue first">
+        <div class="wButton"><a href='{{ url("service/add") }}' title="" class="buttonL bLightBlue first">
             <span class="icol-add"></span>
             <span>Add New</span>
         </a></div>
