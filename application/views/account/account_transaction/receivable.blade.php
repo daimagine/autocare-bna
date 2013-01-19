@@ -42,9 +42,9 @@
                 <td>{{ $account->invoice_no }}</td>
                 <td>{{ $account->reference_no }}</td>
                 <td>{{ $account->subject }}</td>
-                <td>{{ $account->input_date }}</td>
-                <td>{{ $account->invoice_date }}</td>
-                <td>{{ $account->due_date }}</td>
+                <td>{{ DateTime::createFromFormat('Y-m-d H:i:s', $account->input_date)->format('d M Y') }}</td>
+                <td>{{ DateTime::createFromFormat('Y-m-d H:i:s', $account->invoice_date)->format('d M Y') }}</td>
+                <td>{{ DateTime::createFromFormat('Y-m-d H:i:s', $account->due_date)->format('d M Y') }}</td>
                 <td>{{ $account->paid !== null ? 'IDR' : '' }} {{  number_format($account->paid, 2) }}</td>
                 <td>{{ $account->due !== null ? 'IDR' : '' }} {{  number_format($account->due, 2) }}</td>
                 <td>IDR {{ number_format($account->due - $account->paid, 2) }}</td>

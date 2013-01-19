@@ -72,11 +72,11 @@ class AccountTransaction extends Eloquent {
 
         $ate->input_date = date(static::$sqlformat);
 
-        $invoice_date = $data['invoice_date'] . $data['invoice_time'];
+        $invoice_date = $data['invoice_date'] . date('H:i:s');
         $invoice_date = DateTime::createFromFormat(static::$format, $invoice_date);
         $ate->invoice_date = $invoice_date->format(static::$sqlformat);
 
-        $due_date = $data['due_date'] . $data['due_time'];
+        $due_date = $data['due_date'] . date('H:i:s');
         $due_date = DateTime::createFromFormat(static::$format, $due_date);
         $ate->due_date = $due_date->format(static::$sqlformat);
 
@@ -261,11 +261,11 @@ class AccountTransaction extends Eloquent {
 
         $ate->input_date = date(static::$sqlformat);
 
-        $invoice_date = $data['invoice_date'] . $data['invoice_time'];
+        $invoice_date = $data['invoice_date'] . date('H:i:s');
         $invoice_date = DateTime::createFromFormat(static::$format, $invoice_date);
         $ate->invoice_date = $invoice_date->format(static::$sqlformat);
 
-        $due_date = $data['due_date'] . $data['due_time'];
+        $due_date = $data['due_date'] . date('H:i:s');
         $due_date = DateTime::createFromFormat(static::$format, $due_date);
         $ate->due_date = $due_date->format(static::$sqlformat);
 

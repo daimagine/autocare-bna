@@ -17,7 +17,7 @@
             <span class="inLogo"><h6>{{ $accountTransType === 'D' ? 'Account Receivable' : 'Account Payable' }}</h6></span>
             <div class="inInfo">
                 <span class="invoiceNum">Invoice # {{ $account->invoice_no }}</span>
-                <i>{{ date( 'd F Y H:i:s', strtotime($account->invoice_date) ) }}</i>
+                <i>{{ date( 'd F Y', strtotime($account->invoice_date) ) }}</i>
             </div>
             <div class="clear"></div>
         </div>
@@ -26,8 +26,8 @@
             <div class="inFrom">
                 <h5>{{$accountTransType === 'D' ? 'From' : 'To' }} <strong class="red">{{ $account->subject }}</strong></h5>
                 <span>Ref <strong># {{ $account->reference_no }}</strong></span>
-                <span>Invoice create on <strong>{{ date( 'd F Y H:i:s', strtotime($account->due_date) ) }}</strong></span>
-                <span>Payment due by <strong>{{ date( 'd F Y H:i:s', strtotime($account->due_date) ) }}</strong></span>
+                <span>Invoice create on <strong>{{ date( 'd F Y', strtotime($account->due_date) ) }}</strong></span>
+                <span>Payment due by <strong>{{ date( 'd F Y', strtotime($account->due_date) ) }}</strong></span>
                 <span class="black">Invoice Status is <a href="#">{{ $account->paid_date == null ? 'Awaiting payment' : ( $account->paid < $account->due ? 'Partially Paid' : 'Paid' )}}</a></span>
             </div>
 

@@ -41,10 +41,6 @@
             <div class="grid9">
                 <ul class="timeRange">
                     <li><input name="invoice_date" type="text" class="datepicker" value="{{ $invoice_date }}" /></li>
-                    <li class="sep">-</li>
-                    <li><input name="invoice_time" type="text" class="timepicker" size="10" value="{{$invoice_time }}" />
-                        <span class="ui-datepicker-append">(hh:mm:ss)</span>
-                    </li>
                 </ul>
             </div>
             <div class="clear"></div>
@@ -56,10 +52,6 @@
             <div class="grid9">
                 <ul class="timeRange">
                     <li><input name="due_date" type="text" class="datepicker" value="{{ $due_date }}" /></li>
-                    <li class="sep">-</li>
-                    <li><input name="due_time" type="text" class="timepicker" size="10" value="{{ $due_time }}" />
-                        <span class="ui-datepicker-append">(hh:mm:ss)</span>
-                    </li>
                 </ul>
             </div>
             <div class="clear"></div>
