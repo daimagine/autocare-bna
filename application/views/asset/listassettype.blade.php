@@ -21,8 +21,8 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($lstAssetType as $type)
             <?php $no=0; ?>
+            @foreach($lstAssetType as $type)
             <tr class="">
                 <td>{{ $no+1 }}&nbsp;</td>
                 <td class="name">{{ $type->name }}&nbsp;</td>

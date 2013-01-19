@@ -28,7 +28,7 @@ $(function() {
         var $nameField = $('#assetName').val();
         var $descField = $('#assetDesc').val();
         var $vendorField = $('#assetVendor').val();
-        var $remarksField = $('#remarks').val();
+//        var $remarksField = $('#remarks').val();
         var $reqField = $('.cssOnBox.reqField');
         var $status = false;
         console.log($reqField);
@@ -43,14 +43,13 @@ $(function() {
         });
 
         console.log('status --> '+$status);
-        if ($status && $descField != '' && $nameField!='' && $vendorField!='' && $remarksField!='') {
+        if ($status && $descField != '' && $nameField!='' && $vendorField!='') {
             $status = true;
         }
         console.log('status --> '+$status);
         if ($status) {
         $("#formDialogApproved").html('<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>' +
             ' Are you sure the data is correct and you want to closed this approved print ?' +
-            '<br/> <em>Please make sure you has write correct information message for accounting team on remarks field</em>' +
             '</p>');
         document.formAutocare.action.value = 'confirm';
         $("#formDialogApproved").dialog('open');
