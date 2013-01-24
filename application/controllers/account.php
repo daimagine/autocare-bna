@@ -32,6 +32,8 @@ class Account_Controller extends Secure_Controller {
             return Redirect::to('account/index');
         }
         $account = Account::find($id);
+
+        dd($account);
         return $this->layout->nest('content', 'account.edit', array(
             'account' => $account,
         ));
@@ -149,7 +151,7 @@ class Account_Controller extends Secure_Controller {
     public function post_invoice_in() {
         $validation = Validator::make(Input::all(), $this->getInvoiceRules());
         $data = Input::all();
-//        dd($data);
+        //dd($data);
         $type = @$data['type'];
         if(!$validation->fails()) {
             $success = AccountTransaction::create($data);
@@ -252,10 +254,12 @@ class Account_Controller extends Secure_Controller {
         $due_time = date(AccountTransaction::$timeformat, strtotime($account->due_date));
         $items = $account->items;
         $accounts = Account::allSelect(array(
-            'category' => array('<>', AccountCategory::ACCOUNTING)
+//            'category' => array('=', AccountCategory::ITEM)
+            'type' => array('=', $type)
         ));
         $accountAccountings = Account::allSelect(array(
-            'category' => array('=', AccountCategory::ACCOUNTING)
+            'category' => array('=', AccountCategory::ACCOUNTING),
+            'type' => array('=', $type)
         ));
 
         return $this->layout->nest('content', 'account.account_transaction.edit', array(
