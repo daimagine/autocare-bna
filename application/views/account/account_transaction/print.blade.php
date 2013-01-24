@@ -68,13 +68,13 @@
                 <tr>
                     <td class="table-detail-left">Tanggal Invoice</td>
                     <td class="table-detail-mid">:</td>
-                    <td class="table-detail-right">{{ date( 'd F Y H:i:s', strtotime($account->invoice_date) ) }}</td>
+                    <td class="table-detail-right">{{ date( 'd F Y', strtotime($account->invoice_date) ) }}</td>
                 </tr>
 
                 <tr>
                     <td class="table-detail-left">Jatuh Tempo Pembayaran</td>
                     <td class="table-detail-mid">:</td>
-                    <td class="table-detail-right">{{ date( 'd F Y H:i:s', strtotime($account->due_date) ) }}</td>
+                    <td class="table-detail-right">{{ date( 'd F Y', strtotime($account->due_date) ) }}</td>
                 </tr>
 
                 <tr>

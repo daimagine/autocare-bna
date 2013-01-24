@@ -314,9 +314,9 @@ class Account_Controller extends Secure_Controller {
             'subject' => 'required',
             'invoice_no' => 'required|min:5|max:50',
             'invoice_date' => 'required',
-            'invoice_time' => 'required',
+//            'invoice_time' => 'required',
             'due_date' => 'required',
-            'due_time' => 'required',
+//            'due_time' => 'required',
         );
         if($method == 'add') {
             $additional = array(
